@@ -1,0 +1,977 @@
+"""Order aggregation results by count"""
+input AggregationOrderBy {
+  """Order by count (asc or desc)"""
+  count: SortDirection
+}
+
+"""Record type: app.bsky.actor.profile"""
+type AppBskyActorProfile {
+  """Record URI"""
+  uri: String
+
+  """Record CID"""
+  cid: String
+
+  """DID of record author"""
+  did: String
+
+  """Collection name"""
+  collection: String
+
+  """When record was indexed"""
+  indexedAt: String
+
+  """Handle of the actor who created this record"""
+  actorHandle: String
+
+  """Field from lexicon"""
+  avatar: Blob
+
+  """Field from lexicon"""
+  banner: Blob
+
+  """Field from lexicon"""
+  createdAt: String
+
+  """Field from lexicon"""
+  description: String
+
+  """Field from lexicon"""
+  displayName: String
+
+  """Field from lexicon"""
+  joinedViaStarterPack: ComAtprotoRepoStrongRef
+
+  """Field from lexicon"""
+  labels: AppBskyActorProfileLabels
+
+  """Field from lexicon"""
+  pinnedPost: ComAtprotoRepoStrongRef
+
+  """Field from lexicon"""
+  pronouns: String
+
+  """Field from lexicon"""
+  website: String
+
+  """Forward join to referenced record"""
+  pinnedPostResolved: Record
+
+  """Forward join to referenced record"""
+  joinedViaStarterPackResolved: Record
+
+  """
+  DID join: record in org.atmosphereconf.profile that shares the same DID as this record
+  """
+  orgAtmosphereconfProfileByDid: OrgAtmosphereconfProfile
+}
+
+"""Aggregated results for app.bsky.actor.profile"""
+type AppBskyActorProfileAggregated {
+  """Grouped field value"""
+  uri: String
+
+  """Grouped field value"""
+  cid: String
+
+  """Grouped field value"""
+  did: String
+
+  """Grouped field value"""
+  collection: String
+
+  """Grouped field value"""
+  indexed_at: String
+
+  """Grouped field value"""
+  avatar: String
+
+  """Grouped field value"""
+  banner: String
+
+  """Grouped field value"""
+  createdAt: String
+
+  """Grouped field value"""
+  description: String
+
+  """Grouped field value"""
+  displayName: String
+
+  """Grouped field value"""
+  joinedViaStarterPack: String
+
+  """Grouped field value"""
+  labels: String
+
+  """Grouped field value"""
+  pinnedPost: String
+
+  """Grouped field value"""
+  pronouns: String
+
+  """Grouped field value"""
+  website: String
+
+  """Count of records in this group"""
+  count: Int!
+}
+
+"""A connection to a list of items for AppBskyActorProfile"""
+type AppBskyActorProfileConnection {
+  """A list of edges"""
+  edges: [AppBskyActorProfileEdge!]!
+
+  """Information to aid in pagination"""
+  pageInfo: PageInfo!
+
+  """Total number of items in the connection"""
+  totalCount: Int
+}
+
+"""An edge in a connection for AppBskyActorProfile"""
+type AppBskyActorProfileEdge {
+  """The item at the end of the edge"""
+  node: AppBskyActorProfile!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Filter operators for AppBskyActorProfile fields"""
+input AppBskyActorProfileFieldCondition {
+  """Exact match (equals)"""
+  eq: String
+
+  """Match any value in the list"""
+  in: [String!]
+
+  """Case-insensitive substring match (string fields only)"""
+  contains: String
+
+  """Greater than"""
+  gt: String
+
+  """Greater than or equal to"""
+  gte: String
+
+  """Less than"""
+  lt: String
+
+  """Less than or equal to"""
+  lte: String
+
+  """Filter for null or missing values (true) or non-null values (false)"""
+  isNull: Boolean
+}
+
+"""Available groupBy fields for AppBskyActorProfile"""
+enum AppBskyActorProfileGroupByField {
+  """Group by uri"""
+  uri
+
+  """Group by cid"""
+  cid
+
+  """Group by did"""
+  did
+
+  """Group by collection"""
+  collection
+
+  """Group by indexedAt"""
+  indexedAt
+
+  """Group by actorHandle"""
+  actorHandle
+
+  """Group by createdAt"""
+  createdAt
+
+  """Group by description"""
+  description
+
+  """Group by displayName"""
+  displayName
+
+  """Group by labels"""
+  labels
+
+  """Group by pronouns"""
+  pronouns
+
+  """Group by website"""
+  website
+}
+
+"""Specifies a field to group by with optional date truncation"""
+input AppBskyActorProfileGroupByFieldInput {
+  """Field name to group by"""
+  field: AppBskyActorProfileGroupByField!
+
+  """Date truncation interval (for datetime fields)"""
+  interval: DateInterval
+}
+
+"""Input type for AppBskyActorProfileInput"""
+input AppBskyActorProfileInput {
+  """Input field for avatar"""
+  avatar: BlobInput
+
+  """Input field for banner"""
+  banner: BlobInput
+
+  """Input field for createdAt"""
+  createdAt: String
+
+  """Input field for description"""
+  description: String
+
+  """Input field for displayName"""
+  displayName: String
+
+  """Input field for joinedViaStarterPack"""
+  joinedViaStarterPack: String
+
+  """Input field for labels"""
+  labels: String
+
+  """Input field for pinnedPost"""
+  pinnedPost: String
+
+  """Input field for pronouns"""
+  pronouns: String
+
+  """Input field for website"""
+  website: String
+}
+
+union AppBskyActorProfileLabels = ComAtprotoLabelDefsSelfLabels
+
+"""Filter for AppBskyActorProfile reference fields (presence check only)"""
+input AppBskyActorProfileRefFieldCondition {
+  """Filter for null (true) or non-null (false) values"""
+  isNull: Boolean
+}
+
+"""Available sort fields for AppBskyActorProfile"""
+enum AppBskyActorProfileSortField {
+  """Sort by uri"""
+  uri
+
+  """Sort by cid"""
+  cid
+
+  """Sort by did"""
+  did
+
+  """Sort by collection"""
+  collection
+
+  """Sort by indexedAt"""
+  indexedAt
+
+  """Sort by createdAt"""
+  createdAt
+
+  """Sort by description"""
+  description
+
+  """Sort by displayName"""
+  displayName
+
+  """Sort by labels"""
+  labels
+
+  """Sort by pronouns"""
+  pronouns
+
+  """Sort by website"""
+  website
+}
+
+"""Specifies a field to sort by and its direction for AppBskyActorProfile"""
+input AppBskyActorProfileSortFieldInput {
+  """Field to sort by"""
+  field: AppBskyActorProfileSortField!
+
+  """Sort direction (ASC or DESC)"""
+  direction: SortDirection!
+}
+
+"""Filter conditions for AppBskyActorProfile with nested AND/OR support"""
+input AppBskyActorProfileWhereInput {
+  """Filter by uri"""
+  uri: AppBskyActorProfileFieldCondition
+
+  """Filter by cid"""
+  cid: AppBskyActorProfileFieldCondition
+
+  """Filter by did"""
+  did: AppBskyActorProfileFieldCondition
+
+  """Filter by collection"""
+  collection: AppBskyActorProfileFieldCondition
+
+  """Filter by indexedAt"""
+  indexedAt: AppBskyActorProfileFieldCondition
+
+  """Filter by actorHandle"""
+  actorHandle: AppBskyActorProfileFieldCondition
+
+  """Filter by createdAt"""
+  createdAt: AppBskyActorProfileFieldCondition
+
+  """Filter by description"""
+  description: AppBskyActorProfileFieldCondition
+
+  """Filter by displayName"""
+  displayName: AppBskyActorProfileFieldCondition
+
+  """Filter by joinedViaStarterPack"""
+  joinedViaStarterPack: AppBskyActorProfileRefFieldCondition
+
+  """Filter by labels"""
+  labels: AppBskyActorProfileFieldCondition
+
+  """Filter by pinnedPost"""
+  pinnedPost: AppBskyActorProfileRefFieldCondition
+
+  """Filter by pronouns"""
+  pronouns: AppBskyActorProfileFieldCondition
+
+  """Filter by website"""
+  website: AppBskyActorProfileFieldCondition
+
+  """All conditions must match (AND logic)"""
+  and: [AppBskyActorProfileWhereInput!]
+
+  """Any condition must match (OR logic)"""
+  or: [AppBskyActorProfileWhereInput!]
+}
+
+"""A blob reference with metadata and URL generation"""
+type Blob {
+  """CID reference to the blob"""
+  ref: String!
+
+  """MIME type of the blob"""
+  mimeType: String!
+
+  """Size in bytes"""
+  size: Int!
+
+  """
+  Generate CDN URL for the blob with the specified preset (avatar, banner, feed_thumbnail, feed_fullsize)
+  """
+  url(
+    """Image preset: avatar, banner, feed_thumbnail, feed_fullsize"""
+    preset: String
+  ): String!
+}
+
+"""Input type for blob references"""
+input BlobInput {
+  """CID reference to the blob"""
+  ref: String!
+
+  """MIME type of the blob"""
+  mimeType: String!
+
+  """Size in bytes"""
+  size: Int!
+}
+
+"""Response from uploading a blob"""
+type BlobUploadResponse {
+  """CID reference to the blob"""
+  ref: String!
+
+  """MIME type of the blob"""
+  mimeType: String!
+
+  """Size in bytes"""
+  size: Int!
+}
+
+"""Object type from lexicon definition"""
+type ComAtprotoLabelDefsSelfLabel {
+  """Field from object definition"""
+  val: String!
+}
+
+"""Object type from lexicon definition"""
+type ComAtprotoLabelDefsSelfLabels {
+  """Field from object definition"""
+  values: [ComAtprotoLabelDefsSelfLabel!]!
+}
+
+"""Object type from lexicon definition"""
+type ComAtprotoRepoStrongRef {
+  """Field from object definition"""
+  cid: String!
+
+  """Field from object definition"""
+  uri: String!
+
+  """Forward join to referenced record"""
+  uriResolved: Record
+}
+
+"""Object type from lexicon definition"""
+type CommunityLexiconLocationHthree {
+  """Field from object definition"""
+  name: String
+
+  """Field from object definition"""
+  value: String!
+}
+
+"""Date truncation intervals for aggregation"""
+enum DateInterval {
+  """Truncate to hour"""
+  HOUR
+
+  """Truncate to day"""
+  DAY
+
+  """Truncate to week"""
+  WEEK
+
+  """Truncate to month"""
+  MONTH
+}
+
+"""Result of a delete mutation"""
+type DeleteResult {
+  """URI of deleted record"""
+  uri: String
+}
+
+"""Root mutation type"""
+type Mutation {
+  """Upload a blob to the PDS"""
+  uploadBlob(
+    """Base64 encoded blob data"""
+    data: String!
+
+    """MIME type of the blob"""
+    mimeType: String!
+  ): BlobUploadResponse!
+
+  """Create a new app.bsky.actor.profile record"""
+  createAppBskyActorProfile(
+    """Record data"""
+    input: AppBskyActorProfileInput!
+
+    """Optional record key (defaults to TID)"""
+    rkey: String
+  ): AppBskyActorProfile
+
+  """Update an existing app.bsky.actor.profile record"""
+  updateAppBskyActorProfile(
+    """Record key to update"""
+    rkey: String!
+
+    """Updated record data"""
+    input: AppBskyActorProfileInput!
+  ): AppBskyActorProfile
+
+  """Delete a app.bsky.actor.profile record"""
+  deleteAppBskyActorProfile(
+    """Record key to delete"""
+    rkey: String!
+  ): DeleteResult
+
+  """Create a new org.atmosphereconf.profile record"""
+  createOrgAtmosphereconfProfile(
+    """Record data"""
+    input: OrgAtmosphereconfProfileInput!
+
+    """Optional record key (defaults to TID)"""
+    rkey: String
+  ): OrgAtmosphereconfProfile
+
+  """Update an existing org.atmosphereconf.profile record"""
+  updateOrgAtmosphereconfProfile(
+    """Record key to update"""
+    rkey: String!
+
+    """Updated record data"""
+    input: OrgAtmosphereconfProfileInput!
+  ): OrgAtmosphereconfProfile
+
+  """Delete a org.atmosphereconf.profile record"""
+  deleteOrgAtmosphereconfProfile(
+    """Record key to delete"""
+    rkey: String!
+  ): DeleteResult
+}
+
+"""Record type: org.atmosphereconf.profile"""
+type OrgAtmosphereconfProfile {
+  """Record URI"""
+  uri: String
+
+  """Record CID"""
+  cid: String
+
+  """DID of record author"""
+  did: String
+
+  """Collection name"""
+  collection: String
+
+  """When record was indexed"""
+  indexedAt: String
+
+  """Handle of the actor who created this record"""
+  actorHandle: String
+
+  """Field from lexicon"""
+  avatar: Blob
+
+  """Field from lexicon"""
+  createdAt: String
+
+  """Field from lexicon"""
+  description: String
+
+  """Field from lexicon"""
+  displayName: String
+
+  """Field from lexicon"""
+  homeTown: CommunityLexiconLocationHthree
+
+  """Field from lexicon"""
+  interests: [String!]
+
+  """
+  Reverse join: records in app.bsky.actor.profile that reference this record via joinedViaStarterPack
+  """
+  appBskyActorProfileViaJoinedViaStarterPack(
+    """Returns the first n items from the list"""
+    first: Int
+
+    """Returns items after the given cursor"""
+    after: String
+
+    """Returns the last n items from the list"""
+    last: Int
+
+    """Returns items before the given cursor"""
+    before: String
+
+    """Sort order for the connection"""
+    sortBy: [AppBskyActorProfileSortFieldInput!]
+
+    """Filter conditions for the query"""
+    where: AppBskyActorProfileWhereInput
+  ): AppBskyActorProfileConnection
+
+  """
+  Reverse join: records in app.bsky.actor.profile that reference this record via pinnedPost
+  """
+  appBskyActorProfileViaPinnedPost(
+    """Returns the first n items from the list"""
+    first: Int
+
+    """Returns items after the given cursor"""
+    after: String
+
+    """Returns the last n items from the list"""
+    last: Int
+
+    """Returns items before the given cursor"""
+    before: String
+
+    """Sort order for the connection"""
+    sortBy: [AppBskyActorProfileSortFieldInput!]
+
+    """Filter conditions for the query"""
+    where: AppBskyActorProfileWhereInput
+  ): AppBskyActorProfileConnection
+
+  """
+  DID join: record in app.bsky.actor.profile that shares the same DID as this record
+  """
+  appBskyActorProfileByDid: AppBskyActorProfile
+}
+
+"""Aggregated results for org.atmosphereconf.profile"""
+type OrgAtmosphereconfProfileAggregated {
+  """Grouped field value"""
+  uri: String
+
+  """Grouped field value"""
+  cid: String
+
+  """Grouped field value"""
+  did: String
+
+  """Grouped field value"""
+  collection: String
+
+  """Grouped field value"""
+  indexed_at: String
+
+  """Grouped field value"""
+  avatar: String
+
+  """Grouped field value"""
+  createdAt: String
+
+  """Grouped field value"""
+  description: String
+
+  """Grouped field value"""
+  displayName: String
+
+  """Grouped field value"""
+  homeTown: String
+
+  """Grouped field value"""
+  interests: String
+
+  """Count of records in this group"""
+  count: Int!
+}
+
+"""A connection to a list of items for OrgAtmosphereconfProfile"""
+type OrgAtmosphereconfProfileConnection {
+  """A list of edges"""
+  edges: [OrgAtmosphereconfProfileEdge!]!
+
+  """Information to aid in pagination"""
+  pageInfo: PageInfo!
+
+  """Total number of items in the connection"""
+  totalCount: Int
+}
+
+"""An edge in a connection for OrgAtmosphereconfProfile"""
+type OrgAtmosphereconfProfileEdge {
+  """The item at the end of the edge"""
+  node: OrgAtmosphereconfProfile!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Filter operators for OrgAtmosphereconfProfile fields"""
+input OrgAtmosphereconfProfileFieldCondition {
+  """Exact match (equals)"""
+  eq: String
+
+  """Match any value in the list"""
+  in: [String!]
+
+  """Case-insensitive substring match (string fields only)"""
+  contains: String
+
+  """Greater than"""
+  gt: String
+
+  """Greater than or equal to"""
+  gte: String
+
+  """Less than"""
+  lt: String
+
+  """Less than or equal to"""
+  lte: String
+
+  """Filter for null or missing values (true) or non-null values (false)"""
+  isNull: Boolean
+}
+
+"""Available groupBy fields for OrgAtmosphereconfProfile"""
+enum OrgAtmosphereconfProfileGroupByField {
+  """Group by uri"""
+  uri
+
+  """Group by cid"""
+  cid
+
+  """Group by did"""
+  did
+
+  """Group by collection"""
+  collection
+
+  """Group by indexedAt"""
+  indexedAt
+
+  """Group by actorHandle"""
+  actorHandle
+
+  """Group by createdAt"""
+  createdAt
+
+  """Group by description"""
+  description
+
+  """Group by displayName"""
+  displayName
+
+  """Group by interests"""
+  interests
+}
+
+"""Specifies a field to group by with optional date truncation"""
+input OrgAtmosphereconfProfileGroupByFieldInput {
+  """Field name to group by"""
+  field: OrgAtmosphereconfProfileGroupByField!
+
+  """Date truncation interval (for datetime fields)"""
+  interval: DateInterval
+}
+
+"""Input type for OrgAtmosphereconfProfileInput"""
+input OrgAtmosphereconfProfileInput {
+  """Input field for avatar"""
+  avatar: BlobInput
+
+  """Input field for createdAt"""
+  createdAt: String
+
+  """Input field for description"""
+  description: String
+
+  """Input field for displayName"""
+  displayName: String
+
+  """Input field for homeTown"""
+  homeTown: String
+
+  """Input field for interests"""
+  interests: String
+}
+
+"""
+Filter for OrgAtmosphereconfProfile reference fields (presence check only)
+"""
+input OrgAtmosphereconfProfileRefFieldCondition {
+  """Filter for null (true) or non-null (false) values"""
+  isNull: Boolean
+}
+
+"""Available sort fields for OrgAtmosphereconfProfile"""
+enum OrgAtmosphereconfProfileSortField {
+  """Sort by uri"""
+  uri
+
+  """Sort by cid"""
+  cid
+
+  """Sort by did"""
+  did
+
+  """Sort by collection"""
+  collection
+
+  """Sort by indexedAt"""
+  indexedAt
+
+  """Sort by createdAt"""
+  createdAt
+
+  """Sort by description"""
+  description
+
+  """Sort by displayName"""
+  displayName
+}
+
+"""
+Specifies a field to sort by and its direction for OrgAtmosphereconfProfile
+"""
+input OrgAtmosphereconfProfileSortFieldInput {
+  """Field to sort by"""
+  field: OrgAtmosphereconfProfileSortField!
+
+  """Sort direction (ASC or DESC)"""
+  direction: SortDirection!
+}
+
+"""
+Filter conditions for OrgAtmosphereconfProfile with nested AND/OR support
+"""
+input OrgAtmosphereconfProfileWhereInput {
+  """Filter by uri"""
+  uri: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by cid"""
+  cid: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by did"""
+  did: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by collection"""
+  collection: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by indexedAt"""
+  indexedAt: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by actorHandle"""
+  actorHandle: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by createdAt"""
+  createdAt: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by description"""
+  description: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by displayName"""
+  displayName: OrgAtmosphereconfProfileFieldCondition
+
+  """Filter by homeTown"""
+  homeTown: OrgAtmosphereconfProfileRefFieldCondition
+
+  """All conditions must match (AND logic)"""
+  and: [OrgAtmosphereconfProfileWhereInput!]
+
+  """Any condition must match (OR logic)"""
+  or: [OrgAtmosphereconfProfileWhereInput!]
+}
+
+"""Information about pagination in a connection"""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """Cursor corresponding to the first item in the page"""
+  startCursor: String
+
+  """Cursor corresponding to the last item in the page"""
+  endCursor: String
+}
+
+"""Root query type"""
+type Query {
+  """Query app.bsky.actor.profile with cursor pagination and sorting"""
+  appBskyActorProfile(
+    """Returns the first n items from the list"""
+    first: Int
+
+    """Returns items after the given cursor"""
+    after: String
+
+    """Returns the last n items from the list"""
+    last: Int
+
+    """Returns items before the given cursor"""
+    before: String
+
+    """Sort order for the connection"""
+    sortBy: [AppBskyActorProfileSortFieldInput!]
+
+    """Filter conditions for the query"""
+    where: AppBskyActorProfileWhereInput
+  ): AppBskyActorProfileConnection
+
+  """Query org.atmosphereconf.profile with cursor pagination and sorting"""
+  orgAtmosphereconfProfile(
+    """Returns the first n items from the list"""
+    first: Int
+
+    """Returns items after the given cursor"""
+    after: String
+
+    """Returns the last n items from the list"""
+    last: Int
+
+    """Returns items before the given cursor"""
+    before: String
+
+    """Sort order for the connection"""
+    sortBy: [OrgAtmosphereconfProfileSortFieldInput!]
+
+    """Filter conditions for the query"""
+    where: OrgAtmosphereconfProfileWhereInput
+  ): OrgAtmosphereconfProfileConnection
+
+  """Aggregated query for app.bsky.actor.profile"""
+  appBskyActorProfileAggregated(
+    """Fields to group by (required)"""
+    groupBy: [AppBskyActorProfileGroupByFieldInput!]
+
+    """Filter records before aggregation"""
+    where: AppBskyActorProfileWhereInput
+
+    """Order by count (default: desc)"""
+    orderBy: AggregationOrderBy
+
+    """Maximum number of results (default 50, max 1000)"""
+    limit: Int
+  ): [AppBskyActorProfileAggregated!]
+
+  """Aggregated query for org.atmosphereconf.profile"""
+  orgAtmosphereconfProfileAggregated(
+    """Fields to group by (required)"""
+    groupBy: [OrgAtmosphereconfProfileGroupByFieldInput!]
+
+    """Filter records before aggregation"""
+    where: OrgAtmosphereconfProfileWhereInput
+
+    """Order by count (default: desc)"""
+    orderBy: AggregationOrderBy
+
+    """Maximum number of results (default 50, max 1000)"""
+    limit: Int
+  ): [OrgAtmosphereconfProfileAggregated!]
+
+  """The currently authenticated user, or null if not authenticated"""
+  viewer: Viewer
+}
+
+union Record = AppBskyActorProfile | OrgAtmosphereconfProfile
+
+"""Sort direction for query results"""
+enum SortDirection {
+  """Ascending order"""
+  ASC
+
+  """Descending order"""
+  DESC
+}
+
+"""GraphQL subscription root"""
+type Subscription {
+  """Emitted when a new app.bsky.actor.profile record is created"""
+  appBskyActorProfileCreated: AppBskyActorProfile!
+
+  """Emitted when a app.bsky.actor.profile record is updated"""
+  appBskyActorProfileUpdated: AppBskyActorProfile!
+
+  """Emitted when a app.bsky.actor.profile record is deleted"""
+  appBskyActorProfileDeleted: AppBskyActorProfile!
+
+  """Emitted when a new org.atmosphereconf.profile record is created"""
+  orgAtmosphereconfProfileCreated: OrgAtmosphereconfProfile!
+
+  """Emitted when a org.atmosphereconf.profile record is updated"""
+  orgAtmosphereconfProfileUpdated: OrgAtmosphereconfProfile!
+
+  """Emitted when a org.atmosphereconf.profile record is deleted"""
+  orgAtmosphereconfProfileDeleted: OrgAtmosphereconfProfile!
+}
+
+"""Authenticated user"""
+type Viewer {
+  """User DID"""
+  did: String!
+
+  """User handle"""
+  handle: String
+
+  """DID join: app.bsky.actor.profile record for this user"""
+  appBskyActorProfileByDid: AppBskyActorProfile
+
+  """DID join: org.atmosphereconf.profile record for this user"""
+  orgAtmosphereconfProfileByDid: OrgAtmosphereconfProfile
+}
+
