@@ -1,8 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { CallbackPage } from "../components/CallbackPage";
+import { Card } from "@/components/ui/card";
+import { CallbackHandler } from "@/components/CallbackHandler";
 ---
 
 <Layout title="Signing In... - Atmosphere Conference">
-  <CallbackPage client:load />
+  <div class="flex-1 flex items-center justify-center">
+    <Card className="w-full max-w-sm p-8 text-center">
+      <CallbackHandler client:load />
+    </Card>
+  </div>
 </Layout>

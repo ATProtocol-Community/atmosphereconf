@@ -7,7 +7,6 @@ import { graphql } from "@/lib/graphql";
 import { isAuthenticated, query, mutate } from "@/lib/client";
 import type { ProfileSettingsPageQuery } from "./__generated__/ProfileSettingsPageQuery.graphql";
 import type { ProfileSettingsPageUploadBlobMutation } from "./__generated__/ProfileSettingsPageUploadBlobMutation.graphql";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -90,7 +89,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 type ViewerData = ProfileSettingsPageQuery["response"];
 
-export function ProfileSettingsPage() {
+export function ProfileSettingsForm() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -242,135 +241,129 @@ export function ProfileSettingsPage() {
 
   if (loading) {
     return (
-      <div className="w-full px-4">
-        <Card className="max-w-2xl mx-auto mt-8 p-8 text-center">
-          <div className="flex justify-center mb-4">
-            <Spinner />
-          </div>
-          <p className="text-gray-600">Loading settings...</p>
-        </Card>
+      <div className="text-center">
+        <div className="flex justify-center mb-4">
+          <Spinner />
+        </div>
+        <p className="text-gray-600">Loading settings...</p>
       </div>
     );
   }
 
   if (error && !saving) {
     return (
-      <div className="w-full px-4">
-        <Card className="max-w-2xl mx-auto mt-8 p-8 text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button asChild>
-            <a href="/profile">Back to Profile</a>
-          </Button>
-        </Card>
+      <div className="text-center">
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
+        <p className="text-gray-600 mb-4">{error}</p>
+        <Button asChild>
+          <a href="/profile">Back to Profile</a>
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="w-full px-4">
-      <Card className="max-w-2xl mx-auto mt-8 p-8">
-        <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" size="icon" asChild>
-            <a href="/profile">
-              <ArrowLeft className="h-5 w-5" />
-            </a>
-          </Button>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Profile</h1>
-        </div>
+    <>
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/profile">
+            <ArrowLeft className="h-5 w-5" />
+          </a>
+        </Button>
+        <h1 className="text-2xl font-bold text-gray-900">Edit Profile</h1>
+      </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormItem>
-              <FormLabel>Avatar</FormLabel>
-              <FormControl>
-                <AvatarInput
-                  currentAvatarUrl={currentAvatarUrl}
-                  fallback={fallbackChar}
-                  onChange={setAvatarFile}
-                />
-              </FormControl>
-              <FormDescription>PNG or JPEG, max 1MB</FormDescription>
-            </FormItem>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormItem>
+            <FormLabel>Avatar</FormLabel>
+            <FormControl>
+              <AvatarInput
+                currentAvatarUrl={currentAvatarUrl}
+                fallback={fallbackChar}
+                onChange={setAvatarFile}
+              />
+            </FormControl>
+            <FormDescription>PNG or JPEG, max 1MB</FormDescription>
+          </FormItem>
 
-            <FormField
-              control={form.control}
-              name="displayName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Display Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your name" maxLength={64} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bio</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell others about yourself..."
-                      maxLength={256}
-                      rows={3}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormItem>
-              <FormLabel>Home Town</FormLabel>
-              <FormControl>
-                <LocationInput
-                  value={location}
-                  onChange={setLocation}
-                  placeholder="Search for your city..."
-                />
-              </FormControl>
-            </FormItem>
-
-            <FormField
-              control={form.control}
-              name="interests"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Interests</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. rust, atproto, distributed systems"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Separate with commas</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {error && (
-              <div className="text-destructive text-sm">{error}</div>
+          <FormField
+            control={form.control}
+            name="displayName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Display Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your name" maxLength={64} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
+          />
 
-            <div className="flex justify-end gap-3">
-              <Button variant="secondary" asChild>
-                <a href="/profile">Cancel</a>
-              </Button>
-              <Button type="submit" disabled={saving}>
-                {saving ? "Saving..." : "Save Profile"}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </Card>
-    </div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Tell others about yourself..."
+                    maxLength={256}
+                    rows={3}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormItem>
+            <FormLabel>Home Town</FormLabel>
+            <FormControl>
+              <LocationInput
+                value={location}
+                onChange={setLocation}
+                placeholder="Search for your city..."
+              />
+            </FormControl>
+          </FormItem>
+
+          <FormField
+            control={form.control}
+            name="interests"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Interests</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g. rust, atproto, distributed systems"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Separate with commas</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {error && (
+            <div className="text-destructive text-sm">{error}</div>
+          )}
+
+          <div className="flex justify-end gap-3">
+            <Button variant="secondary" asChild>
+              <a href="/profile">Cancel</a>
+            </Button>
+            <Button type="submit" disabled={saving}>
+              {saving ? "Saving..." : "Save Profile"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 }
 

@@ -1,8 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { ProfilePage } from "../components/ProfilePage";
+import { Card } from "@/components/ui/card";
+import { ProfileContent } from "@/components/ProfileContent";
 ---
 
 <Layout title="Profile - Atmosphere Conference">
-  <ProfilePage client:load />
+  <div class="w-full">
+    <Card className="max-w-2xl mx-auto mt-8 p-8">
+      <ProfileContent client:load />
+    </Card>
+  </div>
 </Layout>
