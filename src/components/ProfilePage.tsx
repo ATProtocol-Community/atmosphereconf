@@ -97,7 +97,7 @@ export function ProfilePage() {
 
   if (error || !viewer) {
     return (
-      <div className="w-full px-4">
+      <div className="w-full">
         <Card className="max-w-2xl mx-auto mt-8 p-8 text-center">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
           <p className="text-gray-600 mb-4">{error || "Not authenticated"}</p>
@@ -116,7 +116,7 @@ export function ProfilePage() {
   const avatarUrl = confProfile?.avatar?.url || bskyProfile?.avatar?.url;
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full">
       <Card className="max-w-2xl mx-auto mt-8 p-8">
         <div className="flex items-center gap-4 mb-6">
           <Avatar className="size-16">

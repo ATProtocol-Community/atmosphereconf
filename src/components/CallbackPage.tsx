@@ -37,7 +37,7 @@ export function CallbackPage() {
   }, []);
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4">
+    <div className="flex-1 flex items-center justify-center">
       <Card className="w-full max-w-sm p-8 text-center">
         {error ? (
           <>
