@@ -40,7 +40,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4">
+    <div className="flex-1 flex items-center justify-center">
       <Card className="w-full max-w-sm p-8">
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-2">
           Sign In

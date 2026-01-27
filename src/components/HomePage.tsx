@@ -47,7 +47,7 @@ const SPONSORS = [
 
 export function HomePage() {
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-12">
+    <div className="space-y-12">
         {/* Hero Section */}
         <Card className="w-full text-center py-12 px-8">
           <img
