@@ -4,30 +4,35 @@ import "../styles/global.css";
 import { Header } from "../components/Header";
 
 interface Props {
-    title?: string;
+  title?: string;
 }
 
 const {
-    title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
+  title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
 } = Astro.props;
+
+// It doesn't matter if the access token is expired because we'll check
+// again soon.
+// TODO: check if this is still true later on.
+const isLoggedIn = !!Astro.cookies.get("access_token")?.value;
 ---
 
 <!doctype html>
 <html lang="en" class="h-full">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <title>{title}</title>
-        <ViewTransitions />
-    </head>
-    <body class="h-full antialiased bg-background">
-        <div class="min-h-screen flex flex-col">
-            <Header client:load transition:persist />
-            <main class="flex-1 flex flex-col px-10 py-8 w-full max-w-4xl mx-auto ">
-                <slot />
-            </main>
-        </div>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ViewTransitions />
+  </head>
+  <body class="h-full antialiased bg-background">
+    <div class="min-h-screen flex flex-col">
+      <Header client:load transition:persist isLoggedIn={isLoggedIn} />
+      <main class="flex-1 flex flex-col px-10 py-8 w-full max-w-4xl mx-auto">
+        <slot />
+      </main>
+    </div>
+  </body>
 </html>

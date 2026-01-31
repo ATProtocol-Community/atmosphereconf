@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ActorAutocomplete, type Actor } from "@/components/ActorAutocomplete";
 
-export function LoginForm() {
+export function LoginForm({ error: serverError }: { error?: string | null }) {
   const [handle, setHandle] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(serverError || null);
   const [submitting, setSubmitting] = useState(false);
 
-  async function handleLogin(handleValue: string) {
+  function handleLogin(handleValue: string) {
     const trimmedHandle = handleValue.trim();
     if (!trimmedHandle) {
       setError("Please enter your Bluesky handle");
@@ -18,19 +18,12 @@ export function LoginForm() {
 
     setError(null);
     setSubmitting(true);
-
-    try {
-      await login(trimmedHandle);
-    } catch (err: any) {
-      console.error("Login error:", err);
-      setError("Login failed: " + (err.message || "Unknown error"));
-      setSubmitting(false);
-    }
+    login(trimmedHandle);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await handleLogin(handle);
+    handleLogin(handle);
   }
 
   function handleActorSelect(actor: Actor) {
