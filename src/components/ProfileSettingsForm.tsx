@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { graphql } from "@/lib/graphql";
-import { isAuthenticated, query, mutate } from "@/lib/client";
+import { query, mutate } from "@/lib/client";
 import type { ProfileSettingsPageQuery } from "./__generated__/ProfileSettingsPageQuery.graphql";
 import type { ProfileSettingsPageUploadBlobMutation } from "./__generated__/ProfileSettingsPageUploadBlobMutation.graphql";
 import { Button } from "@/components/ui/button";
@@ -118,12 +118,6 @@ export function ProfileSettingsForm() {
   useEffect(() => {
     async function loadProfile() {
       try {
-        const isAuth = await isAuthenticated();
-        if (!isAuth) {
-          window.location.href = "/login";
-          return;
-        }
-
         const data = await query<ViewerData>(SETTINGS_QUERY);
         if (!data.viewer) {
           setError("Not authenticated");
