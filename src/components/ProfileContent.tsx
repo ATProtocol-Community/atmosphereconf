@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { graphql } from "../lib/graphql";
-import { isAuthenticated, logout, query } from "../lib/client";
+import { logout, query } from "../lib/client";
 import type { ProfilePageQuery } from "./__generated__/ProfilePageQuery.graphql";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ProfileField } from "./ProfileField";
@@ -48,12 +48,6 @@ export function ProfileContent() {
   useEffect(() => {
     async function loadProfile() {
       try {
-        const isAuth = await isAuthenticated();
-        if (!isAuth) {
-          window.location.href = "/login";
-          return;
-        }
-
         const data = await query<ProfilePageQuery["response"]>(VIEWER_PROFILE_QUERY);
         if (!data.viewer) {
           setError("Not authenticated");

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { graphql } from "../lib/graphql";
-import { isAuthenticated, query } from "../lib/client";
+import { query } from "../lib/client";
 import type { HeaderQuery } from "./__generated__/HeaderQuery.graphql";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -27,19 +27,18 @@ const VIEWER_QUERY = graphql`
 
 type Viewer = NonNullable<HeaderQuery["response"]["viewer"]>;
 
-export function Header() {
+export function Header({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   const [viewer, setViewer] = useState<Viewer | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(isLoggedIn);
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     async function checkAuth() {
       try {
-        const authenticated = await isAuthenticated();
-        if (authenticated) {
-          const data = await query<HeaderQuery["response"]>(VIEWER_QUERY);
-          if (data.viewer) {
-            setViewer(data.viewer);
-          }
+        const data = await query<HeaderQuery["response"]>(VIEWER_QUERY);
+        if (data.viewer) {
+          setViewer(data.viewer);
         }
       } catch (err) {
         console.error("Auth check failed:", err);

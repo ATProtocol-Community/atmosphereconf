@@ -2,6 +2,15 @@
 import Layout from "../layouts/Layout.astro";
 import { Card } from "@/components/ui/card";
 import { LoginForm } from "@/components/LoginForm";
+
+// Redirect if already logged in
+const userDid = Astro.cookies.get("user_did")?.value;
+if (userDid) {
+  return Astro.redirect("/profile");
+}
+
+// Show error from failed callback
+const error = Astro.url.searchParams.get("error");
 ---
 
 <Layout title="Sign In - Atmosphere Conference">
@@ -14,7 +23,7 @@ import { LoginForm } from "@/components/LoginForm";
         Sign in with your AT Protocol account
       </p>
 
-      <LoginForm client:load />
+      <LoginForm client:load error={error} />
 
       <p class="text-center mt-6 text-sm text-gray-600">
         Don't have an AT Protocol account?{" "}
