@@ -1,3 +1,5 @@
+import { isAbortError } from "@/lib/client";
+
 export interface NominatimResult {
   display_name: string;
   lat: string;
@@ -11,7 +13,10 @@ export interface NominatimResult {
   };
 }
 
-export async function searchLocations(query: string): Promise<NominatimResult[]> {
+export async function searchLocations(
+  query: string,
+  signal?: AbortSignal,
+): Promise<NominatimResult[]> {
   if (!query || query.trim().length < 2) {
     return [];
   }
@@ -27,6 +32,7 @@ export async function searchLocations(query: string): Promise<NominatimResult[]>
       headers: {
         "User-Agent": "atmosphere-conf-app/1.0",
       },
+      signal,
     });
 
     if (!response.ok) {
@@ -34,7 +40,10 @@ export async function searchLocations(query: string): Promise<NominatimResult[]>
     }
 
     return await response.json();
-  } catch (error) {
+  } catch (error: unknown) {
+    if (isAbortError(error)) {
+      return [];
+    }
     console.error("Error fetching locations from Nominatim:", error);
     return [];
   }
