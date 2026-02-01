@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f9e95a96296ceaca010bfff7df8fdd43>>
+ * @generated SignedSource<<9f501fcb581b74ce6a162840c756d8d1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,8 +9,8 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
-export type HomePageQuery$variables = Record<PropertyKey, never>;
-export type HomePageQuery$data = {
+export type profileRegularQuery$variables = Record<PropertyKey, never>;
+export type profileRegularQuery$data = {
   readonly viewer: {
     readonly appBskyActorProfileByDid: {
       readonly avatar: {
@@ -18,6 +18,7 @@ export type HomePageQuery$data = {
       } | null | undefined;
       readonly displayName: string | null | undefined;
     } | null | undefined;
+    readonly did: string;
     readonly handle: string | null | undefined;
     readonly orgAtmosphereconfProfileByDid: {
       readonly avatar: {
@@ -27,9 +28,9 @@ export type HomePageQuery$data = {
     } | null | undefined;
   } | null | undefined;
 };
-export type HomePageQuery = {
-  response: HomePageQuery$data;
-  variables: HomePageQuery$variables;
+export type profileRegularQuery = {
+  response: profileRegularQuery$data;
+  variables: profileRegularQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -79,6 +80,13 @@ v1 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
+        "name": "did",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
         "name": "handle",
         "storageKey": null
       },
@@ -111,7 +119,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "HomePageQuery",
+    "name": "profileRegularQuery",
     "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -120,20 +128,20 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "HomePageQuery",
+    "name": "profileRegularQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "08cf2035f0b6aa42b0334c904e9c0f70",
+    "cacheID": "38434cc8023cd62225f0dfd7070087d9",
     "id": null,
     "metadata": {},
-    "name": "HomePageQuery",
+    "name": "profileRegularQuery",
     "operationKind": "query",
-    "text": "query HomePageQuery {\n  viewer {\n    handle\n    appBskyActorProfileByDid {\n      displayName\n      avatar {\n        url(preset: \"avatar\")\n      }\n    }\n    orgAtmosphereconfProfileByDid {\n      displayName\n      avatar {\n        url(preset: \"avatar\")\n      }\n    }\n  }\n}\n"
+    "text": "query profileRegularQuery {\n  viewer {\n    did\n    handle\n    appBskyActorProfileByDid {\n      displayName\n      avatar {\n        url(preset: \"avatar\")\n      }\n    }\n    orgAtmosphereconfProfileByDid {\n      displayName\n      avatar {\n        url(preset: \"avatar\")\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "73d9fce4f23216fe7afbe5c6e02a4aa3";
+(node as any).hash = "76dac20a75e78d436c1b11dac251b748";
 
 export default node;

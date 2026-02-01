@@ -1,12 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Card } from "@/components/ui/card";
+import Card from "@/components/ui/card.astro";
 import { LoginForm } from "@/components/LoginForm";
+
+// Redirect if already logged in
+const userDid = Astro.cookies.get("user_did")?.value;
+if (userDid) {
+  return Astro.redirect("/profile");
+}
+
+// Show error from failed callback
+const error = Astro.url.searchParams.get("error");
 ---
 
 <Layout title="Sign In - Atmosphere Conference">
   <div class="flex-1 flex items-center justify-center">
-    <Card className="w-full max-w-sm p-8">
+    <Card class="w-full max-w-sm p-8">
       <h1 class="text-2xl font-bold text-gray-900 text-center mb-2">
         Sign In
       </h1>
@@ -14,7 +23,7 @@ import { LoginForm } from "@/components/LoginForm";
         Sign in with your AT Protocol account
       </p>
 
-      <LoginForm client:load />
+      <LoginForm client:load error={error} />
 
       <p class="text-center mt-6 text-sm text-gray-600">
         Don't have an AT Protocol account?{" "}
