@@ -10,3 +10,19 @@ export const POST: APIRoute = async ({ cookies }) => {
     headers: { "Content-Type": "application/json" },
   });
 };
+
+export const GET: APIRoute = async ({ cookies, redirect, request }) => {
+  cookies.delete("access_token", { path: "/" });
+  cookies.delete("refresh_token", { path: "/" });
+  cookies.delete("user_did", { path: "/" });
+
+  let to = "/";
+  try {
+    const url = new URL(request.url);
+    to = url.searchParams.get("to")?.startsWith("/")
+      ? (url.searchParams.get("to") ?? to)
+      : to;
+  } catch (e) {}
+
+  return redirect(to);
+};

@@ -1,13 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { Card } from "@/components/ui/card";
+import Card from "@/components/ui/card.astro";
 import { ProfileSettingsForm } from "@/components/ProfileSettingsForm";
 
 ---
 
 <Layout title="Edit Profile - Atmosphere Conference">
   <div class="w-full px-4">
-    <Card className="max-w-2xl mx-auto mt-8 p-8">
+    <Card class="max-w-2xl mx-auto mt-8 p-8">
       <ProfileSettingsForm client:load />
     </Card>
   </div>

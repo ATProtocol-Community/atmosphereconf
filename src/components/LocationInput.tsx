@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { MapPin } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { searchLocations, type NominatimResult } from "@/utils/nominatim";
 import { latLonToH3 } from "@/utils/h3";
 
@@ -23,43 +22,58 @@ export function LocationInput({ value, onChange, placeholder }: LocationInputPro
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const debounceTimer = useRef<number | null>(null);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const focusControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    // Close dropdown on outside click.
+    function handleClickOutside(event: PointerEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setShowDropdown(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, []);
 
   useEffect(() => {
+    // Abort pending focus lookup on unmount.
+    return () => {
+      focusControllerRef.current?.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    // Debounced search on user input.
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
-    }
-
-    if (inputValue.trim().length < 2) {
-      setSuggestions([]);
-      setShowDropdown(false);
-      return;
     }
 
     if (!hasInteracted) {
       return;
     }
 
+    if (inputValue.trim().length < 2) {
+      setSuggestions([]);
+      setShowDropdown(false);
+      setIsLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
     debounceTimer.current = setTimeout(async () => {
       setIsLoading(true);
-      const results = await searchLocations(inputValue);
-      setSuggestions(results);
-      setShowDropdown(results.length > 0);
-      setIsLoading(false);
-    }, 300) as unknown as number;
+      const results = await searchLocations(inputValue, controller.signal);
+      if (!controller.signal.aborted) {
+        setSuggestions(results);
+        setShowDropdown(results.length > 0);
+        setIsLoading(false);
+      }
+    }, 300);
 
     return () => {
+      controller.abort();
       if (debounceTimer.current) {
         clearTimeout(debounceTimer.current);
       }
@@ -77,11 +91,16 @@ export function LocationInput({ value, onChange, placeholder }: LocationInputPro
   const handleFocus = async () => {
     setHasInteracted(true);
     if (inputValue.trim().length >= 2) {
+      focusControllerRef.current?.abort();
+      const controller = new AbortController();
+      focusControllerRef.current = controller;
       setIsLoading(true);
-      const results = await searchLocations(inputValue);
-      setSuggestions(results);
-      setShowDropdown(results.length > 0);
-      setIsLoading(false);
+      const results = await searchLocations(inputValue, controller.signal);
+      if (!controller.signal.aborted) {
+        setSuggestions(results);
+        setShowDropdown(results.length > 0);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -115,13 +134,13 @@ export function LocationInput({ value, onChange, placeholder }: LocationInputPro
   return (
     <div className="relative" ref={wrapperRef}>
       <div className="relative">
-        <Input
+        <input
           type="text"
           value={inputValue}
           onChange={handleInputChange}
           onFocus={handleFocus}
           placeholder={placeholder || "Search for a location..."}
-          className="pr-10"
+          className="ui-input pr-10"
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
           {isLoading ? (
