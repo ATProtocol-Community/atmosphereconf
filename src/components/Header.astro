@@ -1,0 +1,36 @@
+---
+import Button from "@/components/ui/button.astro";
+import { Avatar } from "@/components/Avatar";
+import { maybeGetLoggedInProfile } from "@/lib/profile";
+
+const profile = await maybeGetLoggedInProfile({
+  request: Astro.request,
+  cookies: Astro.cookies,
+});
+---
+
+<header
+  class="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-white/10 h-14"
+>
+  <div class="max-w-4xl mx-auto px-4 h-full flex items-center justify-between">
+    <a href="/" class="font-semibold text-white">Atmosphere Conf 2026</a>
+    <div class="h-8 flex items-center">
+      {
+        profile ? (
+          <a href="/profile">
+            <Avatar
+              size="sm"
+              className="cursor-pointer ring-2 ring-white/50 hover:ring-white"
+              src={profile.avatarUrl}
+              alt={profile.displayName}
+            />
+          </a>
+        ) : (
+          <Button variant="secondary" size="sm" href="/login">
+            Sign In
+          </Button>
+        )
+      }
+    </div>
+  </div>
+</header>

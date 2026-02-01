@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Card } from "@/components/ui/card";
+import Card from "@/components/ui/card.astro";
 
 const AGENDA = [
   { time: "9:00 AM", title: "Registration & Breadcrumbs", speaker: null },
@@ -67,7 +67,7 @@ const SPONSORS = [
 <Layout title="Atmosphere Conference">
   <div class="space-y-12">
     <!-- Hero Section -->
-    <Card className="w-full text-center py-12 px-8">
+    <Card class="w-full text-center py-12 px-8">
       <img
         src="https://do3z7e6uuakno.cloudfront.net/uploads/event/logo/1152732/5d74de6fb26f78a66e93147e5d5068e0.png"
         alt="Atmosphere Conference"
@@ -107,7 +107,7 @@ const SPONSORS = [
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {
           SPEAKERS.map((speaker) => (
-            <Card className="p-6">
+            <Card class="p-6">
               <div class="flex gap-4">
                 <div class="w-16 h-16 rounded-full bg-gray-200 flex-shrink-0" />
                 <div>
@@ -127,7 +127,7 @@ const SPONSORS = [
     <!-- Sponsors Section -->
     <section>
       <h2 class="text-2xl font-bold text-gray-900 mb-6">Sponsors</h2>
-      <Card className="p-6">
+      <Card class="p-6">
         <div class="flex flex-wrap justify-center gap-8">
           {
             SPONSORS.map((sponsor) => (

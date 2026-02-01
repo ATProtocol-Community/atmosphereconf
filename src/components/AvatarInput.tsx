@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Camera } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar } from "@/components/Avatar";
 
 interface AvatarInputProps {
   currentAvatarUrl?: string | null;
-  fallback: string;
   onChange: (file: File | null) => void;
 }
 
-export function AvatarInput({ currentAvatarUrl, fallback, onChange }: AvatarInputProps) {
+export function AvatarInput({ currentAvatarUrl, onChange }: AvatarInputProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
       onChange(file);
@@ -32,10 +36,12 @@ export function AvatarInput({ currentAvatarUrl, fallback, onChange }: AvatarInpu
     <div>
       <label htmlFor="avatar" className="cursor-pointer inline-block">
         <div className="relative w-20 h-20">
-          <Avatar className="w-20 h-20 border-2 border-gray-200 hover:border-gray-300 transition-colors">
-            {displayUrl && <AvatarImage src={displayUrl} alt="Avatar preview" />}
-            <AvatarFallback className="text-2xl">{fallback}</AvatarFallback>
-          </Avatar>
+          <Avatar
+            size="lg"
+            className="border-2 border-gray-200 hover:border-gray-300 transition-colors"
+            src={displayUrl || undefined}
+            alt="Avatar preview"
+          />
           <div className="absolute bottom-0 right-0 bg-gray-700 rounded-full w-6 h-6 flex items-center justify-center">
             <Camera className="w-3.5 h-3.5 text-white" />
           </div>

@@ -37,3 +37,9 @@ export async function mutate<T>(
 ): Promise<T> {
   return query<T>(mutationString, variables);
 }
+
+export function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException || error instanceof Error
+    ? error.name === "AbortError"
+    : false;
+}

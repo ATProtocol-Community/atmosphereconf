@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { login } from "../lib/client";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { ActorAutocomplete, type Actor } from "@/components/ActorAutocomplete";
 
 export function LoginForm({ error: serverError }: { error?: string | null }) {
@@ -35,7 +33,12 @@ export function LoginForm({ error: serverError }: { error?: string | null }) {
     <>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="handle">Handle</Label>
+          <label
+            htmlFor="handle"
+            className="flex items-center gap-2 text-sm leading-none font-medium select-none"
+          >
+            Handle
+          </label>
           <ActorAutocomplete
             id="handle"
             name="handle"
@@ -46,9 +49,13 @@ export function LoginForm({ error: serverError }: { error?: string | null }) {
             disabled={submitting}
           />
         </div>
-        <Button type="submit" disabled={submitting} size="lg">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] bg-primary text-primary-foreground hover:bg-primary/90 h-10 rounded-md px-6"
+        >
           {submitting ? "Redirecting..." : "Sign In"}
-        </Button>
+        </button>
       </form>
 
       {error && (
