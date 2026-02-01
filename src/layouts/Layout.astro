@@ -1,7 +1,7 @@
 ---
 import { ViewTransitions } from "astro:transitions";
 import "../styles/global.css";
-import { Header } from "../components/Header";
+import Header from "../components/Header.astro";
 
 interface Props {
   title?: string;
@@ -11,10 +11,6 @@ const {
   title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
 } = Astro.props;
 
-// It doesn't matter if the access token is expired because we'll check
-// again soon.
-// TODO: check if this is still true later on.
-const isLoggedIn = !!Astro.cookies.get("access_token")?.value;
 ---
 
 <!doctype html>
@@ -29,7 +25,7 @@ const isLoggedIn = !!Astro.cookies.get("access_token")?.value;
   </head>
   <body class="h-full antialiased bg-background">
     <div class="min-h-screen flex flex-col">
-      <Header client:load transition:persist isLoggedIn={isLoggedIn} />
+      <Header transition:persist />
       <main class="flex-1 flex flex-col px-10 py-8 w-full max-w-4xl mx-auto">
         <slot />
       </main>

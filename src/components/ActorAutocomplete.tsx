@@ -1,19 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverAnchor,
-} from "@/components/ui/popover";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Spinner } from "@/components/ui/spinner";
+import * as Popover from "@radix-ui/react-popover";
+import { Command } from "cmdk";
+import { Spinner } from "@/components/Spinner";
+import { Avatar } from "@/components/Avatar";
+import { isAbortError } from "@/lib/client";
 
 export interface Actor {
   did: string;
@@ -34,6 +24,73 @@ interface ActorAutocompleteProps {
 
 const DEBOUNCE_MS = 300;
 
+async function fetchActors(
+  query: string,
+  signal?: AbortSignal,
+): Promise<Actor[]> {
+  const url = new URL(
+    "https://public.api.bsky.app/xrpc/app.bsky.actor.searchActorsTypeahead",
+  );
+  url.searchParams.set("q", query);
+  url.searchParams.set("limit", "5");
+  const response = await fetch(url.toString(), { signal });
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch actors from Bluesky: ${response.statusText}`,
+    );
+  }
+  return (await response.json())?.actors ?? [];
+}
+
+function ActorList({
+  loading,
+  actors,
+  handleSelect,
+}: {
+  loading: boolean;
+  actors: Actor[];
+  handleSelect: (actor: Actor) => void;
+}) {
+  return (
+    <Command.List className="py-1">
+      {loading && actors.length === 0 ? (
+        <div className="py-6 text-center text-sm text-gray-500">
+          Searching...
+        </div>
+      ) : actors.length === 0 ? (
+        <div className="py-6 text-center text-sm text-gray-500">
+          No users found.
+        </div>
+      ) : (
+        actors.map((actor) => (
+          <Command.Item
+            key={actor.did}
+            value={actor.handle}
+            onSelect={() => handleSelect(actor)}
+            className="w-full px-3 py-2 text-left transition-colors flex items-center gap-2 data-[selected=true]:bg-gray-50"
+          >
+            <Avatar
+              size="sm"
+              src={actor.avatar}
+              alt={actor.displayName || actor.handle}
+            />
+            <div className="flex flex-col min-w-0">
+              {actor.displayName && (
+                <span className="text-sm font-medium truncate">
+                  {actor.displayName}
+                </span>
+              )}
+              <span className="text-xs text-gray-500 truncate">
+                @{actor.handle}
+              </span>
+            </div>
+          </Command.Item>
+        ))
+      )}
+    </Command.List>
+  );
+}
+
 export function ActorAutocomplete({
   value,
   onChange,
@@ -46,7 +103,6 @@ export function ActorAutocomplete({
   const [open, setOpen] = useState(false);
   const [actors, setActors] = useState<Actor[]>([]);
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Debounced search effect
@@ -62,42 +118,30 @@ export function ActorAutocomplete({
       return;
     }
 
+    const controller = new AbortController();
     setLoading(true);
 
     debounceRef.current = setTimeout(async () => {
       try {
-        const url = new URL(
-          "https://public.api.bsky.app/xrpc/app.bsky.actor.searchActorsTypeahead"
-        );
-        url.searchParams.set("q", query);
-        url.searchParams.set("limit", "5");
+        const actors = await fetchActors(query, controller.signal);
 
-        const response = await fetch(url.toString());
-
-        if (!response.ok) {
-          setActors([]);
-          setLoading(false);
-          return;
+        if (!controller.signal.aborted) {
+          setActors(actors);
         }
-
-        const data = await response.json();
-        const results: Actor[] = (data.actors || []).map((actor: any) => ({
-          did: actor.did || "",
-          handle: actor.handle || "",
-          displayName: actor.displayName,
-          avatar: actor.avatar,
-        }));
-
-        setActors(results);
-      } catch {
-        // Silent fail - just clear results
-        setActors([]);
+      } catch (err: unknown) {
+        if (!isAbortError(err)) {
+          console.error("Error fetching actors from Bluesky:", err);
+          setActors([]);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }, DEBOUNCE_MS);
 
     return () => {
+      controller.abort();
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
@@ -111,101 +155,55 @@ export function ActorAutocomplete({
     onSelect(actor);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+  const handleInputChange = (newValue: string) => {
     onChange(newValue);
     setOpen(newValue.trim().length > 0);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Let Command handle arrow keys and enter when open
-    if (open && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-      e.preventDefault();
-    }
-  };
-
-  const showDropdown = open && (actors.length > 0 || loading);
+  const showDropdown = open && value.trim().length > 0;
 
   return (
-    <Popover open={showDropdown} onOpenChange={setOpen}>
-      <PopoverAnchor asChild>
-        <div className="relative">
-          <input
-            ref={inputRef}
-            type="text"
-            id={id}
-            name={name}
-            value={value}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onFocus={() => value.trim() && setOpen(true)}
-            onBlur={() => {
-              // Delay close to allow click on dropdown items
-              setTimeout(() => setOpen(false), 150);
-            }}
-            placeholder={placeholder}
-            disabled={disabled}
-            autoComplete="off"
-            required
-            className={cn(
-              "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-              "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-            )}
-          />
-          {loading && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <Spinner size={16} />
-            </div>
-          )}
-        </div>
-      </PopoverAnchor>
-      <PopoverContent
-        className="w-[var(--radix-popover-trigger-width)] p-0"
-        align="start"
-        onOpenAutoFocus={(e) => e.preventDefault()}
-      >
-        <Command>
-          <CommandList>
-            {loading && actors.length === 0 ? (
-              <div className="py-6 text-center text-sm text-muted-foreground">
-                Searching...
+    <Popover.Root open={showDropdown} onOpenChange={setOpen}>
+      <Command shouldFilter={false} className="w-full">
+        <Popover.Anchor asChild>
+          <div className="relative">
+            <Command.Input
+              id={id}
+              name={name}
+              value={value}
+              onValueChange={handleInputChange}
+              onFocus={() => value.trim() && setOpen(true)}
+              onBlur={() => {
+                setTimeout(() => setOpen(false), 150);
+              }}
+              placeholder={placeholder}
+              disabled={disabled}
+              autoComplete="off"
+              required
+              className={"ui-input"}
+            />
+            {loading && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <Spinner size={16} />
               </div>
-            ) : actors.length === 0 ? (
-              <CommandEmpty>No users found.</CommandEmpty>
-            ) : (
-              <CommandGroup>
-                {actors.map((actor) => (
-                  <CommandItem
-                    key={actor.did}
-                    value={actor.handle}
-                    onSelect={() => handleSelect(actor)}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <Avatar className="h-8 w-8">
-                      {actor.avatar && <AvatarImage src={actor.avatar} />}
-                      <AvatarFallback>
-                        {(actor.displayName || actor.handle)
-                          .charAt(0)
-                          .toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col min-w-0">
-                      {actor.displayName && (
-                        <span className="text-sm font-medium truncate">
-                          {actor.displayName}
-                        </span>
-                      )}
-                      <span className="text-xs text-muted-foreground truncate">
-                        @{actor.handle}
-                      </span>
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
             )}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+          </div>
+        </Popover.Anchor>
+        <Popover.Portal>
+          <Popover.Content
+            className="z-50 w-(--radix-popover-trigger-width) mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            align="start"
+            sideOffset={4}
+            onOpenAutoFocus={(event: Event) => event.preventDefault()}
+          >
+            <ActorList
+              loading={loading}
+              actors={actors}
+              handleSelect={handleSelect}
+            />
+          </Popover.Content>
+        </Popover.Portal>
+      </Command>
+    </Popover.Root>
   );
 }

@@ -5,26 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { graphql } from "@/lib/graphql";
 import { query, mutate } from "@/lib/client";
-import type { ProfileSettingsPageQuery } from "./__generated__/ProfileSettingsPageQuery.graphql";
-import type { ProfileSettingsPageUploadBlobMutation } from "./__generated__/ProfileSettingsPageUploadBlobMutation.graphql";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Spinner } from "@/components/ui/spinner";
+import type { ProfileSettingsFormQuery } from "./__generated__/ProfileSettingsFormQuery.graphql";
+import type { ProfileSettingsFormUploadBlobMutation } from "./__generated__/ProfileSettingsFormUploadBlobMutation.graphql";
+import { Spinner } from "@/components/Spinner";
 import { AvatarInput } from "./AvatarInput";
 import { LocationInput, type LocationData } from "./LocationInput";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 
 const SETTINGS_QUERY = graphql`
-  query ProfileSettingsPageQuery {
+  query ProfileSettingsFormQuery {
     viewer {
       did
       handle
@@ -54,7 +42,10 @@ const SETTINGS_QUERY = graphql`
 `;
 
 const UPLOAD_BLOB_MUTATION = graphql`
-  mutation ProfileSettingsPageUploadBlobMutation($data: String!, $mimeType: String!) {
+  mutation ProfileSettingsFormUploadBlobMutation(
+    $data: String!
+    $mimeType: String!
+  ) {
     uploadBlob(data: $data, mimeType: $mimeType) {
       ref
       mimeType
@@ -64,7 +55,9 @@ const UPLOAD_BLOB_MUTATION = graphql`
 `;
 
 const CREATE_PROFILE_MUTATION = graphql`
-  mutation ProfileSettingsPageCreateProfileMutation($input: OrgAtmosphereconfProfileInput!) {
+  mutation ProfileSettingsFormCreateProfileMutation(
+    $input: OrgAtmosphereconfProfileInput!
+  ) {
     createOrgAtmosphereconfProfile(input: $input, rkey: "self") {
       uri
     }
@@ -72,7 +65,9 @@ const CREATE_PROFILE_MUTATION = graphql`
 `;
 
 const UPDATE_PROFILE_MUTATION = graphql`
-  mutation ProfileSettingsPageUpdateProfileMutation($input: OrgAtmosphereconfProfileInput!) {
+  mutation ProfileSettingsFormUpdateProfileMutation(
+    $input: OrgAtmosphereconfProfileInput!
+  ) {
     updateOrgAtmosphereconfProfile(rkey: "self", input: $input) {
       uri
     }
@@ -80,14 +75,20 @@ const UPDATE_PROFILE_MUTATION = graphql`
 `;
 
 const profileFormSchema = z.object({
-  displayName: z.string().max(64, "Display name must be 64 characters or less").optional(),
-  description: z.string().max(256, "Bio must be 256 characters or less").optional(),
+  displayName: z
+    .string()
+    .max(64, "Display name must be 64 characters or less")
+    .optional(),
+  description: z
+    .string()
+    .max(256, "Bio must be 256 characters or less")
+    .optional(),
   interests: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-type ViewerData = ProfileSettingsPageQuery["response"];
+type ViewerData = ProfileSettingsFormQuery["response"];
 
 export function ProfileSettingsForm() {
   const [loading, setLoading] = useState(true);
@@ -104,9 +105,13 @@ export function ProfileSettingsForm() {
     mimeType: string;
     size: number;
   } | null>(null);
-  const [fallbackChar, setFallbackChar] = useState("U");
 
-  const form = useForm<ProfileFormValues>({
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       displayName: "",
@@ -116,9 +121,12 @@ export function ProfileSettingsForm() {
   });
 
   useEffect(() => {
+    let isActive = true;
+
     async function loadProfile() {
       try {
         const data = await query<ViewerData>(SETTINGS_QUERY);
+        if (!isActive) return;
         if (!data.viewer) {
           setError("Not authenticated");
           return;
@@ -131,9 +139,8 @@ export function ProfileSettingsForm() {
 
         // Pre-populate form
         const name = confProfile?.displayName || bskyProfile?.displayName || "";
-        setFallbackChar(name.charAt(0).toUpperCase() || "U");
 
-        form.reset({
+        reset({
           displayName: name,
           description: confProfile?.description || "",
           interests: confProfile?.interests?.join(", ") || "",
@@ -148,7 +155,9 @@ export function ProfileSettingsForm() {
           });
         }
 
-        setCurrentAvatarUrl(confProfile?.avatar?.url || bskyProfile?.avatar?.url || null);
+        setCurrentAvatarUrl(
+          confProfile?.avatar?.url || bskyProfile?.avatar?.url || null,
+        );
 
         // Store existing avatar blob so we can preserve it on submit
         if (confProfile?.avatar) {
@@ -158,16 +167,21 @@ export function ProfileSettingsForm() {
             size: confProfile.avatar.size,
           });
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
+        if (!isActive) return;
         console.error("Profile load error:", err);
-        setError(err.message || "Failed to load profile");
+        setError(err instanceof Error ? err.message : "Failed to load profile");
       } finally {
+        if (!isActive) return;
         setLoading(false);
       }
     }
 
     loadProfile();
-  }, [form]);
+    return () => {
+      isActive = false;
+    };
+  }, [reset]);
 
   async function onSubmit(values: ProfileFormValues) {
     setSaving(true);
@@ -179,10 +193,9 @@ export function ProfileSettingsForm() {
       // Upload avatar if changed
       if (avatarFile) {
         const base64 = await fileToBase64(avatarFile);
-        const blobResult = await mutate<ProfileSettingsPageUploadBlobMutation["response"]>(
-          UPLOAD_BLOB_MUTATION,
-          { data: base64, mimeType: avatarFile.type }
-        );
+        const blobResult = await mutate<
+          ProfileSettingsFormUploadBlobMutation["response"]
+        >(UPLOAD_BLOB_MUTATION, { data: base64, mimeType: avatarFile.type });
         avatarBlob = {
           ref: blobResult.uploadBlob.ref,
           mimeType: blobResult.uploadBlob.mimeType,
@@ -226,9 +239,9 @@ export function ProfileSettingsForm() {
       }
 
       window.location.href = "/profile";
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Save error:", err);
-      setError(err.message || "Failed to save profile");
+      setError(err instanceof Error ? err.message : "Failed to save profile");
       setSaving(false);
     }
   }
@@ -249,9 +262,12 @@ export function ProfileSettingsForm() {
       <div className="text-center">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
         <p className="text-gray-600 mb-4">{error}</p>
-        <Button asChild>
-          <a href="/profile">Back to Profile</a>
-        </Button>
+        <a
+          href="/profile"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
+        >
+          Back to Profile
+        </a>
       </div>
     );
   }
@@ -259,104 +275,112 @@ export function ProfileSettingsForm() {
   return (
     <>
       <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" size="icon" asChild>
-          <a href="/profile">
-            <ArrowLeft className="h-5 w-5" />
-          </a>
-        </Button>
+        <a
+          href="/profile"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 size-9"
+          aria-label="Back to profile"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </a>
         <h1 className="text-2xl font-bold text-gray-900">Edit Profile</h1>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormItem>
-            <FormLabel>Avatar</FormLabel>
-            <FormControl>
-              <AvatarInput
-                currentAvatarUrl={currentAvatarUrl}
-                fallback={fallbackChar}
-                onChange={setAvatarFile}
-              />
-            </FormControl>
-            <FormDescription>PNG or JPEG, max 1MB</FormDescription>
-          </FormItem>
-
-          <FormField
-            control={form.control}
-            name="displayName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Display Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your name" maxLength={64} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid gap-2">
+          <label className="text-sm font-medium">Avatar</label>
+          <AvatarInput
+            currentAvatarUrl={currentAvatarUrl}
+            onChange={setAvatarFile}
           />
+          <p className="text-sm text-muted-foreground">PNG or JPEG, max 1MB</p>
+        </div>
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bio</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Tell others about yourself..."
-                    maxLength={256}
-                    rows={3}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+        <div className="grid gap-2">
+          <label className="text-sm font-medium" htmlFor="displayName">
+            Display Name
+          </label>
+          <input
+            id="displayName"
+            placeholder="Your name"
+            maxLength={64}
+            className="ui-input"
+            aria-invalid={!!errors.displayName}
+            {...register("displayName")}
           />
-
-          <FormItem>
-            <FormLabel>Home Town</FormLabel>
-            <FormControl>
-              <LocationInput
-                value={location}
-                onChange={setLocation}
-                placeholder="Search for your city..."
-              />
-            </FormControl>
-          </FormItem>
-
-          <FormField
-            control={form.control}
-            name="interests"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Interests</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="e.g. rust, atproto, distributed systems"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>Separate with commas</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {error && (
-            <div className="text-destructive text-sm">{error}</div>
+          {errors.displayName?.message && (
+            <p className="text-destructive text-sm">
+              {errors.displayName.message}
+            </p>
           )}
+        </div>
 
-          <div className="flex justify-end gap-3">
-            <Button variant="secondary" asChild>
-              <a href="/profile">Cancel</a>
-            </Button>
-            <Button type="submit" disabled={saving}>
-              {saving ? "Saving..." : "Save Profile"}
-            </Button>
-          </div>
-        </form>
-      </Form>
+        <div className="grid gap-2">
+          <label className="text-sm font-medium" htmlFor="description">
+            Bio
+          </label>
+          <textarea
+            id="description"
+            placeholder="Tell others about yourself..."
+            maxLength={256}
+            rows={3}
+            className="ui-textarea"
+            aria-invalid={!!errors.description}
+            {...register("description")}
+          />
+          {errors.description?.message && (
+            <p className="text-destructive text-sm">
+              {errors.description.message}
+            </p>
+          )}
+        </div>
+
+        <div className="grid gap-2">
+          <label className="text-sm font-medium">Home Town</label>
+          <LocationInput
+            key={location?.h3Index || "empty"}
+            value={location}
+            onChange={setLocation}
+            placeholder="Search for your city..."
+          />
+        </div>
+
+        <div className="grid gap-2">
+          <label className="text-sm font-medium" htmlFor="interests">
+            Interests
+          </label>
+          <input
+            id="interests"
+            placeholder="e.g. rust, atproto, distributed systems"
+            className="ui-input"
+            aria-invalid={!!errors.interests}
+            {...register("interests")}
+          />
+          <p className="text-sm text-muted-foreground">Separate with commas</p>
+          {errors.interests?.message && (
+            <p className="text-destructive text-sm">
+              {errors.interests.message}
+            </p>
+          )}
+        </div>
+
+        {error && <div className="text-destructive text-sm">{error}</div>}
+
+        <div className="flex justify-end gap-3">
+          <a
+            href="/profile"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2"
+          >
+            Cancel
+          </a>
+          <button
+            type="submit"
+            disabled={saving}
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
+          >
+            {saving ? "Saving..." : "Save Profile"}
+          </button>
+        </div>
+      </form>
     </>
   );
 }
