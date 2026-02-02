@@ -25,11 +25,20 @@ jobs:
       - name: Check if preview environment exists
         id: check
         run: |
-          RESULT=$(curl --silent --request POST \
+          set -e
+
+          RESULT=$(curl --silent --fail --request POST \
             --url https://backboard.railway.com/graphql/v2 \
             --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
             --header 'Content-Type: application/json' \
             --data '{"query":"query { environments(projectId: \"${{ vars.RAILWAY_PROJECT_ID }}\") { edges { node { id name } } } }"}')
+
+          # Check for API errors
+          ERROR=$(echo "$RESULT" | jq -r '.errors[0].message // empty')
+          if [ -n "$ERROR" ]; then
+            echo "API error: $ERROR"
+            exit 1
+          fi
 
           EXISTS=$(echo "$RESULT" | jq -r '.data.environments.edges[] | select(.node.name == "pr-${{ github.event.pull_request.number }}") | .node.id')
 
