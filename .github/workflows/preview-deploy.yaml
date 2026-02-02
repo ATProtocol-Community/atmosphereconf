@@ -24,7 +24,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ vars.RAILWAY_PROJECT_ID }}
+          railway link -p ${{ vars.RAILWAY_PROJECT_ID }}
           railway environment create pr-${{ github.event.pull_request.number }} || true
 
           # Deploy and capture the deployment domain
@@ -58,5 +58,5 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway link ${{ vars.RAILWAY_PROJECT_ID }}
+          railway link -p ${{ vars.RAILWAY_PROJECT_ID }}
           railway environment delete pr-${{ github.event.pull_request.number }} --yes
