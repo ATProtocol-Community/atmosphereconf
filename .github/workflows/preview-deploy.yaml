@@ -33,13 +33,13 @@ jobs:
           branch_name: ${{ github.head_ref }}
 
       - name: Comment with preview URL
-        if: steps.railway-deploy.outputs.service_domain != ''
         uses: actions/github-script@v7
         with:
           script: |
             const marker = '<!-- railway-preview -->';
-            const domain = '${{ steps.railway-deploy.outputs.service_domain }}';
             const envName = 'pr-${{ github.event.pull_request.number }}';
+            const domain = `conf-demo-pr-${{ github.event.pull_request.number }}.up.railway.app`;
+
 
             const { data: comments } = await github.rest.issues.listComments({
               issue_number: context.issue.number,
