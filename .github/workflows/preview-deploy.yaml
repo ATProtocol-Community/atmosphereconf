@@ -29,21 +29,22 @@ jobs:
 
           # Deploy and capture the deployment domain
           # We use --json to get a machine-readable response
-          DEPLOY_URL=$(railway up --environment pr-${{ github.event.pull_request.number }} --detach --json | jq -r '.deploymentDomain')
-          echo "DEPLOY_URL=https://$DEPLOY_URL" >> $GITHUB_OUTPUT
+          railway up --environment pr-${{ github.event.pull_request.number }} --detach
+
+          # echo "DEPLOY_URL=https://$DEPLOY_URL" >> $GITHUB_OUTPUT
 
       - name: Comment with preview URL
         uses: actions/github-script@v7
         with:
           script: |
-            const url = "${{ steps.railway-deploy.outputs.DEPLOY_URL }}";
+            # const url = "${{ steps.railway-deploy.outputs.DEPLOY_URL }}";
             const envName = "pr-${{ github.event.pull_request.number }}";
 
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `🪿 🪿 🪿 Preview environment **${envName}** ready!\n🪿 🪿 🪿Take a gander: ${url}`
+              body: `🪿 🪿 🪿 Preview environment **${envName}** ready!\n🪿 🪿 🪿Take a gander: [TO BE DONE]`
             })
 
   cleanup-preview:
