@@ -33,9 +33,9 @@ jobs:
           branch_name: ${{ github.head_ref }}
           environment_variables: |
             {
-              "QUICKSLICE_CLIENT_ID": "$\{{shared.QUICKSLICE_CLIENT_ID}}",
-              "QUICKSLICE_CLIENT_SECRET":  "$\{{shared.QUICKSLICE_CLIENT_SECRET}}",
-              "QUICKSLICE_REDIRECT_URI": " https://$\{{RAILWAY_PUBLIC_DOMAIN}}/api/auth/callback"
+              "QUICKSLICE_CLIENT_ID": "${{ '${{shared.QUICKSLICE_CLIENT_ID}}' }}",
+              "QUICKSLICE_CLIENT_SECRET":  "${{ '${{shared.QUICKSLICE_CLIENT_SECRET}}' }}",
+              "QUICKSLICE_REDIRECT_URI": "https://${{ '${{RAILWAY_PUBLIC_DOMAIN}}' }}/api/auth/callback"
             }
 
       - name: Comment with preview URL
