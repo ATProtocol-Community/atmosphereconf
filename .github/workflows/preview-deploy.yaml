@@ -2,7 +2,7 @@ name: Deploy Preview to Railway
 
 on:
   pull_request:
-    types: [opened, closed]
+    types: [opened, synchronize, closed]
 
 permissions:
   contents: read
@@ -14,8 +14,34 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-preview:
+  check-environment:
     if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    # TODO: rename this since it's just an environment with no gates
+    environment: preview-cleanup
+    outputs:
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Check if preview environment exists
+        id: check
+        run: |
+          RESULT=$(curl --silent --request POST \
+            --url https://backboard.railway.com/graphql/v2 \
+            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            --header 'Content-Type: application/json' \
+            --data '{"query":"query { environments(projectId: \"${{ vars.RAILWAY_PROJECT_ID }}\") { edges { node { id name } } } }"}')
+
+          EXISTS=$(echo "$RESULT" | jq -r '.data.environments.edges[] | select(.node.name == "pr-${{ github.event.pull_request.number }}") | .node.id')
+
+          if [ -n "$EXISTS" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+  create-preview:
+    needs: check-environment
+    if: github.event.action != 'closed' && needs.check-environment.outputs.exists == 'false'
     runs-on: ubuntu-latest
     environment: preview-deploy
     steps:
@@ -53,8 +79,6 @@ jobs:
               repo: context.repo.repo
             });
 
-
-            Take a gander: https://conf-demo-pr-6.up.railway.app
             const body = `${marker}\n## 🪿 🪿 🪿 Preview environment for **${envName}** is ready! 🪿 🪿 🪿\nTake a gander: https://${domain}`;
 
             const existingComment = comments.find(comment => comment.body.includes(marker));
