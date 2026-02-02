@@ -2,7 +2,7 @@ name: Deploy Preview to Railway
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, closed]
 
 permissions:
   contents: read
