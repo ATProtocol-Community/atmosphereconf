@@ -14,47 +14,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # We check if the environment was created first so we can skip creating it
-  # if it's already there.
-  check-environment:
+  create-preview:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
-    # TODO: rename this since it's just an environment with no gates
-    environment: preview-cleanup
-    outputs:
-      exists: ${{ steps.check.outputs.exists }}
-    steps:
-      - name: Check if preview environment exists
-        id: check
-        run: |
-          set -e
-
-          RESULT=$(curl --silent --fail --request POST \
-            --url https://backboard.railway.com/graphql/v2 \
-            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
-            --header 'Content-Type: application/json' \
-            --data '{"query":"query { environments(projectId: \"${{ vars.RAILWAY_PROJECT_ID }}\") { edges { node { id name } } } }"}')
-
-          # Check for API errors
-          ERROR=$(echo "$RESULT" | jq -r '.errors[0].message // empty')
-          if [ -n "$ERROR" ]; then
-            echo "API error: $ERROR"
-            exit 1
-          fi
-
-          EXISTS=$(echo "$RESULT" | jq -r '.data.environments.edges[] | select(.node.name == "pr-${{ github.event.pull_request.number }}") | .node.id')
-
-          if [ -n "$EXISTS" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-  create-preview:
-    needs: check-environment
-    if: github.event.action != 'closed' && needs.check-environment.outputs.exists == 'false'
-    runs-on: ubuntu-latest
-    environment: preview-deploy
+    environment: >-
+      ${{ (github.actor == github.repository_owner 
+          || github.event.pull_request.author_association == 'MEMBER'
+          || github.event.pull_request.author_association == 'COLLABORATOR')
+          && 'preview-cleanup' 
+          || 'preview-deploy' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -74,6 +42,34 @@ jobs:
               "QUICKSLICE_CLIENT_SECRET":  "${{ '${{shared.QUICKSLICE_CLIENT_SECRET}}' }}",
               "QUICKSLICE_REDIRECT_URI": "https://${{ '${{RAILWAY_PUBLIC_DOMAIN}}' }}/api/auth/callback"
             }
+
+      - name: Wait for deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { getEnvironmentId, getLatestDeploymentStatus } = await import('${{ github.workspace }}/.github/scripts/railway.mjs');
+
+            const token = '${{ secrets.RAILWAY_TOKEN }}';
+            const projectId = '${{ vars.RAILWAY_PROJECT_ID }}';
+            const prNumber = context.payload.pull_request.number;
+            const envName = `pr-${prNumber}`;
+
+            const envId = await getEnvironmentId({ token, projectId, name: envName });
+            if (!envId) throw new Error(`Environment ${envName} not found`);
+
+            // Try listening for 10 minutes
+            for (let i = 0; i < 60; i++) {
+              const status = await getLatestDeploymentStatus({ token, projectId, environmentId: envId });
+              core.info(`Attempt ${i + 1}: status=${status}`);
+
+              if (status === 'SUCCESS') return;
+              if (['FAILED', 'CRASHED', 'REMOVED'].includes(status)) {
+                throw new Error(`Deployment failed with status: ${status}`);
+              }
+
+              await new Promise(r => setTimeout(r, 10000));
+            }
+            throw new Error('Timed out waiting for deployment');
 
       - name: Comment with preview URL
         uses: actions/github-script@v7
