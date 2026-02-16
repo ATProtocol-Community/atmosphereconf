@@ -1,0 +1,53 @@
+---
+const RELEASE_IDS = {
+  live: "cfllygt-phg,corporate-supporter",
+  remote: "remote-attendee",
+} as const;
+
+interface Props {
+  type: keyof typeof RELEASE_IDS;
+}
+
+const { type } = Astro.props;
+---
+
+<tito-widget
+  event="atmosphereconf/atmosphereconf2026"
+  releases={RELEASE_IDS[type]}></tito-widget>
+
+<script>
+  const TITO_URL = "https://js.tito.io/v2/with/inline";
+
+  function loadTitoScript() {
+    if (document.querySelector(`script[src="${TITO_URL}"]`)) return;
+    const s = document.createElement("script");
+    s.src = TITO_URL;
+    s.async = true;
+    document.head.appendChild(s);
+  }
+
+  // Preserve Tito's injected assets across view transition swaps
+  document.addEventListener("astro:before-swap", (e) => {
+    document.head
+      .querySelectorAll('link[href*="tito.io"], script[src*="tito.io"]')
+      .forEach((el) => e.newDocument.head.appendChild(el.cloneNode(true)));
+    document.head.querySelectorAll("style").forEach((el) => {
+      if (el.textContent?.includes("--fa-font-solid")) {
+        e.newDocument.head.appendChild(el.cloneNode(true));
+      }
+    });
+  });
+
+  document.addEventListener("astro:after-swap", loadTitoScript);
+  loadTitoScript();
+</script>
+
+<style is:global>
+  @reference "../styles/global.css";
+  tito-widget > * {
+    margin: 0;
+  }
+  tito-widget label {
+    @apply text-4xl py-2;
+  }
+</style>

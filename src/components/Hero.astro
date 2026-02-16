@@ -1,0 +1,59 @@
+---
+import GoodStuff from "@/assets/goodstuff-goose.png";
+import { Image } from "astro:assets";
+---
+
+<div
+  class="w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-6 py-8 md:px-10 md:py-8 flex bg-white gap-10 items-center justify-center"
+>
+  <Image
+    class="h-auto w-full max-w-sm"
+    src={GoodStuff}
+    width={528 * 1.5}
+    height={660 * 1.5}
+    alt="Conference mascot Goodstuff"
+  />
+  <div class="flex flex-col gap-10 content-center items-center">
+    <div>
+      <h1
+        class="text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900"
+      >
+        ATmosphereConf
+      </h1>
+      <p class="mt-4 text-lg md:text-2xl text-gray-700">
+        the global AT Protocol community conference
+      </p>
+    </div>
+    <div
+      class="grid grid-cols-[auto_auto] w-fit gap-x-2 text-4xl items-center col-auto"
+    >
+      <div class="text-gray-500 text-xl justify-self-end self-end">
+        Preshow
+      </div><time>March 26-27 &</time>
+      <div class="text-gray-500 text-xl justify-self-end self-start">
+        Conference
+      </div><time>March 28-29, 2026</time>
+    </div>
+    <div class="flex flex-col gap-1">
+      <div class="text-xl text-gray-700">
+        see you @
+        <a
+          class="text-blue-600 underline"
+          href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
+        >, Vancouver, BC, Canada ...or <a
+          class="text-blue-600 underline"
+          href="/remote">remote</a
+        >!
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <a class="text-4xl text-black" href="#tickets">🪿🎟️</a>
+      <a
+        class="text-2xl text-black underline underline-offset-2"
+        href="#tickets"
+        >Tickets now <strong class="font-bold">On Sale</strong></a
+      >
+      <a class="text-4xl text-black" href="#tickets">🎟️🪿</a>
+    </div>
+  </div>
+</div>
