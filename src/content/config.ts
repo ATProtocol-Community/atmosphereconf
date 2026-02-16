@@ -66,15 +66,14 @@ export const collections = {
     }),
   }),
   sponsors: defineCollection({
-    loader: async () => [
-      { id: "goose-labs", name: "Goose Labs" },
-      { id: "flock-foundation", name: "The Flock Foundation" },
-      { id: "honk-industries", name: "Honk Industries" },
-      { id: "waddle-works", name: "Waddle Works" },
-      { id: "feathersoft", name: "Feathersoft" },
-    ],
-    schema: z.object({
-      name: z.string(),
-    }),
+    loader: glob({ pattern: "**/*.yaml", base: "./src/content/sponsors" }),
+    schema: ({ image }) =>
+      z.object({
+        name: z.string(),
+        level: z.string(),
+        url: z.string(),
+        handle: z.string(),
+        logo: image(),
+      }),
   }),
 };

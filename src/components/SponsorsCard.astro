@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  sponsor: CollectionEntry<"sponsors">;
+}
+
+const { sponsor } = Astro.props;
+const { name, logo, url } = sponsor.data;
+---
+
+<a
+  href={url !== "TBD" ? url : undefined}
+  target={url !== "TBD" ? "_blank" : undefined}
+  rel={url !== "TBD" ? "noopener noreferrer" : undefined}
+  class:list={[
+    "rounded-xl border border-border bg-card p-6 flex flex-col items-center justify-center gap-3 transition-shadow",
+    url !== "TBD" && "hover:shadow-md",
+  ]}
+>
+  <Image src={logo} alt={name} class="h-12 w-auto max-w-[10rem] object-contain" />
+  <span class="text-sm text-muted-foreground font-medium">{name}</span>
+</a>
