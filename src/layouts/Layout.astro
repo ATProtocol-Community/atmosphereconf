@@ -10,7 +10,6 @@ interface Props {
 const {
   title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
 } = Astro.props;
-
 ---
 
 <!doctype html>
@@ -26,7 +25,7 @@ const {
   <body class="h-full antialiased bg-background">
     <div class="min-h-screen flex flex-col">
       <Header transition:animate="none" />
-      <main class="flex-1 flex flex-col px-10 py-8 w-full max-w-4xl mx-auto">
+      <main class="flex-1 flex flex-col px-10 w-full max-w-4xl mx-auto">
         <slot />
       </main>
     </div>
