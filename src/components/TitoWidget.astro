@@ -15,36 +15,7 @@ const { type } = Astro.props;
   event="atmosphereconf/atmosphereconf2026"
   releases={RELEASE_IDS[type]}></tito-widget>
 
-<script>
-  const TITO_URL = "https://js.tito.io/v2/with/inline";
-
-  function loadTitoScript() {
-    if (document.querySelector(`script[src="${TITO_URL}"]`)) return;
-    const s = document.createElement("script");
-    s.src = TITO_URL;
-    s.async = true;
-    document.head.appendChild(s);
-  }
-
-  // Preserve Tito's injected CSS across view transition swaps
-  document.addEventListener("astro:before-swap", (e) => {
-    document.head
-      .querySelectorAll('link[href*="tito.io"]')
-      .forEach((el) => e.newDocument.head.appendChild(el.cloneNode(true)));
-    document.head.querySelectorAll("style").forEach((el) => {
-      if (el.textContent?.includes("--fa-font-solid")) {
-        e.newDocument.head.appendChild(el.cloneNode(true));
-      }
-    });
-  });
-
-  // Force fresh Tito init after swap by removing stale script first
-  document.addEventListener("astro:after-swap", () => {
-    document.querySelector(`script[src="${TITO_URL}"]`)?.remove();
-    loadTitoScript();
-  });
-  loadTitoScript();
-</script>
+<script is:inline src="https://js.tito.io/v2/with/inline" async></script>
 
 <style is:global>
   @reference "../styles/global.css";
