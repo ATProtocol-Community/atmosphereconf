@@ -111,6 +111,7 @@
 
 @layer base {
   html {
+    scroll-behavior: smooth;
     scroll-padding-top: 4.5rem; /* h-14 header + breathing room */
   }
   * {
