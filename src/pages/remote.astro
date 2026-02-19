@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "@/components/home/Hero.astro";
+import TicketsSection from "@/components/home/TicketsSection.astro";
+import FaqsSection from "@/components/home/FaqsSection.astro";
+import WorkshopsSection from "@/components/home/WorkshopsSection.astro";
+import ScheduleSection from "@/components/home/ScheduleSection.astro";
+import SponsorsSection from "@/components/home/SponsorsSection.astro";
+import StarringSection from "@/components/home/StarringSection.astro";
+---
+
+<Layout title="ATmosphereConf 2026 – Remote">
+  <div class="space-y-10">
+    <Hero />
+    <div id="tickets"><TicketsSection mode="remote" /></div>
+    <!-- <WorkshopsSection /> -->
+    <div id="talks"><StarringSection /></div>
+    <div id="faqs"><FaqsSection /></div>
+    <!-- <ScheduleSection /> -->
+    <SponsorsSection />
+  </div>
+</Layout>

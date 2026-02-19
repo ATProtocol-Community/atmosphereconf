@@ -6,21 +6,22 @@ import TitoWidget from "@/components/shared/TitoWidget.astro";
   <span class="group-[.remote]:hidden">Can't make it there?</span>
   <span class="group-[.live]:hidden">Want to mingle?</span>
 
-  <input id="ticket-toggle" type="checkbox" class="hidden" />
-  <label for="ticket-toggle" class="underline text-blue-600 cursor-pointer">
-    <span class="group-[.remote]:hidden">Go remote →</span>
-    <span class="group-[.live]:hidden">Join us on campus ←</span>
-  </label>
+  <a href="/remote" class="underline text-blue-600 cursor-pointer group-[.remote]:hidden">Go remote →</a>
+  <a href="/" class="underline text-blue-600 cursor-pointer group-[.live]:hidden">Join us on campus ←</a>
 </p>
 
 <TitoWidget type="live" class:list="group-[.remote]:hidden" />
 <TitoWidget type="remote" class:list="group-[.live]:hidden" />
 
 <script>
-  const toggle = document.getElementById("ticket-toggle") as HTMLInputElement;
-  const section = toggle.closest("section");
-  toggle?.addEventListener("change", () => {
-    section?.classList.toggle("remote", toggle.checked);
-    section?.classList.toggle("live", !toggle.checked);
+  document.querySelectorAll<HTMLAnchorElement>('a[href="/remote"], a[href="/"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      history.pushState({}, "", link.getAttribute("href")!);
+      // pushState doesn't fire popstate, so we dispatch it manually
+      // to let TicketsSection (and any other listener) react to the URL change
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      document.getElementById("ticket-section")?.scrollIntoView({ behavior: "smooth" });
+    });
   });
 </script>
