@@ -1,0 +1,238 @@
+<!-- Desktop: corner peel ticket -->
+<a
+  id="nav-ticket-peel"
+  class="nav-ticket-peel"
+  href="/#ticket-details"
+  aria-hidden="true"
+>
+  <span class="ntp-tab">NOW SELLING</span>
+  <span class="ntp-perf"></span>
+  <span class="ntp-body">
+    <span class="ntp-small">live + remote</span>
+    <span class="ntp-main">🪿 Buy your tickets now</span>
+  </span>
+</a>
+
+<!-- Mobile: static ticket bar -->
+<a
+  id="nav-ticket-tape"
+  class="nav-ticket-tape"
+  href="/#ticket-details"
+  aria-hidden="true"
+>
+  <span class="ntt-tab">ON SALE</span>
+  <span class="ntt-perf"></span>
+  <span class="ntt-body">
+    <span class="ntt-cta">🪿 Buy your tickets now</span>
+    <span class="ntt-sep">·</span>
+    <span class="ntt-detail">March 26–29, 2026</span>
+    <span class="ntt-sep">·</span>
+    <span class="ntt-detail">Live + Remote</span>
+  </span>
+</a>
+
+<style>
+  /* ===== DESKTOP: CORNER PEEL (hidden on mobile) ===== */
+  .nav-ticket-peel {
+    display: none;
+    position: absolute;
+    right: 1.5rem;
+    top: 100%;
+    z-index: -1;
+    align-items: stretch;
+    text-decoration: none;
+    transform: rotate(2deg) translateY(-100%);
+    transition: transform 0.25s ease, filter 0.25s ease;
+    transform-origin: top right;
+    filter: drop-shadow(0 0 0 transparent);
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .nav-ticket-peel {
+      display: flex;
+    }
+  }
+  .nav-ticket-peel.visible {
+    transform: rotate(2deg) translateY(0);
+    pointer-events: auto;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  }
+  .nav-ticket-peel:hover {
+    transform: rotate(0deg) translateY(0);
+  }
+
+  .ntp-tab {
+    background: oklch(0.6744 0.1753 254.76);
+    color: white;
+    padding: 0.6rem 0.4rem;
+    font-size: 0.45rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    border-radius: 0 0 0 6px;
+  }
+  .ntp-perf {
+    width: 0;
+    position: relative;
+    overflow: visible;
+  }
+  .ntp-perf::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -3px;
+    width: 6px;
+    height: calc(100% + 2px);
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      white 3px,
+      white 6px
+    );
+    z-index: 1;
+  }
+  .ntp-body {
+    background: oklch(0.95 0.02 254.76);
+    border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
+    border-left: none;
+    border-top: none;
+    padding: 0.6rem 1rem;
+    border-radius: 0 0 6px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .ntp-small {
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: oklch(0.6744 0.1753 254.76);
+    font-weight: 600;
+  }
+  .ntp-main {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--foreground);
+    white-space: nowrap;
+  }
+
+  /* ===== MOBILE: STATIC TICKET BAR (hidden on desktop) ===== */
+  .nav-ticket-tape {
+    display: flex;
+    align-items: stretch;
+    text-decoration: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease;
+  }
+  @media (min-width: 640px) {
+    .nav-ticket-tape {
+      display: none !important;
+    }
+  }
+  .nav-ticket-tape.visible {
+    max-height: 40px;
+  }
+
+  .ntt-tab {
+    background: oklch(0.6744 0.1753 254.76);
+    color: white;
+    padding: 0 0.35rem;
+    font-size: 0.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    flex-shrink: 0;
+  }
+  .ntt-perf {
+    width: 0;
+    position: relative;
+    overflow: visible;
+    flex-shrink: 0;
+  }
+  .ntt-perf::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -3px;
+    width: 6px;
+    height: calc(100% + 2px);
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      white 3px,
+      white 6px
+    );
+    z-index: 1;
+  }
+  .ntt-body {
+    flex: 1;
+    background: oklch(0.95 0.02 254.76);
+    border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
+    border-left: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+    height: 40px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ntt-cta {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--foreground);
+  }
+  .ntt-detail {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: oklch(0.6744 0.1753 254.76);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .ntt-sep {
+    color: oklch(0.6744 0.1753 254.76 / 0.3);
+    font-size: 0.7rem;
+  }
+</style>
+
+<script>
+  const ticketPeel = document.getElementById("nav-ticket-peel");
+  const ticketTape = document.getElementById("nav-ticket-tape");
+  const heroStub = document.querySelector(".ticket-stub");
+  const header = document.getElementById("site-header");
+
+  function showBanners(show: boolean) {
+    ticketPeel?.classList.toggle("visible", show);
+    ticketTape?.classList.toggle("visible", show);
+    ticketPeel?.setAttribute("aria-hidden", String(!show));
+    ticketTape?.setAttribute("aria-hidden", String(!show));
+  }
+
+  if (heroStub && header) {
+    // Pages with the hero ticket stub: show after it scrolls behind header
+    const headerH = header.offsetHeight;
+    const ticketObserver = new IntersectionObserver(
+      ([entry]) => showBanners(!entry.isIntersecting),
+      { rootMargin: `-${headerH}px 0px 0px 0px`, threshold: 0 },
+    );
+    ticketObserver.observe(heroStub);
+  } else {
+    // Other pages: always show
+    showBanners(true);
+  }
+</script>

@@ -13,6 +13,7 @@ const { type, class: className } = Astro.props;
 ---
 
 <tito-widget
+  id={`tito-${type}`}
   class:list={[className]}
   data-ticket-type={type}
   event="atmosphereconf/atmosphereconf2026"
