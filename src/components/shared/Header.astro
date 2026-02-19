@@ -40,19 +40,64 @@ const navLinks = [
     </a>
     <span class="text-white/30 select-none" aria-hidden="true">//</span>
     <nav class="flex items-center gap-4">
-      {
-        navLinks.map(({ href, label }) => (
-          <a
-            href={href}
-            data-nav-section={href.replace("/#", "")}
-            class="text-white/60 hover:text-white transition-colors"
+      <!-- desktop links -->
+      <div class="hidden sm:flex items-center gap-4">
+        {
+          navLinks.map(({ href, label }) => (
+            <a
+              href={href}
+              data-nav-section={href.replace("/#", "")}
+              class="text-white/60 hover:text-white transition-colors"
+            >
+              {label}
+            </a>
+          ))
+        }
+      </div>
+      <!-- mobile dropdown -->
+      <div class="sm:hidden relative">
+        <button
+          id="nav-menu-btn"
+          class="text-white/60 hover:text-white transition-colors flex items-center gap-1"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          menu
+          <svg
+            class="w-3 h-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            {label}
-          </a>
-        ))
-      }
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <!-- little jank, but 'hidden' overrides flex -->
+        <div
+          id="nav-menu"
+          class="flex hidden absolute right-0 top-full mt-1 bg-primary border border-white/20 rounded flex-col min-w-[50vw] w-max py-2"
+        >
+          {
+            navLinks.map(({ href, label }) => (
+              <a
+                href={href}
+                data-nav-section={href.replace("/#", "")}
+                class="text-white/60 hover:text-white transition-colors px-4 py-2"
+              >
+                {label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
     </nav>
-    <span class="text-white/30 select-none" aria-hidden="true">//</span>
+    <span class="text-white/30 select-none hidden md:inline" aria-hidden="true"
+      >//</span
+    >
     <!-- <div class="h-8 flex items-center">
             {
                 profile ? (
@@ -80,6 +125,31 @@ const navLinks = [
 </header>
 
 <script>
+  // Mobile nav dropdown
+  const navMenuBtn = document.getElementById("nav-menu-btn");
+  const navMenu = document.getElementById("nav-menu");
+  if (navMenuBtn && navMenu) {
+    navMenuBtn.addEventListener("click", () => {
+      const open = navMenu.classList.toggle("hidden");
+      navMenuBtn.setAttribute("aria-expanded", String(!open));
+    });
+    document.addEventListener("click", (e) => {
+      if (
+        !navMenuBtn.contains(e.target as Node) &&
+        !navMenu.contains(e.target as Node)
+      ) {
+        navMenu.classList.add("hidden");
+        navMenuBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+    navMenu.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        navMenu.classList.add("hidden");
+        navMenuBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
   // On index page, logo scrolls to top instead of reloading
   const logo = document.getElementById("site-logo");
   if (logo && window.location.pathname === "/") {
