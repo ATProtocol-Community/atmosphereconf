@@ -2,16 +2,22 @@
 import Card from "@/components/ui/card.astro";
 import DetailsGrid from "@/components/home/DetailsGrid.astro";
 import TicketsToggle from "@/components/home/TicketsToggle.astro";
+
+interface Props {
+  mode?: "live" | "remote";
+}
+
+const { mode = "live" } = Astro.props;
 ---
 
-<section id="ticket-section" class="group live">
+<section id="ticket-section" class:list={["group", mode]}>
   <Card class="gap-4" title="tickets">
     <p class="text-gray-800 max-w-[65ch]">
       Come join 250+ in-person attendees, and 100s more online. Arrive <span
         class="font-semibold">two days early</span
       > for extended events, deep dives, and local activities; then gather for
-      <span class="font-semibold">two full days</span> of conference—with topics
-      for everyone!
+      <span class="font-semibold">two full days</span> of conference—with topics for
+      everyone!
     </p>
     <div>
       <p class="text-4xl text-balance text-center mt-6">
@@ -39,3 +45,12 @@ import TicketsToggle from "@/components/home/TicketsToggle.astro";
     <TicketsToggle />
   </Card>
 </section>
+
+<script>
+  window.addEventListener("popstate", () => {
+    const section = document.getElementById("ticket-section");
+    const mode = location.pathname === "/remote" ? "remote" : "live";
+    section?.classList.remove("live", "remote");
+    section?.classList.add(mode);
+  });
+</script>
