@@ -2,6 +2,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -109,13 +110,17 @@
 }
 
 @layer base {
+  html {
+    scroll-padding-top: 4.5rem; /* h-14 header + breathing room */
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
   }
-  button, [role="button"] {
+  button,
+  [role="button"] {
     cursor: pointer;
   }
   h1 {

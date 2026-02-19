@@ -1,12 +1,15 @@
 ---
 import GoodStuff from "@/assets/goodstuff-goose.png";
 import { Image } from "astro:assets";
+import TicketStubLink from "./TicketStubLink.astro";
 ---
 
 <div
+  data-hero
   class="w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-6 py-8 md:px-10 md:py-8 flex flex-col lg:flex-row bg-white gap-2 md:gap-10 items-center justify-center"
 >
   <Image
+    data-hero-goose
     class="h-auto lg:w-full max-w-sm w-72"
     src={GoodStuff}
     width={528 * 1.5}
@@ -18,23 +21,33 @@ import { Image } from "astro:assets";
       <h1
         class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-gray-900"
       >
-        ATmosphereConf
+        <span class="text-primary">AT</span>mosphereConf
       </h1>
       <p class="mt-4 text-lg md:text-2xl text-gray-700">
         the global AT Protocol community conference
       </p>
     </div>
     <div
-      class="grid grid-cols-[auto_auto] w-fit gap-x-2 text-4xl items-center col-auto"
+      class="grid grid-cols-[auto_auto] w-fit gap-x-2 text-4xl items-center col-auto font-mono"
     >
-      <div class="text-gray-500 text-xl justify-self-end self-end">
+      <div
+        class="text-gray-500 justify-self-end self-end font-mono uppercase tracking-wider text-base"
+      >
         Preshow
-      </div><time>March 26-27 &</time>
-      <div class="text-gray-500 text-xl justify-self-end self-start">
+      </div><time class="text-4xl">March 26-27 &</time>
+      <div
+        class="text-gray-500 justify-self-end self-start font-mono uppercase tracking-wider text-base"
+      >
         Conference
-      </div><time>March 28-29, 2026</time>
+      </div><time class="text-4xl">March 28-29, 2026</time>
     </div>
-    <div class="flex flex-col gap-1 text-center text-pretty">
+    <div
+      class="flex
+        flex-col
+        gap-1
+        text-center
+        text-pretty"
+    >
       <div class="text-xl text-gray-700">
         see you @
         <a
@@ -47,14 +60,6 @@ import { Image } from "astro:assets";
         >!
       </div>
     </div>
-    <div class="flex items-center gap-6">
-      <a class="text-4xl text-black" href="#tickets">🪿🎟️</a>
-      <a
-        class="text-2xl text-black underline underline-offset-2"
-        href="#tickets"
-        >Tickets now <strong class="font-bold">On Sale</strong></a
-      >
-      <a class="text-4xl text-black" href="#tickets">🎟️🪿</a>
-    </div>
+    <TicketStubLink />
   </div>
 </div>

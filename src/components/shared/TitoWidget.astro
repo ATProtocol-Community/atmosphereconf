@@ -1,0 +1,203 @@
+---
+const RELEASE_IDS = {
+  live: "cfllygt-phg,corporate-supporter",
+  remote: "remote-attendee",
+} as const;
+
+interface Props {
+  type: keyof typeof RELEASE_IDS;
+  class?: string;
+}
+
+const { type, class: className } = Astro.props;
+---
+
+<tito-widget
+  class:list={[className]}
+  data-ticket-type={type}
+  event="atmosphereconf/atmosphereconf2026"
+  releases={RELEASE_IDS[type]}></tito-widget>
+
+{import.meta.env.DEV ? (
+  <script is:inline src="https://js.tito.io/v2/with/inline,development_mode" async></script>
+) : (
+  <script is:inline src="https://js.tito.io/v2/with/inline" async></script>
+)}
+
+<style is:global>
+  @reference "../../styles/global.css";
+
+  /* ── Reset Tito defaults ── */
+  tito-widget > * {
+    margin: 0 !important;
+  }
+
+  /* Override Tito's default release card styling */
+  tito-widget .tito-release {
+    border: 1px solid var(--border) !important;
+    border-radius: 0.75rem !important;
+    background: white !important;
+    padding: 1.25rem 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    box-shadow: none !important;
+  }
+
+  /* Ticket name */
+  tito-widget .tito-release--title,
+  tito-widget label {
+    font-family: var(--font-mono) !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+  }
+
+  /* Price */
+  tito-widget .tito-price,
+  tito-widget .tito-price-details-regular {
+    font-family: var(--font-mono) !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+  }
+
+  tito-widget .tito-price-details-donation input {
+    min-width: 80px !important;
+  }
+
+  /* Description text */
+  tito-widget .tito-release-description,
+  tito-widget .tito-release-description--description {
+    font-size: 0.85rem !important;
+    color: #6b7280 !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Quantity input */
+  tito-widget .tito-quantity-input,
+  tito-widget input[type="number"] {
+    width: 3.5rem !important;
+    text-align: center !important;
+    border-radius: 0.375rem !important;
+    border: 1px solid var(--border) !important;
+    background: white !important;
+    color: #111827 !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.875rem !important;
+    padding: 0.35rem 0.25rem !important;
+    box-shadow: none !important;
+  }
+
+  /* ── Submit / Continue button ── */
+  tito-widget .tito-submit {
+    background: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    border: none !important;
+    border-radius: 0.5rem !important;
+    padding: 0.65rem 1.5rem !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transition: opacity 0.15s !important;
+  }
+
+  tito-widget .tito-submit:hover {
+    opacity: 0.9 !important;
+  }
+
+  /* ── Discount code ── */
+  tito-widget .tito-discount-code-field,
+  tito-widget input[type="text"] {
+    border-radius: 0.375rem !important;
+    border: 1px solid var(--border) !important;
+    background: white !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    color: #111827 !important;
+    font-family: var(--font-mono) !important;
+    box-shadow: none !important;
+  }
+
+  tito-widget .tito-submit--discount-code {
+    border-radius: 0.375rem !important;
+    border: 1px solid var(--border) !important;
+    background: white !important;
+    color: #374151 !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1rem !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+  }
+
+  /* ── Form actions row ── */
+  tito-widget .tito-form-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    margin-top: 1rem !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid var(--border) !important;
+  }
+
+  /* ── Misc cleanup ── */
+  tito-widget .tito-release--tax {
+    font-size: 0.75rem !important;
+    color: #9ca3af !important;
+    font-family: var(--font-mono) !important;
+  }
+
+  tito-widget .tito-release--status {
+    font-size: 0.7rem !important;
+    font-family: var(--font-mono) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    color: #9ca3af !important;
+  }
+
+  tito-widget .tito-widget-form {
+    padding-top: 20px;
+  }
+
+  /* Reserve space before Tito loads to prevent layout shift */
+  tito-widget:not(.tito-widget-loaded) {
+    display: block;
+  }
+  tito-widget[data-ticket-type="live"]:not(.tito-widget-loaded) {
+    aspect-ratio: 718 / 686;
+  }
+  tito-widget[data-ticket-type="remote"]:not(.tito-widget-loaded) {
+    aspect-ratio: 718 / 364;
+  }
+</style>
+
+<script>
+  // Re-scroll to hash anchor after Tito loads, but only if the user
+  // hasn't interacted (scrolled, clicked, etc.) since page load.
+  (() => {
+    let userInteracted = false;
+    const markInteracted = () => { userInteracted = true; };
+    const events = ["scroll", "click", "touchstart", "keydown"] as const;
+    events.forEach((e) => window.addEventListener(e, markInteracted, { once: true, passive: true }));
+
+    const observer = new MutationObserver(() => {
+      const loaded = document.querySelector("tito-widget .tito-widget-form");
+      if (!loaded) return;
+      observer.disconnect();
+
+      // Mark widget as loaded (removes min-height)
+      document.querySelectorAll("tito-widget").forEach((el) => el.classList.add("tito-widget-loaded"));
+
+      if (!userInteracted && window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        target?.scrollIntoView({ behavior: "smooth" });
+      }
+
+      events.forEach((e) => window.removeEventListener(e, markInteracted));
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  })();
+</script>

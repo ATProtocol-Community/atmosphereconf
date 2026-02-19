@@ -1,9 +1,13 @@
 ---
+import slugify from "slugify";
+
 interface Props {
   class?: string;
+  title?: string;
 }
 
-const { class: className = "" } = Astro.props;
+const { class: className = "", title } = Astro.props;
+const slug = title ? slugify(title, { lower: true, strict: true }) : undefined;
 ---
 
 <div
@@ -12,5 +16,13 @@ const { class: className = "" } = Astro.props;
     className,
   ]}
 >
+  {title && (
+    <h2
+      id={slug}
+      class="font-mono text-lg uppercase tracking-widest font-semibold text-primary mb-1.5"
+    >
+      <a href={`#${slug}`} class="hover:underline">{`// ${title}`}</a>
+    </h2>
+  )}
   <slot />
 </div>

@@ -1,130 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Card from "@/components/ui/card.astro";
-import SponsorsCard from "@/components/SponsorsCard.astro";
-import TitoWidget from "@/components/TitoWidget.astro";
-import Hero from "@/components/Hero.astro";
-import { getCollection } from "astro:content";
-import { getEntry } from "astro:content";
-
-const sponsors = await getCollection("sponsors");
-const bskySponsor = await getEntry("sponsors", "bsky")!;
-const agenda = await getCollection("agenda");
-
-const agendaWithSpeakers = await Promise.all(
-  agenda.map(async (item) => ({
-    ...item,
-    speaker: item.data.speaker ? await getEntry(item.data.speaker) : null,
-  })),
-);
+import Hero from "@/components/home/Hero.astro";
+import TicketsSection from "@/components/home/TicketsSection.astro";
+import FaqsSection from "@/components/home/FaqsSection.astro";
+import WorkshopsSection from "@/components/home/WorkshopsSection.astro";
+import ScheduleSection from "@/components/home/ScheduleSection.astro";
+import SponsorsSection from "@/components/home/SponsorsSection.astro";
+import StarringSection from "@/components/home/StarringSection.astro";
 ---
 
 <Layout title="ATmosphereConf 2026">
   <div class="space-y-10">
     <Hero />
-
-    <!-- Tickets Section -->
-    <section>
-      <h2 id="tickets" class="text-2xl font-bold text-gray-900 mb-4">
-        Grab Your Tickets
-      </h2>
-      <Card class="px-6 gap-4">
-        <p class="text-3xl text-pretty">
-          <strong class="font-bold">ATmosphereConf</strong> is at <a
-            class="text-blue-600 underline"
-            href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
-          > on March 26-27 & 28-29, 2026
-        </p>
-        <p class="text-gray-800 max-w-[65ch]">
-          Come <span class="font-semibold">two days early</span> for extended events,
-          deep dives, and local activities; then gather for <span
-            class="font-semibold">two full days</span
-          > of conference—with topics for everyo ne!
-        </p>
-        <p class="text-gray-800 max-w-[65ch]">
-          Join 250+ in-person attendees, and 100s more online with 3 full video
-          streams powered by Streamplace. Can't make there? <a
-            class="underline text-blue-600"
-            href="/remote"
-            data-astro-reload>Go remote</a
-          >
-        </p>
-        <TitoWidget type="live" />
-      </Card>
-    </section>
-
-    <!-- Workshops Section -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-        Workshops & Activities, Thursday -&gt; Friday
-      </h2>
-      <Card class="px-6">
-        <p class="text-gray-700">
-          (Static list? Grist via Ted? we are unblocked from showing these, they
-          are confirmed)
-        </p>
-        <h3 class="text-lg font-semibold text-gray-900">ATScience Friday</h3>
-        <ul class="text-gray-800 space-y-2">
-          <li>Thursday (March 26): Workshops & activities</li>
-          <li>Friday (March 27): ATScience Friday</li>
-        </ul>
-      </Card>
-    </section>
-
-    <!-- Main Schedule Section -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">
-        Main Conference Schedule
-      </h2>
-      <Card class="px-6">
-        <p class="text-gray-700">
-          (coming soon, point to <a
-            class="text-blue-700 hover:underline"
-            href="https://leaflet.pub/"
-            target="_blank"
-            rel="noopener noreferrer">Leaflet</a
-          > with pre-announced speakers)
-        </p>
-        <div class="grid grid-cols-1">
-          {
-            agendaWithSpeakers.map((item) => (
-              <div class="flex items-center py-4">
-                <div class="w-24 flex-shrink-0 text-sm font-medium text-gray-500">
-                  {item.data.time}
-                </div>
-                <div class="ml-4">
-                  <div class="font-medium text-gray-900">{item.data.title}</div>
-                  {item.speaker && (
-                    <div class="text-sm text-gray-500">
-                      {item.speaker.data.name}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          }
-        </div>
-      </Card>
-    </section>
-
-    <!-- Sponsors Section -->
-    <section>
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">Sponsors</h2>
-      <Card class="px-6">
-        <div></div>
-        <p class="text-gray-800 font-medium">
-          Thank you to Bluesky for being our title sponsor.
-        </p>
-        <SponsorsCard sponsor={bskySponsor} />
-        <p class="text-gray-700">Other sponsors:</p>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-stretch">
-          {
-            sponsors
-              .filter((sponsor) => sponsor.data.level !== "title")
-              .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
-          }
-        </div>
-      </Card>
-    </section>
+    <div id="tickets"><TicketsSection /></div>
+    <!-- <WorkshopsSection /> -->
+    <div id="talks"><StarringSection /></div>
+    <div id="faqs"><FaqsSection /></div>
+    <!-- <ScheduleSection /> -->
+    <SponsorsSection />
   </div>
 </Layout>

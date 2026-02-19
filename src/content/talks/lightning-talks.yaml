@@ -1,0 +1,132 @@
+- id: 81gXlXP
+  title: "State of the Multi-Protocol Social Web (name will change)"
+  speaker_name: Anuj Ahooja
+  speaker_id: "@quillmatiq.com"
+  category: Development and Protocol
+
+- id: 9qP16Kp
+  title: "Stop Hallucinating the Protocol: Grounding your AI Agents with the Official ATproto Docs"
+  speaker_name: Jessie Rushing
+  speaker_id: "@immber.bsky.social"
+  category: Development and Protocol
+
+- id: q4QdXj7
+  title: ATProto design philosophy behind BookHive
+  speaker_name: Nicholas Perez
+  speaker_id: "@nickthesick.com"
+  category: Development and Protocol
+
+- id: 5B02jaM
+  title: Keywords vs Embeddings
+  speaker_name: Jasper Rädisch
+  speaker_id: "@raedisch.net"
+  category: Development and Protocol
+
+- id: aQJAWl9
+  title: Affordances of the Atmosphere
+  speaker_name: Tynan Purdy
+  speaker_id: tynanpurdy.com
+  category: Development and Protocol
+
+- id: dWGJ41y
+  title: Abstracting the AppView
+  speaker_name: Chad Miller
+  speaker_id: chadtmiller.com
+  category: Development and Protocol
+
+- id: ob8N65V
+  title: How to use Bluesky to easily and securely preview a software product to users.
+  speaker_name: Tim Burks
+  speaker_id: "@timburks.me"
+  category: Community
+
+- id: 686gZde
+  title: Using GraphQL to build with ATProto
+  speaker_name: Tim Ryan
+  speaker_id: "@timryan.org"
+  category: Development and Protocol
+
+- id: 2EG4YMj
+  title: "What 350,000 users taught me about growing on Open Social"
+  speaker_name: Victoria White
+  speaker_id: "@buildwithtori.com"
+  category: Community
+
+- id: 2EGLPML
+  title: Burning down data walls in the US Fire Service and Beyond
+  speaker_name: Stephan Noel
+  speaker_id: "@stephanjnoel.bsky.social"
+  category: Community
+
+- id: xX5yRJr
+  title: "Skylimit: A curating web client with fine-grained controls to mimic the newspaper experience"
+  speaker_name: Ramalingam Saravanan
+  speaker_id: "@sarava.net"
+  category: Development and Protocol
+
+- id: lbkWPeN
+  title: "Oaklog: Building a community calendar in the Oakland Bay Area"
+  speaker_name: Glenn Poppe
+  speaker_id: "@pop.pe"
+  category: Media and Civics
+
+- id: Bzr448Q
+  title: "Why Gander Social?"
+  speaker_name: Jennifer Mitchell
+  speaker_id: "jennie-gander.bsky.social"
+  category: Development and Protocol
+
+- id: 81Xovjr
+  title: Feeds Are The New Websites
+  speaker_name: Mike McCue
+  speaker_id: "@mmccue.bsky.social"
+  category: Community
+
+- id: ZjMOl7o
+  title: "Matadata! Publishing scientific data straight to AT"
+  speaker_name: Robin Berjon
+  speaker_id: "@robin.berjon.com"
+  category: Development and Protocol
+
+- id: 000Syverson
+  title: Paul Syverson Lightning Talk
+  speaker_name: Paul Syverson
+  speaker_id: psyverson.bsky.social
+  category: Development and Protocol
+
+- id: OD6Gd0A
+  title: "Cosmik: building the Noosphere on the Atmosphere"
+  speaker_name: Ronen Tamari
+  speaker_id: ronentk.me
+  category: Media and Civics
+
+- id: MeWBzWX
+  title: A better NPM site is possible
+  speaker_name: Zeu
+  speaker_id: "@zeu.dev"
+  category: Development and Protocol
+
+- id: Xxd7xqj
+  title: E2EE DMs for Bluesky
+  speaker_name: Ranga Krishnan
+  speaker_id: "@rangakrishnan1.bsky.social"
+  category: Development and Protocol
+
+- id: QKNkKMX
+  title: Scaling the Atmosphere
+  speaker_name: Jim Calabro
+  speaker_id: "@calabro.io"
+  category: Development and Protocol
+
+- id: 7Rr2zW6
+  title: "Pollen: Prototyping a toolkit for journalists and researchers to restore source transparency in an AI-saturated feed"
+  speaker_name: Hypha Coop
+  speaker_id: "@hypha.coop"
+  category: Media and Civics
+
+- id: QKZoLBX
+  title: "How (de)centralized is Bluesky, really?"
+  speaker_name: Billy Pierce
+  speaker_id: "@billwpierce.co"
+  category: Media and Civics
+

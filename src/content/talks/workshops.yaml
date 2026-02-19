@@ -1,0 +1,70 @@
+- id: Y5KB1kv
+  title: OAuth Masterclass
+  speaker_name: Nick Gerakines
+  speaker_id: ngerakines.me
+  category: Development and Protocol
+
+- id: PdW72pB
+  title: Consuming the Atmosphere
+  speaker_name: Alexander Garnett
+  speaker_id: "@alex.bsky.team"
+  category: Development and Protocol
+
+- id: 81gXjdP
+  title: Creating the Atmosphere
+  speaker_name: Alexander Garnett
+  speaker_id: "@alex.bsky.team"
+  category: Development and Protocol
+
+- id: Y5XGQQ6
+  title: Build an AT Protocol app with Slices
+  speaker_name: Chad Miller
+  speaker_id: chadtmiller.com
+  category: Development and Protocol
+
+- id: zx4e1Oq
+  title: "at://advent, an atproto adventure"
+  speaker_name: Bailey Townsend
+  speaker_id: baileytownsend.dev
+  category: Development and Protocol
+
+- id: 81D2Mez
+  title: Dive into user research with fellow ATProto builders and users
+  speaker_name: Tessa Brown
+  speaker_id: "@tessa.germnetwork.com"
+  category: Development and Protocol
+
+- id: A7ebKjo
+  title: "Hospicing social media : Personal archival practices for transition"
+  speaker_name: Dawn Walker
+  speaker_id: "@dcwalker.ca"
+  category: Media and Civics
+
+- id: XxPK17j
+  title: "Atmospheric Publishing: how and why to publish to the social web"
+  speaker_name: Brendan Schlagel
+  speaker_id: "@schlage.town"
+  category: Media and Civics
+
+- id: Bzy111e
+  title: Explorations into new social tech modalities
+  speaker_name: Ivan Sigal
+  speaker_id: ivansigal.bsky.social
+  category: Media and Civics
+
+- id: 000ChadWorkshop
+  title: Quickslice
+  speaker_name: Chad Miller
+  speaker_id: chadtmiller.com
+  category: Development and Protocol
+
+- id: 000ArushiWorkshop
+  title: "What can we build together?"
+  speaker_name: Arushi Bandi
+  speaker_id: offline.arushibandi.com
+
+- id: 000UXWorkshop
+  title: TKTK UX Workshop
+  speaker_name: Tessa Brown
+  speaker_id: "@tessa.germnetwork.com"
+

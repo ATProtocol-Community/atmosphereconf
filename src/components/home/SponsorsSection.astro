@@ -1,0 +1,31 @@
+---
+import Card from "@/components/ui/card.astro";
+import SponsorsCard from "@/components/shared/SponsorsCard.astro";
+import { getCollection, getEntry } from "astro:content";
+
+const sponsors = await getCollection("sponsors");
+const bskySponsor = await getEntry("sponsors", "bsky")!;
+---
+
+<section>
+  <Card title="sponsors">
+    <p class="text-muted-foreground mb-4">
+      A huge thank you to Bluesky for being our title sponsor.
+    </p>
+    <SponsorsCard sponsor={bskySponsor} />
+    <div class="mt-6">
+      <h3
+        class="font-mono text-xs uppercase tracking-widest font-semibold text-primary mb-3"
+      >
+        // community sponsors
+      </h3>
+      <div class="grid grid-cols-3 gap-4 items-stretch">
+        {
+          sponsors
+            .filter((sponsor) => sponsor.data.level !== "title")
+            .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
+        }
+      </div>
+    </div>
+  </Card>
+</section>

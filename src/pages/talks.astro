@@ -1,0 +1,70 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Card from "@/components/ui/card.astro";
+import StarringCard from "@/components/home/StarringCard.astro";
+import { getCollection } from "astro:content";
+
+const [presentations, lightning, panels, workshops] = await Promise.all([
+  getCollection("presentations"),
+  getCollection("lightning-talks"),
+  getCollection("panels"),
+  getCollection("workshops"),
+]);
+
+const allTalks = [
+  ...presentations.map((t) => ({ id: t.id, ...t.data, typeName: "Presentation" })),
+  ...lightning.map((t) => ({ id: t.id, ...t.data, typeName: "Lightning Talk" })),
+  ...panels.map((t) => ({ id: t.id, ...t.data, typeName: "Discussion / Panel" })),
+  ...workshops.map((t) => ({ id: t.id, ...t.data, typeName: "Workshop" })),
+];
+
+const types = ["Presentation", "Lightning Talk", "Discussion / Panel", "Workshop"] as const;
+const typeLabels: Record<string, string> = {
+  Presentation: "Presentations",
+  "Lightning Talk": "Lightning Talks",
+  "Discussion / Panel": "Discussions & Panels",
+  Workshop: "Workshops",
+};
+const grouped = Object.groupBy(allTalks, (t) => t.typeName);
+---
+
+<Layout title="All Talks — ATmosphereConf 2026">
+  <div class="space-y-10">
+    <h1 class="font-mono text-2xl uppercase tracking-widest font-semibold text-primary mt-6">
+      All Talks
+    </h1>
+
+    {types.map((type) => {
+      const talks = grouped[type];
+      if (!talks?.length) return null;
+      return (
+        <Card title={typeLabels[type]}>
+          <div class="flex flex-col gap-3 mt-2">
+            {talks.map((talk) => (
+              <StarringCard
+                talkId={talk.id}
+                title={talk.title}
+                speakerName={talk.speaker_name}
+                speakerId={talk.speaker_id}
+                typeName={talk.typeName}
+                anchor
+              />
+            ))}
+          </div>
+        </Card>
+      );
+    })}
+  </div>
+</Layout>
+
+<script>
+  // Event delegation for bsky profile links
+  document.addEventListener("click", (e) => {
+    const el = (e.target as HTMLElement).closest("[data-bsky-href]") as HTMLElement | null;
+    if (el) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.open(el.dataset.bskyHref!, "_blank");
+    }
+  });
+</script>

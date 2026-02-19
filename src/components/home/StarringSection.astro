@@ -1,0 +1,87 @@
+---
+import Card from "@/components/ui/card.astro";
+import StarringCard from "./StarringCard.astro";
+import { getRandomTalks } from "@/lib/talks";
+
+const starred = await getRandomTalks();
+---
+
+<section>
+  <Card title="starring">
+    <p class="text-muted-foreground mb-4">
+      A random sample from our gaggle of speakers
+    </p>
+    <div id="starring-list" class="flex flex-col gap-3">
+      {
+        starred.map((talk) => (
+          <StarringCard
+            talkId={talk.id}
+            title={talk.title}
+            speakerName={talk.speaker_name}
+            speakerId={talk.speaker_id}
+            typeName={talk.typeName}
+          />
+        ))
+      }
+    </div>
+    <button
+      id="show-more-talks"
+      class="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-blue-400 py-2.5 text-sm font-semibold text-blue-600 cursor-pointer transition-all hover:border-blue-600 hover:border-solid hover:bg-blue-50"
+    >
+      🪿 I'm feeling curious
+    </button>
+    <div class="flex justify-end mt-3">
+      <a
+        href="/talks"
+        class="text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        See them all &rarr;
+      </a>
+    </div>
+  </Card>
+</section>
+
+<script>
+  const btn = document.getElementById("show-more-talks");
+  const list = document.getElementById("starring-list");
+
+  // Event delegation for bsky profile links
+  list?.addEventListener("click", (e) => {
+    const el = (e.target as HTMLElement).closest(
+      "[data-bsky-href]",
+    ) as HTMLElement | null;
+    if (el) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.open(el.dataset.bskyHref!, "_blank");
+    }
+  });
+
+  function fitToViewport() {
+    const cards = Array.from(list!.children);
+    if (!cards.length) return;
+    cards.forEach((c) => ((c as HTMLElement).style.display = ""));
+    const cardH = cards[0].getBoundingClientRect().height;
+    const gap = 12; // gap-3
+    // Budget: one viewport minus card chrome (title bar ~80px + buttons ~56px + section padding ~40px)
+    const available = window.innerHeight - 176;
+    const max = Math.max(3, Math.floor((available + gap) / (cardH + gap)));
+    cards.forEach(
+      (c, i) => ((c as HTMLElement).style.display = i < max ? "" : "none"),
+    );
+  }
+
+  fitToViewport();
+
+  btn?.addEventListener("click", async () => {
+    btn.textContent = "🪿 Loading...";
+    try {
+      const res = await fetch("/partials/random-talks");
+      list!.innerHTML = await res.text();
+      fitToViewport();
+    } catch {
+      btn.textContent = "Something went wrong";
+    }
+    btn.textContent = "🪿 I'm feeling curious";
+  });
+</script>

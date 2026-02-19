@@ -1,0 +1,35 @@
+- id: hotel-where-to-stay
+  question: Where should I stay?
+  answer: |
+    We have reserved rooms and special rates at the [Gage Suites](https://suitesatubc.com/gage-apartments-vancouver/), about a 10min walk on campus to The Nest venue.
+
+    Use this [Booking Link](https://reserve.suitesatubc.com/GROUP/availability.asp?hotelCode=UBC&sdl=Check+In&startDate=03%2F25%2F2026&edl=Check+Out&endDate=03%2F30%2F2026&adults=1&children=&rooms=1&requesttype=invBlockCode&code=G260325A) for a 5 night stay, checking in on Wednesday, March 25th (day before first Pre-Conference Day) and checking out on Monday, March 30th (the day after the Main Conference ends).
+
+    Adjust your dates depending on what events you'll be participating in. If you come back to the site from elsewhere, our booking code is `G260325A`.
+
+    _For those wishing to stay earlier / longer, we have the same rates 3 days before and 3 days after._
+
+- id: hotel-rooms
+  question: What are the rooms like?
+  answer: |
+    The rooms we have reserved are Signature Suites:
+
+    > Premium private studio room with queen bed, fully equipped kitchen with appliances, and washroom with shower (no bathtub). Superior bathroom and kitchenette finishes. Complimentary high-speed Wi-Fi and LCD TV. Sleeps up to two people. Suite has air conditioning during the summer months
+
+    There are other, larger suites with a second bed available at the same location that you can review in the booking link.
+
+- id: hotel-location
+  question: Where is the venue?
+  answer: |
+    **Gage Suites** (hotel)
+    5959 Student Union Blvd [GMap](https://maps.app.goo.gl/tptEFc7ikrtrnnw29) · [CoMaps](https://comaps.at/0pGgTTYEaS/Gage_Apartments_at_UBC)
+    Vancouver, BC V6T 1K2
+
+    **AMS Student Nest** (main conference venue)
+    6133 University Blvd [GMap](https://maps.app.goo.gl/S5z3Ninc3hgsp5qW7) · [CoMaps](https://comaps.at/0pGgTRymIh/AMS_Nest_%28Student_Union_Building%29)
+    Vancouver, BC V6T 1Z1
+
+- id: hotel-travel-support
+  question: Is there travel support?
+  answer: |
+    Organizers, speakers, and other community members who are having their travel supported will all be staying at Gage Suites. As part of travel support onboarding, you'll be booked into these suites.

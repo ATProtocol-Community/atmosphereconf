@@ -1,15 +1,10 @@
 import { glob } from "astro/loaders";
 import { defineCollection, reference, z } from "astro:content";
-import { parseInline } from "marked";
+import { faqCollections } from "./faqs/_config";
+import { talkCollections } from "./talks/_config";
 
 export const collections = {
-  faqs: defineCollection({
-    loader: glob({ pattern: "**/*.md", base: "./src/content/faqs" }),
-    schema: z.object({
-      Q: z.string().transform((question) => parseInline(question)),
-      position: z.number(),
-    }),
-  }),
+  ...faqCollections,
   agenda: defineCollection({
     loader: async () => [
       {
@@ -65,6 +60,7 @@ export const collections = {
       bio: z.string(),
     }),
   }),
+  ...talkCollections,
   sponsors: defineCollection({
     loader: glob({ pattern: "**/*.yaml", base: "./src/content/sponsors" }),
     schema: ({ image }) =>

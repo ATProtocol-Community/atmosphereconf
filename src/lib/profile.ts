@@ -1,5 +1,5 @@
-import type { HeaderQuery } from "@/components/__generated__/HeaderQuery.graphql";
-import type { ProfilePageQuery } from "@/components/__generated__/ProfilePageQuery.graphql";
+import type { profileRegularQuery as HeaderQuery } from "./__generated__/profileRegularQuery.graphql";
+import type { profileFullQuery as ProfilePageQuery } from "./__generated__/profileFullQuery.graphql";
 
 import { graphql } from "./graphql";
 import type { AstroCookies } from "astro";

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Command } from "cmdk";
-import { Spinner } from "@/components/Spinner";
-import { Avatar } from "@/components/Avatar";
+import { Spinner } from "@/components/ui/Spinner";
+import { Avatar } from "@/components/profile/Avatar";
 import { isAbortError } from "@/lib/client";
 
 export interface Actor {

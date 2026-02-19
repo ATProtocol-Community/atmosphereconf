@@ -1,0 +1,41 @@
+---
+import Layout from "./Layout.astro";
+import Card from "@/components/ui/card.astro";
+
+interface Props {
+  title: string;
+  frontmatter?: {
+    title?: string;
+  };
+}
+
+const { title, frontmatter } = Astro.props;
+const pageTitle = frontmatter?.title ?? title;
+---
+
+<Layout title={`${pageTitle} – ATmosphereConf 2026`}>
+  <section class="my-10">
+    <Card class="px-6">
+      <h2
+        class="font-mono text-[11px] uppercase tracking-widest font-semibold text-primary mb-3"
+      >
+        // {pageTitle.toLowerCase()}
+      </h2>
+      <div class="prose prose-gray max-w-none
+        [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-gray-900 [&_h2]:mt-8 [&_h2]:mb-3
+        [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-gray-900 [&_h3]:mt-6 [&_h3]:mb-2
+        [&_p]:text-gray-800 [&_p]:leading-relaxed [&_p]:mb-4
+        [&_a]:text-blue-600 [&_a]:underline
+        [&_blockquote]:border-l-4 [&_blockquote]:border-primary/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-gray-600 [&_blockquote]:my-4
+        [&_code]:bg-gray-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:font-mono
+        [&_ul]:space-y-1 [&_ul]:mb-4
+        [&_li]:text-gray-800
+        [&_em]:text-gray-600
+        [&_strong]:font-semibold
+        [&_hr]:border-border [&_hr]:my-6
+      ">
+        <slot />
+      </div>
+    </Card>
+  </section>
+</Layout>

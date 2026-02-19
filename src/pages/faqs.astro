@@ -1,24 +1,33 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getCollection, render } from "astro:content";
+import Card from "@/components/ui/card.astro";
+import FaqList from "@/components/shared/FaqList.astro";
+import { getCollection } from "astro:content";
 
-const faqs = (await getCollection("faqs")).sort(
-  (a, b) =>  a.data.position - b.data.position,
-);
+const allFaqs = [
+  ...(await getCollection("faqs-hotel")),
+  ...(await getCollection("faqs-remote")),
+];
+
+const sections = [...new Map(allFaqs.map((f) => [f.data.category, f.data.categoryName])).entries()];
 ---
 
-<Layout title="Our FAQs">
-  <div class="flex flex-col gap-4">
-    Check these out:
+<Layout title="FAQs – ATmosphereConf 2026">
   {
-    faqs.map(async (faq) => {
-      const { Content } = await render(faq);
+    sections.map(([category, displayName]) => {
+      const sectionFaqs = allFaqs.filter((f) => f.data.category === category);
       return (
-        <details class="bg-white px-8 py-4">
-          <summary class="text-lg font-bold" set:html={faq.data.Q} />
-          <div class="mt-2"><Content /></div>
-        </details>
+        <section id={category} class="my-10">
+          <Card class="px-6">
+            <h2 class="font-mono text-lg uppercase tracking-widest font-semibold text-primary mb-3">
+              <a href={`#${category}`} class="section-link hover:underline" data-section={category}>
+                // {displayName.toLowerCase()}
+              </a>
+            </h2>
+            <FaqList faqs={sectionFaqs} />
+          </Card>
+        </section>
       );
     })
-  }</div>
+  }
 </Layout>
