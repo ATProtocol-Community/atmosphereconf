@@ -6,122 +6,140 @@ import GoodStuff from "@/assets/goodstuff-goose.png";
 import { Image } from "astro:assets";
 
 const profile = await maybeGetLoggedInProfile({
-  request: Astro.request,
-  cookies: Astro.cookies,
+    request: Astro.request,
+    cookies: Astro.cookies,
 });
 
 const navLinks = [
-  { href: "/#tickets", label: "tickets" },
-  { href: "/#talks", label: "talks" },
-  { href: "/#faqs", label: "faqs" },
+    { href: "/#tickets", label: "tickets" },
+    { href: "/#talks", label: "talks" },
+    { href: "/#faqs", label: "faqs" },
 ];
 ---
 
 <header
-  id="site-header"
-  class="sticky top-0 z-10 bg-primary h-14 font-mono border-b-4 border-white"
+    id="site-header"
+    class="sticky top-0 z-10 bg-primary h-14 font-mono border-b-4 border-white"
 >
-  <div class="h-full flex items-center justify-center gap-6 text-base">
-    <a href="/" data-astro-reload class="flex items-center gap-1.5 font-semibold text-lg text-primary-foreground/80">
-      <Image
-        id="header-goose"
-        class="w-6 h-6 rounded-full object-cover object-top opacity-0 -ml-7 transition-all duration-300"
-        src={GoodStuff}
-        width={48}
-        height={48}
-        alt=""
-      />
-      <span><span class="text-blue-900">AT</span>mosphereConf</span>
-    </a>
-    <span class="text-white/30 select-none" aria-hidden="true">//</span>
-    <nav class="flex items-center gap-4">
-      {navLinks.map(({ href, label }) => (
+    <div class="h-full flex items-center justify-center gap-6 text-base">
         <a
-          href={href}
-          data-nav-section={href.replace("/#", "")}
-          class="text-white/60 hover:text-white transition-colors"
-        >{label}</a>
-      ))}
-    </nav>
-    <span class="text-white/30 select-none" aria-hidden="true">//</span>
-    <div class="h-8 flex items-center">
-      {
-        profile ? (
-          <a href="/profile">
-            <Avatar
-              size="sm"
-              className="cursor-pointer ring-2 ring-white/50 hover:ring-white"
-              src={profile.avatarUrl}
-              alt={profile.displayName}
+            href="/"
+            data-astro-reload
+            class="flex items-center gap-1.5 font-semibold text-lg text-primary-foreground/80"
+        >
+            <Image
+                id="header-goose"
+                class="w-6 h-6 rounded-full object-cover object-top opacity-0 -ml-7 transition-all duration-300"
+                src={GoodStuff}
+                width={48}
+                height={48}
+                alt=""
             />
-          </a>
-        ) : (
+            <span><span class="text-blue-900">AT</span>mosphereConf</span>
+        </a>
+        <span class="text-white/30 select-none" aria-hidden="true">//</span>
+        <nav class="flex items-center gap-4">
+            {
+                navLinks.map(({ href, label }) => (
+                    <a
+                        href={href}
+                        data-nav-section={href.replace("/#", "")}
+                        class="text-white/60 hover:text-white transition-colors"
+                    >
+                        {label}
+                    </a>
+                ))
+            }
+        </nav>
+        <span class="text-white/30 select-none" aria-hidden="true">//</span>
+        <div class="h-8 flex items-center">
+            {
+                profile ? (
+                    <a href="/profile">
+                        <Avatar
+                            size="sm"
+                            className="cursor-pointer ring-2 ring-white/50 hover:ring-white"
+                            src={profile.avatarUrl}
+                            alt={profile.displayName}
+                        />
+                    </a>
+                ) : (
+                    {
+                        /* // commenting out for now
           <a
             href="/login"
             class="font-mono text-base font-medium text-white border border-white/40 rounded px-3 py-1 hover:bg-white hover:text-primary transition-colors"
           >
             sign in
           </a>
-        )
-      }
+          */
+                    }
+                )
+            }
+        </div>
     </div>
-  </div>
 </header>
 
 <script>
-  const goose = document.getElementById("header-goose");
-  const hero = document.querySelector("[data-hero-goose]");
-  if (goose && hero) {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          goose.classList.add("opacity-0", "-ml-7");
-          goose.classList.remove("opacity-100", "ml-0");
-        } else {
-          goose.classList.remove("opacity-0", "-ml-7");
-          goose.classList.add("opacity-100", "ml-0");
-        }
-      },
-      { threshold: 0 }
-    );
-    observer.observe(hero);
-  }
+    const goose = document.getElementById("header-goose");
+    const hero = document.querySelector("[data-hero-goose]");
+    if (goose && hero) {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    goose.classList.add("opacity-0", "-ml-7");
+                    goose.classList.remove("opacity-100", "ml-0");
+                } else {
+                    goose.classList.remove("opacity-0", "-ml-7");
+                    goose.classList.add("opacity-100", "ml-0");
+                }
+            },
+            { threshold: 0 },
+        );
+        observer.observe(hero);
+    }
 
-  // Highlight nav link for the section currently in view
-  const navLinks = document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]");
-  const sections = new Map<string, Element>();
-  navLinks.forEach((link) => {
-    const id = link.dataset.navSection!;
-    const el = document.getElementById(id);
-    if (el) sections.set(id, el);
-  });
-
-  const active = "text-white underline decoration-dashed decoration-white/70 underline-offset-4";
-  const inactive = "text-white/60";
-
-  function setActive(id: string | null) {
+    // Highlight nav link for the section currently in view
+    const navLinks =
+        document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]");
+    const sections = new Map<string, Element>();
     navLinks.forEach((link) => {
-      const isActive = link.dataset.navSection === id;
-      active.split(" ").forEach((c) => link.classList.toggle(c, isActive));
-      inactive.split(" ").forEach((c) => link.classList.toggle(c, !isActive));
+        const id = link.dataset.navSection!;
+        const el = document.getElementById(id);
+        if (el) sections.set(id, el);
     });
-  }
 
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          setActive(entry.target.id);
-          return;
-        }
-      }
-    },
-    { rootMargin: "-50% 0px -50% 0px" }
-  );
+    const active =
+        "text-white underline decoration-dashed decoration-white/70 underline-offset-4";
+    const inactive = "text-white/60";
 
-  sections.forEach((el) => sectionObserver.observe(el));
+    function setActive(id: string | null) {
+        navLinks.forEach((link) => {
+            const isActive = link.dataset.navSection === id;
+            active
+                .split(" ")
+                .forEach((c) => link.classList.toggle(c, isActive));
+            inactive
+                .split(" ")
+                .forEach((c) => link.classList.toggle(c, !isActive));
+        });
+    }
 
-  // Set initial active from URL hash
-  const hash = window.location.hash.replace("#", "");
-  if (hash && sections.has(hash)) setActive(hash);
+    const sectionObserver = new IntersectionObserver(
+        (entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    setActive(entry.target.id);
+                    return;
+                }
+            }
+        },
+        { rootMargin: "-50% 0px -50% 0px" },
+    );
+
+    sections.forEach((el) => sectionObserver.observe(el));
+
+    // Set initial active from URL hash
+    const hash = window.location.hash.replace("#", "");
+    if (hash && sections.has(hash)) setActive(hash);
 </script>
