@@ -22,13 +22,22 @@
 >
   <span class="ntt-tab">ON SALE</span>
   <span class="ntt-perf"></span>
-  <span class="ntt-body">
-    <span class="ntt-cta">🪿 Buy your tickets now</span>
-    <span class="ntt-sep">·</span>
-    <span class="ntt-detail">March 26–29, 2026</span>
-    <span class="ntt-sep">·</span>
-    <span class="ntt-detail">Live + Remote</span>
-  </span>
+  <div class="ntt-body">
+    <div class="ntt-scroll">
+      <span class="ntt-cta">🪿 Buy your tickets now</span>
+      <span class="ntt-sep">·</span>
+      <span class="ntt-detail">March 26–29, 2026</span>
+      <span class="ntt-sep">·</span>
+      <span class="ntt-detail">Live + Remote</span>
+      <span class="ntt-sep">·</span>
+      <span class="ntt-cta">🪿 Buy your tickets now</span>
+      <span class="ntt-sep">·</span>
+      <span class="ntt-detail">March 26–29, 2026</span>
+      <span class="ntt-sep">·</span>
+      <span class="ntt-detail">Live + Remote</span>
+      <span class="ntt-sep">·</span>
+    </div>
+  </div>
 </a>
 
 <style>
@@ -42,7 +51,9 @@
     align-items: stretch;
     text-decoration: none;
     transform: rotate(2deg) translateY(-100%);
-    transition: transform 0.25s ease, filter 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      filter 0.25s ease;
     transform-origin: top right;
     filter: drop-shadow(0 0 0 transparent);
     pointer-events: none;
@@ -144,7 +155,7 @@
   .ntt-tab {
     background: oklch(0.6744 0.1753 254.76);
     color: white;
-    padding: 0 0.35rem;
+    padding: 0 0.45rem;
     font-size: 0.4rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -184,13 +195,26 @@
     background: oklch(0.95 0.02 254.76);
     border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
     border-left: none;
+    height: 40px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .ntt-scroll {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0 0.75rem;
-    height: 40px;
-    overflow: hidden;
     white-space: nowrap;
+    animation: ntt-marquee 12s linear infinite;
+  }
+  @keyframes ntt-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-49%);
+    }
   }
   .ntt-cta {
     font-size: 0.7rem;
