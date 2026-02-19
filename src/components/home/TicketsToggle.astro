@@ -1,0 +1,26 @@
+---
+import TitoWidget from "@/components/shared/TitoWidget.astro";
+---
+
+<p class="text-gray-800 max-w-[65ch] mx-auto">
+  <span class="group-[.remote]:hidden">Can't make it there?</span>
+  <span class="group-[.live]:hidden">Want to mingle?</span>
+
+  <input id="ticket-toggle" type="checkbox" class="hidden" />
+  <label for="ticket-toggle" class="underline text-blue-600 cursor-pointer">
+    <span class="group-[.remote]:hidden">Go remote →</span>
+    <span class="group-[.live]:hidden">Join us on campus ←</span>
+  </label>
+</p>
+
+<TitoWidget type="live" class:list="group-[.remote]:hidden" />
+<TitoWidget type="remote" class:list="group-[.live]:hidden" />
+
+<script>
+  const toggle = document.getElementById("ticket-toggle") as HTMLInputElement;
+  const section = toggle.closest("section");
+  toggle?.addEventListener("change", () => {
+    section?.classList.toggle("remote", toggle.checked);
+    section?.classList.toggle("live", !toggle.checked);
+  });
+</script>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Camera } from "lucide-react";
-import { Avatar } from "@/components/Avatar";
+import { Avatar } from "@/components/profile/Avatar";
 
 interface AvatarInputProps {
   currentAvatarUrl?: string | null;

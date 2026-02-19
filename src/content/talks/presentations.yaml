@@ -1,0 +1,312 @@
+- id: obaP26x
+  title: "Who owns the group chat? Building collaborative spaces on ATProto"
+  speaker_name: Brittany Ellich
+  speaker_id: "@brittanyellich.com"
+  category: Development and Protocol
+
+- id: ZjL74D0
+  title: "Jacquard Magic: how to make atproto actually easy with Rust"
+  speaker_name: Orual
+  speaker_id: "@nonbinary.computer"
+  category: Development and Protocol
+
+- id: zxRkxk8
+  title: "Blousques: Case Study on the Challenges in Translating Bluesky's UI"
+  speaker_name: Stanislas Signoud (Signez)
+  speaker_id: "@signez.fr"
+  category: Development and Protocol
+
+- id: EkexvrN
+  title: "~~Compete or kill~~ Cooperate and Succeed!"
+  speaker_name: Govind Mohan
+  speaker_id: gov.glados.computer
+  category: Development and Protocol
+
+- id: MelQ8Ak
+  title: "Rethinking the Client: Why User Choice is the Key to Growth for ATProto"
+  speaker_name: Tyler Fisher
+  speaker_id: "@tylerjfisher.com"
+  category: Community
+
+- id: PdNOkAP
+  title: "habitat: how to get away from skeumorphism on ATproto"
+  speaker_name: Arushi Bandi
+  speaker_id: offline.arushibandi.com
+  category: Development and Protocol
+
+- id: A7YLlpl
+  title: "An artist dreaming in the Atmosphere: visions about commmunity, sustainability and creativity"
+  speaker_name: Hilke Ros
+  speaker_id: "@hilk.eu"
+  category: Community
+
+- id: rjQp2Z2
+  title: "ATProto and Osprey: Automating Moderation in the Atmosphere"
+  speaker_name: Hailey Elizabeth
+  speaker_id: "@hailey.at"
+  category: Development and Protocol
+
+- id: QKqWDrG
+  title: "DID:PLC War Games"
+  speaker_name: Edmund Edgar
+  speaker_id: goat.navy
+  category: Development and Protocol
+
+- id: aQ1J9GE
+  title: 2026 Atmosphere Report
+  speaker_name: Paul Frazee
+  speaker_id: pfrazee.com
+  category: Development and Protocol
+
+- id: rjQ96kl
+  title: "Protocol Governance & Hard Decentralization"
+  speaker_name: Daniel Holmgren
+  speaker_id: "@dholms.xyz"
+  category: Development and Protocol
+
+- id: q4qlVLY
+  title: Community privacy in a decentralized network
+  speaker_name: Evelyn Osman
+  speaker_id: "@chipnick.com"
+  category: Development and Protocol
+
+- id: VLa69bl
+  title: "Publishing Without Platforms: Building Native Media on AT Protocol"
+  speaker_name: Jim Ray
+  speaker_id: "@jimray.bsky.team"
+  category: Media and Civics
+
+- id: EkGROKB
+  title: A Free Press needs Free Protocols
+  speaker_name: Joe Germuska
+  speaker_id: "@joe.germuska.com"
+  category: Community
+
+- id: ODqQQJA
+  title: Waiting for the Future to Load
+  speaker_name: Amber Case
+  speaker_id: "@case.bsky.social"
+  category: Media and Civics
+
+- id: ja4ooAa
+  title: "Building Public-Interest Infrastructure on ATProto"
+  speaker_name: Sebastian Vogelsang
+  speaker_id: "@seabass.bsky.social"
+  category: Media and Civics
+
+- id: gDPMMa1
+  title: "One Year of Graze - lessons learned funding, building, and growing in the atmosphere"
+  speaker_name: Devin Gaffney
+  speaker_id: devingaffney.com
+  category: Media and Civics
+
+- id: q4QAgVk
+  title: Building decentralized AI on atproto
+  speaker_name: Maxine Levesque
+  speaker_id: "@maxine.science"
+  category: Development and Protocol
+
+- id: QK9Ae6Y
+  title: "Groundings with my Siblings: Lessons Learned Building for Community"
+  speaker_name: Rudy Fraser
+  speaker_id: "@rude1.blacksky.team"
+  category: Development and Protocol
+
+- id: gDPLaGd
+  title: "Did Lexicon just accidentally solve the enterprise data problem?"
+  speaker_name: Emily Gorcenski
+  speaker_id: "@emily.gorcen.ski"
+  category: Development and Protocol
+
+- id: WObY04Q
+  title: "furryli.st: Scaling Community and Belonging in an Outrage-Driven World"
+  speaker_name: Baldemar Motomochi
+  speaker_id: "@baldemo.to"
+  category: Community
+
+- id: LZxV6dv
+  title: Consent Before Cryptography
+  speaker_name: Tessa Brown
+  speaker_id: "@tessa.germnetwork.com"
+  category: Community
+
+- id: 2E9XG1b
+  title: "Creating a Safer Web: Blacksky's Moderation Tool"
+  speaker_name: Dr. KaLyn Coghill
+  speaker_id: "@drkalyn.blacksky.team"
+  category: Community
+
+- id: LZ4oWrj
+  title: "Two Years of Skywatch: Lessons Learned for Community Moderation"
+  speaker_name: D Scarnecchia
+  speaker_id: "@scoiattolo.mountainherder.xyz"
+  category: Community
+
+- id: Mej2N5X
+  title: Making space for the Protoverse
+  speaker_name: Meri Leeworthy
+  speaker_id: "@meri.garden"
+  category: Community
+
+- id: ODxNLMM
+  title: "Who talks to whom? Coordination gaps in decentralised infrastructure"
+  speaker_name: Laurens Hof
+  speaker_id: "@laurenshof.online"
+  category: Media and Civics
+
+- id: 0Qq9NlZ
+  title: "Coop: Open source Trust & Safety infrastructure for all"
+  speaker_name: Cassidy James Blaede
+  speaker_id: "@cassidyjames.com"
+  category: Media and Civics
+
+- id: rj8Xv62
+  title: TBD
+  speaker_name: Blaine Cook
+  speaker_id: blaine.bsky.social
+  category: Media and Civics
+
+- id: RGqppqd
+  title: "How Streamplace Works: VODs"
+  speaker_name: Eli Mallon
+  speaker_id: "@iame.li"
+  category: Development and Protocol
+
+- id: XxP4RzL
+  title: "Building Cirrus: a single-user, serverless PDS"
+  speaker_name: Matt Kane
+  speaker_id: "@mk.gg"
+  category: Development and Protocol
+
+- id: 9qjDJZG
+  title: "From Toilets to Moths: The Future of Social Media is Weird and Not For Everyone"
+  speaker_name: Dame
+  speaker_id: "@dame.is"
+  category: Development and Protocol
+
+- id: PdJ6Q8d
+  title: Journalism must create its own algorithms
+  speaker_name: Aendra Rininsland
+  speaker_id: "@aendra.com"
+  category: Media and Civics
+
+- id: QKlrLXG
+  title: "Advocating for Digital Sovereignty: European Experiences and Global Lessons"
+  speaker_name: Sandra Barthel
+  speaker_id: "@sandrabarthel.bsky.social"
+  category: Media and Civics
+
+- id: 7Rrv0E0
+  title: "Beyond Bluesky: Community infrastructure"
+  speaker_name: fig
+  speaker_id: "@bad-example.com"
+  category: Development and Protocol
+
+- id: jaAWVRY
+  title: "Bringing Self Sovereign Identities to the Masses via ATproto (and how to maximize coherence between upcoming DID:PLC forks)"
+  speaker_name: Paul Fuxjäger
+  speaker_id: "@cypherhippie.bsky.social"
+  category: Development and Protocol
+
+- id: xXWE9Dv
+  title: "Data Sovereignty for Games (and Everything Else): Building Decentralized Industry Infrastructure on ATProto"
+  speaker_name: Trezy Who
+  speaker_id: "@trezy.codes"
+  category: Development and Protocol
+
+- id: OD2G9j8
+  title: The Phoenix Architecture
+  speaker_name: Chad Fowler
+  speaker_id: "@chadfowler.com"
+  category: Development and Protocol
+
+- id: 9qkWqPG
+  title: Building Future of Artificial Intelligence on AT Protocol
+  speaker_name: Cameron Pfiffer
+  speaker_id: cameron.stream
+  category: Development and Protocol
+
+- id: OD2PpYA
+  title: Open social tech and geopolitical risk
+  speaker_name: Ivan Sigal
+  speaker_id: ivansigal.bsky.social
+  category: Media and Civics
+
+- id: VLerG2y
+  title: Understanding the Landscape of Custom Feeds on Bluesky
+  speaker_name: Leijie Wang
+  speaker_id: "@leijiew.bsky.social"
+  category: Community
+
+- id: eqVMWz0
+  title: Content Moderation Futures
+  speaker_name: lindsay blackwell
+  speaker_id: "@linguangst.bsky.social"
+  category: Media and Civics
+
+- id: 9q8ZX5Q
+  title: Social Components
+  speaker_name: Dan Abramov
+  speaker_id: danabra.mov
+  category: Development and Protocol
+
+- id: BzrpDQK
+  title: "Feature / Product / Business: A Framework for Sustainable ATProto Projects"
+  speaker_name: Mosh Lee
+  speaker_id: "@mosh.bsky.social"
+  category: Development and Protocol
+
+- id: gDELD0M
+  title: Landslide
+  speaker_name: Erin Kissane
+  speaker_id: "@kissane.myatproto.social"
+  category: Media and Civics
+
+- id: J9yOpYz
+  title: The Aggregation Era burned journalism institutions to the ground. The federated era is emerging from those embers
+  speaker_name: Justin Bank
+  speaker_id: bankonjustin.bsky.social
+  category: Media and Civics
+
+- id: VLgVWM6
+  title: "tangled: the business end"
+  speaker_name: Anirudh Oppiliappan
+  speaker_id: "@anirudh.fi"
+  category: Development and Protocol
+
+- id: RG6Nepp
+  title: "Large-scale interoperability in the ATmosphere"
+  speaker_name: "Roscoe Rubin-Rottenberg"
+  speaker_id: "@knotbin.com"
+  category: Development and Protocol
+
+- id: 1AzdYWM
+  title: "Bluenotes: Community Notes for ATProto"
+  speaker_name: Jonathan Warden
+  speaker_id: "@jonathanwarden.com"
+  category: Development and Protocol
+
+- id: gDP6A8N
+  title: Account logic in ATProto using Trusted Execution Environments
+  speaker_name: Kobi Gurkan
+  speaker_id: kobi.bsky.social
+  category: Development and Protocol
+
+- id: J9EgEdX
+  title: "Hypercerts on ATProto: Collective Funding, Evaluation, and Ownership as Social Data"
+  speaker_name: Holke Brammer
+  speaker_id: "@holke.xyz"
+  category: Development and Protocol
+
+- id: obLbvQV
+  title: "Building the Sovereign Media Stack: A Roadmap for AT Protocol"
+  speaker_name: Natalie Mullins
+  speaker_id: "@eclecticcapital.bsky.com"
+  category: Development and Protocol
+
+- id: XxPMqvO
+  title: "Build and share personal apps, using an open source tool to help get started"
+  speaker_name: Jon Wilson
+  speaker_id: "@jon2600.bsky.social"
+  category: Development and Protocol
+

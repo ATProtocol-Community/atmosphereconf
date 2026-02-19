@@ -1,0 +1,44 @@
+---
+import Card from "@/components/ui/card.astro";
+import { getCollection, getEntry } from "astro:content";
+
+const agenda = await getCollection("agenda");
+const agendaWithSpeakers = await Promise.all(
+  agenda.map(async (item) => ({
+    ...item,
+    speaker: item.data.speaker ? await getEntry(item.data.speaker) : null,
+  })),
+);
+---
+
+<section>
+  <Card title="schedule">
+    <p class="text-gray-700">
+      (coming soon, point to <a
+        class="text-blue-700 hover:underline"
+        href="https://leaflet.pub/"
+        target="_blank"
+        rel="noopener noreferrer">Leaflet</a
+      > with pre-announced speakers)
+    </p>
+    <div class="grid grid-cols-1">
+      {
+        agendaWithSpeakers.map((item) => (
+          <div class="flex items-center py-4">
+            <div class="w-24 flex-shrink-0 text-sm font-medium text-gray-500">
+              {item.data.time}
+            </div>
+            <div class="ml-4">
+              <div class="font-medium text-gray-900">{item.data.title}</div>
+              {item.speaker && (
+                <div class="text-sm text-gray-500">
+                  {item.speaker.data.name}
+                </div>
+              )}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Card>
+</section>

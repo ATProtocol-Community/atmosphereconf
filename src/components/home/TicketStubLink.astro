@@ -1,0 +1,104 @@
+---
+interface Props {
+  href?: string;
+}
+
+const { href = "#tickets" } = Astro.props;
+---
+
+<a href={href} class="ticket-stub">
+  <div class="ticket-tab">NOW SELLING</div>
+  <div class="ticket-perforation"></div>
+  <div class="ticket-body">
+    <span class="ticket-label">Live and remote </span>
+    <span class="ticket-main"
+      >🪿 Get Your Tickets <span class="ticket-arrow">&darr;</span></span
+    >
+  </div>
+</a>
+
+<style>
+  .ticket-stub {
+    display: inline-flex;
+    align-items: stretch;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+  .ticket-stub:hover {
+    transform: rotate(2deg);
+  }
+
+  .ticket-tab {
+    background: oklch(0.6744 0.1753 254.76);
+    color: white;
+    padding: 0.85rem 0.85rem;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .ticket-perforation {
+    width: 0;
+    position: relative;
+    overflow: visible;
+  }
+  .ticket-perforation::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -3px;
+    width: 6px;
+    height: calc(100% + 4px);
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      white 3px,
+      white 6px
+    );
+    z-index: 1;
+  }
+
+  .ticket-body {
+    background: oklch(0.6744 0.1753 254.76 / 0.08);
+    border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
+    border-left: none;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .ticket-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.65rem;
+    color: oklch(0.6744 0.1753 254.76);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+  }
+
+  .ticket-main {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--foreground);
+  }
+
+  .ticket-arrow {
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  /* .ticket-stub:hover .ticket-arrow {
+    transform: translateY(3px);
+  } */
+</style>

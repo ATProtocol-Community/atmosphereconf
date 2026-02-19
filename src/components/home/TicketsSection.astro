@@ -1,0 +1,41 @@
+---
+import Card from "@/components/ui/card.astro";
+import DetailsGrid from "@/components/home/DetailsGrid.astro";
+import TicketsToggle from "@/components/home/TicketsToggle.astro";
+---
+
+<section id="ticket-section" class="group live">
+  <Card class="gap-4" title="tickets">
+    <p class="text-gray-800 max-w-[65ch]">
+      Come join 250+ in-person attendees, and 100s more online. Arrive <span
+        class="font-semibold">two days early</span
+      > for extended events, deep dives, and local activities; then gather for
+      <span class="font-semibold">two full days</span> of conference—with topics
+      for everyone!
+    </p>
+    <div>
+      <p class="text-4xl text-balance text-center mt-6">
+        <strong class="font-bold">ATmosphereConf</strong>
+        <span class="show-live group-[.remote]:hidden"
+          >is at <a
+            class="text-blue-600 underline"
+            href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
+          > on</span
+        >
+        <span class="show-remote group-[.live]:hidden"
+          >is <em>wherever you are*</em>,</span
+        >
+        March 26-27 & 28-29, 2026
+      </p>
+      <span
+        class="show-remote group-[.live]:invisible text-sm text-center w-full inline-block italic mt-0.5 mb-1"
+        >*but also at <a
+          class="text-blue-600 underline"
+          href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
+        ></span
+      >
+    </div>
+    <DetailsGrid />
+    <TicketsToggle />
+  </Card>
+</section>

@@ -1,0 +1,35 @@
+---
+import Card from "@/components/ui/card.astro";
+import FaqList from "@/components/shared/FaqList.astro";
+import { getCollection } from "astro:content";
+
+const sections = [
+  { faqs: await getCollection("faqs-hotel") },
+  { faqs: await getCollection("faqs-remote") },
+];
+---
+
+<section>
+  <Card title="FAQs">
+    <p class="text-muted-foreground mb-4">More than you ever knew to ask</p>
+    {sections.map(({ faqs }, i) => (
+      <div id={faqs[0].data.category} class="faq-section">
+        <h3
+          class:list={[
+            "font-mono text-sm uppercase tracking-widest font-semibold text-primary mb-4",
+            i === 0 ? "mt-2" : "mt-8",
+          ]}
+        >
+          <a
+            href={`#${faqs[0].data.category}`}
+            class="section-link hover:underline"
+            data-section={faqs[0].data.category}
+          >
+            // {faqs[0].data.categoryName.toLowerCase()}
+          </a>
+        </h3>
+        <FaqList faqs={faqs} />
+      </div>
+    ))}
+  </Card>
+</section>

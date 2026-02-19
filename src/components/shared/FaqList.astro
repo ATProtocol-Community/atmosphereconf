@@ -1,0 +1,95 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  faqs: CollectionEntry<"faqs-hotel" | "faqs-remote">[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<div class="flex flex-col gap-3">
+  {faqs.map((faq) => (
+    <details
+      id={faq.id}
+      class="group faq-item rounded-lg border border-border bg-white px-6 py-4 transition-shadow hover:shadow-sm"
+    >
+      <summary class="text-base font-semibold text-gray-900 cursor-pointer list-none flex items-center gap-2 [&::-webkit-details-marker]:hidden">
+        <span class="text-primary/60 group-open:rotate-90 transition-transform text-sm">
+          &#9654;
+        </span>
+        <span set:html={faq.data.question} />
+        <a
+          href={`#${faq.id}`}
+          class="faq-link opacity-30 sm:opacity-0 group-hover:opacity-100 text-primary/50 hover:text-primary/80 transition-opacity ml-1 text-base font-semibold -m-2 p-2"
+          data-faq-id={faq.id}
+          title="Copy link"
+        >
+          #
+        </a>
+      </summary>
+      <div class="mt-3 pt-3 border-t border-border/50 text-gray-700 leading-relaxed [&_a]:text-blue-600 [&_a]:underline [&_p]:mb-3 [&_p:last-child]:mb-0 [&_em]:text-gray-500">
+        <Fragment set:html={faq.data.answer} />
+      </div>
+    </details>
+  ))}
+</div>
+
+<script>
+  // Open FAQs matching the hash
+  function openFaqFromHash() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+
+    const el = document.getElementById(hash);
+    if (!el) return;
+
+    if (el.tagName === "DETAILS") {
+      (el as HTMLDetailsElement).open = true;
+    } else {
+      el.querySelectorAll<HTMLDetailsElement>("details.faq-item")
+        .forEach((d) => { d.open = true; });
+      el.closest(".faq-section, section")
+        ?.querySelectorAll<HTMLDetailsElement>("details.faq-item")
+        .forEach((d) => { d.open = true; });
+    }
+
+    el.scrollIntoView();
+  }
+
+  // Initial load
+  openFaqFromHash();
+  // bfcache restore (back/forward navigation)
+  window.addEventListener("pageshow", (e) => { if (e.persisted) openFaqFromHash(); });
+  // Hash changes after load
+  window.addEventListener("hashchange", openFaqFromHash);
+
+  // Section links: scroll only, don't auto-open
+  document
+    .querySelectorAll<HTMLAnchorElement>("a.section-link")
+    .forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const href = link.getAttribute("href")!;
+        history.pushState(null, "", href);
+        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+  // Individual FAQ links: open that one FAQ and scroll
+  document
+    .querySelectorAll<HTMLAnchorElement>("a.faq-link")
+    .forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const href = link.getAttribute("href")!;
+        history.pushState(null, "", href);
+        const target = document.querySelector(href);
+        if (target?.tagName === "DETAILS") {
+          (target as HTMLDetailsElement).open = true;
+        }
+        target?.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+</script>

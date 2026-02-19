@@ -7,7 +7,7 @@ import { graphql } from "@/lib/graphql";
 import { query, mutate } from "@/lib/client";
 import type { ProfileSettingsFormQuery } from "./__generated__/ProfileSettingsFormQuery.graphql";
 import type { ProfileSettingsFormUploadBlobMutation } from "./__generated__/ProfileSettingsFormUploadBlobMutation.graphql";
-import { Spinner } from "@/components/Spinner";
+import { Spinner } from "@/components/ui/Spinner";
 import { AvatarInput } from "./AvatarInput";
 import { LocationInput, type LocationData } from "./LocationInput";
 

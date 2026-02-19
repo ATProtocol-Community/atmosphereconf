@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { login } from "../lib/client";
-import { ActorAutocomplete, type Actor } from "@/components/ActorAutocomplete";
+import { login } from "@/lib/client";
+import { ActorAutocomplete, type Actor } from "@/components/profile/ActorAutocomplete";
 
 export function LoginForm({ error: serverError }: { error?: string | null }) {
   const [handle, setHandle] = useState("");

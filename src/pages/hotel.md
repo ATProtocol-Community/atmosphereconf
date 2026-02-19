@@ -1,5 +1,6 @@
 ---
 title: Conference Hotel
+layout: ../layouts/ContentLayout.astro
 ---
 
 We have reserved rooms and special rates at the [Gage Suites](https://suitesatubc.com/gage-apartments-vancouver/), which is about a 10min walk on campus to The Nest venue where the conference takes place.
