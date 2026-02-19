@@ -5,27 +5,46 @@ import { getCollection, getEntry } from "astro:content";
 
 const sponsors = await getCollection("sponsors");
 const bskySponsor = await getEntry("sponsors", "bsky")!;
+const streamplaceSponsor = await getEntry("sponsors", "streamplace")!;
 ---
 
 <section>
-  <Card title="sponsors">
-    <p class="text-muted-foreground mb-4">
-      A huge thank you to Bluesky for being our title sponsor.
-    </p>
-    <SponsorsCard sponsor={bskySponsor} />
-    <div class="mt-6">
-      <h3
-        class="font-mono text-xs uppercase tracking-widest font-semibold text-primary mb-3"
-      >
-        // community sponsors
-      </h3>
-      <div class="grid grid-cols-3 gap-4 items-stretch">
-        {
-          sponsors
-            .filter((sponsor) => sponsor.data.level !== "title")
-            .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
-        }
-      </div>
-    </div>
-  </Card>
+    <Card title="sponsors">
+        <p class="text-muted-foreground mb-4">
+            A huge thank you to Bluesky for being our title sponsor.
+        </p>
+        <SponsorsCard sponsor={bskySponsor} />
+        <p class="text-muted-foreground mb-4">
+            <a href="https://stream.place">Streamplace</a> is our video provider for
+            the conference, and will be streaming up to 3 rooms and powering chat
+            as part of our remote track.
+        </p>
+        <SponsorsCard sponsor={streamplaceSponsor} />
+        <div class="mt-6">
+            <h3
+                class="font-mono text-xs uppercase tracking-widest font-semibold text-primary mb-3"
+            >
+                // major
+            </h3>
+            <div class="grid grid-cols-3 gap-4 items-stretch">
+                {
+                    sponsors
+                        .filter((sponsor) => sponsor.data.level === "major")
+                        .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
+                }
+            </div>
+            <h3
+                class="font-mono text-xs uppercase tracking-widest font-semibold text-primary mb-3"
+            >
+                // community
+            </h3>
+            <div class="grid grid-cols-3 gap-4 items-stretch">
+                {
+                    sponsors
+                        .filter((sponsor) => sponsor.data.level === "community")
+                        .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
+                }
+            </div>
+        </div>
+    </Card>
 </section>
