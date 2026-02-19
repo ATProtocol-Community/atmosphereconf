@@ -23,6 +23,7 @@ const navLinks = [
     class="h-full flex items-center justify-center gap-6 text-base relative z-10 bg-primary border-b sm:border-b-4 border-white"
   >
     <a
+      id="site-logo"
       href="/"
       data-astro-reload
       class="flex items-center gap-1.5 font-semibold text-lg text-primary-foreground/80"
@@ -79,6 +80,16 @@ const navLinks = [
 </header>
 
 <script>
+  // On index page, logo scrolls to top instead of reloading
+  const logo = document.getElementById("site-logo");
+  if (logo && window.location.pathname === "/") {
+    logo.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      history.replaceState(null, "", "/");
+    });
+  }
+
   const goose = document.getElementById("header-goose");
   const hero = document.querySelector("[data-hero-goose]");
   if (goose && hero) {
@@ -119,12 +130,19 @@ const navLinks = [
     });
   }
 
+  let currentActive: string | null = null;
   const sectionObserver = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          setActive(entry.target.id);
+          currentActive = entry.target.id;
+          setActive(currentActive);
           return;
+        }
+        // Clear if the currently active section left the viewport
+        if (entry.target.id === currentActive) {
+          currentActive = null;
+          setActive(null);
         }
       }
     },
@@ -132,6 +150,15 @@ const navLinks = [
   );
 
   sections.forEach((el) => sectionObserver.observe(el));
+
+  // Activate "tickets" nav when the header ticket banner appears
+  window.addEventListener("ticket-banner", ((e: CustomEvent) => {
+    if (e.detail.visible && !currentActive) {
+      setActive("tickets");
+    } else if (!e.detail.visible && currentActive === null) {
+      setActive(null);
+    }
+  }) as EventListener);
 
   // Set initial active from URL hash
   const hash = window.location.hash.replace("#", "");

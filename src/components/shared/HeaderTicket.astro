@@ -221,14 +221,18 @@
     ticketTape?.classList.toggle("visible", show);
     ticketPeel?.setAttribute("aria-hidden", String(!show));
     ticketTape?.setAttribute("aria-hidden", String(!show));
+    window.dispatchEvent(
+      new CustomEvent("ticket-banner", { detail: { visible: show } }),
+    );
   }
 
   if (heroStub && header) {
-    // Pages with the hero ticket stub: show after it scrolls behind header
+    // Pages with the hero ticket stub: show only after it fully scrolls behind header
     const headerH = header.offsetHeight;
+    const stubH = (heroStub as HTMLElement).offsetHeight;
     const ticketObserver = new IntersectionObserver(
       ([entry]) => showBanners(!entry.isIntersecting),
-      { rootMargin: `-${headerH}px 0px 0px 0px`, threshold: 0 },
+      { rootMargin: `-${headerH + stubH}px 0px 0px 0px`, threshold: 0 },
     );
     ticketObserver.observe(heroStub);
   } else {
