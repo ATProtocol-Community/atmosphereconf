@@ -36,6 +36,18 @@ const streamplaceSponsor = await getEntry("sponsors", "streamplace")!;
             <h3
                 class="font-mono text-xs uppercase tracking-widest font-semibold text-primary mb-3"
             >
+                // sponsors
+            </h3>
+            <div class="grid grid-cols-3 gap-4 items-stretch">
+                {
+                    sponsors
+                        .filter((sponsor) => sponsor.data.level === "sponsor")
+                        .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
+                }
+            </div>
+            <h3
+                class="font-mono text-xs uppercase tracking-widest font-semibold text-primary mb-3"
+            >
                 // community
             </h3>
             <div class="grid grid-cols-3 gap-4 items-stretch">

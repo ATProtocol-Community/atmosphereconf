@@ -1,5 +1,5 @@
-- id: hotel-where-to-stay
-  question: Where should I stay?
+- id: hotel
+  question: What is the conference hotel?
   answer: |
     We have reserved rooms and special rates at the [Gage Suites](https://suitesatubc.com/gage-apartments-vancouver/), about a 10min walk on campus to The Nest venue.
 

@@ -1,0 +1,8 @@
+- id: code-of-conduct
+  question: Does the conference have a code of conduct?
+  answer: |
+    The code of conduct that the AT Community Fund events and spaces is covered under is posted on the blog at [atprotocol.dev/code-of-conduct](https://atprotocol.dev/code-of-conduct/).
+- id: coc-help
+  question: Who do I contact about code of content issues?
+  answer: |
+    If you are experiencing harassment, witness an incident or have concerns about content associated with our community and projects, please [contact us hello @ atmosphereconf.org](https://forms.atprotocol.community/r/nPadKP) or direct message [@atprotocol.dev](https://bsky.app/profile/atprotocol.dev). Volunteers at the registration desk or room monitors can also assist.
