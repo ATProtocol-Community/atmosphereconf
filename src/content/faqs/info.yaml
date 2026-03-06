@@ -14,3 +14,17 @@
 
     6133 University Blvd [GMap](https://maps.app.goo.gl/S5z3Ninc3hgsp5qW7) · [CoMaps](https://comaps.at/0pGgTRymIh/AMS_Nest_%28Student_Union_Building%29)
     Vancouver, BC V6T 1Z1
+- id: vancouver-airport
+  question: How do I get from the airport?
+  answer: |
+    The Skytrain goes to and from the airport. The most direct route is to take the Canada Line (there is only one line leaving the airport) and get out at Oakridge - 41st Avenue. Cross the street and take the R4 fast bus to the end of the line UBC Bus Exchange Bay 1, and it's a 5min walk to the Gage Suites conference hotel.
+- id: vancouver-transportation
+  question: How do I get around Vancouver generally?
+  answer: |
+    Vancouver's public transit is quite good. There is a fast bus to UBC along Broadway, so will take 30-40min from downtown Vancouver. Public transit is enabled with tap-to-pay that works with major credit cards, or you can buy a stored value [Compass Card](https://www.compasscard.ca/) and use that to tap.
+
+    Uber and Lyft are both available.
+- id: vancouver-restaurants
+  question: What kind of restaurants are around?
+  answer: |
+    There is a [dinner plans channel in Roomy](https://roomy.space/did:plc:ik6zkolq2vtq77lxsi65dcfq/01KFP2A3M4ZB4XM6NDBDT04XCA) which is a good place to trade restaurant tips.

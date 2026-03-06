@@ -3,11 +3,9 @@
   answer: |
     We have reserved rooms and special rates at the [Gage Suites](https://suitesatubc.com/gage-apartments-vancouver/), about a 10min walk on campus to The Nest venue.
 
-    Use this [Booking Link](https://reserve.suitesatubc.com/GROUP/availability.asp?hotelCode=UBC&sdl=Check+In&startDate=03%2F25%2F2026&edl=Check+Out&endDate=03%2F30%2F2026&adults=1&children=&rooms=1&requesttype=invBlockCode&code=G260325A) for a 5 night stay, checking in on Wednesday, March 25th (day before first Pre-Conference Day) and checking out on Monday, March 30th (the day after the Main Conference ends).
+    **🚨🚨 Conference Hotel reserved rates are now sold out 🚨🚨**
 
-    Adjust your dates depending on what events you'll be participating in. If you come back to the site from elsewhere, our booking code is `G260325A`.
-
-    _For those wishing to stay earlier / longer, we have the same rates 3 days before and 3 days after._
+    There is very limited availability of rooms at regular rates, with mostly only one bedroom + sofa bed rooms available. [Check the site directly](https://reserve.suitesatubc.com/vancouver/availability.asp).
 
 - id: hotel-rooms
   question: What are the rooms like?
@@ -16,20 +14,29 @@
 
     > Premium private studio room with queen bed, fully equipped kitchen with appliances, and washroom with shower (no bathtub). Superior bathroom and kitchenette finishes. Complimentary high-speed Wi-Fi and LCD TV. Sleeps up to two people. Suite has air conditioning during the summer months
 
-    There are other, larger suites with a second bed available at the same location that you can review in the booking link.
-
 - id: hotel-location
-  question: Where is the venue?
+  question: Where is the conference hotel?
   answer: |
     **Gage Suites** (hotel)
     5959 Student Union Blvd [GMap](https://maps.app.goo.gl/tptEFc7ikrtrnnw29) · [CoMaps](https://comaps.at/0pGgTTYEaS/Gage_Apartments_at_UBC)
     Vancouver, BC V6T 1K2
+
+    This is about a 5-10min walk from the main conference venue:
 
     **AMS Student Nest** (main conference venue)
     6133 University Blvd [GMap](https://maps.app.goo.gl/S5z3Ninc3hgsp5qW7) · [CoMaps](https://comaps.at/0pGgTRymIh/AMS_Nest_%28Student_Union_Building%29)
     Vancouver, BC V6T 1Z1
 
 - id: hotel-travel-support
-  question: Is there travel support?
+  question: What are the details for travel support hotel stays?
   answer: |
-    Organizers, speakers, and other community members who are having their travel supported will all be staying at Gage Suites. As part of travel support onboarding, you'll be booked into these suites.
+    Organizers, speakers, and other community members who are having their travel supported will all be staying at Gage Suites. As part of travel support onboarding, you'll be booked into these suites. Your name and id at the front desk is all that you will need to present.
+
+- id: other-accomodation
+  question: Do you have other accomodation recommendations?
+  answer: |
+    Here is a [Booking.com link](https://www.booking.com/searchresults.html?ss=AMS+Student+Nest&efdco=1&label=gen173nr-10CAEoggI46AdIM1gEaCeIAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Avi9qs0GwAIB0gIkMmVlNjZjYWEtMTJhMi00ZDJlLTllMzAtMjg5MmEzYTM5NzY52AIB4AIB&aid=304142&lang=en-us&sb=1&src_elem=sb&src=index&dest_id=ChIJW5QWwphzhlQRIZvAKHPdu-k&dest_type=latlong&latitude=49.266612&longitude=-123.2500258&ac_position=0&ac_click_type=g&ac_langcode=xu&ac_suggestion_list_length=1&search_selected=true&search_pageview_id=7c1742fce48d018b&checkin=2026-03-25&checkout=2026-03-30&group_adults=1&no_rooms=1&group_children=0&chal_t=1772789617895&force_referer=) sorted by distance to the conference venue.
+
+    Closer to downtown Vancouver, the [Holiday Inn Vancouver-Centre](https://www.ihg.com/holidayinn/hotels/us/en/vancouver/yvrbw/hoteldetail) is right on Broadway which has a fast bus line direct to the UBC campus.
+
+    Find others to coordinate with in the [Roomy #accomodation-tips channel](https://roomy.space/did:plc:ik6zkolq2vtq77lxsi65dcfq/01KK186QMVWM6ZNCRFZM9PJ5R1).
