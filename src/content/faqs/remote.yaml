@@ -11,3 +11,17 @@
     The workshops will primarily be designed as in person workshops, with presentations and support.
 
     We'll look at capturing video / streaming the ones that make sense, and as we confirm workshops we'll discuss with presenters how / if they are able to also include remote participants.
+- id: remote-streaming
+  question: How can I watch the video streaming?
+  answer: |
+    Video streaming is provided by [Streamplace](https://stream.place). You can access streams in a web browser, or through the Streamplace desktop or mobile apps. Login with your Atmosphere account, and you'll be able to chat on stream.
+
+    Stream links will be available on the [remote page](/remote).
+- id: remote-video-recording
+  question: Will the videos be recorded?
+  answer: |
+    Yes, the videos will be recorded and made available after the conference for watching on demand.
+- id: remote-chat
+  question: What other online spaces are available?
+  answer: |
+    We have a [Roomy space at roomy.space/atmosphereconf.org](https://roomy.space/atmosphereconf.org). Login with your Atmosphere account to participate there.
