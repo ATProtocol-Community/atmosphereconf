@@ -25,7 +25,7 @@ export default defineConfig({
         additionalScopes: [
           "repo:org.atmosphereconf.profile?action=create",
           "repo:org.atmosphereconf.profile?action=update",
-          "blob:image/png",
+          "blob:image/*",
         ],
       },
     }),
