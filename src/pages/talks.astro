@@ -12,13 +12,30 @@ const [presentations, lightning, panels, workshops] = await Promise.all([
 ]);
 
 const allTalks = [
-  ...presentations.map((t) => ({ id: t.id, ...t.data, typeName: "Presentation" })),
-  ...lightning.map((t) => ({ id: t.id, ...t.data, typeName: "Lightning Talk" })),
-  ...panels.map((t) => ({ id: t.id, ...t.data, typeName: "Discussion / Panel" })),
+  ...presentations.map((t) => ({
+    id: t.id,
+    ...t.data,
+    typeName: "Presentation",
+  })),
+  ...lightning.map((t) => ({
+    id: t.id,
+    ...t.data,
+    typeName: "Lightning Talk",
+  })),
+  ...panels.map((t) => ({
+    id: t.id,
+    ...t.data,
+    typeName: "Discussion / Panel",
+  })),
   ...workshops.map((t) => ({ id: t.id, ...t.data, typeName: "Workshop" })),
 ];
 
-const types = ["Presentation", "Lightning Talk", "Discussion / Panel", "Workshop"] as const;
+const types = [
+  "Presentation",
+  "Lightning Talk",
+  "Discussion / Panel",
+  "Workshop",
+] as const;
 const typeLabels: Record<string, string> = {
   Presentation: "Presentations",
   "Lightning Talk": "Lightning Talks",
@@ -30,41 +47,33 @@ const grouped = Object.groupBy(allTalks, (t) => t.typeName);
 
 <Layout title="All Talks — ATmosphereConf 2026">
   <div class="space-y-10">
-    <h1 class="font-mono text-2xl uppercase tracking-widest font-semibold text-primary mt-6">
+    <h1
+      class="text-primary mt-6 font-mono text-2xl font-semibold tracking-widest uppercase"
+    >
       All Talks
     </h1>
 
-    {types.map((type) => {
-      const talks = grouped[type];
-      if (!talks?.length) return null;
-      return (
-        <Card title={typeLabels[type]}>
-          <div class="flex flex-col gap-3 mt-2">
-            {talks.map((talk) => (
-              <StarringCard
-                talkId={talk.id}
-                title={talk.title}
-                speakerName={talk.speaker_name}
-                speakerId={talk.speaker_id}
-                typeName={talk.typeName}
-                anchor
-              />
-            ))}
-          </div>
-        </Card>
-      );
-    })}
+    {
+      types.map((type) => {
+        const talks = grouped[type];
+        if (!talks?.length) return null;
+        return (
+          <Card title={typeLabels[type]}>
+            <div class="mt-2 flex flex-col gap-3">
+              {talks.map((talk) => (
+                <StarringCard
+                  talkId={talk.id}
+                  title={talk.title}
+                  speakerName={talk.speaker_name}
+                  speakerId={talk.speaker_id}
+                  typeName={talk.typeName}
+                  anchor
+                />
+              ))}
+            </div>
+          </Card>
+        );
+      })
+    }
   </div>
 </Layout>
-
-<script>
-  // Event delegation for bsky profile links
-  document.addEventListener("click", (e) => {
-    const el = (e.target as HTMLElement).closest("[data-bsky-href]") as HTMLElement | null;
-    if (el) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.open(el.dataset.bskyHref!, "_blank");
-    }
-  });
-</script>
