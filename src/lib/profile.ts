@@ -1,102 +1,68 @@
-import { getBlueskyAgent, getPdsAgent } from "@fujocoded/authproto/helpers";
-import { IdResolver } from "@atproto/identity";
+import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { lexToJson } from "@atproto/lexicon";
+import { getBlobCDNUrl } from "./bsky";
 
-const idResolver = new IdResolver({});
+type AvatarBlob = { $type: "blob"; ref: { $link: string }; mimeType: string; size: number };
 
-type BskyProfile = {
-  displayName?: string;
-  description?: string;
-  avatar?: string;
-};
-
-type ConfProfile = {
-  displayName?: string;
-  description?: string;
-  homeTown?: { name: string; value: string };
-  interests?: string[];
-  avatar?: { $type: "blob"; ref: { $link: string }; mimeType: string; size: number };
-  createdAt?: string;
-};
-
-type Profile<T extends "regular" | "full" = "regular"> = {
+export type LoadedProfile = {
   did: string;
   handle: string;
   displayName: string;
-  avatarUrl: string;
-  bskyProfile: BskyProfile | null;
-  confProfile: T extends "full" ? ConfProfile | null : null;
+  avatarUrl: string | undefined;
+  description: string | undefined;
+  bio: string | undefined;
+  pronouns: string | null | undefined;
+  website: string | null | undefined;
+  homeTown: { name?: string | null; value?: string } | null | undefined;
+  interests: readonly string[] | null | undefined;
+  germMessageMeUrl: string | null | undefined;
+  collections: string[];
+  confAvatarBlob: AvatarBlob | null;
 };
 
-function confAvatarUrl(
-  confProfile: ConfProfile | null,
-  did: string,
-  pdsUrl: string | null,
-): string | null {
-  const cid = confProfile?.avatar?.ref?.$link;
-  if (!cid || !pdsUrl) return null;
-  return `${pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`;
-}
+export async function loadProfile(identifier: string): Promise<LoadedProfile | null> {
+  const agent = await getPdsAgent({ didOrHandle: identifier });
+  if (!agent) return null;
 
-export const maybeGetLoggedInProfile = async <
-  T extends "regular" | "full" = "regular",
->({
-  locals,
-  type = "regular" as T,
-}: {
-  locals: App.Locals;
-  type?: T;
-}): Promise<Profile<T> | null> => {
-  const { loggedInUser } = locals;
-  if (!loggedInUser) return null;
-
+  let did: string, handle: string, collections: string[];
   try {
-    // Use public API — no auth scope needed for reading profiles
-    const bskyAgent = await getBlueskyAgent();
-    if (!bskyAgent) return null;
-
-    const { data: bskyProfile } = await bskyAgent.app.bsky.actor.getProfile({
-      actor: loggedInUser.did,
-    });
-
-    let confProfile: ConfProfile | null = null;
-    let pdsUrl: string | null = null;
-    if (type === "full") {
-      try {
-        const atprotoData = await idResolver.did.resolveAtprotoData(loggedInUser.did);
-        pdsUrl = atprotoData.pds;
-      } catch {
-        // PDS resolution failed
-      }
-      const pdsAgent = await getPdsAgent({ loggedInUser });
-      if (pdsAgent) {
-        try {
-          const { data } = await pdsAgent.com.atproto.repo.getRecord({
-            repo: loggedInUser.did,
-            collection: "org.atmosphereconf.profile",
-            rkey: "self",
-          });
-          confProfile = lexToJson(data.value) as ConfProfile;
-        } catch {
-          // No conf profile record yet
-        }
-      }
-    }
-
-    return {
-      did: loggedInUser.did,
-      handle: loggedInUser.handle,
-      displayName:
-        confProfile?.displayName ||
-        bskyProfile.displayName ||
-        loggedInUser.handle ||
-        "?",
-      avatarUrl: confAvatarUrl(confProfile, loggedInUser.did, pdsUrl) || bskyProfile.avatar || "",
-      bskyProfile,
-      confProfile: (type === "full" ? confProfile : null) as Profile<T>["confProfile"],
-    };
-  } catch (error) {
-    console.error("Error getting logged in profile:", error);
+    const { data } = await agent.com.atproto.repo.describeRepo({ repo: identifier });
+    did = data.did;
+    handle = data.handle;
+    collections = data.collections;
+  } catch {
     return null;
   }
-};
+
+  const [bskyResult, confResult, germResult] = await Promise.allSettled([
+    agent.com.atproto.repo.getRecord({ repo: did, collection: "app.bsky.actor.profile", rkey: "self" }),
+    agent.com.atproto.repo.getRecord({ repo: did, collection: "org.atmosphereconf.profile", rkey: "self" }),
+    agent.com.atproto.repo.getRecord({ repo: did, collection: "com.germnetwork.declaration", rkey: "self" }),
+  ]);
+
+  const bsky = bskyResult.status === "fulfilled" ? lexToJson(bskyResult.value.data.value) as any : null;
+  const conf = confResult.status === "fulfilled" ? lexToJson(confResult.value.data.value) as any : null;
+  const germ = germResult.status === "fulfilled" ? lexToJson(germResult.value.data.value) as any : null;
+
+  const avatarUrl = conf?.avatar
+    ? getBlobCDNUrl(did, conf.avatar)
+    : bsky?.avatar
+      ? getBlobCDNUrl(did, bsky.avatar)
+      : undefined;
+
+  return {
+    did,
+    handle,
+    displayName: conf?.displayName ?? bsky?.displayName ?? handle,
+    avatarUrl,
+    description: conf?.description ?? bsky?.description ?? undefined,
+    bio: conf?.bio ?? undefined,
+    pronouns: conf?.pronouns ?? bsky?.pronouns ?? null,
+    website: conf?.website ?? bsky?.website ?? null,
+    homeTown: conf?.homeTown ?? null,
+    interests: conf?.interests ?? null,
+    germMessageMeUrl: germ?.messageMe?.messageMeUrl ?? null,
+    collections,
+    confAvatarBlob: conf?.avatar ?? null,
+  };
+}

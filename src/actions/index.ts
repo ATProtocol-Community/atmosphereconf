@@ -68,6 +68,9 @@ export const server = {
     input: z.object({
       displayName: z.string().max(64).optional(),
       description: z.string().max(256).optional(),
+      bio: z.string().max(10000).optional(),
+      pronouns: z.string().max(64).optional(),
+      website: z.string().max(256).optional(),
       interests: z.array(z.string().max(64)).max(20).optional(),
       homeTown: z
         .object({ name: z.string(), value: z.string() })
@@ -87,16 +90,15 @@ export const server = {
         });
 
       // Preserve existing createdAt on update, set new on create
-      let createdAt = new Date().toISOString();
+      let createdAt: string = new Date().toISOString();
       try {
         const existing = await pdsAgent.com.atproto.repo.getRecord({
           repo: loggedInUser.did,
           collection: "org.atmosphereconf.profile",
           rkey: "self",
         });
-        createdAt =
-          (existing.data.value as Record<string, unknown>).createdAt as string ||
-          createdAt;
+        const existingCreatedAt = (existing.data.value as any)?.createdAt;
+        if (typeof existingCreatedAt === "string") createdAt = existingCreatedAt;
       } catch {
         // No existing record — use new timestamp
       }

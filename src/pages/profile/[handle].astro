@@ -1,8 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
-import ProfileContent from "@/components/profile/ProfileContent.astro";
-import { loadProfile } from "@/lib/profile-loader";
+import { ProfileView } from "@/components/profile/ProfileView";
+import { loadProfile } from "@/lib/profile";
+import { getActiveIcons } from "@/components/profile/lexicon-icons";
 
 const { handle } = Astro.params;
 const profile = await loadProfile(handle!);
@@ -10,12 +11,34 @@ const profile = await loadProfile(handle!);
 if (!profile) {
   return Astro.redirect("/404");
 }
+
+const svgFiles = import.meta.glob<string>("/src/components/profile/icons/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+const svgMap: Record<string, string> = Object.fromEntries(
+  Object.entries(svgFiles).map(([path, svg]) => [
+    path.replace(/.*\//, "").replace(".svg", ""),
+    svg,
+  ])
+);
+
+const activeIcons = getActiveIcons(profile.collections).map((icon) => ({
+  label: icon.label,
+  html: svgMap[icon.svgName] ?? "",
+  href: icon.url?.(profile.handle, profile.did),
+}));
 ---
 
 <Layout title={`${profile.displayName} - Atmosphere Conference`}>
   <div class="w-full">
     <Card class="max-w-2xl mx-auto mt-8 p-8">
-      <ProfileContent {...profile} />
+      <ProfileView
+        client:load
+        {...profile}
+        activeIcons={activeIcons}
+      />
     </Card>
   </div>
 </Layout>

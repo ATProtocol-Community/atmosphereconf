@@ -1,15 +1,13 @@
 ---
 import Button from "@/components/ui/button.astro";
 import { Avatar } from "@/components/profile/Avatar";
-import { maybeGetLoggedInProfile } from "@/lib/profile";
+import { loadProfile } from "@/lib/profile";
 import GoodStuff from "@/assets/goodstuff-goose.png";
 import { Image } from "astro:assets";
 import HeaderTicket from "./HeaderTicket.astro";
 
-const profile = await maybeGetLoggedInProfile({
-  locals: Astro.locals,
-  type: "full",
-});
+const { loggedInUser } = Astro.locals;
+const profile = loggedInUser ? await loadProfile(loggedInUser.did) : null;
 
 const navLinks = [
   { href: "/#tickets", label: "tickets" },
