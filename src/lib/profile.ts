@@ -1,5 +1,6 @@
-import { getPdsAgent } from "@fujocoded/authproto/helpers";
+import { AtpBaseClient } from "@atproto/api";
 import { lexToJson } from "@atproto/lexicon";
+import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl } from "./bsky";
 
 type AvatarBlob = { $type: "blob"; ref: { $link: string }; mimeType: string; size: number };
@@ -21,24 +22,39 @@ export type LoadedProfile = {
 };
 
 export async function loadProfile(identifier: string): Promise<LoadedProfile | null> {
-  const agent = await getPdsAgent({ didOrHandle: identifier });
-  if (!agent) return null;
+  let agent: AtpBaseClient;
+  let did: string, handle: string;
 
-  let did: string, handle: string, collections: string[];
+  // Try Microcosm first for fast identity resolution, fall back to getPdsAgent
   try {
-    const { data } = await agent.com.atproto.repo.describeRepo({ repo: identifier });
+    const res = await fetch(
+      `https://slingshot.microcosm.blue/xrpc/blue.microcosm.identity.resolveMiniDoc?identifier=${encodeURIComponent(identifier)}`,
+    );
+    if (!res.ok) throw new Error("Microcosm unavailable");
+    const data = await res.json();
+    if (!data.did || !data.pds || !data.handle) throw new Error("Incomplete identity data");
     did = data.did;
     handle = data.handle;
-    collections = data.collections;
+    agent = new AtpBaseClient(data.pds);
   } catch {
-    return null;
+    const fallback = await getPdsAgent({ didOrHandle: identifier });
+    if (!fallback) return null;
+    try {
+      const { data } = await fallback.com.atproto.repo.describeRepo({ repo: identifier });
+      did = data.did;
+      handle = data.handle;
+    } catch {
+      return null;
+    }
+    agent = fallback;
   }
-
-  const [bskyResult, confResult, germResult] = await Promise.allSettled([
+  const [describeResult, bskyResult, confResult, germResult] = await Promise.allSettled([
+    agent.com.atproto.repo.describeRepo({ repo: did }),
     agent.com.atproto.repo.getRecord({ repo: did, collection: "app.bsky.actor.profile", rkey: "self" }),
     agent.com.atproto.repo.getRecord({ repo: did, collection: "org.atmosphereconf.profile", rkey: "self" }),
     agent.com.atproto.repo.getRecord({ repo: did, collection: "com.germnetwork.declaration", rkey: "self" }),
   ]);
+  const collections = describeResult.status === "fulfilled" ? describeResult.value.data.collections : [];
 
   const bsky = bskyResult.status === "fulfilled" ? lexToJson(bskyResult.value.data.value) as any : null;
   const conf = confResult.status === "fulfilled" ? lexToJson(confResult.value.data.value) as any : null;
