@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import authproto from "@fujocoded/authproto";
 
 import react from "@astrojs/react";
 import node from "@astrojs/node";
@@ -12,7 +13,16 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  integrations: [react()],
+  integrations: [
+    react(),
+    authproto({
+      applicationName: "ATmosphere Conference 2026",
+      applicationDomain: "https://atmosphereconf.org/",
+      driver: {
+        name: "memory",
+      },
+    }),
+  ],
   server: {
     host: "0.0.0.0",
   },

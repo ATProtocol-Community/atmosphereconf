@@ -7,8 +7,7 @@ import { Image } from "astro:assets";
 import HeaderTicket from "./HeaderTicket.astro";
 
 const profile = await maybeGetLoggedInProfile({
-  request: Astro.request,
-  cookies: Astro.cookies,
+  locals: Astro.locals,
 });
 
 const navLinks = [
@@ -98,27 +97,27 @@ const navLinks = [
     <span class="text-white/30 select-none hidden md:inline" aria-hidden="true"
       >//</span
     >
-    <!-- <div class="h-8 flex items-center">
-            {
-                profile ? (
-                    <a href="/profile">
-                        <Avatar
-                            size="sm"
-                            className="cursor-pointer ring-2 ring-white/50 hover:ring-white"
-                            src={profile.avatarUrl}
-                            alt={profile.displayName}
-                        />
-                    </a>
-                ) : (
-                    <a
-                        href="/login"
-                        class="font-mono text-base font-medium text-white border border-white/40 rounded px-3 py-1 hover:bg-white hover:text-primary transition-colors"
-                    >
-                        sign in
-                    </a>
-                )
-            }
-        </div> -->
+    <div class="h-8 flex items-center">
+      {
+        profile ? (
+          <a href="/profile">
+            <Avatar
+              size="sm"
+              className="cursor-pointer ring-2 ring-white/50 hover:ring-white"
+              src={profile.avatarUrl}
+              alt={profile.displayName}
+            />
+          </a>
+        ) : (
+          <a
+            href="/login"
+            class="font-mono text-base font-medium text-white border border-white/40 rounded px-3 py-1 hover:bg-white hover:text-primary transition-colors"
+          >
+            sign in
+          </a>
+        )
+      }
+    </div>
   </div>
 
   <HeaderTicket />

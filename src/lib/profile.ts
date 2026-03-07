@@ -1,135 +1,81 @@
-import type { profileRegularQuery as HeaderQuery } from "./__generated__/profileRegularQuery.graphql";
-import type { profileFullQuery as ProfilePageQuery } from "./__generated__/profileFullQuery.graphql";
+import { getBlueskyAgent, getPdsAgent } from "@fujocoded/authproto/helpers";
 
-import { graphql } from "./graphql";
-import type { AstroCookies } from "astro";
+type BskyProfile = {
+  displayName?: string;
+  description?: string;
+  avatar?: string;
+};
 
-const VIEWER_QUERY = graphql`
-  query profileRegularQuery {
-    viewer {
-      did
-      handle
-      appBskyActorProfileByDid {
-        displayName
-        avatar {
-          url(preset: "avatar")
-        }
-      }
-      orgAtmosphereconfProfileByDid {
-        displayName
-        avatar {
-          url(preset: "avatar")
-        }
-      }
-    }
-  }
-`;
-
-const VIEWER_PROFILE_QUERY = graphql`
-  query profileFullQuery {
-    viewer {
-      did
-      handle
-      appBskyActorProfileByDid {
-        displayName
-        description
-        avatar {
-          url(preset: "avatar")
-        }
-      }
-      orgAtmosphereconfProfileByDid {
-        displayName
-        description
-        homeTown {
-          name
-          value
-        }
-        interests
-        avatar {
-          url(preset: "avatar")
-        }
-        createdAt
-      }
-    }
-  }
-`;
-
-type ViewerRegular = NonNullable<HeaderQuery["response"]["viewer"]>;
-type ViewerFull = NonNullable<ProfilePageQuery["response"]["viewer"]>;
+type ConfProfile = {
+  displayName?: string;
+  description?: string;
+  homeTown?: { name: string; value: string };
+  interests?: string[];
+  avatar?: { ref: { $link: string }; mimeType: string; size: number };
+  createdAt?: string;
+};
 
 type Profile<T extends "regular" | "full" = "regular"> = {
   did: string;
-  handle: string | null;
+  handle: string;
   displayName: string;
   avatarUrl: string;
-  bskyProfile: (T extends "full"
-    ? ViewerFull
-    : ViewerRegular)["appBskyActorProfileByDid"];
-  confProfile: (T extends "full"
-    ? ViewerFull
-    : ViewerRegular)["orgAtmosphereconfProfileByDid"];
+  bskyProfile: BskyProfile | null;
+  confProfile: T extends "full" ? ConfProfile | null : null;
 };
 
 export const maybeGetLoggedInProfile = async <
   T extends "regular" | "full" = "regular",
 >({
-  request,
-  cookies,
+  locals,
   type = "regular" as T,
 }: {
-  request: Request;
-  cookies: AstroCookies;
+  locals: App.Locals;
   type?: T;
 }): Promise<Profile<T> | null> => {
-  if (!cookies?.get("access_token")?.value) {
-    return null;
-  }
+  const { loggedInUser } = locals;
+  if (!loggedInUser) return null;
 
   try {
-    const response = await fetch(
-      new URL("/api/graphql", new URL(request.url)),
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // TODO: we cannot get this from Astro cookies somehow
-          cookie: request.headers.get("cookie")?.toString() ?? "",
-        },
-        body: JSON.stringify({
-          query: type == "full" ? VIEWER_PROFILE_QUERY : VIEWER_QUERY,
-        }),
-      },
-    );
+    // Use public API — no auth scope needed for reading profiles
+    const bskyAgent = await getBlueskyAgent();
+    if (!bskyAgent) return null;
 
-    if (response.ok) {
-      const { data } = await response.json();
+    const { data: bskyProfile } = await bskyAgent.app.bsky.actor.getProfile({
+      actor: loggedInUser.did,
+    });
 
-      const viewer = data.viewer as ViewerRegular | ViewerFull | undefined;
-      if (!viewer) {
-        return null;
+    let confProfile: ConfProfile | null = null;
+    if (type === "full") {
+      const pdsAgent = await getPdsAgent({ loggedInUser });
+      if (pdsAgent) {
+        try {
+          const { data } = await pdsAgent.com.atproto.repo.getRecord({
+            repo: loggedInUser.did,
+            collection: "org.atmosphereconf.profile",
+            rkey: "self",
+          });
+          confProfile = data.value as ConfProfile;
+        } catch {
+          // No conf profile record yet
+        }
       }
-
-      const { orgAtmosphereconfProfileByDid, appBskyActorProfileByDid } =
-        viewer;
-
-      return {
-        did: viewer.did,
-        handle: viewer.handle ?? null,
-        displayName:
-          orgAtmosphereconfProfileByDid?.displayName ||
-          appBskyActorProfileByDid?.displayName ||
-          viewer.handle ||
-          "?",
-        avatarUrl:
-          viewer.orgAtmosphereconfProfileByDid?.avatar?.url ||
-          viewer.appBskyActorProfileByDid?.avatar?.url ||
-          "",
-        bskyProfile: viewer.appBskyActorProfileByDid,
-        confProfile: viewer.orgAtmosphereconfProfileByDid,
-      };
     }
-  } catch (error: unknown) {
+
+    return {
+      did: loggedInUser.did,
+      handle: loggedInUser.handle,
+      displayName:
+        confProfile?.displayName ||
+        bskyProfile.displayName ||
+        loggedInUser.handle ||
+        "?",
+      avatarUrl: bskyProfile.avatar || "",
+      bskyProfile,
+      confProfile: (type === "full" ? confProfile : null) as Profile<T>["confProfile"],
+    };
+  } catch (error) {
     console.error("Error getting logged in profile:", error);
+    return null;
   }
-  return null;
 };

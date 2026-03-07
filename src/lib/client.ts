@@ -1,15 +1,3 @@
-export function login(handle: string): void {
-  const params = new URLSearchParams({ handle });
-  // TODO: switch these to server redirects once it's moved to Astro actions
-  window.location.href = `/api/auth/login?${params}`;
-}
-
-export async function logout(): Promise<void> {
-  await fetch("/api/auth/logout", { method: "POST" });
-  // TODO: switch these to server redirects once it's moved to Astro actions
-  window.location.href = "/";
-}
-
 export async function query<T>(
   queryString: string,
   variables?: Record<string, unknown>,

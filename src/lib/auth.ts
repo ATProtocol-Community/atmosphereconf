@@ -26,7 +26,7 @@ export const AUTH_CONFIG = {
   CLIENT_SECRET: import.meta.env.QUICKSLICE_CLIENT_SECRET,
   REDIRECT_URI:
     import.meta.env.QUICKSLICE_REDIRECT_URI ||
-    "http://localhost:4321/api/auth/callback",
+    "http://localhost:4321/oauth/callback",
 };
 
 // "lax" — used for PKCE cookies that must survive the cross-site OAuth redirect

@@ -9,8 +9,8 @@ if (userDid) {
   return Astro.redirect("/profile");
 }
 
-// Show error from failed callback
-const error = Astro.url.searchParams.get("error");
+// Show error from failed callback or authproto session error
+const error = Astro.locals.authproto?.errorDescription || Astro.url.searchParams.get("error");
 ---
 
 <Layout title="Sign In - Atmosphere Conference">

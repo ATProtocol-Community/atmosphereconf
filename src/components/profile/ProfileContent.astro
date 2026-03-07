@@ -5,8 +5,7 @@ import { Avatar } from "@/components/profile/Avatar";
 import { maybeGetLoggedInProfile } from "@/lib/profile";
 
 const profile = await maybeGetLoggedInProfile({
-  request: Astro.request,
-  cookies: Astro.cookies,
+  locals: Astro.locals,
   type: "full",
 });
 
@@ -20,7 +19,9 @@ const confProfile = profile?.confProfile;
     <div class="text-center">
       <h2 class="text-xl font-semibold text-gray-900 mb-2">Error</h2>
       <p class="text-gray-600 mb-4">Failed to load profile</p>
-      <Button href="/logout">Logout</Button>
+      <form method="POST" action="/oauth/logout">
+        <Button type="submit">Logout</Button>
+      </form>
     </div>
   ) : (
     <>
@@ -56,9 +57,11 @@ const confProfile = profile?.confProfile;
               <circle cx="12" cy="12" r="3" />
             </svg>
           </Button>
-          <Button variant="secondary" type="button" href="/logout">
-            Logout
-          </Button>
+          <form method="POST" action="/oauth/logout">
+            <Button variant="secondary" type="submit">
+              Logout
+            </Button>
+          </form>
         </div>
       </div>
 
