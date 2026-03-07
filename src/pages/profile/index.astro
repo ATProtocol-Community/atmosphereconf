@@ -1,33 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Card from "@/components/ui/card.astro";
-import { ProfileView } from "@/components/profile/ProfileView";
+import ProfilePage from "@/components/profile/ProfilePage.astro";
 import { loadProfile } from "@/lib/profile";
-import { getActiveIcons } from "@/components/profile/lexicon-icons";
 
 const { loggedInUser } = Astro.locals;
 if (!loggedInUser) return Astro.redirect("/login");
 
 const profile = await loadProfile(loggedInUser.did);
 if (!profile) return Astro.redirect("/login");
-
-const svgFiles = import.meta.glob<string>("/src/components/profile/icons/*.svg", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-});
-const svgMap: Record<string, string> = Object.fromEntries(
-  Object.entries(svgFiles).map(([path, svg]) => [
-    path.replace(/.*\//, "").replace(".svg", ""),
-    svg,
-  ])
-);
-
-const activeIcons = getActiveIcons(profile.collections).map((icon) => ({
-  label: icon.label,
-  html: svgMap[icon.svgName] ?? "",
-  href: icon.url?.(profile.handle, profile.did),
-}));
 
 const editData = {
   initialDisplayName: profile.displayName,
@@ -45,15 +25,5 @@ const editData = {
 ---
 
 <Layout title="Profile - Atmosphere Conference">
-  <div class="w-full">
-    <Card class="max-w-2xl mx-auto mt-8 p-8">
-      <ProfileView
-        client:load
-        {...profile}
-        isOwnProfile={true}
-        activeIcons={activeIcons}
-        editData={editData}
-      />
-    </Card>
-  </div>
+  <ProfilePage {profile} {editData} />
 </Layout>
