@@ -3,28 +3,10 @@ import Layout from "../../layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
 import Button from "@/components/ui/button.astro";
 import ProfileContent from "@/components/profile/ProfileContent.astro";
-import { maybeGetLoggedInProfile } from "@/lib/profile";
+import { loadProfile } from "@/lib/profile-loader";
 
-const profile = await maybeGetLoggedInProfile({
-  request: Astro.request,
-  cookies: Astro.cookies,
-  type: "full",
-});
-
-let collections: string[] = [];
-if (profile) {
-  try {
-    const response = await fetch(
-      `https://public.api.bsky.app/xrpc/com.atproto.repo.describeRepo?repo=${encodeURIComponent(profile.did)}`,
-    );
-    if (response.ok) {
-      const data = await response.json();
-      collections = data.collections ?? [];
-    }
-  } catch (e) {
-    // collections stays empty
-  }
-}
+const userDid = Astro.cookies.get("user_did")?.value;
+const profile = userDid ? await loadProfile(userDid) : null;
 ---
 
 <Layout title="Profile - Atmosphere Conference">
@@ -37,17 +19,7 @@ if (profile) {
           <Button href="/logout">Logout</Button>
         </div>
       ) : (
-        <ProfileContent
-          did={profile.did}
-          handle={profile.handle}
-          displayName={profile.displayName}
-          avatarUrl={profile.avatarUrl}
-          description={profile.confProfile?.description}
-          homeTown={profile.confProfile?.homeTown}
-          interests={profile.confProfile?.interests}
-          isOwnProfile={true}
-          collections={collections}
-        />
+        <ProfileContent {...profile} isOwnProfile={true} />
       )}
     </Card>
   </div>

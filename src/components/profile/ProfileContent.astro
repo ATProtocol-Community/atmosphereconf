@@ -2,14 +2,22 @@
 import Button from "@/components/ui/button.astro";
 import Badge from "@/components/ui/badge.astro";
 import { Avatar } from "@/components/profile/Avatar";
+import ProfileLinks from "@/components/profile/ProfileLinks.astro";
+import RichText from "@/components/profile/RichText.astro";
 import { getActiveIcons } from "@/components/profile/lexicon-icons";
 
-// Add new icon imports here as the set grows
-import blueskyIconRaw from "@/components/profile/icons/bluesky.svg?raw";
+const svgFiles = import.meta.glob<string>("./icons/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
 
-const SVG_MAP: Record<string, string> = {
-  bluesky: blueskyIconRaw,
-};
+const SVG_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(svgFiles).map(([path, svg]) => [
+    path.replace("./icons/", "").replace(".svg", ""),
+    svg,
+  ]),
+);
 
 interface Props {
   did: string;
@@ -19,6 +27,9 @@ interface Props {
   description?: string | null;
   homeTown?: { name?: string | null } | null;
   interests?: readonly string[] | null;
+  pronouns?: string | null;
+  website?: string | null;
+  germMessageMeUrl?: string | null;
   isOwnProfile?: boolean;
   collections?: string[];
 }
@@ -31,6 +42,9 @@ const {
   description,
   homeTown,
   interests,
+  pronouns,
+  website,
+  germMessageMeUrl,
   isOwnProfile = false,
   collections = [],
 } = Astro.props;
@@ -39,33 +53,15 @@ const activeIcons = getActiveIcons(collections);
 ---
 
 <div class="flex flex-col gap-0">
-  <div class="flex items-center gap-4 mb-6">
+  <!-- Avatar row: avatar + name/handle + action buttons -->
+  <div class="flex items-center gap-4 mb-3">
     <Avatar size="lg" src={avatarUrl ?? ""} alt={displayName} />
     <div class="flex-1">
       <h1 class="text-2xl font-bold text-gray-900">{displayName}</h1>
       <p class="text-gray-500">{handle ? `@${handle}` : did}</p>
-      {activeIcons.length > 0 && (
-        <div class="flex gap-2 mt-1.5">
-          {activeIcons.map((icon) => {
-            const iconEl = (
-              <span
-                title={icon.label}
-                class="w-4 h-4 text-gray-400 inline-block"
-                set:html={SVG_MAP[icon.svgName]}
-              />
-            );
-            const href = icon.url?.(handle ?? did, did);
-            return href ? (
-              <a href={href} target="_blank" rel="noopener noreferrer" title={icon.label}>
-                {iconEl}
-              </a>
-            ) : iconEl;
-          })}
-        </div>
-      )}
     </div>
     {isOwnProfile && (
-      <div class="flex gap-2">
+      <div class="flex gap-2 self-start">
         <Button
           variant="secondary"
           size="icon"
@@ -94,10 +90,12 @@ const activeIcons = getActiveIcons(collections);
     )}
   </div>
 
-  <div class="mb-3">
-    <div class="text-xs text-gray-500 uppercase tracking-wide">Bio</div>
+  <ProfileLinks {did} {handle} {pronouns} {website} {germMessageMeUrl} />
+
+  <div class="mt-6 mb-3">
+    <div class="text-xs text-gray-500 uppercase tracking-wide">About</div>
     {description
-      ? <div class="text-gray-900 mt-0.5">{description}</div>
+      ? <RichText text={description} class="text-gray-900 mt-0.5 block" />
       : <span class="text-xs font-mono text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 mt-0.5 inline-block">NO DATA YET</span>
     }
   </div>
@@ -121,4 +119,23 @@ const activeIcons = getActiveIcons(collections);
       : <span class="text-xs font-mono text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 mt-0.5 inline-block">NO DATA YET</span>
     }
   </div>
+
+  {activeIcons.length > 0 && (
+    <div class="mb-3">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-2">Active On</div>
+      <div class="flex flex-wrap gap-3">
+        {activeIcons.map((icon) => {
+          const href = icon.url?.(handle ?? did, did);
+          const el = (
+            <span title={icon.label} class="size-5 block" set:html={SVG_MAP[icon.svgName]} />
+          );
+          return href ? (
+            <a href={href} target="_blank" rel="noopener noreferrer" title={icon.label} class="size-5">
+              {el}
+            </a>
+          ) : el;
+        })}
+      </div>
+    </div>
+  )}
 </div>

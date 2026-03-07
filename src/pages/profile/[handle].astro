@@ -2,82 +2,20 @@
 import Layout from "../../layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
 import ProfileContent from "@/components/profile/ProfileContent.astro";
-import { getBlobCDNUrl } from "@/lib/bsky";
+import { loadProfile } from "@/lib/profile-loader";
 
 const { handle } = Astro.params;
-
-// Resolve handle → DID + PDS in one call so we can hit the user's own PDS for describeRepo
-let identity: { did: string; pds: string } | null = null;
-try {
-  const response = await fetch(
-    `https://slingshot.microcosm.blue/xrpc/blue.microcosm.identity.resolveMiniDoc?identifier=${encodeURIComponent(handle!)}`,
-  );
-  if (response.ok) {
-    const data = await response.json();
-    if (data.did && data.pds) identity = { did: data.did, pds: data.pds };
-  }
-} catch (e) {
-  // identity stays null
-}
-
-if (!identity) {
-  return Astro.redirect("/404");
-}
-
-const { did, pds } = identity;
-
-// Fetch all three in parallel from their respective sources
-const [profileResult, collectionsResult, confProfileResult] = await Promise.allSettled([
-  fetch(
-    `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`,
-  ).then((r) => (r.ok ? r.json() : null)),
-  fetch(
-    `${pds}/xrpc/com.atproto.repo.describeRepo?repo=${encodeURIComponent(did)}`,
-  ).then((r) => (r.ok ? r.json() : null)),
-  fetch(
-    `${pds}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=org.atmosphereconf.profile&rkey=self`,
-  ).then((r) => (r.ok ? r.json() : null)),
-]);
-
-const profile =
-  profileResult.status === "fulfilled" ? profileResult.value : null;
-const collections: string[] =
-  collectionsResult.status === "fulfilled"
-    ? (collectionsResult.value?.collections ?? [])
-    : [];
-// getRecord wraps the data in a `value` field
-const confProfile =
-  confProfileResult.status === "fulfilled"
-    ? confProfileResult.value?.value ?? null
-    : null;
+const profile = await loadProfile(handle!);
 
 if (!profile) {
   return Astro.redirect("/404");
 }
-
-const avatarUrl =
-  confProfile?.avatar
-    ? getBlobCDNUrl(did, confProfile.avatar)
-    : profile.avatar ?? undefined;
-
-const description = confProfile?.description ?? profile.description ?? undefined;
 ---
 
-<Layout
-  title={`${profile.displayName ?? profile.handle} - Atmosphere Conference`}
->
+<Layout title={`${profile.displayName} - Atmosphere Conference`}>
   <div class="w-full">
     <Card class="max-w-2xl mx-auto mt-8 p-8">
-      <ProfileContent
-        did={profile.did}
-        handle={profile.handle}
-        displayName={confProfile?.displayName ?? profile.displayName ?? profile.handle}
-        avatarUrl={avatarUrl}
-        description={description}
-        homeTown={confProfile?.homeTown}
-        interests={confProfile?.interests}
-        collections={collections}
-      />
+      <ProfileContent {...profile} />
     </Card>
   </div>
 </Layout>

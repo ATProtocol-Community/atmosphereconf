@@ -12,7 +12,35 @@ export const LEXICON_ICONS: LexiconIconDef[] = [
     match: (col) => col.startsWith("app.bsky."),
     url: (handle) => `https://bsky.app/profile/${handle}`,
   },
-  // Add more here, e.g.:
+  {
+    label: "Blento",
+    svgName: "blento",
+    match: (col) => col.startsWith("app.blento."),
+    url: (handle) => `https://blento.app/${handle}`,
+  },
+  {
+    label: "Tangled",
+    svgName: "tangled",
+    match: (col) => col.startsWith("sh.tangled."),
+    url: (handle) => `https://tangled.org/${handle}`,
+  },{
+    label: "Npmx",
+    svgName: "npmx",
+    match: (col) => col.startsWith("dev.npmx."),
+    url: (handle) => `https://npmx.dev/profile/${handle}`,
+  },
+  // {
+  //   label: "stream.place",
+  //   svgName: "streamplace",
+  //   match: (col) => col.startsWith("place.stream."),
+  //   url: (handle) => `https://stream.place/${handle}`,
+  // },
+  // {
+  //   label: "Popfeed",
+  //   svgName: "popfeed",
+  //   match: (col) => col.startsWith("social.popfeed."),
+  //   url: (handle) => `https://popfeed.social/profile/${handle}`,
+  // }
   // {
   //   label: "Atmosphere",
   //   svgName: "atmosphere",
