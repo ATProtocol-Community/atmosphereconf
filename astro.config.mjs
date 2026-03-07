@@ -17,7 +17,11 @@ export default defineConfig({
     react(),
     authproto({
       applicationName: "ATmosphere Conference 2026",
-      applicationDomain: "https://atmosphereconf.org/",
+      applicationDomain: "https://atmosphereconf.org",
+      externalDomain:
+        import.meta.env.MODE === "development"
+          ? "http://localhost:4321"
+          : "https://atmosphereconf.org",
       driver: {
         name: "memory",
       },
