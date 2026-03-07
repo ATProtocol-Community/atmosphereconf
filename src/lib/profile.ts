@@ -1,4 +1,8 @@
 import { getBlueskyAgent, getPdsAgent } from "@fujocoded/authproto/helpers";
+import { IdResolver } from "@atproto/identity";
+import { lexToJson } from "@atproto/lexicon";
+
+const idResolver = new IdResolver({});
 
 type BskyProfile = {
   displayName?: string;
@@ -11,7 +15,7 @@ type ConfProfile = {
   description?: string;
   homeTown?: { name: string; value: string };
   interests?: string[];
-  avatar?: { ref: { $link: string }; mimeType: string; size: number };
+  avatar?: { $type: "blob"; ref: { $link: string }; mimeType: string; size: number };
   createdAt?: string;
 };
 
@@ -23,6 +27,16 @@ type Profile<T extends "regular" | "full" = "regular"> = {
   bskyProfile: BskyProfile | null;
   confProfile: T extends "full" ? ConfProfile | null : null;
 };
+
+function confAvatarUrl(
+  confProfile: ConfProfile | null,
+  did: string,
+  pdsUrl: string | null,
+): string | null {
+  const cid = confProfile?.avatar?.ref?.$link;
+  if (!cid || !pdsUrl) return null;
+  return `${pdsUrl}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`;
+}
 
 export const maybeGetLoggedInProfile = async <
   T extends "regular" | "full" = "regular",
@@ -46,7 +60,14 @@ export const maybeGetLoggedInProfile = async <
     });
 
     let confProfile: ConfProfile | null = null;
+    let pdsUrl: string | null = null;
     if (type === "full") {
+      try {
+        const atprotoData = await idResolver.did.resolveAtprotoData(loggedInUser.did);
+        pdsUrl = atprotoData.pds;
+      } catch {
+        // PDS resolution failed
+      }
       const pdsAgent = await getPdsAgent({ loggedInUser });
       if (pdsAgent) {
         try {
@@ -55,7 +76,7 @@ export const maybeGetLoggedInProfile = async <
             collection: "org.atmosphereconf.profile",
             rkey: "self",
           });
-          confProfile = data.value as ConfProfile;
+          confProfile = lexToJson(data.value) as ConfProfile;
         } catch {
           // No conf profile record yet
         }
@@ -70,7 +91,7 @@ export const maybeGetLoggedInProfile = async <
         bskyProfile.displayName ||
         loggedInUser.handle ||
         "?",
-      avatarUrl: bskyProfile.avatar || "",
+      avatarUrl: confAvatarUrl(confProfile, loggedInUser.did, pdsUrl) || bskyProfile.avatar || "",
       bskyProfile,
       confProfile: (type === "full" ? confProfile : null) as Profile<T>["confProfile"],
     };

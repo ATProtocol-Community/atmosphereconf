@@ -8,6 +8,7 @@ import HeaderTicket from "./HeaderTicket.astro";
 
 const profile = await maybeGetLoggedInProfile({
   locals: Astro.locals,
+  type: "full",
 });
 
 const navLinks = [

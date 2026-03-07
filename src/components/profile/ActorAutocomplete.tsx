@@ -3,7 +3,6 @@ import * as Popover from "@radix-ui/react-popover";
 import { Command } from "cmdk";
 import { Spinner } from "@/components/ui/Spinner";
 import { Avatar } from "@/components/profile/Avatar";
-import { isAbortError } from "@/lib/client";
 
 export interface Actor {
   did: string;
@@ -129,7 +128,7 @@ export function ActorAutocomplete({
           setActors(actors);
         }
       } catch (err: unknown) {
-        if (!isAbortError(err)) {
+        if (!(err instanceof DOMException && err.name === "AbortError")) {
           console.error("Error fetching actors from Bluesky:", err);
           setActors([]);
         }

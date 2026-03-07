@@ -1,6 +1,0 @@
-{
-  "src": "src",
-  "language": "typescript",
-  "schema": "schema.graphql",
-  "eagerEsModules": true
-}

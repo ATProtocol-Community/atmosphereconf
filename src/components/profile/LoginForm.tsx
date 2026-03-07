@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import {
   ActorAutocomplete,
   type Actor,
@@ -6,15 +7,26 @@ import {
 
 export function LoginForm({ error: serverError }: { error?: string | null }) {
   const [handle, setHandle] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(serverError || null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   function handleActorSelect(actor: Actor) {
-    setHandle(actor.handle);
+    flushSync(() => {
+      setHandle(actor.handle);
+      setLoading(true);
+    });
+    formRef.current?.requestSubmit();
   }
 
   return (
     <>
-      <form className="flex flex-col gap-4" method="POST" action="/oauth/login">
+      <form
+        ref={formRef}
+        className="flex flex-col gap-4"
+        method="POST"
+        action="/oauth/login"
+      >
         <div className="flex flex-col gap-2">
           <label
             htmlFor="handle"
@@ -33,7 +45,7 @@ export function LoginForm({ error: serverError }: { error?: string | null }) {
         </div>
         <button
           type="submit"
-          disabled={!handle?.length}
+          disabled={!handle?.length || loading}
           className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] bg-primary text-primary-foreground hover:bg-primary/90 h-10 rounded-md px-6"
         >
           Sign In

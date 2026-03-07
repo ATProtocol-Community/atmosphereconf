@@ -21,6 +21,13 @@ export default defineConfig({
       driver: {
         name: "memory",
       },
+      scopes: {
+        additionalScopes: [
+          "repo:org.atmosphereconf.profile?action=create",
+          "repo:org.atmosphereconf.profile?action=update",
+          "blob:image/png",
+        ],
+      },
     }),
   ],
   server: {

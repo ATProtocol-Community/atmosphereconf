@@ -4,8 +4,7 @@ import Card from "@/components/ui/card.astro";
 import { LoginForm } from "@/components/profile/LoginForm";
 
 // Redirect if already logged in
-const userDid = Astro.cookies.get("user_did")?.value;
-if (userDid) {
+if (Astro.locals.loggedInUser) {
   return Astro.redirect("/profile");
 }
 
