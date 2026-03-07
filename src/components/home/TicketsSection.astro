@@ -45,12 +45,3 @@ const { mode = "live" } = Astro.props;
     <TicketsToggle />
   </Card>
 </section>
-
-<script>
-  window.addEventListener("popstate", () => {
-    const section = document.getElementById("ticket-section");
-    const mode = location.pathname === "/remote" ? "remote" : "live";
-    section?.classList.remove("live", "remote");
-    section?.classList.add(mode);
-  });
-</script>

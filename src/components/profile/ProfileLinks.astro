@@ -1,0 +1,58 @@
+---
+import GermButton from "@/components/ui/germ-button.astro";
+
+interface Props {
+  did: string;
+  handle: string | null;
+  pronouns?: string | null;
+  website?: string | null;
+  germMessageMeUrl?: string | null;
+}
+
+const { pronouns, website, germMessageMeUrl } = Astro.props;
+const hasAnything = pronouns || website || germMessageMeUrl;
+---
+
+{
+  hasAnything && (
+    <>
+      <div class="flex flex-wrap items-center gap-2">
+        {pronouns && (
+          <span class="text-xs font-medium bg-secondary text-secondary-foreground rounded-full px-2.5 py-0.5">
+            {pronouns}
+          </span>
+        )}
+        {website && (
+          <a
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-xs font-medium border border-gray-200 rounded-full px-2.5 py-0.5 text-gray-600 hover:bg-gray-50 truncate max-w-45"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+              <path d="M2 12h20" />
+            </svg>
+            {website.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+          </a>
+        )}
+      </div>
+      {germMessageMeUrl && (
+        <div class="mt-2">
+          <GermButton href={germMessageMeUrl} />
+        </div>
+      )}
+    </>
+  )
+}

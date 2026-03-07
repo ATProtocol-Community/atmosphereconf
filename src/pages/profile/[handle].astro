@@ -1,0 +1,14 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProfilePage from "@/components/profile/ProfilePage.astro";
+import { loadProfile } from "@/lib/profile";
+
+const { handle } = Astro.params;
+const profile = await loadProfile(handle!);
+
+if (!profile) return Astro.redirect("/404");
+---
+
+<Layout title={`${profile.displayName} - Atmosphere Conference`}>
+  <ProfilePage {profile} />
+</Layout>

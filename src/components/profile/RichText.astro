@@ -1,0 +1,54 @@
+---
+import { tokenize, type Token } from "@atcute/bluesky-richtext-parser";
+
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+
+type Segment =
+  | { kind: "text"; content: string }
+  | { kind: "br" }
+  | { kind: "link"; href: string; text: string };
+
+function flatten(tokens: Token[]): Segment[] {
+  return tokens.flatMap((token): Segment[] => {
+    switch (token.type) {
+      case "mention":
+        return [{ kind: "link", href: `https://bsky.app/profile/${token.handle}`, text: token.raw }];
+      case "topic":
+        return [{ kind: "link", href: `https://bsky.app/search?q=${encodeURIComponent("#" + token.name)}`, text: token.raw }];
+      case "autolink":
+        return [{ kind: "link", href: token.url, text: token.raw }];
+      case "link":
+        return [{ kind: "link", href: token.url, text: token.children.map((c) => c.raw).join("") }];
+      case "escape":
+        return [{ kind: "text", content: token.escaped }];
+      default: {
+        const parts = token.raw.split("\n");
+        return parts.flatMap((part, i): Segment[] =>
+          i < parts.length - 1
+            ? [{ kind: "text", content: part }, { kind: "br" }]
+            : [{ kind: "text", content: part }]
+        );
+      }
+    }
+  });
+}
+
+const segments = flatten(tokenize(text));
+---
+
+<span class={className}>
+  {segments.map((seg) =>
+    seg.kind === "link" ? (
+      <a href={seg.href} target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">{seg.text}</a>
+    ) : seg.kind === "br" ? (
+      <br />
+    ) : (
+      seg.content
+    )
+  )}
+</span>

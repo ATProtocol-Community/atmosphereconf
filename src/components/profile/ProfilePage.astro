@@ -1,0 +1,68 @@
+---
+import Card from "@/components/ui/card.astro";
+import { ProfileView } from "@/components/profile/ProfileView";
+import { getActiveIcons } from "@/components/profile/lexicon-icons";
+import { getTalksByHandle } from "@/lib/talks";
+import StarringCard from "@/components/home/StarringCard.astro";
+import type { LoadedProfile } from "@/lib/profile";
+import type { ProfileEditData } from "@/components/profile/ProfileView";
+
+interface Props {
+  profile: LoadedProfile;
+  editData?: ProfileEditData;
+}
+
+const { profile, editData } = Astro.props;
+
+const svgFiles = import.meta.glob<string>("/src/components/profile/icons/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+const svgMap: Record<string, string> = Object.fromEntries(
+  Object.entries(svgFiles).map(([path, svg]) => [
+    path.replace(/.*\//, "").replace(".svg", ""),
+    svg,
+  ]),
+);
+
+const activeIcons = getActiveIcons(profile.collections).map((icon) => ({
+  label: icon.label,
+  html: svgMap[icon.svgName] ?? "",
+  href: icon.url?.(profile.handle, profile.did),
+}));
+
+const talks = await getTalksByHandle(profile.handle);
+---
+
+<div class="w-full">
+  <Card class="mx-auto mt-16 max-w-2xl p-8 sm:mt-8">
+    <ProfileView
+      client:load
+      {...profile}
+      isOwnProfile={!!editData}
+      activeIcons={activeIcons}
+      editData={editData}
+    />
+    {
+      talks.length > 0 && (
+        <div class="mt-4">
+          <div class="mb-2 text-xs uppercase tracking-wide text-gray-500">
+            Talk
+          </div>
+          <div class="flex flex-col gap-2">
+            {talks.map((talk) => (
+              <StarringCard
+                talkId={talk.id}
+                title={talk.title}
+                speakerName={talk.speaker_name}
+                speakerId={talk.speaker_id}
+                typeName={talk.typeName}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </Card>
+</div>

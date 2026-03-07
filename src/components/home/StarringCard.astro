@@ -27,51 +27,48 @@ const badgeColors: Record<string, string> = {
 
 const baseClass =
   "block rounded-lg border border-border bg-white px-5 py-3 scroll-mt-24 target:ring-2 target:ring-blue-400";
-const linkClass = `${baseClass} group/card transition-all hover:shadow-md hover:border-blue-300 hover:bg-blue-50/30`;
+const linkClass = `${baseClass} group/card relative isolate transition-all hover:shadow-md hover:border-blue-300 hover:bg-blue-50/30`;
 
 const plainTitle = title.replace(/<[^>]*>/g, "");
 const titleSize = plainTitle.length > 50 ? "text-sm" : "text-base";
 const titleClamp = anchor ? "" : "line-clamp-2";
 ---
 
-<a
-  id={anchor ? talkId : undefined}
-  href={anchor ? `#${talkId}` : `/talks#${talkId}`}
-  class={linkClass}
->
+<div id={anchor ? talkId : undefined} class={linkClass}>
   <div class="flex items-center gap-3">
     <span
       class="text-primary/40 shrink-0 transition-colors group-hover/card:text-blue-500"
       >&rarr;</span
     >
-    <div class="flex-1 min-w-0">
+    <div class="min-w-0 flex-1">
+      <a href={anchor ? `#${talkId}` : `/talks#${talkId}`}>
+        <span
+          class:list={[
+            "leading-5 font-semibold text-gray-900",
+            titleSize,
+            titleClamp,
+            !anchor && "h-10",
+          ]}
+          set:html={title}
+        />
+        <span class="absolute inset-0 z-10 h-full w-full"></span>
+      </a>
       <span
-        class:list={[
-          "font-semibold text-gray-900 leading-5",
-          titleSize,
-          titleClamp,
-          !anchor && "h-[2.5rem]",
-        ]}
-        set:html={title}
-      />
-      <span
-        class="flex items-center gap-1.5 mt-1 text-xs text-gray-500 flex-wrap"
+        class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-gray-500"
       >
         <span
           class:list={[
-            "font-medium px-2 py-0.5 rounded-full whitespace-nowrap",
+            "rounded-full px-2 py-0.5 font-medium whitespace-nowrap",
             badgeColors[typeName] || "bg-gray-100 text-gray-600",
           ]}
         >
           {typeName}
         </span>
-        <!-- TODO: browser don't allow nested As, but also this makes me feel dirty -->
-        {speakerName} · <span
-          class="text-blue-600 hover:underline cursor-pointer"
-          data-bsky-href={`https://bsky.app/profile/${handle}`}>@{handle}</span
+        {speakerName} · <a
+          class="z-20 cursor-pointer text-blue-600 hover:underline"
+          href={`/profile/${handle}`}>@{handle}</a
         >
       </span>
     </div>
   </div>
-</a>
-
+</div>

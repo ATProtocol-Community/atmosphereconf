@@ -1,14 +1,29 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Card from "@/components/ui/card.astro";
-import ProfileContent from "@/components/profile/ProfileContent.astro";
+import ProfilePage from "@/components/profile/ProfilePage.astro";
+import { loadProfile } from "@/lib/profile";
 
+const { loggedInUser } = Astro.locals;
+if (!loggedInUser) return Astro.redirect("/login");
+
+const profile = await loadProfile(loggedInUser.did);
+if (!profile) return Astro.redirect("/login");
+
+const editData = {
+  initialDisplayName: profile.displayName,
+  initialDescription: profile.description || "",
+  initialBio: profile.bio || "",
+  initialInterests: profile.interests?.join(", ") || "",
+  initialPronouns: profile.pronouns || "",
+  initialWebsite: profile.website || "",
+  initialLocation: profile.homeTown?.value
+    ? { name: profile.homeTown.name ?? "", h3Index: profile.homeTown.value }
+    : null,
+  currentAvatarUrl: profile.avatarUrl || null,
+  existingAvatarBlob: profile.confAvatarBlob,
+};
 ---
 
 <Layout title="Profile - Atmosphere Conference">
-  <div class="w-full">
-    <Card class="max-w-2xl mx-auto mt-8 p-8">
-      <ProfileContent />
-    </Card>
-  </div>
+  <ProfilePage {profile} {editData} />
 </Layout>

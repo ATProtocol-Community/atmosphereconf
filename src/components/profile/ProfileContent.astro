@@ -2,111 +2,140 @@
 import Button from "@/components/ui/button.astro";
 import Badge from "@/components/ui/badge.astro";
 import { Avatar } from "@/components/profile/Avatar";
-import { maybeGetLoggedInProfile } from "@/lib/profile";
+import ProfileLinks from "@/components/profile/ProfileLinks.astro";
+import RichText from "@/components/profile/RichText.astro";
+import { getActiveIcons } from "@/components/profile/lexicon-icons";
 
-const profile = await maybeGetLoggedInProfile({
-  request: Astro.request,
-  cookies: Astro.cookies,
-  type: "full",
+const svgFiles = import.meta.glob<string>("./icons/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
 });
 
-// console.log(profile);
-// TODO: redirect to sign in page if logged out so below it's just for no profile
-const confProfile = profile?.confProfile;
+const SVG_MAP: Record<string, string> = Object.fromEntries(
+  Object.entries(svgFiles).map(([path, svg]) => [
+    path.replace("./icons/", "").replace(".svg", ""),
+    svg,
+  ]),
+);
+
+interface Props {
+  did: string;
+  handle: string | null;
+  displayName: string;
+  avatarUrl?: string;
+  description?: string | null;
+  homeTown?: { name?: string | null } | null;
+  interests?: readonly string[] | null;
+  pronouns?: string | null;
+  website?: string | null;
+  germMessageMeUrl?: string | null;
+  isOwnProfile?: boolean;
+  collections?: string[];
+}
+
+const {
+  did,
+  handle,
+  displayName,
+  avatarUrl,
+  description,
+  homeTown,
+  interests,
+  pronouns,
+  website,
+  germMessageMeUrl,
+  isOwnProfile = false,
+  collections = [],
+} = Astro.props;
+
+const activeIcons = getActiveIcons(collections);
 ---
 
-{
-  !profile ? (
-    <div class="text-center">
-      <h2 class="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-      <p class="text-gray-600 mb-4">Failed to load profile</p>
-      <Button href="/logout">Logout</Button>
+<div class="flex flex-col gap-0">
+  <!-- Avatar row: avatar + name/handle + action buttons -->
+  <div class="flex items-center gap-4 mb-3">
+    <Avatar size="lg" src={avatarUrl ?? ""} alt={displayName} />
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold text-gray-900">{displayName}</h1>
+      <p class="text-gray-500">{handle ? `@${handle}` : did}</p>
     </div>
-  ) : (
-    <>
-      <div class="flex items-center gap-4 mb-6">
-        <Avatar size="lg" src={profile.avatarUrl} alt={profile.displayName} />
-        <div class="flex-1">
-          <h1 class="text-2xl font-bold text-gray-900">
-            {profile.displayName}
-          </h1>
-          <p class="text-gray-500">
-            {profile.handle ? `@${profile.handle}` : profile.did}
-          </p>
-        </div>
-        <div class="flex gap-2">
-          <Button
-            variant="secondary"
-            size="icon"
-            href="/profile/settings"
-            aria-label="Edit profile"
+    {isOwnProfile && (
+      <div class="flex gap-2 self-start">
+        <Button
+          variant="secondary"
+          size="icon"
+          href="/profile/settings"
+          aria-label="Edit profile"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.11.06a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.73v.12a2 2 0 0 1-1 1.73l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.11.06a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.11-.06a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.73v-.12a2 2 0 0 1 1-1.73l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.11-.06a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          </Button>
-          <Button variant="secondary" type="button" href="/logout">
-            Logout
-          </Button>
-        </div>
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.11.06a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.73v.12a2 2 0 0 1-1 1.73l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.11.06a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.11-.06a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.73v-.12a2 2 0 0 1 1-1.73l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.11-.06a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </Button>
+        <form method="POST" action="/oauth/logout">
+          <Button variant="secondary" type="submit">Logout</Button>
+        </form>
       </div>
+    )}
+  </div>
 
-      {confProfile ? (
-        <>
-          {confProfile.description && (
-            <div class="mb-3">
-              <div class="text-xs text-gray-500 uppercase tracking-wide">
-                Bio
-              </div>
-              <div class="text-gray-900 mt-0.5">{confProfile.description}</div>
-            </div>
-          )}
-          {confProfile.homeTown?.name && (
-            <div class="mb-3">
-              <div class="text-xs text-gray-500 uppercase tracking-wide">
-                Location
-              </div>
-              <div class="text-gray-900 mt-0.5">
-                {confProfile.homeTown.name}
-              </div>
-            </div>
-          )}
-          {confProfile.interests && confProfile.interests.length > 0 && (
-            <div class="mb-3">
-              <div class="text-xs text-gray-500 uppercase tracking-wide">
-                Interests
-              </div>
-              <div class="text-gray-900 mt-0.5">
-                <div class="flex flex-wrap gap-2">
-                  {confProfile.interests.map((interest: string) => (
-                    <Badge variant="secondary">{interest}</Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          {!confProfile.description &&
-            !confProfile.homeTown?.name &&
-            (!confProfile.interests || confProfile.interests.length === 0) && (
-              <p class="text-gray-400 italic">
-                No conference profile details yet.
-              </p>
-            )}
-        </>
-      ) : (
-        <p class="text-gray-400 italic">No conference profile yet.</p>
-      )}
-    </>
-  )
-}
+  <ProfileLinks {did} {handle} {pronouns} {website} {germMessageMeUrl} />
+
+  <div class="mt-6 mb-3">
+    <div class="text-xs text-gray-500 uppercase tracking-wide">About</div>
+    {description
+      ? <RichText text={description} class="text-gray-900 mt-0.5 block" />
+      : <span class="text-xs font-mono text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 mt-0.5 inline-block">NO DATA YET</span>
+    }
+  </div>
+
+  <div class="mb-3">
+    <div class="text-xs text-gray-500 uppercase tracking-wide">Location</div>
+    {homeTown?.name
+      ? <div class="text-gray-900 mt-0.5">{homeTown.name}</div>
+      : <span class="text-xs font-mono text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 mt-0.5 inline-block">NO DATA YET</span>
+    }
+  </div>
+
+  <div class="mb-3">
+    <div class="text-xs text-gray-500 uppercase tracking-wide">Interests</div>
+    {interests && interests.length > 0
+      ? <div class="flex flex-wrap gap-2 mt-0.5">
+          {interests.map((interest: string) => (
+            <Badge variant="secondary">{interest}</Badge>
+          ))}
+        </div>
+      : <span class="text-xs font-mono text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 mt-0.5 inline-block">NO DATA YET</span>
+    }
+  </div>
+
+  {activeIcons.length > 0 && (
+    <div class="mb-3">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-2">Active On</div>
+      <div class="flex flex-wrap gap-3">
+        {activeIcons.map((icon) => {
+          const href = icon.url?.(handle ?? did, did);
+          const el = (
+            <span title={icon.label} class="size-5 block" set:html={SVG_MAP[icon.svgName]} />
+          );
+          return href ? (
+            <a href={href} target="_blank" rel="noopener noreferrer" title={icon.label} class="size-5">
+              {el}
+            </a>
+          ) : el;
+        })}
+      </div>
+    </div>
+  )}
+</div>
