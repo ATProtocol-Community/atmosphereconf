@@ -125,7 +125,28 @@ export function ProfileSettingsForm() {
 
     async function loadProfile() {
       try {
-        const data = await query<ViewerData>(SETTINGS_QUERY);
+        const isMock = document.cookie.includes("mock_profile=1") ||
+          new URLSearchParams(window.location.search).has("mock");
+
+        const data: ViewerData = isMock
+          ? {
+              viewer: {
+                did: "did:plc:mock123",
+                handle: "demo.bsky.social",
+                appBskyActorProfileByDid: {
+                  displayName: "Demo User",
+                  avatar: null,
+                },
+                orgAtmosphereconfProfileByDid: {
+                  displayName: "Demo User",
+                  description: "Excited to attend Atmosphere! Into decentralized social and building cool stuff on atproto.",
+                  homeTown: { name: "Berlin, Germany", value: "8a1f0000000ffff" },
+                  interests: ["atproto", "decentralization", "rust", "typescript"],
+                  avatar: null,
+                },
+              },
+            }
+          : await query<ViewerData>(SETTINGS_QUERY);
         if (!isActive) return;
         if (!data.viewer) {
           setError("Not authenticated");
