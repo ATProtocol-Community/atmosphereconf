@@ -1,26 +1,21 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
-import Button from "@/components/ui/button.astro";
 import ProfileContent from "@/components/profile/ProfileContent.astro";
+import { maybeGetLoggedInProfile } from "@/lib/profile";
 import { loadProfile } from "@/lib/profile-loader";
 
-const userDid = Astro.cookies.get("user_did")?.value;
-const profile = userDid ? await loadProfile(userDid) : null;
+const loggedInProfile = await maybeGetLoggedInProfile({ locals: Astro.locals });
+if (!loggedInProfile) return Astro.redirect("/login");
+
+const profile = await loadProfile(loggedInProfile.did);
+if (!profile) return Astro.redirect("/login");
 ---
 
 <Layout title="Profile - Atmosphere Conference">
   <div class="w-full">
     <Card class="max-w-2xl mx-auto mt-8 p-8">
-      {!profile ? (
-        <div class="text-center">
-          <h2 class="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-          <p class="text-gray-600 mb-4">Failed to load profile</p>
-          <Button href="/logout">Logout</Button>
-        </div>
-      ) : (
-        <ProfileContent {...profile} isOwnProfile={true} />
-      )}
+      <ProfileContent {...profile} isOwnProfile={true} />
     </Card>
   </div>
 </Layout>

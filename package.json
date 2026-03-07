@@ -7,14 +7,13 @@
     "build": "astro build",
     "start": "node ./dist/server/entry.mjs",
     "preview": "astro preview",
-    "astro": "astro",
-    "relay": "relay-compiler",
-    "relay:watch": "relay-compiler --watch"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",
+    "@fujocoded/authproto": "^0.1.4",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-popover": "^1.1.15",
     "@tailwindcss/vite": "^4.1.17",
@@ -23,7 +22,6 @@
     "h3-js": "^4.3.0",
     "lucide-react": "^0.556.0",
     "marked": "^17.0.1",
-    "quickslice-client-js": "^0.1.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.68.0",
@@ -33,8 +31,6 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
-    "graphql": "^16.12.0",
-    "relay-compiler": "^20.1.1"
+    "@types/react-dom": "^19.2.3"
   }
 }

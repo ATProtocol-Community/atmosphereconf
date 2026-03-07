@@ -4,13 +4,12 @@ import Card from "@/components/ui/card.astro";
 import { LoginForm } from "@/components/profile/LoginForm";
 
 // Redirect if already logged in
-const userDid = Astro.cookies.get("user_did")?.value;
-if (userDid) {
+if (Astro.locals.loggedInUser) {
   return Astro.redirect("/profile");
 }
 
-// Show error from failed callback
-const error = Astro.url.searchParams.get("error");
+// Show error from failed callback or authproto session error
+const error = Astro.locals.authproto?.errorDescription || Astro.url.searchParams.get("error");
 ---
 
 <Layout title="Sign In - Atmosphere Conference">

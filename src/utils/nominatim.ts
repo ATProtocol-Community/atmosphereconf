@@ -1,5 +1,3 @@
-import { isAbortError } from "@/lib/client";
-
 export interface NominatimResult {
   display_name: string;
   lat: string;
@@ -41,7 +39,7 @@ export async function searchLocations(
 
     return await response.json();
   } catch (error: unknown) {
-    if (isAbortError(error)) {
+    if (error instanceof DOMException && error.name === "AbortError") {
       return [];
     }
     console.error("Error fetching locations from Nominatim:", error);
