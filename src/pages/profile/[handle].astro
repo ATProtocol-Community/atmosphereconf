@@ -12,8 +12,25 @@ if (!profile) return Astro.redirect("/404");
 
 const isSpeaker = (await getTalksByHandle(profile.handle)).length > 0;
 if (!viewerDid && !isSpeaker) return Astro.redirect("/login");
+
+const isOwnProfile = viewerDid === profile.did;
+const editData = isOwnProfile
+  ? {
+      initialDisplayName: profile.displayName,
+      initialDescription: profile.description || "",
+      initialBio: profile.bio || "",
+      initialInterests: profile.interests?.join(", ") || "",
+      initialPronouns: profile.pronouns || "",
+      initialWebsite: profile.website || "",
+      initialLocation: profile.homeTown?.value
+        ? { name: profile.homeTown.name ?? "", h3Index: profile.homeTown.value }
+        : null,
+      currentAvatarUrl: profile.avatarUrl || null,
+      existingAvatarBlob: profile.confAvatarBlob,
+    }
+  : undefined;
 ---
 
 <Layout title={`${profile.displayName} - Atmosphere Conference`}>
-  <ProfilePage {profile} {viewerDid} />
+  <ProfilePage {profile} {editData} {viewerDid} />
 </Layout>
