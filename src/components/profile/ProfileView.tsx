@@ -97,11 +97,6 @@ export function ProfileView({
             {error}
           </div>
         )}
-        {saving && (
-          <div className="text-muted-foreground mb-4 text-right text-sm">
-            Saving...
-          </div>
-        )}
         <EditingProfile
           displayName={displayName}
           description={description}
@@ -110,6 +105,7 @@ export function ProfileView({
           pronouns={pronouns}
           website={website}
           editData={editData}
+          saving={saving}
           onSave={handleSave}
           onCancel={() => {
             setError(null);

@@ -12,6 +12,7 @@ export function EditingProfile({
   pronouns,
   website,
   editData,
+  saving = false,
   onSave,
   onCancel,
 }: {
@@ -22,6 +23,7 @@ export function EditingProfile({
   pronouns?: string | null;
   website?: string | null;
   editData: ProfileEditData;
+  saving?: boolean;
   onSave: (data: EditSaveData) => void;
   onCancel: () => void;
 }) {
@@ -76,13 +78,15 @@ export function EditingProfile({
               avatarFile,
             })
           }
+          disabled={saving}
           className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold whitespace-nowrap transition-all disabled:opacity-50"
         >
-          Save
+          {saving ? "Saving..." : "Save"}
         </button>
         <button
           onClick={onCancel}
-          className="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold whitespace-nowrap transition-all"
+          disabled={saving}
+          className="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold whitespace-nowrap transition-all disabled:opacity-50"
         >
           Cancel
         </button>

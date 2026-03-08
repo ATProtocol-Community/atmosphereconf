@@ -1,6 +1,4 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import ProfilePage from "@/components/profile/ProfilePage.astro";
 import { loadProfile } from "@/lib/profile";
 
 const { loggedInUser } = Astro.locals;
@@ -9,21 +7,5 @@ if (!loggedInUser) return Astro.redirect("/login");
 const profile = await loadProfile(loggedInUser.did);
 if (!profile) return Astro.redirect("/login");
 
-const editData = {
-  initialDisplayName: profile.displayName,
-  initialDescription: profile.description || "",
-  initialBio: profile.bio || "",
-  initialInterests: profile.interests?.join(", ") || "",
-  initialPronouns: profile.pronouns || "",
-  initialWebsite: profile.website || "",
-  initialLocation: profile.homeTown?.value
-    ? { name: profile.homeTown.name ?? "", h3Index: profile.homeTown.value }
-    : null,
-  currentAvatarUrl: profile.avatarUrl || null,
-  existingAvatarBlob: profile.confAvatarBlob,
-};
+return Astro.redirect(`/profile/${profile.handle}`);
 ---
-
-<Layout title="Profile - Atmosphere Conference">
-  <ProfilePage {profile} {editData} viewerDid={loggedInUser.did} />
-</Layout>
