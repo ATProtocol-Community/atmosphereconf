@@ -5,10 +5,11 @@ import { loadProfile } from "@/lib/profile";
 
 const { handle } = Astro.params;
 const profile = await loadProfile(handle!);
+const viewerDid = Astro.locals.loggedInUser?.did;
 
 if (!profile) return Astro.redirect("/404");
 ---
 
 <Layout title={`${profile.displayName} - Atmosphere Conference`}>
-  <ProfilePage {profile} />
+  <ProfilePage {profile} {viewerDid} />
 </Layout>

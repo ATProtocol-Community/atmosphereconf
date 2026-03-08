@@ -12,6 +12,7 @@ export type { ProfileViewProps } from "./profile-types";
 import type { ProfileViewProps } from "./profile-types";
 
 export function ProfileView({
+  did,
   handle,
   displayName,
   avatarUrl,
@@ -22,6 +23,7 @@ export function ProfileView({
   pronouns,
   website,
   germMessageMeUrl,
+  viewerDid,
   isOwnProfile = false,
   activeIcons,
   editData,
@@ -120,7 +122,7 @@ export function ProfileView({
 
   return (
     <RenderedProfile
-      did=""
+      did={did}
       handle={handle}
       displayName={displayName}
       avatarUrl={avatarUrl}
@@ -131,6 +133,7 @@ export function ProfileView({
       pronouns={pronouns}
       website={website}
       germMessageMeUrl={germMessageMeUrl}
+      viewerDid={viewerDid}
       isOwnProfile={isOwnProfile}
       activeIcons={activeIcons}
       onEdit={() => setIsEditing(true)}
