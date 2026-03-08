@@ -5,6 +5,7 @@ import { GermButton } from "./GermButton";
 import type { ActiveIcon, ProfileViewProps } from "../profile-types";
 
 export function RenderedProfile({
+  did,
   handle,
   displayName,
   avatarUrl,
@@ -15,11 +16,16 @@ export function RenderedProfile({
   pronouns,
   website,
   germMessageMeUrl,
+  viewerDid,
   isOwnProfile,
   activeIcons,
   onEdit,
 }: Omit<ProfileViewProps, "editData"> & { onEdit: () => void }) {
-  const showLinksRow = !!pronouns || !!website || !!germMessageMeUrl;
+  const germDmUrl =
+    germMessageMeUrl && viewerDid
+      ? `${germMessageMeUrl}/web#${did}+${viewerDid}`
+      : undefined;
+  const showLinksRow = !!pronouns || !!website || !!germDmUrl;
 
   return (
     <div className="flex flex-col gap-4">
@@ -88,9 +94,9 @@ export function RenderedProfile({
               )}
             </div>
           )}
-          {germMessageMeUrl && (
+          {germDmUrl && (
             <div>
-              <GermButton href={germMessageMeUrl} />
+              <GermButton href={germDmUrl} />
             </div>
           )}
         </div>
