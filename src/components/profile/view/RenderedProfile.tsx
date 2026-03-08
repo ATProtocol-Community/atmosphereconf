@@ -1,8 +1,8 @@
 import { Pencil } from "lucide-react";
-import { Avatar } from "./Avatar";
+import { Avatar } from "../Avatar";
 import { RichText } from "./RichText";
 import { GermButton } from "./GermButton";
-import type { ActiveIcon, ProfileViewProps } from "./profile-types";
+import type { ActiveIcon, ProfileViewProps } from "../profile-types";
 
 export function RenderedProfile({
   handle,
