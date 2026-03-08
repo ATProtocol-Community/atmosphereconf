@@ -93,7 +93,7 @@ export function EditingProfile({
       </div>
 
       {/* Headshot */}
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start gap-4">
         <div className="shrink-0">
           <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">
             Headshot
@@ -103,7 +103,7 @@ export function EditingProfile({
             onChange={setAvatarFile}
           />
         </div>
-        <p className="text-muted-foreground mt-5 text-xs">
+        <p className="text-muted-foreground sm:mt-5 text-xs">
           This image will be used as your speaker headshot image, or more
           generally for anyone that wants to have a more readable version of
           their real face for finding people at the conference. This is only
