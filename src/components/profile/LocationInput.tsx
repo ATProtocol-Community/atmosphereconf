@@ -142,9 +142,9 @@ export function LocationInput({ value, onChange, placeholder }: LocationInputPro
           placeholder={placeholder || "Search for a location..."}
           className="ui-input pr-10"
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
           {isLoading ? (
-            <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
           ) : (
             <MapPin size={16} />
           )}
@@ -152,17 +152,19 @@ export function LocationInput({ value, onChange, placeholder }: LocationInputPro
       </div>
 
       {showDropdown && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
           {suggestions.map((result) => (
             <button
               key={result.place_id}
               type="button"
               onClick={() => handleSelectLocation(result)}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+              className="w-full border-b border-gray-100 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-gray-50"
             >
               <div className="flex items-start gap-2">
-                <MapPin size={14} className="text-gray-400 mt-1 flex-shrink-0" />
-                <div className="text-sm text-gray-700">{formatLocationName(result)}</div>
+                <MapPin size={14} className="mt-1 shrink-0 text-gray-400" />
+                <div className="text-sm text-gray-700">
+                  {formatLocationName(result)}
+                </div>
               </div>
             </button>
           ))}
