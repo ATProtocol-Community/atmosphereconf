@@ -31,6 +31,7 @@ export interface ProfileViewProps {
   pronouns?: string | null;
   website?: string | null;
   germMessageMeUrl?: string | null;
+  viewerDid?: string | null;
   isOwnProfile?: boolean;
   activeIcons: ActiveIcon[];
   editData?: ProfileEditData;

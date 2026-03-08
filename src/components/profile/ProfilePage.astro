@@ -10,9 +10,10 @@ import type { ProfileEditData } from "@/components/profile/ProfileView";
 interface Props {
   profile: LoadedProfile;
   editData?: ProfileEditData;
+  viewerDid?: string;
 }
 
-const { profile, editData } = Astro.props;
+const { profile, editData, viewerDid } = Astro.props;
 
 const svgFiles = import.meta.glob<string>("/src/components/profile/icons/*.svg", {
   query: "?raw",
@@ -40,6 +41,7 @@ const talks = await getTalksByHandle(profile.handle);
     <ProfileView
       client:load
       {...profile}
+      viewerDid={viewerDid}
       isOwnProfile={!!editData}
       activeIcons={activeIcons}
       editData={editData}

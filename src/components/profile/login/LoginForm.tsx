@@ -3,7 +3,7 @@ import { flushSync } from "react-dom";
 import {
   ActorAutocomplete,
   type Actor,
-} from "@/components/profile/ActorAutocomplete";
+} from "./ActorAutocomplete";
 
 export function LoginForm({ error: serverError }: { error?: string | null }) {
   const [handle, setHandle] = useState("");
