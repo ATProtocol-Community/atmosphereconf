@@ -2,12 +2,16 @@
 import Layout from "../../layouts/Layout.astro";
 import ProfilePage from "@/components/profile/ProfilePage.astro";
 import { loadProfile } from "@/lib/profile";
+import { getTalksByHandle } from "@/lib/talks";
 
 const { handle } = Astro.params;
 const profile = await loadProfile(handle!);
 const viewerDid = Astro.locals.loggedInUser?.did;
 
 if (!profile) return Astro.redirect("/404");
+
+const isSpeaker = (await getTalksByHandle(profile.handle)).length > 0;
+if (!viewerDid && !isSpeaker) return Astro.redirect("/login");
 ---
 
 <Layout title={`${profile.displayName} - Atmosphere Conference`}>
