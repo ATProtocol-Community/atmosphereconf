@@ -4,10 +4,10 @@ export interface AvatarProps extends React.ComponentPropsWithoutRef<"div"> {
   src?: string;
   alt?: string;
   fallback?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
-const sizeClass = { sm: "size-8", md: "size-12", lg: "size-16" } as const;
+const sizeClass = { sm: "size-8", md: "size-12", lg: "size-16", xl: "size-32" } as const;
 
 export function Avatar({
   className,

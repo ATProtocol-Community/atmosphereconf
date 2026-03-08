@@ -35,15 +35,15 @@ export function AvatarInput({ currentAvatarUrl, onChange }: AvatarInputProps) {
   return (
     <div>
       <label htmlFor="avatar" className="cursor-pointer inline-block">
-        <div className="relative w-20 h-20">
+        <div className="relative w-32 h-32">
           <Avatar
-            size="lg"
+            size="xl"
             className="border-2 border-gray-200 hover:border-gray-300 transition-colors"
             src={displayUrl || undefined}
             alt="Avatar preview"
           />
-          <div className="absolute bottom-0 right-0 bg-gray-700 rounded-full w-6 h-6 flex items-center justify-center">
-            <Camera className="w-3.5 h-3.5 text-white" />
+          <div className="absolute bottom-1 right-1 bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center">
+            <Camera className="w-4 h-4 text-white" />
           </div>
         </div>
       </label>
