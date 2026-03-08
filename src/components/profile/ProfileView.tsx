@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { actions } from "astro:actions";
 import type { BlobRef } from "@/actions/index";
-import { RenderedProfile } from "./RenderedProfile";
-import { EditingProfile } from "./EditingProfile";
+import { RenderedProfile } from "./view/RenderedProfile";
+import { EditingProfile } from "./edit/EditingProfile";
 import type { EditSaveData } from "./profile-types";
 
 // Re-export types for existing consumers

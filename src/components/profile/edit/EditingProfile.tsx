@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AvatarInput } from "./AvatarInput";
 import { LocationInput, type LocationData } from "./LocationInput";
 import { CharCount } from "./CharCount";
-import type { ProfileEditData, EditSaveData } from "./profile-types";
+import type { ProfileEditData, EditSaveData } from "../profile-types";
 
 export function EditingProfile({
   displayName,

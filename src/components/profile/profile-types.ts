@@ -1,5 +1,5 @@
 import type { BlobRef } from "@/actions/index";
-import type { LocationData } from "./LocationInput";
+import type { LocationData } from "./edit/LocationInput";
 
 export type ActiveIcon = {
   label: string;
