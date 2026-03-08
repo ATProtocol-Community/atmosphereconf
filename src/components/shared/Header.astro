@@ -99,7 +99,7 @@ const navLinks = [
     <div class="h-8 flex items-center">
       {
         profile ? (
-          <a href="/profile">
+          <a href={`/profile/${profile.handle}`}>
             <Avatar
               size="sm"
               className="cursor-pointer ring-2 ring-white/50 hover:ring-white"
