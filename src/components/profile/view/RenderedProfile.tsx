@@ -28,7 +28,7 @@ export function RenderedProfile({
   const showLinksRow = !!pronouns || !!website || !!germDmUrl;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {/* Avatar + name row */}
       <div className="flex items-center gap-4">
         <Avatar size="lg" src={avatarUrl ?? ""} alt={displayName} />
@@ -95,7 +95,7 @@ export function RenderedProfile({
             </div>
           )}
           {germDmUrl && (
-            <div>
+            <div className="mt-1">
               <GermButton href={germDmUrl} />
             </div>
           )}
@@ -109,19 +109,6 @@ export function RenderedProfile({
             About
           </div>
           <RichText text={description} className="mt-1 block text-gray-900" />
-        </div>
-      )}
-
-      {/* Bio */}
-      {bio && (
-        <div>
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
-            Bio
-          </div>
-          <RichText
-            text={bio}
-            className="mt-1 block whitespace-pre-wrap text-gray-900"
-          />
         </div>
       )}
 
@@ -185,6 +172,19 @@ export function RenderedProfile({
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* Bio */}
+      {bio && (
+        <div>
+          <div className="text-xs tracking-wide text-gray-500 uppercase">
+            Bio
+          </div>
+          <RichText
+            text={bio}
+            className="mt-1 block whitespace-pre-wrap text-gray-900"
+          />
         </div>
       )}
     </div>

@@ -207,25 +207,6 @@ export function EditingProfile({
         </p>
       </div>
 
-      {/* Bio */}
-      <div>
-        <div className="flex items-center justify-between">
-          <div className="text-xs tracking-wide text-gray-500 uppercase">Bio</div>
-          <CharCount value={editBio} max={2000} />
-        </div>
-        <textarea
-          value={editBio}
-          onChange={(e) => setEditBio(e.target.value)}
-          placeholder="Write a longer bio..."
-          maxLength={2000}
-          rows={6}
-          className="ui-textarea mt-1 w-full"
-        />
-        <p className="text-muted-foreground mt-1 text-xs">
-          Speakers and others can put an extended bio here, up to 2000 characters. @-mentions, #tags, and links are supported for rich text.
-        </p>
-      </div>
-
       {/* Location */}
       <div>
         <div className="text-xs tracking-wide text-gray-500 uppercase">
@@ -254,6 +235,25 @@ export function EditingProfile({
         />
         <p className="text-muted-foreground mt-1 text-xs">
           Separate with commas
+        </p>
+      </div>
+
+      {/* Bio */}
+      <div>
+        <div className="flex items-center justify-between">
+          <div className="text-xs tracking-wide text-gray-500 uppercase">Bio</div>
+          <CharCount value={editBio} max={2000} />
+        </div>
+        <textarea
+          value={editBio}
+          onChange={(e) => setEditBio(e.target.value)}
+          placeholder="Write a longer bio..."
+          maxLength={2000}
+          rows={10}
+          className="ui-textarea mt-1 w-full"
+        />
+        <p className="text-muted-foreground mt-1 text-xs">
+          Speakers and others can put an extended bio here, up to 2000 characters. @-mentions, #tags, and links are supported for rich text.
         </p>
       </div>
     </div>

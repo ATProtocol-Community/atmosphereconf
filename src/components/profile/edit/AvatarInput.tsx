@@ -7,7 +7,7 @@ interface AvatarInputProps {
   onChange: (file: File | null) => void;
 }
 
-const ACCEPTED_TYPES = ["image/png", "image/jpeg"];
+const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
 export function AvatarInput({ currentAvatarUrl, onChange }: AvatarInputProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -96,7 +96,7 @@ export function AvatarInput({ currentAvatarUrl, onChange }: AvatarInputProps) {
         ref={inputRef}
         type="file"
         name="avatar"
-        accept="image/png,image/jpeg"
+        accept="image/png,image/jpeg,image/webp"
         className="hidden"
         onChange={handleFileChange}
       />

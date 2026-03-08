@@ -3,7 +3,7 @@ import { z } from "astro:schema";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 
 const MAX_AVATAR_SIZE = 1_000_000; // 1MB
-const ALLOWED_MIME_TYPES = ["image/png", "image/jpeg"];
+const ALLOWED_MIME_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
 export const blobRefSchema = z.object({
   $type: z.literal("blob"),
@@ -27,7 +27,7 @@ export const server = {
       if (!ALLOWED_MIME_TYPES.includes(avatar.type)) {
         throw new ActionError({
           code: "BAD_REQUEST",
-          message: "Avatar must be PNG or JPEG",
+          message: "Avatar must be PNG, JPEG, or WebP",
         });
       }
       if (avatar.size > MAX_AVATAR_SIZE) {
