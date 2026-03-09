@@ -14,7 +14,7 @@
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",
-    "@fujocoded/authproto": "^0.2.0",
+    "@fujocoded/authproto": "^0.2.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-popover": "^1.1.15",
     "@tailwindcss/vite": "^4.1.17",
