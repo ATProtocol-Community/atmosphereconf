@@ -13,6 +13,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@ascorbic/bluesky-loader": "^0.1.0",
+    "@astro-community/astro-embed-bluesky": "^0.1.6",
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",

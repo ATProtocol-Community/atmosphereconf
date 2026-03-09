@@ -2,6 +2,7 @@ import { defineLiveCollection } from "astro:content";
 import { z } from "astro/zod";
 import { atprotoLiveLoader } from "./lib/atproto-live-loader";
 import { calendarRecordToEventData } from "./lib/calendar-event";
+import { liveBlueskyLoader } from "@ascorbic/bluesky-loader";
 
 import { EVENTS_OWNER_DID_OR_HANDLE } from "astro:env/server";
 
@@ -58,4 +59,8 @@ const events = defineLiveCollection({
   }),
 });
 
-export const collections = { events };
+const blueskyPosts = defineLiveCollection({
+  loader: liveBlueskyLoader({ identifier: "atprotocol.dev" }),
+});
+
+export const collections = { events, blueskyPosts };

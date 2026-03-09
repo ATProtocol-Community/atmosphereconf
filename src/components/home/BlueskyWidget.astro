@@ -1,0 +1,23 @@
+---
+import Card from "@/components/ui/card.astro";
+import { BlueskyPost } from "@astro-community/astro-embed-bluesky";
+import { getLiveCollection } from "astro:content";
+
+const result = await getLiveCollection("blueskyPosts", {
+  limit: 20,
+  type: "posts_no_replies",
+});
+const latestPost = result.entries?.find(
+  (entry) => entry.data.author.handle === "atprotocol.dev"
+) ?? result.entries?.at(0);
+---
+
+{
+  latestPost && (
+    <section>
+      <Card title="latest from atprotocol.dev">
+        <BlueskyPost post={latestPost.data} />
+      </Card>
+    </section>
+  )
+}
