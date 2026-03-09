@@ -6,12 +6,14 @@ import { getRandomTalks } from "@/lib/talks";
 const starred = await getRandomTalks();
 ---
 
-{starred.map((talk) => (
-  <StarringCard
-    talkId={talk.id}
-    title={talk.title}
-    speakerName={talk.speaker_name}
-    speakerId={talk.speaker_id}
-    typeName={talk.typeName}
-  />
-))}
+{
+  starred.map((talk) => (
+    <StarringCard
+      talkId={talk.id}
+      title={talk.title}
+      speakerName={talk.speaker_name}
+      speakerId={talk.speaker_id}
+      typeName={talk.typeName}
+    />
+  ))
+}

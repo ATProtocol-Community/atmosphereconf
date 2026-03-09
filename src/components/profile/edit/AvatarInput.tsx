@@ -80,7 +80,7 @@ export function AvatarInput({ currentAvatarUrl, onChange }: AvatarInputProps) {
       className="cursor-pointer"
     >
       <div
-        className={`relative w-32 h-32 rounded-full transition-all ${dragging ? "ring-2 ring-primary ring-offset-2" : ""}`}
+        className={`relative h-32 w-32 rounded-full transition-all ${dragging ? "ring-primary ring-2 ring-offset-2" : ""}`}
       >
         <Avatar
           size="xl"
@@ -88,8 +88,8 @@ export function AvatarInput({ currentAvatarUrl, onChange }: AvatarInputProps) {
           src={displayUrl || undefined}
           alt="Avatar preview"
         />
-        <div className="absolute bottom-1 right-1 bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center">
-          <Camera className="w-4 h-4 text-white" />
+        <div className="absolute right-1 bottom-1 flex h-8 w-8 items-center justify-center rounded-full bg-gray-700">
+          <Camera className="h-4 w-4 text-white" />
         </div>
       </div>
       <input

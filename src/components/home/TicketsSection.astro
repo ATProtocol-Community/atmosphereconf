@@ -12,7 +12,7 @@ const { mode = "live" } = Astro.props;
 
 <section id="ticket-section" class:list={["group", mode]}>
   <Card class="gap-4" title="tickets">
-    <p class="text-gray-800 max-w-[65ch]">
+    <p class="max-w-[65ch] text-gray-800">
       Come join 250+ in-person attendees, and 100s more online. Arrive <span
         class="font-semibold">two days early</span
       > for extended events, deep dives, and local activities; then gather for
@@ -20,7 +20,7 @@ const { mode = "live" } = Astro.props;
       everyone!
     </p>
     <div>
-      <p class="text-4xl text-balance text-center mt-6">
+      <p class="mt-6 text-center text-4xl text-balance">
         <strong class="font-bold">ATmosphereConf</strong>
         <span class="show-live group-[.remote]:hidden"
           >is at <a
@@ -34,7 +34,7 @@ const { mode = "live" } = Astro.props;
         March 26-27 & 28-29, 2026
       </p>
       <span
-        class="show-remote group-[.live]:invisible text-sm text-center w-full inline-block italic mt-0.5 mb-1"
+        class="show-remote mt-0.5 mb-1 inline-block w-full text-center text-sm italic group-[.live]:invisible"
         >*but also at <a
           class="text-blue-600 underline"
           href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a

@@ -66,20 +66,20 @@ function ActorList({
             key={actor.did}
             value={actor.handle}
             onSelect={() => handleSelect(actor)}
-            className="w-full px-3 py-2 text-left transition-colors flex items-center gap-2 data-[selected=true]:bg-gray-50"
+            className="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors data-[selected=true]:bg-gray-50"
           >
             <Avatar
               size="sm"
               src={actor.avatar}
               alt={actor.displayName || actor.handle}
             />
-            <div className="flex flex-col min-w-0">
+            <div className="flex min-w-0 flex-col">
               {actor.displayName && (
-                <span className="text-sm font-medium truncate">
+                <span className="truncate text-sm font-medium">
                   {actor.displayName}
                 </span>
               )}
-              <span className="text-xs text-gray-500 truncate">
+              <span className="truncate text-xs text-gray-500">
                 @{actor.handle}
               </span>
             </div>
@@ -182,7 +182,7 @@ export function ActorAutocomplete({
               className={"ui-input"}
             />
             {loading && (
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <div className="absolute top-1/2 right-3 -translate-y-1/2">
                 <Spinner size={16} />
               </div>
             )}
@@ -190,7 +190,7 @@ export function ActorAutocomplete({
         </Popover.Anchor>
         <Popover.Portal>
           <Popover.Content
-            className="z-50 w-(--radix-popover-trigger-width) mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            className="z-50 mt-1 max-h-60 w-(--radix-popover-trigger-width) overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg"
             align="start"
             sideOffset={4}
             onOpenAutoFocus={(event: Event) => event.preventDefault()}

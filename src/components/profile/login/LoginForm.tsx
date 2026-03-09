@@ -1,9 +1,6 @@
 import { useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import {
-  ActorAutocomplete,
-  type Actor,
-} from "./ActorAutocomplete";
+import { ActorAutocomplete, type Actor } from "./ActorAutocomplete";
 
 export function LoginForm({ error: serverError }: { error?: string | null }) {
   const [handle, setHandle] = useState("");
@@ -46,14 +43,14 @@ export function LoginForm({ error: serverError }: { error?: string | null }) {
         <button
           type="submit"
           disabled={!handle?.length || loading}
-          className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] bg-primary text-primary-foreground hover:bg-primary/90 h-10 rounded-md px-6"
+          className="focus-visible:border-ring focus-visible:ring-ring/50 bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md px-6 text-sm font-semibold whitespace-nowrap transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50"
         >
           Sign In
         </button>
       </form>
 
       {error && (
-        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+        <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
           {error}
         </div>
       )}

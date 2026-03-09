@@ -16,7 +16,11 @@ interface LocationInputProps {
   placeholder?: string;
 }
 
-export function LocationInput({ value, onChange, placeholder }: LocationInputProps) {
+export function LocationInput({
+  value,
+  onChange,
+  placeholder,
+}: LocationInputProps) {
   const [inputValue, setInputValue] = useState(value?.name || "");
   const [suggestions, setSuggestions] = useState<NominatimResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,12 +33,16 @@ export function LocationInput({ value, onChange, placeholder }: LocationInputPro
   useEffect(() => {
     // Close dropdown on outside click.
     function handleClickOutside(event: PointerEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setShowDropdown(false);
       }
     }
     document.addEventListener("pointerdown", handleClickOutside);
-    return () => document.removeEventListener("pointerdown", handleClickOutside);
+    return () =>
+      document.removeEventListener("pointerdown", handleClickOutside);
   }, []);
 
   useEffect(() => {

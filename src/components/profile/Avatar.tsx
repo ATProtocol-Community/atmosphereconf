@@ -7,7 +7,12 @@ export interface AvatarProps extends React.ComponentPropsWithoutRef<"div"> {
   size?: "sm" | "md" | "lg" | "xl";
 }
 
-const sizeClass = { sm: "size-8", md: "size-12", lg: "size-16", xl: "size-32" } as const;
+const sizeClass = {
+  sm: "size-8",
+  md: "size-12",
+  lg: "size-16",
+  xl: "size-32",
+} as const;
 
 export function Avatar({
   className,
@@ -27,8 +32,8 @@ export function Avatar({
       className={`relative isolate flex shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 text-gray-900 ${sizeClass[size]} ${className ?? ""}`.trim()}
       {...props}
     >
-      {showFallback && (
-        fallback ? (
+      {showFallback &&
+        (fallback ? (
           <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-medium">
             {fallback}
           </span>
@@ -45,8 +50,7 @@ export function Avatar({
               clipRule="evenodd"
             />
           </svg>
-        )
-      )}
+        ))}
       {src && !imgFailed && (
         <img
           src={src}

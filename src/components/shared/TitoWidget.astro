@@ -19,11 +19,17 @@ const { type, class: className } = Astro.props;
   event="atmosphereconf/atmosphereconf2026"
   releases={RELEASE_IDS[type]}></tito-widget>
 
-{import.meta.env.DEV ? (
-  <script is:inline src="https://js.tito.io/v2/with/inline,development_mode" async></script>
-) : (
-  <script is:inline src="https://js.tito.io/v2/with/inline" async></script>
-)}
+{
+  import.meta.env.DEV ? (
+    <script
+      is:inline
+      src="https://js.tito.io/v2/with/inline,development_mode"
+      async
+    />
+  ) : (
+    <script is:inline src="https://js.tito.io/v2/with/inline" async />
+  )
+}
 
 <style is:global>
   @reference "../../styles/global.css";
@@ -179,9 +185,13 @@ const { type, class: className } = Astro.props;
   // hasn't interacted (scrolled, clicked, etc.) since page load.
   (() => {
     let userInteracted = false;
-    const markInteracted = () => { userInteracted = true; };
+    const markInteracted = () => {
+      userInteracted = true;
+    };
     const events = ["scroll", "click", "touchstart", "keydown"] as const;
-    events.forEach((e) => window.addEventListener(e, markInteracted, { once: true, passive: true }));
+    events.forEach((e) =>
+      window.addEventListener(e, markInteracted, { once: true, passive: true }),
+    );
 
     const observer = new MutationObserver(() => {
       const loaded = document.querySelector("tito-widget .tito-widget-form");
@@ -189,7 +199,9 @@ const { type, class: className } = Astro.props;
       observer.disconnect();
 
       // Mark widget as loaded (removes min-height)
-      document.querySelectorAll("tito-widget").forEach((el) => el.classList.add("tito-widget-loaded"));
+      document
+        .querySelectorAll("tito-widget")
+        .forEach((el) => el.classList.add("tito-widget-loaded"));
 
       if (!userInteracted && window.location.hash) {
         const target = document.querySelector(window.location.hash);

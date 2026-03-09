@@ -15,11 +15,14 @@ interface Props {
 
 const { profile, editData, viewerDid } = Astro.props;
 
-const svgFiles = import.meta.glob<string>("/src/components/profile/icons/*.svg", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-});
+const svgFiles = import.meta.glob<string>(
+  "/src/components/profile/icons/*.svg",
+  {
+    query: "?raw",
+    import: "default",
+    eager: true,
+  },
+);
 const svgMap: Record<string, string> = Object.fromEntries(
   Object.entries(svgFiles).map(([path, svg]) => [
     path.replace(/.*\//, "").replace(".svg", ""),
@@ -49,7 +52,7 @@ const talks = await getTalksByHandle(profile.handle);
     {
       talks.length > 0 && (
         <div class="mt-4">
-          <div class="mb-2 text-xs uppercase tracking-wide text-gray-500">
+          <div class="mb-2 text-xs tracking-wide text-gray-500 uppercase">
             Talk
           </div>
           <div class="flex flex-col gap-2">

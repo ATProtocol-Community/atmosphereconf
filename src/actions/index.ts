@@ -21,8 +21,7 @@ export const server = {
     }),
     handler: async ({ avatar }, context) => {
       const { loggedInUser } = context.locals;
-      if (!loggedInUser)
-        throw new ActionError({ code: "UNAUTHORIZED" });
+      if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
 
       if (!ALLOWED_MIME_TYPES.includes(avatar.type)) {
         throw new ActionError({
@@ -72,15 +71,12 @@ export const server = {
       pronouns: z.string().max(64).optional(),
       website: z.string().max(256).optional(),
       interests: z.array(z.string().max(64)).max(20).optional(),
-      homeTown: z
-        .object({ name: z.string(), value: z.string() })
-        .optional(),
+      homeTown: z.object({ name: z.string(), value: z.string() }).optional(),
       avatar: blobRefSchema.optional(),
     }),
     handler: async (input, context) => {
       const { loggedInUser } = context.locals;
-      if (!loggedInUser)
-        throw new ActionError({ code: "UNAUTHORIZED" });
+      if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
 
       const pdsAgent = await getPdsAgent({ loggedInUser });
       if (!pdsAgent)
@@ -98,7 +94,8 @@ export const server = {
           rkey: "self",
         });
         const existingCreatedAt = (existing.data.value as any)?.createdAt;
-        if (typeof existingCreatedAt === "string") createdAt = existingCreatedAt;
+        if (typeof existingCreatedAt === "string")
+          createdAt = existingCreatedAt;
       } catch {
         // No existing record — use new timestamp
       }

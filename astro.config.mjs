@@ -18,7 +18,8 @@ export default defineConfig({
     authproto({
       applicationName: "ATmosphere Conference 2026",
       applicationDomain: "https://atmosphereconf.org",
-      externalDomain: process.env.NODE_ENV === "development"
+      externalDomain:
+        process.env.NODE_ENV === "development"
           ? "http://localhost:4321"
           : "https://atmosphereconf.org",
       driver: {

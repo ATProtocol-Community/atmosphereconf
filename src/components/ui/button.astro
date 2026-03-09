@@ -41,23 +41,20 @@ const classes = [
 ];
 ---
 
-{href ? (
-  <a
-    href={href}
-    class:list={classes}
-    aria-disabled={disabled ? "true" : undefined}
-    tabindex={disabled ? -1 : undefined}
-    {...rest}
-  >
-    <slot />
-  </a>
-) : (
-  <button
-    class:list={classes}
-    type={type}
-    disabled={disabled}
-    {...rest}
-  >
-    <slot />
-  </button>
-)}
+{
+  href ? (
+    <a
+      href={href}
+      class:list={classes}
+      aria-disabled={disabled ? "true" : undefined}
+      tabindex={disabled ? -1 : undefined}
+      {...rest}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button class:list={classes} type={type} disabled={disabled} {...rest}>
+      <slot />
+    </button>
+  )
+}

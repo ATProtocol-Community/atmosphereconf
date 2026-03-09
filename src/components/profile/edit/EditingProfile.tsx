@@ -93,7 +93,7 @@ export function EditingProfile({
       </div>
 
       {/* Headshot */}
-      <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         <div className="shrink-0">
           <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">
             Headshot
@@ -103,12 +103,12 @@ export function EditingProfile({
             onChange={setAvatarFile}
           />
         </div>
-        <p className="text-muted-foreground sm:mt-5 text-xs">
+        <p className="text-muted-foreground text-xs sm:mt-5">
           This image will be used as your speaker headshot image, or more
           generally for anyone that wants to have a more readable version of
           their real face for finding people at the conference. This is only
-          shown to logged in users, but is of course publicly available from your
-          PDS under the org.atmosphereconf.profile lexicon.
+          shown to logged in users, but is of course publicly available from
+          your PDS under the org.atmosphereconf.profile lexicon.
         </p>
       </div>
 
@@ -241,7 +241,9 @@ export function EditingProfile({
       {/* Bio */}
       <div>
         <div className="flex items-center justify-between">
-          <div className="text-xs tracking-wide text-gray-500 uppercase">Bio</div>
+          <div className="text-xs tracking-wide text-gray-500 uppercase">
+            Bio
+          </div>
           <CharCount value={editBio} max={2000} />
         </div>
         <textarea
@@ -253,7 +255,8 @@ export function EditingProfile({
           className="ui-textarea mt-1 w-full"
         />
         <p className="text-muted-foreground mt-1 text-xs">
-          Speakers and others can put an extended bio here, up to 2000 characters. @-mentions, #tags, and links are supported for rich text.
+          Speakers and others can put an extended bio here, up to 2000
+          characters. @-mentions, #tags, and links are supported for rich text.
         </p>
       </div>
     </div>

@@ -23,7 +23,8 @@ export const LEXICON_ICONS: LexiconIconDef[] = [
     svgName: "tangled",
     match: (col) => col.startsWith("sh.tangled."),
     url: (handle) => `https://tangled.org/${handle}`,
-  },{
+  },
+  {
     label: "Npmx",
     svgName: "npmx",
     match: (col) => col.startsWith("dev.npmx."),

@@ -17,23 +17,13 @@ const pageTitle = frontmatter?.title ?? title;
   <section class="my-10">
     <Card class="px-6">
       <h2
-        class="font-mono text-[11px] uppercase tracking-widest font-semibold text-primary mb-3"
+        class="text-primary mb-3 font-mono text-[11px] font-semibold tracking-widest uppercase"
       >
         // {pageTitle.toLowerCase()}
       </h2>
-      <div class="prose prose-gray max-w-none
-        [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-gray-900 [&_h2]:mt-8 [&_h2]:mb-3
-        [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-gray-900 [&_h3]:mt-6 [&_h3]:mb-2
-        [&_p]:text-gray-800 [&_p]:leading-relaxed [&_p]:mb-4
-        [&_a]:text-blue-600 [&_a]:underline
-        [&_blockquote]:border-l-4 [&_blockquote]:border-primary/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-gray-600 [&_blockquote]:my-4
-        [&_code]:bg-gray-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:font-mono
-        [&_ul]:space-y-1 [&_ul]:mb-4
-        [&_li]:text-gray-800
-        [&_em]:text-gray-600
-        [&_strong]:font-semibold
-        [&_hr]:border-border [&_hr]:my-6
-      ">
+      <div
+        class="prose prose-gray [&_blockquote]:border-primary/30 [&_hr]:border-border max-w-none [&_a]:text-blue-600 [&_a]:underline [&_blockquote]:my-4 [&_blockquote]:border-l-4 [&_blockquote]:pl-4 [&_blockquote]:text-gray-600 [&_blockquote]:italic [&_code]:rounded [&_code]:bg-gray-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_em]:text-gray-600 [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-gray-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-gray-900 [&_hr]:my-6 [&_li]:text-gray-800 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:text-gray-800 [&_strong]:font-semibold [&_ul]:mb-4 [&_ul]:space-y-1"
+      >
         <slot />
       </div>
     </Card>

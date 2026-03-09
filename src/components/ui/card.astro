@@ -12,17 +12,19 @@ const slug = title ? slugify(title, { lower: true, strict: true }) : undefined;
 
 <div
   class:list={[
-    "bg-card text-card-foreground flex flex-col rounded-xl border py-6 px-8 md:py-8 md:px-12 shadow-sm",
+    "bg-card text-card-foreground flex flex-col rounded-xl border px-8 py-6 shadow-sm md:px-12 md:py-8",
     className,
   ]}
 >
-  {title && (
-    <h2
-      id={slug}
-      class="font-mono text-lg uppercase tracking-widest font-semibold text-primary mb-1.5"
-    >
-      <a href={`#${slug}`} class="hover:underline">{`// ${title}`}</a>
-    </h2>
-  )}
+  {
+    title && (
+      <h2
+        id={slug}
+        class="text-primary mb-1.5 font-mono text-lg font-semibold tracking-widest uppercase"
+      >
+        <a href={`#${slug}`} class="hover:underline">{`// ${title}`}</a>
+      </h2>
+    )
+  }
   <slot />
 </div>

@@ -6,7 +6,7 @@ interface SpinnerProps {
 export function Spinner({ className = "", size = 48 }: SpinnerProps) {
   return (
     <svg
-      className={`animate-spin text-primary ${className}`.trim()}
+      className={`text-primary animate-spin ${className}`.trim()}
       width={size}
       height={size}
       viewBox="0 0 24 24"

@@ -10,6 +10,7 @@ We will be building out a conference website with a handful of ATProto specific 
 For open discussion, and for those who are joining as active volunteers, please visit the [community forum](https://discourse.atprotocol.community/c/atmosphereconf/25/none).
 
 ## Conference Profile
+
 For starters, we're going to have a custom conference profile. Attendees and speakers (and anyone else!) can login and create an extended profile. Inspired by [Discover Toronto](https://discover.toronto.inc/), we had an [initial discussion in the forum](https://discourse.atprotocol.community/t/conference-profiles/186) and are going to work on fleshing this out here with detailed issues.
 
 > [!NOTE]
