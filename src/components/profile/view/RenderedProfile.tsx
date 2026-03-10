@@ -108,7 +108,10 @@ export function RenderedProfile({
           <div className="text-xs tracking-wide text-gray-500 uppercase">
             About
           </div>
-          <RichText text={description} className="mt-1 block text-gray-900" />
+          <RichText
+            text={description}
+            className="mt-1 block break-words text-gray-900"
+          />
         </div>
       )}
 
