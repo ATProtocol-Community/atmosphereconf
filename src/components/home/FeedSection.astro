@@ -1,0 +1,28 @@
+---
+import Card from "@/components/ui/card.astro";
+import Button from "@/components/ui/button.astro";
+import BlueskyFeed from "./BlueskyFeed";
+import { fetchFeedPage, FEED_URL } from "@/lib/bsky";
+
+let initialData;
+try {
+  initialData = await fetchFeedPage();
+} catch (e) {
+  console.error("Failed to fetch initial feed:", e);
+  initialData = { posts: [], cursor: undefined };
+}
+---
+
+<section>
+  <Card title="feed">
+    <p class="text-muted-foreground mb-4">
+      Follow the conference conversation on Bluesky. Subscribe to the
+      AtmosphereConf feed to stay up to date with talks, announcements, and what
+      attendees are buzzing about.
+    </p>
+    <div class="mb-4">
+      <BlueskyFeed client:visible initialData={initialData} />
+    </div>
+    <Button href={FEED_URL} size="lg">Subscribe on Bluesky</Button>
+  </Card>
+</section>
