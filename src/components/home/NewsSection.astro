@@ -1,0 +1,61 @@
+---
+import Card from "@/components/ui/card.astro";
+import { getLiveCollection } from "astro:content";
+
+const result = await getLiveCollection("leafletPosts");
+const posts = (result.entries ?? [])
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishedAt).getTime() -
+      new Date(a.data.publishedAt).getTime(),
+  )
+  .slice(0, 5);
+---
+
+{
+  posts.length > 0 && (
+    <section>
+      <Card title="news">
+        <ul class="divide-y divide-gray-200">
+          {posts.map((post) => {
+            const date = new Date(post.data.publishedAt);
+            const formatted = date.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            });
+            const url = post.data.basePath
+              ? `https://${post.data.basePath}/${post.data.rkey}`
+              : `https://leaflet.pub/${post.data.rkey}`;
+            return (
+              <li class="py-3 first:pt-0 last:pb-0">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group flex gap-4"
+                >
+                  {post.data.imageUrl && (
+                    <img
+                      src={post.data.imageUrl}
+                      alt=""
+                      class="h-16 w-24 shrink-0 rounded object-cover"
+                    />
+                  )}
+                  <div class="flex flex-1 items-baseline justify-between gap-4">
+                    <span class="text-gray-900 group-hover:text-blue-700 group-hover:underline">
+                      {post.data.title}
+                    </span>
+                    <span class="shrink-0 text-sm text-gray-500">
+                      {formatted}
+                    </span>
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
+    </section>
+  )
+}
