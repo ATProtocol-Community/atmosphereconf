@@ -4,10 +4,12 @@ import type { FeedPage, SerializedPost } from "@/lib/bsky";
 
 export function useFeedPagination(initialData: FeedPage) {
   const [posts, setPosts] = useState<SerializedPost[]>(initialData.posts);
-  const [cursor, setCursor] = useState<string | undefined>(initialData.cursor);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(!!initialData.cursor);
   const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(!!initialData.cursor);
+
+  const cursorRef = useRef<string | undefined>(initialData.cursor);
+  const loadingRef = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
   const seenUris = useRef(new Set(initialData.posts.map((p) => p.uri)));
 
@@ -16,7 +18,8 @@ export function useFeedPagination(initialData: FeedPage) {
   }, []);
 
   const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
+    if (loadingRef.current || !cursorRef.current) return;
+    loadingRef.current = true;
     setLoading(true);
     setError(null);
 
@@ -26,7 +29,7 @@ export function useFeedPagination(initialData: FeedPage) {
 
     try {
       const { data, error: actionError } = await actions.getFeedPage({
-        cursor,
+        cursor: cursorRef.current,
       });
 
       if (controller.signal.aborted) return;
@@ -43,7 +46,7 @@ export function useFeedPagination(initialData: FeedPage) {
       });
 
       setPosts((prev) => [...prev, ...newPosts]);
-      setCursor(data.cursor);
+      cursorRef.current = data.cursor;
       if (!data.cursor) setHasMore(false);
     } catch {
       if (!controller.signal.aborted) {
@@ -51,10 +54,11 @@ export function useFeedPagination(initialData: FeedPage) {
       }
     } finally {
       if (!controller.signal.aborted) {
+        loadingRef.current = false;
         setLoading(false);
       }
     }
-  }, [loading, hasMore, cursor]);
+  }, []);
 
   return { posts, loading, error, hasMore, loadMore };
 }

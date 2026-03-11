@@ -10,7 +10,7 @@ interface BlueskyFeedProps {
   initialData: FeedPage;
 }
 
-export default function BlueskyFeed({ initialData }: BlueskyFeedProps) {
+export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
   const { posts, loading, error, loadMore } = useFeedPagination(initialData);
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -80,10 +80,10 @@ export default function BlueskyFeed({ initialData }: BlueskyFeedProps) {
       )}
       {error && (
         <div className="text-center py-3 text-muted-foreground text-sm">
-          {error}{" "}
+          {error}
           <button
             onClick={loadMore}
-            className="text-primary hover:underline"
+            className="text-primary hover:underline ml-1"
           >
             Retry
           </button>

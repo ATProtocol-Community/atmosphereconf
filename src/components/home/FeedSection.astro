@@ -1,7 +1,7 @@
 ---
 import Card from "@/components/ui/card.astro";
 import Button from "@/components/ui/button.astro";
-import BlueskyFeed from "./BlueskyFeed";
+import { BlueskyFeed } from "./BlueskyFeed";
 import { fetchFeedPage, FEED_URL } from "@/lib/bsky";
 
 let initialData;
@@ -23,6 +23,6 @@ try {
     <div class="mb-4">
       <BlueskyFeed client:visible initialData={initialData} />
     </div>
-    <Button href={FEED_URL} size="lg">Subscribe on Bluesky</Button>
+    <Button href={FEED_URL} size="lg" target="_blank" rel="noopener noreferrer">Subscribe on Bluesky</Button>
   </Card>
 </section>

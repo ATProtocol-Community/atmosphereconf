@@ -1,4 +1,5 @@
 import type { SerializedPost, RichTextSegment } from "@/lib/bsky";
+import { buildPostUrl } from "@/utils/bsky";
 import { formatRelativeTime } from "@/utils/date";
 import { PostEmbed } from "./PostEmbed";
 
@@ -33,7 +34,7 @@ function RichTextContent({ segments }: { segments: RichTextSegment[] }) {
 }
 
 export function PostCard({ post }: { post: SerializedPost }) {
-  const bskyUrl = `https://bsky.app/profile/${post.authorDid}/post/${post.uri.split("/").pop()}`;
+  const bskyUrl = buildPostUrl(post.authorDid, post.uri);
 
   return (
     <div className="border border-border rounded-lg p-3 sm:p-4">
