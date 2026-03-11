@@ -1,3 +1,7 @@
+import { ExternalLink } from "lucide-react";
+
+const MAX_HEIGHT_PX = 480;
+
 export function PostVideo({
   thumbnail,
   alt,
@@ -9,37 +13,39 @@ export function PostVideo({
   aspectRatio?: { width: number; height: number };
   bskyUrl: string;
 }) {
-  const paddingBottom = aspectRatio
-    ? `${(aspectRatio.height / aspectRatio.width) * 100}%`
-    : "56.25%";
+  const DEFAULT_ASPECT_RATIO = { width: 16, height: 9 };
+  const { width, height } = aspectRatio ?? DEFAULT_ASPECT_RATIO;
+  const isPortrait = height > width;
 
   return (
-    <a
-      href={bskyUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block relative mt-2 rounded-lg overflow-hidden bg-muted group"
-      style={{ paddingBottom }}
+    <div
+      className={`mt-2 rounded-lg overflow-hidden bg-black ${isPortrait ? "flex justify-center" : ""}`}
+      style={{ maxHeight: MAX_HEIGHT_PX }}
     >
-      {thumbnail && (
-        <img
-          src={thumbnail}
-          alt={alt || "Video thumbnail"}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      )}
-      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-        <div className="w-14 h-14 rounded-full bg-black/60 flex items-center justify-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="white"
-            className="w-7 h-7 ml-1"
-          >
-            <path d="M8 5v14l11-7z" />
-          </svg>
+      <a
+        href={bskyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block relative group"
+        style={{
+          aspectRatio: `${width}/${height}`,
+          maxHeight: MAX_HEIGHT_PX,
+        }}
+      >
+        {thumbnail && (
+          <img
+            src={thumbnail}
+            alt={alt || "Video thumbnail"}
+            className="w-full h-full object-cover"
+          />
+        )}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
+          <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2 text-white text-sm font-medium">
+            <ExternalLink className="w-4 h-4" />
+            Watch on Bluesky
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
   );
 }

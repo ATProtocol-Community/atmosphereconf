@@ -1,4 +1,5 @@
 import type { AppBskyEmbedRecord } from "@atproto/api";
+import { buildPostUrl } from "@/utils/bsky";
 import { formatRelativeTime } from "@/utils/date";
 
 export function PostQuoteEmbed({
@@ -8,14 +9,15 @@ export function PostQuoteEmbed({
 }) {
   const type = record.$type as string;
 
+  const unavailableLabels: Record<string, string> = {
+    "app.bsky.embed.record#viewNotFound": "Post not found",
+    "app.bsky.embed.record#viewBlocked": "Blocked post",
+  };
+
   if (type !== "app.bsky.embed.record#viewRecord") {
     return (
       <div className="border border-border rounded-lg p-3 mt-2 text-sm text-muted-foreground">
-        {type === "app.bsky.embed.record#viewNotFound"
-          ? "Post not found"
-          : type === "app.bsky.embed.record#viewBlocked"
-            ? "Blocked post"
-            : "Unavailable post"}
+        {unavailableLabels[type] ?? "Unavailable post"}
       </div>
     );
   }
@@ -23,7 +25,7 @@ export function PostQuoteEmbed({
   const viewRecord = record as AppBskyEmbedRecord.ViewRecord;
   const value = viewRecord.value as { text?: string; createdAt?: string };
   const author = viewRecord.author;
-  const bskyUrl = `https://bsky.app/profile/${author.did}/post/${viewRecord.uri.split("/").pop()}`;
+  const bskyUrl = buildPostUrl(author.did, viewRecord.uri);
 
   return (
     <a
