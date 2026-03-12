@@ -1,6 +1,7 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro:schema";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
+import { fetchFeedPage } from "@/lib/bsky";
 
 const MAX_AVATAR_SIZE = 1_000_000; // 1MB
 const ALLOWED_MIME_TYPES = ["image/png", "image/jpeg", "image/webp"];
@@ -14,6 +15,15 @@ export const blobRefSchema = z.object({
 export type BlobRef = z.infer<typeof blobRefSchema>;
 
 export const server = {
+  getFeedPage: defineAction({
+    input: z.object({
+      cursor: z.string().optional(),
+    }),
+    handler: async ({ cursor }) => {
+      return fetchFeedPage(cursor);
+    },
+  }),
+
   uploadAvatar: defineAction({
     accept: "form",
     input: z.object({
