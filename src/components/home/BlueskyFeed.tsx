@@ -1,8 +1,8 @@
 import { useCallback, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import type { FeedPage } from "@/lib/bsky";
-import { PostCard } from "./feed/PostCard";
-import { useFeedPagination } from "./feed/useFeedPagination";
+import { PostCard } from "@/components/feed/PostCard";
+import { useFeedPagination } from "@/components/feed/useFeedPagination";
 
 const SCROLL_THRESHOLD = 200;
 

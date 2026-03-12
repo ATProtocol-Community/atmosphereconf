@@ -51,9 +51,13 @@ function flattenTokens(tokens: Token[]): Segment[] {
 export function RichText({
   text,
   className,
+  linkClassName,
+  linkStyle,
 }: {
   text: string;
   className?: string;
+  linkClassName?: string;
+  linkStyle?: React.CSSProperties;
 }) {
   const segments = flattenTokens(tokenize(text));
   return (
@@ -65,7 +69,8 @@ export function RichText({
             href={seg.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
+            className={linkClassName ?? "text-blue-600 hover:underline"}
+            style={linkStyle}
           >
             {seg.text}
           </a>

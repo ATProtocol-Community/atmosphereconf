@@ -31,6 +31,11 @@ export interface ProfileViewProps {
   pronouns?: string | null;
   website?: string | null;
   germMessageMeUrl?: string | null;
+  bskyDisplayName?: string;
+  bskyAvatarUrl?: string;
+  bskyBannerUrl?: string;
+  bskyDescription?: string;
+  bskyDescriptionSegments?: { text: string; link?: string; tag?: string }[];
   viewerDid?: string | null;
   isOwnProfile?: boolean;
   activeIcons: ActiveIcon[];

@@ -109,6 +109,50 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+[data-theme="blacksky"] {
+  /* Palette */
+  --theme-bg: #0f1729;
+  --theme-fg: #e8eaf0;
+  --theme-muted: #8b8fa3;
+  --theme-accent: #6b7bf5;
+  --theme-surface: #182040;
+  --theme-border: rgba(255, 255, 255, 0.08);
+
+  /* Semantic mappings */
+  --card: var(--theme-bg);
+  --card-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --primary: var(--theme-accent);
+  --primary-foreground: var(--theme-fg);
+  --muted-foreground: var(--theme-muted);
+  --secondary: rgba(255, 255, 255, 0.1);
+  --secondary-foreground: var(--theme-fg);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: var(--theme-accent);
+
+  /* Back-face tokens */
+  --back-face-bg: var(--theme-bg);
+  --back-face-banner: linear-gradient(to right, #1a2340, #2a3560);
+  --back-face-ring: #070C0C;
+  --back-face-pill-bg: rgba(15, 23, 41, 0.85);
+  --back-face-pill-fg: var(--theme-accent);
+  --back-face-link: var(--theme-accent);
+}
+
+[data-theme="bluesky"] {
+  /* Palette */
+  --theme-accent: #2563eb;
+  --theme-muted: #6b7280;
+
+  /* Back-face tokens */
+  --back-face-bg: white;
+  --back-face-banner: linear-gradient(to right, #60a5fa, #3b82f6);
+  --back-face-ring: white;
+  --back-face-pill-bg: rgba(255, 255, 255, 0.95);
+  --back-face-pill-fg: var(--theme-muted);
+  --back-face-link: var(--theme-accent);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

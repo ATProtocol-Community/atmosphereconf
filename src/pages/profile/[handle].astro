@@ -7,6 +7,7 @@ import { getTalksByHandle } from "@/lib/talks";
 const { handle } = Astro.params;
 const profile = await loadProfile(handle!);
 const viewerDid = Astro.locals.loggedInUser?.did;
+const viewerHandle = Astro.locals.loggedInUser?.handle;
 
 if (!profile) return Astro.redirect("/404");
 
@@ -32,5 +33,5 @@ const editData = isOwnProfile
 ---
 
 <Layout title={`${profile.displayName} - Atmosphere Conference`}>
-  <ProfilePage {profile} {editData} {viewerDid} />
+  <ProfilePage {profile} {editData} {viewerDid} {viewerHandle} />
 </Layout>

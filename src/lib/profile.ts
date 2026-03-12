@@ -1,7 +1,8 @@
-import { AtpBaseClient } from "@atproto/api";
+import { AtpBaseClient, RichText as RichTextAPI, AtpAgent } from "@atproto/api";
 import { lexToJson } from "@atproto/lexicon";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
-import { getBlobCDNUrl } from "./bsky";
+import { getBlobCDNUrl, parseRichText } from "./bsky";
+import type { RichTextSegment } from "./bsky";
 
 type AvatarBlob = {
   $type: "blob";
@@ -22,9 +23,29 @@ export type LoadedProfile = {
   homeTown: { name?: string | null; value?: string } | null | undefined;
   interests: readonly string[] | null | undefined;
   germMessageMeUrl: string | null | undefined;
+  bskyDisplayName?: string;
+  bskyAvatarUrl?: string;
+  bskyBannerUrl?: string;
+  bskyDescription?: string;
+  bskyDescriptionSegments?: RichTextSegment[];
   collections: string[];
   confAvatarBlob: AvatarBlob | null;
 };
+
+const publicAgent = new AtpAgent({ service: "https://public.api.bsky.app" });
+
+async function detectDescriptionFacets(
+  description?: string,
+): Promise<RichTextSegment[] | undefined> {
+  if (!description) return undefined;
+  try {
+    const rt = new RichTextAPI({ text: description });
+    await rt.detectFacets(publicAgent);
+    return parseRichText(description, rt.facets as unknown[] | undefined);
+  } catch {
+    return parseRichText(description);
+  }
+}
 
 export async function loadProfile(
   identifier: string,
@@ -95,11 +116,13 @@ export async function loadProfile(
       ? (lexToJson(germResult.value.data.value) as any)
       : null;
 
+  const bskyAvatarUrl = bsky?.avatar
+    ? getBlobCDNUrl(did, bsky.avatar)
+    : undefined;
+
   const avatarUrl = conf?.avatar
     ? getBlobCDNUrl(did, conf.avatar)
-    : bsky?.avatar
-      ? getBlobCDNUrl(did, bsky.avatar)
-      : undefined;
+    : bskyAvatarUrl;
 
   return {
     did,
@@ -113,6 +136,11 @@ export async function loadProfile(
     homeTown: conf?.homeTown ?? null,
     interests: conf?.interests ?? null,
     germMessageMeUrl: germ?.messageMe?.messageMeUrl ?? null,
+    bskyDisplayName: bsky?.displayName ?? undefined,
+    bskyAvatarUrl,
+    bskyBannerUrl: bsky?.banner ? getBlobCDNUrl(did, bsky.banner) : undefined,
+    bskyDescription: bsky?.description ?? undefined,
+    bskyDescriptionSegments: await detectDescriptionFacets(bsky?.description),
     collections,
     confAvatarBlob: conf?.avatar ?? null,
   };
