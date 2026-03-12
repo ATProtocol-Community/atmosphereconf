@@ -102,8 +102,8 @@ function serializePost(
     replyCount: post.replyCount ?? 0,
     repostedBy:
       reason?.$type === "app.bsky.feed.defs#reasonRepost"
-        ? ((reason as AppBskyFeedDefs.ReasonRepost).by.displayName ||
-          (reason as AppBskyFeedDefs.ReasonRepost).by.handle)
+        ? (reason as AppBskyFeedDefs.ReasonRepost).by.displayName ||
+          (reason as AppBskyFeedDefs.ReasonRepost).by.handle
         : undefined,
   };
 }

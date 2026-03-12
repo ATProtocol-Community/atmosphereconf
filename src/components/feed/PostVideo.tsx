@@ -19,14 +19,14 @@ export function PostVideo({
 
   return (
     <div
-      className={`mt-2 rounded-lg overflow-hidden bg-black ${isPortrait ? "flex justify-center" : ""}`}
+      className={`mt-2 overflow-hidden rounded-lg bg-black ${isPortrait ? "flex justify-center" : ""}`}
       style={{ maxHeight: MAX_HEIGHT_PX }}
     >
       <a
         href={bskyUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="block relative group"
+        className="group relative block"
         style={{
           aspectRatio: `${width}/${height}`,
           maxHeight: MAX_HEIGHT_PX,
@@ -36,12 +36,12 @@ export function PostVideo({
           <img
             src={thumbnail}
             alt={alt || "Video thumbnail"}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         )}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-colors">
-          <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2 text-white text-sm font-medium">
-            <ExternalLink className="w-4 h-4" />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/40">
+          <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2 text-sm font-medium text-white">
+            <ExternalLink className="h-4 w-4" />
             Watch on Bluesky
           </div>
         </div>

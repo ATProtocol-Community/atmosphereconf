@@ -1,4 +1,9 @@
-import type { AppBskyEmbedRecord, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyEmbedExternal } from "@atproto/api";
+import type {
+  AppBskyEmbedRecord,
+  AppBskyEmbedImages,
+  AppBskyEmbedVideo,
+  AppBskyEmbedExternal,
+} from "@atproto/api";
 import { buildPostUrl } from "@/utils/bsky";
 import { formatRelativeTime } from "@/utils/date";
 import { PostImages } from "./PostImages";
@@ -19,7 +24,7 @@ export function PostQuoteEmbed({
 
   if (type !== "app.bsky.embed.record#viewRecord") {
     return (
-      <div className="border border-border rounded-lg p-3 mt-2 text-sm text-muted-foreground">
+      <div className="border-border text-muted-foreground mt-2 rounded-lg border p-3 text-sm">
         {unavailableLabels[type] ?? "Unavailable post"}
       </div>
     );
@@ -35,46 +40,64 @@ export function PostQuoteEmbed({
       href={bskyUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="block border border-border rounded-lg p-3 mt-2 hover:bg-muted/50 transition-colors"
+      className="border-border hover:bg-muted/50 mt-2 block rounded-lg border p-3 transition-colors"
     >
       <div className="flex items-center gap-2">
         {author.avatar && (
           <img
             src={author.avatar}
             alt={author.displayName || author.handle}
-            className="w-4 h-4 rounded-full"
+            className="h-4 w-4 rounded-full"
             width={16}
             height={16}
             loading="lazy"
             decoding="async"
           />
         )}
-        <span className="font-semibold text-xs truncate">
+        <span className="truncate text-xs font-semibold">
           {author.displayName || author.handle}
         </span>
-        <span className="text-xs text-muted-foreground">@{author.handle}</span>
+        <span className="text-muted-foreground text-xs">@{author.handle}</span>
         {value.createdAt && (
-          <span className="text-xs text-muted-foreground ml-auto whitespace-nowrap">
+          <span className="text-muted-foreground ml-auto text-xs whitespace-nowrap">
             {formatRelativeTime(value.createdAt)}
           </span>
         )}
       </div>
       {value.text && (
-        <p className="text-sm mt-1 whitespace-pre-wrap break-words line-clamp-4">
+        <p className="mt-1 line-clamp-4 text-sm break-words whitespace-pre-wrap">
           {value.text}
         </p>
       )}
       {viewRecord.embeds?.map((embed, i) => {
         const type = (embed as { $type?: string }).$type;
         if (type === "app.bsky.embed.images#view") {
-          return <PostImages key={i} images={(embed as AppBskyEmbedImages.View).images} />;
+          return (
+            <PostImages
+              key={i}
+              images={(embed as AppBskyEmbedImages.View).images}
+            />
+          );
         }
         if (type === "app.bsky.embed.video#view") {
           const v = embed as AppBskyEmbedVideo.View;
-          return <PostVideo key={i} thumbnail={v.thumbnail} alt={v.alt} aspectRatio={v.aspectRatio} bskyUrl={bskyUrl} />;
+          return (
+            <PostVideo
+              key={i}
+              thumbnail={v.thumbnail}
+              alt={v.alt}
+              aspectRatio={v.aspectRatio}
+              bskyUrl={bskyUrl}
+            />
+          );
         }
         if (type === "app.bsky.embed.external#view") {
-          return <PostExternalEmbed key={i} external={(embed as AppBskyEmbedExternal.View).external} />;
+          return (
+            <PostExternalEmbed
+              key={i}
+              external={(embed as AppBskyEmbedExternal.View).external}
+            />
+          );
         }
         return null;
       })}

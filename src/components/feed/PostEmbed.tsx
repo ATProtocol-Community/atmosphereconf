@@ -22,9 +22,7 @@ export function PostEmbed({
 
   switch (embed.$type as string) {
     case "app.bsky.embed.images#view":
-      return (
-        <PostImages images={(embed as AppBskyEmbedImages.View).images} />
-      );
+      return <PostImages images={(embed as AppBskyEmbedImages.View).images} />;
     case "app.bsky.embed.external#view":
       return (
         <PostExternalEmbed
@@ -44,9 +42,7 @@ export function PostEmbed({
     }
     case "app.bsky.embed.record#view":
       return (
-        <PostQuoteEmbed
-          record={(embed as AppBskyEmbedRecord.View).record}
-        />
+        <PostQuoteEmbed record={(embed as AppBskyEmbedRecord.View).record} />
       );
     case "app.bsky.embed.recordWithMedia#view": {
       const rwm = embed as AppBskyEmbedRecordWithMedia.View;

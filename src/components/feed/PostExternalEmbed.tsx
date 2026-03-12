@@ -17,25 +17,25 @@ export function PostExternalEmbed({
       href={external.uri}
       target="_blank"
       rel="noopener noreferrer"
-      className="block mt-2 border border-border rounded-lg overflow-hidden hover:bg-muted/50 transition-colors"
+      className="border-border hover:bg-muted/50 mt-2 block overflow-hidden rounded-lg border transition-colors"
     >
       {external.thumb && (
         <img
           src={external.thumb}
           alt={external.title || ""}
-          className="w-full h-40 object-cover"
+          className="h-40 w-full object-cover"
           loading="lazy"
         />
       )}
       <div className="p-3">
-        <p className="text-xs text-muted-foreground">{hostname}</p>
+        <p className="text-muted-foreground text-xs">{hostname}</p>
         {external.title && (
-          <p className="font-semibold text-sm mt-0.5 line-clamp-2">
+          <p className="mt-0.5 line-clamp-2 text-sm font-semibold">
             {external.title}
           </p>
         )}
         {external.description && (
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+          <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">
             {external.description}
           </p>
         )}

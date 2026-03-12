@@ -25,8 +25,7 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
   const handleScroll = useCallback(() => {
     const el = parentRef.current;
     if (!el) return;
-    const distanceFromBottom =
-      el.scrollHeight - el.scrollTop - el.clientHeight;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
     if (distanceFromBottom < SCROLL_THRESHOLD) {
       loadMore();
     }
@@ -34,7 +33,7 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
 
   if (posts.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground text-sm">
+      <div className="text-muted-foreground py-8 text-center text-sm">
         No posts yet. Be the first to post!
       </div>
     );
@@ -74,16 +73,16 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
         </div>
       </div>
       {loading && (
-        <div className="text-center py-3 text-muted-foreground text-sm">
+        <div className="text-muted-foreground py-3 text-center text-sm">
           Loading...
         </div>
       )}
       {error && (
-        <div className="text-center py-3 text-muted-foreground text-sm">
+        <div className="text-muted-foreground py-3 text-center text-sm">
           {error}
           <button
             onClick={loadMore}
-            className="text-primary hover:underline ml-1"
+            className="text-primary ml-1 hover:underline"
           >
             Retry
           </button>

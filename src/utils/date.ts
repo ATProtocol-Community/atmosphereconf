@@ -6,9 +6,7 @@ const MONTH = 2592000;
 const YEAR = 31536000;
 
 export function formatRelativeTime(dateStr: string): string {
-  const seconds = Math.floor(
-    (Date.now() - new Date(dateStr).getTime()) / 1000,
-  );
+  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
 
   if (seconds < 5) return "now";
   if (seconds < MINUTE) return `${seconds}s`;

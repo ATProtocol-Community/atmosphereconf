@@ -29,8 +29,7 @@ export function AuthorFeed({ actor, initialData }: AuthorFeedProps) {
   const handleScroll = useCallback(() => {
     const el = parentRef.current;
     if (!el) return;
-    const distanceFromBottom =
-      el.scrollHeight - el.scrollTop - el.clientHeight;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
     if (distanceFromBottom < SCROLL_THRESHOLD) {
       loadMore();
     }
@@ -38,7 +37,7 @@ export function AuthorFeed({ actor, initialData }: AuthorFeedProps) {
 
   if (posts.length === 0) {
     return (
-      <div className="py-6 text-center text-sm text-muted-foreground">
+      <div className="text-muted-foreground py-6 text-center text-sm">
         No posts yet.
       </div>
     );
@@ -78,17 +77,14 @@ export function AuthorFeed({ actor, initialData }: AuthorFeedProps) {
         </div>
       </div>
       {loading && (
-        <div className="py-3 text-center text-sm text-muted-foreground">
+        <div className="text-muted-foreground py-3 text-center text-sm">
           Loading...
         </div>
       )}
       {error && (
-        <div className="py-3 text-center text-sm text-muted-foreground">
+        <div className="text-muted-foreground py-3 text-center text-sm">
           {error}{" "}
-          <button
-            onClick={loadMore}
-            className="text-primary hover:underline"
-          >
+          <button onClick={loadMore} className="text-primary hover:underline">
             Retry
           </button>
         </div>

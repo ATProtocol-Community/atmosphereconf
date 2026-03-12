@@ -51,13 +51,19 @@ const parsed = events
     return { ...e, startMin: start, endMin: end };
   });
 
-const minTime = Math.floor(Math.min(...parsed.map((e) => e.startMin)) / 60) * 60;
+const minTime =
+  Math.floor(Math.min(...parsed.map((e) => e.startMin)) / 60) * 60;
 const maxTime = Math.ceil(Math.max(...parsed.map((e) => e.endMin)) / 60) * 60;
 const totalSlots = (maxTime - minTime) / 30;
 
 const isInfo = (type: string) => type === "info";
 
-const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "panel"]);
+const linkableTypes = new Set([
+  "workshop",
+  "presentation",
+  "lightning-talk",
+  "panel",
+]);
 function isLinkable(event: { id?: string; type: string }) {
   return !!(event.id && linkableTypes.has(event.type));
 }
@@ -79,10 +85,10 @@ const gridEvents = parsed
 const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
 ---
 
-<div class="day-schedule rounded-lg border border-border">
+<div class="day-schedule border-border rounded-lg border">
   <!-- ========== MOBILE: Vertical room tabs + single-room panels ========== -->
 
-  <div class="flex flex-col divide-y divide-border md:hidden">
+  <div class="divide-border flex flex-col divide-y md:hidden">
     {
       rooms.map((room, i) => (
         <button
@@ -90,7 +96,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
           class:list={[
             "room-tab px-3 py-2.5 text-left text-xs font-semibold tracking-wide uppercase transition-colors",
             i === 0
-              ? "border-l-2 border-l-blue-600 text-blue-600 bg-blue-50/50"
+              ? "border-l-2 border-l-blue-600 bg-blue-50/50 text-blue-600"
               : "text-muted-foreground",
           ]}
         >
@@ -108,13 +114,16 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
       return (
         <div
           data-room-panel={roomIndex}
-          class:list={["md:hidden border-t border-border", roomIndex !== 0 && "hidden"]}
+          class:list={[
+            "border-border border-t md:hidden",
+            roomIndex !== 0 && "hidden",
+          ]}
         >
           <div class="flex">
-            <div class="w-14 flex-none border-r border-border" />
+            <div class="border-border w-14 flex-none border-r" />
             <div class="grid flex-auto grid-cols-1 grid-rows-1">
               <div
-                class="col-start-1 col-end-2 row-start-1 grid divide-y divide-border/40"
+                class="divide-border/40 col-start-1 col-end-2 row-start-1 grid divide-y"
                 style={timeGridRows}
               >
                 <div class="row-end-1 h-0" />
@@ -122,7 +131,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
                 {Array.from({ length: totalSlots }).map((_, i) => (
                   <div>
                     {i % 2 === 0 && (
-                      <div class="sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none text-muted-foreground">
+                      <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
                         {formatHour(minTime + i * 30)}
                       </div>
                     )}
@@ -135,7 +144,10 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
               >
                 {roomEvents.map((event) => (
                   <li
-                    class:list={["relative flex p-0.5", isLinkable(event) && "cursor-pointer group/evt"]}
+                    class:list={[
+                      "relative flex p-0.5",
+                      isLinkable(event) && "group/evt cursor-pointer",
+                    ]}
                     style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: 1`}
                   >
                     <ScheduleEventCell event={event} />
@@ -152,15 +164,15 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
   <!-- ========== DESKTOP: Full multi-column layout ========== -->
   <div class="hidden overflow-x-auto md:block">
     <div style={`min-width: ${rooms.length * 10 + 4}rem`}>
-      <div class="flex border-b border-border bg-card">
-        <div class="w-14 flex-none border-r border-border"></div>
+      <div class="border-border bg-card flex border-b">
+        <div class="border-border w-14 flex-none border-r"></div>
         <div
-          class="grid flex-auto divide-x divide-border"
+          class="divide-border grid flex-auto divide-x"
           style={`grid-template-columns: repeat(${rooms.length}, 1fr)`}
         >
           {
             rooms.map((room) => (
-              <div class="px-2 py-2.5 text-center text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              <div class="text-muted-foreground px-2 py-2.5 text-center text-xs font-semibold tracking-wide uppercase">
                 {room}
               </div>
             ))
@@ -169,10 +181,10 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
       </div>
 
       <div class="flex">
-        <div class="w-14 flex-none border-r border-border"></div>
+        <div class="border-border w-14 flex-none border-r"></div>
         <div class="grid flex-auto grid-cols-1 grid-rows-1">
           <div
-            class="col-start-1 col-end-2 row-start-1 grid divide-y divide-border/40"
+            class="divide-border/40 col-start-1 col-end-2 row-start-1 grid divide-y"
             style={timeGridRows}
           >
             <div class="row-end-1 h-0"></div>
@@ -181,7 +193,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
               Array.from({ length: totalSlots }).map((_, i) => (
                 <div>
                   {i % 2 === 0 && (
-                    <div class="sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none text-muted-foreground">
+                    <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
                       {formatHour(minTime + i * 30)}
                     </div>
                   )}
@@ -191,7 +203,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
           </div>
 
           <div
-            class="col-start-1 col-end-2 row-start-1 grid grid-rows-1 divide-x divide-border/40"
+            class="divide-border/40 col-start-1 col-end-2 row-start-1 grid grid-rows-1 divide-x"
             style={`grid-template-columns: repeat(${rooms.length}, 1fr)`}
           >
             {rooms.map(() => <div class="row-span-full" />)}
@@ -204,7 +216,10 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
             {
               gridEvents.map((event) => (
                 <li
-                  class:list={["relative flex p-0.5", isLinkable(event) && "cursor-pointer group/evt"]}
+                  class:list={[
+                    "relative flex p-0.5",
+                    isLinkable(event) && "group/evt cursor-pointer",
+                  ]}
                   style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}`}
                 >
                   <ScheduleEventCell event={event} />

@@ -34,7 +34,9 @@ export function RenderedProfile({
       <div className="flex items-center gap-4">
         <Avatar size="lg" src={avatarUrl ?? ""} alt={displayName} />
         <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-bold text-card-foreground">{displayName}</h1>
+          <h1 className="text-card-foreground text-2xl font-bold">
+            {displayName}
+          </h1>
           <a
             href={`https://bsky.app/profile/${handle}`}
             target="_blank"
@@ -80,7 +82,7 @@ export function RenderedProfile({
                   href={website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex max-w-45 items-center gap-1 truncate rounded-full border border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-secondary"
+                  className="border-border text-muted-foreground hover:bg-secondary inline-flex max-w-45 items-center gap-1 truncate rounded-full border px-2.5 py-0.5 text-xs font-medium"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -113,12 +115,12 @@ export function RenderedProfile({
       {/* About */}
       {description && (
         <div>
-          <div className="text-xs tracking-wide text-muted-foreground uppercase">
+          <div className="text-muted-foreground text-xs tracking-wide uppercase">
             About
           </div>
           <RichText
             text={description}
-            className="mt-1 block break-words text-card-foreground"
+            className="text-card-foreground mt-1 block break-words"
           />
         </div>
       )}
@@ -126,17 +128,17 @@ export function RenderedProfile({
       {/* Location */}
       {homeTown?.name && (
         <div>
-          <div className="text-xs tracking-wide text-muted-foreground uppercase">
+          <div className="text-muted-foreground text-xs tracking-wide uppercase">
             Location
           </div>
-          <div className="mt-1 text-card-foreground">{homeTown.name}</div>
+          <div className="text-card-foreground mt-1">{homeTown.name}</div>
         </div>
       )}
 
       {/* Interests */}
       {interests && interests.length > 0 && (
         <div>
-          <div className="text-xs tracking-wide text-muted-foreground uppercase">
+          <div className="text-muted-foreground text-xs tracking-wide uppercase">
             Interests
           </div>
           <div className="mt-1.5 flex flex-wrap gap-2">
@@ -155,7 +157,7 @@ export function RenderedProfile({
       {/* Active On */}
       {activeIcons.length > 0 && (
         <div>
-          <div className="mb-2 text-xs tracking-wide text-muted-foreground uppercase">
+          <div className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
             Active On
           </div>
           <div className="flex flex-wrap gap-3">
@@ -189,12 +191,12 @@ export function RenderedProfile({
       {/* Bio */}
       {bio && (
         <div>
-          <div className="text-xs tracking-wide text-muted-foreground uppercase">
+          <div className="text-muted-foreground text-xs tracking-wide uppercase">
             Bio
           </div>
           <RichText
             text={bio}
-            className="mt-1 block whitespace-pre-wrap text-card-foreground"
+            className="text-card-foreground mt-1 block whitespace-pre-wrap"
           />
         </div>
       )}

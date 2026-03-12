@@ -17,8 +17,14 @@ interface Props {
 
 const { event } = Astro.props;
 
-const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "panel"]);
-const href = event.id && linkableTypes.has(event.type) ? `/event/${event.id}` : null;
+const linkableTypes = new Set([
+  "workshop",
+  "presentation",
+  "lightning-talk",
+  "panel",
+]);
+const href =
+  event.id && linkableTypes.has(event.type) ? `/event/${event.id}` : null;
 const isInfo = event.type === "info";
 
 function formatTime(iso: string) {
@@ -76,9 +82,7 @@ const speakerNames = event.speakers?.map((s) => s.name).join(", ");
 ---
 
 <Fragment>
-  {href && (
-    <a href={href} class="absolute inset-0 z-10" />
-  )}
+  {href && <a href={href} class="absolute inset-0 z-10" />}
   <div
     class:list={[
       "flex-1 overflow-hidden rounded-md px-2 py-1.5 text-xs leading-tight transition-[filter]",
@@ -87,29 +91,27 @@ const speakerNames = event.speakers?.map((s) => s.name).join(", ");
       href && "group-hover/evt:brightness-95",
     ]}
   >
-    {isInfo ? (
-      <>
-        <span class="font-semibold">{event.title}</span>
-        {time && (
-          <p class:list={["mt-0.5", getSubColors(event.type)]}>
-            {time}
-          </p>
-        )}
-      </>
-    ) : (
-      <>
-        <p class="font-semibold" set:html={event.title} />
-        {time && (
-          <p class:list={["mt-0.5", getSubColors(event.type)]}>
-            {time}
-          </p>
-        )}
-        {speakerNames && (
-          <p class:list={["mt-0.5", getSubColors(event.type)]}>
-            {speakerNames}
-          </p>
-        )}
-      </>
-    )}
+    {
+      isInfo ? (
+        <>
+          <span class="font-semibold">{event.title}</span>
+          {time && (
+            <p class:list={["mt-0.5", getSubColors(event.type)]}>{time}</p>
+          )}
+        </>
+      ) : (
+        <>
+          <p class="font-semibold" set:html={event.title} />
+          {time && (
+            <p class:list={["mt-0.5", getSubColors(event.type)]}>{time}</p>
+          )}
+          {speakerNames && (
+            <p class:list={["mt-0.5", getSubColors(event.type)]}>
+              {speakerNames}
+            </p>
+          )}
+        </>
+      )
+    }
   </div>
 </Fragment>

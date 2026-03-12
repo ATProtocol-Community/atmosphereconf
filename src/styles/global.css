@@ -133,7 +133,7 @@
   /* Back-face tokens */
   --back-face-bg: var(--theme-bg);
   --back-face-banner: linear-gradient(to right, #1a2340, #2a3560);
-  --back-face-ring: #070C0C;
+  --back-face-ring: #070c0c;
   --back-face-pill-bg: rgba(15, 23, 41, 0.85);
   --back-face-pill-fg: var(--theme-accent);
   --back-face-link: var(--theme-accent);

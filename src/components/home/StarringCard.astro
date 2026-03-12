@@ -12,13 +12,7 @@ interface Props {
   anchor?: boolean;
 }
 
-const {
-  talkId,
-  title,
-  speakers = [],
-  typeName,
-  anchor = false,
-} = Astro.props;
+const { talkId, title, speakers = [], typeName, anchor = false } = Astro.props;
 
 const badgeColors: Record<string, string> = {
   Presentation: "bg-blue-100 text-blue-700",

@@ -7,9 +7,7 @@ const speakerSchema = z.object({
 });
 
 const scheduleSchema = z.object({
-  title: z
-    .string()
-    .transform((t) => t.replace(/~~(.+?)~~/g, "<del>$1</del>")),
+  title: z.string().transform((t) => t.replace(/~~(.+?)~~/g, "<del>$1</del>")),
   type: z.enum([
     "presentation",
     "lightning-talk",
