@@ -2,67 +2,40 @@ import { getCollection } from "astro:content";
 
 const MAX_CARDS = 8;
 
+const typeNames: Record<string, string> = {
+  presentation: "Presentation",
+  "lightning-talk": "Lightning Talk",
+  panel: "Discussion / Panel",
+  workshop: "Workshop",
+};
+
 export async function getTalksByHandle(handle: string) {
-  const [presentations, lightning, panels, workshops] = await Promise.all([
-    getCollection("presentations"),
-    getCollection("lightning-talks"),
-    getCollection("panels"),
-    getCollection("workshops"),
-  ]);
+  const schedule = await getCollection("schedule");
 
-  const allTalks = [
-    ...presentations.map((t) => ({
+  return schedule
+    .filter((t) => {
+      const type = t.data.type;
+      if (!(type in typeNames)) return false;
+      return t.data.speakers?.some((s) => s.id === handle);
+    })
+    .map((t) => ({
       id: t.id,
       ...t.data,
-      typeName: "Presentation" as const,
-    })),
-    ...lightning.map((t) => ({
-      id: t.id,
-      ...t.data,
-      typeName: "Lightning Talk" as const,
-    })),
-    ...panels.map((t) => ({
-      id: t.id,
-      ...t.data,
-      typeName: "Discussion / Panel" as const,
-    })),
-    ...workshops.map((t) => ({
-      id: t.id,
-      ...t.data,
-      typeName: "Workshop" as const,
-    })),
-  ];
-
-  return allTalks.filter((t) => t.speaker_id.replace(/^@/, "") === handle);
+      typeName: typeNames[t.data.type],
+    }));
 }
 
 export async function getRandomTalks() {
-  const [presentations, lightning, panels, workshops] = await Promise.all([
-    getCollection("presentations"),
-    getCollection("lightning-talks"),
-    getCollection("panels"),
-    getCollection("workshops"),
-  ]);
+  const schedule = await getCollection("schedule");
 
-  const allTalks = [
-    ...presentations.map((t) => ({
+  const talks = schedule
+    .filter((t) => t.data.type in typeNames)
+    .map((t) => ({
       id: t.id,
       ...t.data,
-      typeName: "Presentation",
-    })),
-    ...lightning.map((t) => ({
-      id: t.id,
-      ...t.data,
-      typeName: "Lightning Talk",
-    })),
-    ...panels.map((t) => ({
-      id: t.id,
-      ...t.data,
-      typeName: "Discussion / Panel",
-    })),
-    ...workshops.map((t) => ({ id: t.id, ...t.data, typeName: "Workshop" })),
-  ];
+      typeName: typeNames[t.data.type],
+    }));
 
-  const shuffled = allTalks.sort(() => Math.random() - 0.5);
+  const shuffled = talks.sort(() => Math.random() - 0.5);
   return shuffled.slice(0, MAX_CARDS);
 }
