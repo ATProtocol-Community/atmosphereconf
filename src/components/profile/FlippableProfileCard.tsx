@@ -111,25 +111,32 @@ export function FlippableProfileCard({
 
   const frontFaceContent = (
     <>
-      <ThemeToggle theme={theme} onToggle={toggleTheme} />
-      {hasBsky && (
-        <button
-          onClick={() => setFlipped(true)}
-          className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs backdrop-blur-md transition-colors"
-          style={{
-            backgroundColor: "var(--back-face-pill-bg)",
-            color: "var(--back-face-pill-fg)",
-          }}
-          aria-label={flipButtonLabel}
-        >
-          <RotateCcw className="h-3 w-3" />
-          {flipButtonText}
-        </button>
-      )}
+      <div className="absolute top-3 right-3 left-3 z-10 flex items-center justify-between">
+        <ThemeToggle
+          theme={theme}
+          onToggle={toggleTheme}
+          style={{ position: "relative", top: "auto", left: "auto" }}
+        />
+        {hasBsky && (
+          <button
+            onClick={() => setFlipped(true)}
+            className="border-border inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs backdrop-blur-md transition-colors"
+            style={{
+              backgroundColor: "var(--back-face-pill-bg)",
+              color: "var(--back-face-pill-fg)",
+            }}
+            aria-label={flipButtonLabel}
+          >
+            <RotateCcw className="h-3 w-3" />
+            {flipButtonText}
+          </button>
+        )}
+      </div>
+      <div className="pt-6" />
       <ProfileView {...profileProps} />
       {talks.length > 0 && (
         <div className="mt-4">
-          <div className="mb-2 text-xs tracking-wide text-muted-foreground uppercase">
+          <div className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
             Talk
           </div>
           <div className="flex flex-col gap-2">
@@ -148,7 +155,7 @@ export function FlippableProfileCard({
       <div className="mx-auto my-12 max-w-2xl" data-theme={theme}>
         {!flipped ? (
           <div
-            className={`relative min-h-[85dvh] max-h-[85dvh] flex flex-col justify-center overflow-auto bg-card text-card-foreground ${cardClasses}`}
+            className={`bg-card text-card-foreground relative flex max-h-[85dvh] min-h-[85dvh] flex-col justify-center overflow-auto ${cardClasses}`}
           >
             {frontFaceContent}
           </div>
@@ -179,9 +186,9 @@ export function FlippableProfileCard({
           transform: `rotateY(${effectiveRotation}deg)`,
         }}
       >
-        {/* Front face — Conference profile */}
+        {/* Front face — conference profile */}
         <div
-          className={`relative flex min-h-[85dvh] flex-col justify-center overflow-auto bg-card text-card-foreground ${cardClasses}`}
+          className={`bg-card text-card-foreground relative flex min-h-[85dvh] flex-col justify-center overflow-auto ${cardClasses}`}
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
@@ -192,7 +199,7 @@ export function FlippableProfileCard({
           {frontFaceContent}
         </div>
 
-        {/* Back face — Bluesky identity + feed */}
+        {/* Back face — atproto identity + feed */}
         {hasBsky && (
           <BackFace
             cardClasses={cardClasses}
