@@ -1,3 +1,4 @@
+import { Repeat2 } from "lucide-react";
 import type { SerializedPost, RichTextSegment } from "@/lib/bsky";
 import { buildPostUrl } from "@/utils/bsky";
 import { formatRelativeTime } from "@/utils/date";
@@ -40,22 +41,7 @@ export function PostCard({ post }: { post: SerializedPost }) {
     <div className="border border-border rounded-lg p-3 sm:p-4">
       {post.repostedBy && (
         <div className="flex items-center gap-1.5 mb-2 text-xs text-muted-foreground">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m17 2 4 4-4 4" />
-            <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
-            <path d="m7 22-4-4 4-4" />
-            <path d="M21 13v1a4 4 0 0 1-4 4H3" />
-          </svg>
+          <Repeat2 className="h-3.5 w-3.5" />
           Reposted by {post.repostedBy}
         </div>
       )}
