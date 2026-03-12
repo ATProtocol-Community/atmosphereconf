@@ -21,10 +21,11 @@ export function RenderedProfile({
   activeIcons,
   onEdit,
 }: Omit<ProfileViewProps, "editData"> & { onEdit: () => void }) {
-  const germDmUrl =
-    germMessageMeUrl && viewerDid
+  const germDmUrl = germMessageMeUrl
+    ? viewerDid
       ? `${germMessageMeUrl}/web#${did}+${viewerDid}`
-      : undefined;
+      : germMessageMeUrl
+    : undefined;
   const showLinksRow = !!pronouns || !!website || !!germDmUrl;
 
   return (
@@ -33,8 +34,15 @@ export function RenderedProfile({
       <div className="flex items-center gap-4">
         <Avatar size="lg" src={avatarUrl ?? ""} alt={displayName} />
         <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
-          <p className="text-gray-500">@{handle}</p>
+          <h1 className="text-2xl font-bold text-card-foreground">{displayName}</h1>
+          <a
+            href={`https://bsky.app/profile/${handle}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:underline"
+          >
+            @{handle}
+          </a>
         </div>
         {isOwnProfile && (
           <div className="flex shrink-0 gap-2 self-start">
@@ -72,7 +80,7 @@ export function RenderedProfile({
                   href={website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex max-w-45 items-center gap-1 truncate rounded-full border border-gray-200 px-2.5 py-0.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                  className="inline-flex max-w-45 items-center gap-1 truncate rounded-full border border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-secondary"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,12 +113,12 @@ export function RenderedProfile({
       {/* About */}
       {description && (
         <div>
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-xs tracking-wide text-muted-foreground uppercase">
             About
           </div>
           <RichText
             text={description}
-            className="mt-1 block break-words text-gray-900"
+            className="mt-1 block break-words text-card-foreground"
           />
         </div>
       )}
@@ -118,17 +126,17 @@ export function RenderedProfile({
       {/* Location */}
       {homeTown?.name && (
         <div>
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-xs tracking-wide text-muted-foreground uppercase">
             Location
           </div>
-          <div className="mt-1 text-gray-900">{homeTown.name}</div>
+          <div className="mt-1 text-card-foreground">{homeTown.name}</div>
         </div>
       )}
 
       {/* Interests */}
       {interests && interests.length > 0 && (
         <div>
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-xs tracking-wide text-muted-foreground uppercase">
             Interests
           </div>
           <div className="mt-1.5 flex flex-wrap gap-2">
@@ -147,7 +155,7 @@ export function RenderedProfile({
       {/* Active On */}
       {activeIcons.length > 0 && (
         <div>
-          <div className="mb-2 text-xs tracking-wide text-gray-500 uppercase">
+          <div className="mb-2 text-xs tracking-wide text-muted-foreground uppercase">
             Active On
           </div>
           <div className="flex flex-wrap gap-3">
@@ -181,12 +189,12 @@ export function RenderedProfile({
       {/* Bio */}
       {bio && (
         <div>
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-xs tracking-wide text-muted-foreground uppercase">
             Bio
           </div>
           <RichText
             text={bio}
-            className="mt-1 block whitespace-pre-wrap text-gray-900"
+            className="mt-1 block whitespace-pre-wrap text-card-foreground"
           />
         </div>
       )}
