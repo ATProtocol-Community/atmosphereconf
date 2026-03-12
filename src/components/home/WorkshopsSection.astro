@@ -1,5 +1,26 @@
 ---
 import Card from "@/components/ui/card.astro";
+import DaySchedule from "@/components/ui/DaySchedule.astro";
+import { getCollection } from "astro:content";
+
+const schedule = await getCollection("schedule");
+
+const workshopTypes = new Set(["workshop", "info", "activity"]);
+const allWorkshops = schedule.filter(
+  (e) => workshopTypes.has(e.data.type) && e.data.start,
+);
+
+const rooms = [
+  "2301 Classroom",
+  "2311 Classroom",
+  "Performance Theatre",
+  "Bukhman Lounge",
+];
+
+const days = [
+  { date: "2026-03-26", heading: "Thursday, March 26th: Workshops" },
+  { date: "2026-03-27", heading: "Friday, March 27th: Workshops & ATScience" },
+] as const;
 ---
 
 <section>
@@ -11,185 +32,19 @@ import Card from "@/components/ui/card.astro";
       your ticket registration form.
     </p>
 
-    <h3 class="pt-2 text-lg font-semibold text-gray-900">
-      Thursday, March 26th: Workshops
-    </h3>
-    <table>
-      <tr>
-        <th>Time</th><th>2301 Classroom</th><th>2311 Classroom</th><th
-          >Performance Theatre</th
-        ><th>Bukhman Lounge</th>
-      </tr>
-      <tr>
-        <td>9:00am</td><td colspan="4" align="center" class="pt-2"
-          >---------------------Doors Open 9am---------------------</td
-        >
-      </tr>
-      <tr>
-        <td>9:30am</td><td rowspan="5" class="pt-5 align-top"
-          ><h4 class="font-semibold">
-            OAuth Masterclass, Nick Gerakines (9:30am - 12:30pm)
-          </h4></td
-        ><td rowspan="5">Unconf Classroom</td><td>OPEN</td><td rowspan="5"
-          >Unconf Discussions</td
-        >
-      </tr>
-      <tr>
-        <td>10:00am</td>
-      </tr>
-      <tr>
-        <td>10:30am</td><td class="pt-5 align-top"
-          ><h4 class="font-semibold">
-            Hospicing Social Media, Dawn Walker (10:30am - 12:30pm)
-          </h4></td
-        >
-      </tr>
-      <tr>
-        <td>11:00am</td>
-      </tr>
-      <tr>
-        <td>11:30am</td>
-      </tr>
-      <tr>
-        <td>12:30pm</td><td colspan="4" align="center" class="pt-2"
-          >---------------------Lunch Break, 12:30pm - 2pm (Not
-          Catered)---------------------</td
-        >
-      </tr>
-      <tr>
-        <td>2:00pm</td><td
-          ><h4 class="font-semibold">
-            Building an Appview, Chad Miller (2pm - 4pm)
-          </h4></td
-        ><td>Unconf Classroom</td><td
-          ><h4 class="font-semibold">
-            What futures can we build together? Arushi, Ivan, Christian (2pm -
-            4pm)
-          </h4><p class="pt-2">
-            In this workshop, we will ask: what are new social modalities that
-            we can build with the affordances of ATProtocol? This is a
-            cross-disciplinary workshop with people from all tracks to ideate
-            and co-design together possibilities for new social and communal
-            modes on the protocol (not focusing on implementation of ideas).
-            Attendees will walk away with an expansion of future possibilities
-            of what it looks like to be online.
-          </p></td
-        ><td rowspan="2">Office Hours Lounge (2pm - 6:30pm)</td>
-      </tr>
-      <tr>
-        <td>4:30pm</td><td>OPEN</td><td>Unconf Classroom</td><td
-          ><h4 class="font-semibold">
-            Dive into user research, Tessa, Anna, Tynan (4:30pm - 6:30pm)
-          </h4>
-          <p class="pt-2">
-            Get feedback on your project and see what’s growing! Recent talks
-            about onboarding in the Atmosphere have drawn calls for more user
-            research. This workshop from Germ’s CEO Tessa Brown and founding
-            engineer Anna Mistele is an opportunity for builders in the
-            ecosystem to gain immediate insights by conducting research for
-            their products, and for attendees to see new products in action.
-            We’re not experts, but rather fellow builders making space for us to
-            learn from each other as a community! Supported by Tynan.
-          </p></td
-        >
-      </tr>
-    </table>
-    <h3 class="pt-2 text-lg font-semibold text-gray-900">
-      Friday, March 27th: Workshops & ATScience
-    </h3>
+    {
+      days.map(({ date, heading }) => {
+        const events = allWorkshops
+          .filter((w) => w.data.start?.startsWith(date))
+          .map((w) => ({ id: w.id, ...w.data }));
 
-    <table>
-      <tr>
-        <th>Time</th><th>2301 Classroom</th><th>2311 Classroom</th><th
-          >Performance Theatre</th
-        ><th>Bukhman Lounge</th>
-      </tr>
-      <tr>
-        <td>9:00am</td><td colspan="4" align="center" class="pt-2"
-          >---------------------Doors Open 9am---------------------</td
-        >
-      </tr>
-      <tr>
-        <td>9:30am</td><td class="pt-5 align-top"
-          ><h4 class="font-semibold">
-            Consuming the ATmosphere, Bluesky Dev Rel (9:30am - 12:30pm)
-          </h4><p>
-            This will be an introductory workshop for developers who may have
-            some JS/TS experience but almost no AT experience, who want to learn
-            how to and read posts and other data from the Atmosphere. <a
-              href="https://news.atmosphereconf.org/3m7ptkcpedk2m">More »</a
-            >
-          </p></td
-        ><td
-          ><h4 class="font-semibold">
-            Founders & Funders, 9am - 1pm, including an offsite lunch
-          </h4><p class="pt-2">
-            A special invite only event for atproto teams building products,
-            services, and companies that they intend to fund through investment,
-            grants, or other mechanisms. Please apply to join us.
-          </p></td
-        ><td
-          ><h4 class="font-semibold">ATScience Morning</h4><p class="pt-2">
-            Please see the <a href="https://atscience.leaflet.pub/3mfz526irfs2y"
-              >ATScience Agenda</a
-            >
-          </p></td
-        ><td><h4 class="font-semibold">ATScience Lounge</h4></td>
-      </tr>
-
-      <tr>
-        <td>12:30pm</td><td colspan="4" align="center" class="pt-2"
-          >------------------Lunch Break, 12:30pm - 1:30pm (Not
-          Catered)------------------</td
-        >
-      </tr>
-      <tr>
-        <td>1:30pm</td><td
-          ><h4 class="font-semibold">
-            Creating the ATmosphere, Bluesky Dev Rel (1:30pm - 4:30pm)
-          </h4><p>
-            This will be an intermediate workshop on designing AT Lexicons to
-            support new apps, with an emphasis on reusing the social graph data
-            that already exists in the network. <a
-              href="https://news.atmosphereconf.org/3m7ptkcpedk2m">More »</a
-            >
-          </p></td
-        ><td>Hold for Ted (1:30pm - 4:30pm)</td><td rowspan="2"
-          ><h4 class="font-semibold">ATScience Afternoon</h4><p class="pt-2">
-            Please see the <a href="https://atscience.leaflet.pub/3mfz526irfs2y"
-              >ATScience Agenda</a
-            >
-          </p></td
-        ><td rowspan="2">ATScience Lounge</td>
-      </tr>
-      <tr>
-        <td>4:30pm</td><td
-          ><h4 class="font-semibold">
-            Atmospheric Publishing Discussion (4:30pm - 6:30pm)
-          </h4><p class="pt-2">
-            Standard Site, Leaflet, Pckt, Offprint, and anyone else interested
-            in what the opportunities are for publishing to the Atmosphere.
-          </p></td
-        ><td
-          ><h4 class="font-semibold">
-            at://advent, fig, bailey (4:30pm - 6:30pm)
-          </h4><p class="pt-2">
-            "at://advent is an atproto adventure, teaching new explorers the
-            ropes through a series of protocol challenges!<br />
-
-            Participants will dive in to play-test the initial set of
-            challenges, with guidance.<br />
-
-            This will be a preview ahead of the public online release of
-            at://advent, and will provide us with insight into what aspects are
-            working well and what we need to improve.<br />
-
-            at://advent is about growing the atproto developer audience: we
-            strive to make it enticing and accessible to beginner and non-devs"
-          </p></td
-        >
-        >
-      </tr>
-    </table>
+        return (
+          <div class="mt-8">
+            <h3 class="mb-4 text-lg font-semibold text-gray-900">{heading}</h3>
+            <DaySchedule events={events} rooms={rooms} />
+          </div>
+        );
+      })
+    }
   </Card>
 </section>

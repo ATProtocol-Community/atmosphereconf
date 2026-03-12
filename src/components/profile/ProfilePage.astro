@@ -40,7 +40,7 @@ const talks = await getTalksByHandle(profile.handle);
 ---
 
 <div class="w-full">
-  <Card class="mx-auto mt-16 max-w-2xl p-8 sm:mt-8">
+  <Card class="mt-20">
     <ProfileView
       client:load
       {...profile}
@@ -60,8 +60,7 @@ const talks = await getTalksByHandle(profile.handle);
               <StarringCard
                 talkId={talk.id}
                 title={talk.title}
-                speakerName={talk.speaker_name}
-                speakerId={talk.speaker_id}
+                speakers={talk.speakers}
                 typeName={talk.typeName}
               />
             ))}
