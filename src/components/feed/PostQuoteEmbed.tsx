@@ -1,6 +1,9 @@
-import type { AppBskyEmbedRecord } from "@atproto/api";
+import type { AppBskyEmbedRecord, AppBskyEmbedImages, AppBskyEmbedVideo, AppBskyEmbedExternal } from "@atproto/api";
 import { buildPostUrl } from "@/utils/bsky";
 import { formatRelativeTime } from "@/utils/date";
+import { PostImages } from "./PostImages";
+import { PostVideo } from "./PostVideo";
+import { PostExternalEmbed } from "./PostExternalEmbed";
 
 export function PostQuoteEmbed({
   record,
@@ -61,6 +64,20 @@ export function PostQuoteEmbed({
           {value.text}
         </p>
       )}
+      {viewRecord.embeds?.map((embed, i) => {
+        const type = (embed as { $type?: string }).$type;
+        if (type === "app.bsky.embed.images#view") {
+          return <PostImages key={i} images={(embed as AppBskyEmbedImages.View).images} />;
+        }
+        if (type === "app.bsky.embed.video#view") {
+          const v = embed as AppBskyEmbedVideo.View;
+          return <PostVideo key={i} thumbnail={v.thumbnail} alt={v.alt} aspectRatio={v.aspectRatio} bskyUrl={bskyUrl} />;
+        }
+        if (type === "app.bsky.embed.external#view") {
+          return <PostExternalEmbed key={i} external={(embed as AppBskyEmbedExternal.View).external} />;
+        }
+        return null;
+      })}
     </a>
   );
 }

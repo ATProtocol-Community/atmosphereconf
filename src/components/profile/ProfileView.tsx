@@ -23,6 +23,9 @@ export function ProfileView({
   pronouns,
   website,
   germMessageMeUrl,
+  bskyDisplayName,
+  bskyAvatarUrl,
+  bskyDescription,
   viewerDid,
   isOwnProfile = false,
   activeIcons,
@@ -129,6 +132,9 @@ export function ProfileView({
       pronouns={pronouns}
       website={website}
       germMessageMeUrl={germMessageMeUrl}
+      bskyDisplayName={bskyDisplayName}
+      bskyAvatarUrl={bskyAvatarUrl}
+      bskyDescription={bskyDescription}
       viewerDid={viewerDid}
       isOwnProfile={isOwnProfile}
       activeIcons={activeIcons}

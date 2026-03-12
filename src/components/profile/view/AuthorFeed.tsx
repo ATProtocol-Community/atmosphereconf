@@ -2,16 +2,20 @@ import { useCallback, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import type { FeedPage } from "@/lib/bsky";
 import { PostCard } from "@/components/feed/PostCard";
-import { useFeedPagination } from "@/components/feed/useFeedPagination";
+import { useAuthorFeedPagination } from "@/components/feed/useAuthorFeedPagination";
 
 const SCROLL_THRESHOLD = 200;
 
-interface BlueskyFeedProps {
+interface AuthorFeedProps {
+  actor: string;
   initialData: FeedPage;
 }
 
-export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
-  const { posts, loading, error, loadMore } = useFeedPagination(initialData);
+export function AuthorFeed({ actor, initialData }: AuthorFeedProps) {
+  const { posts, loading, error, loadMore } = useAuthorFeedPagination(
+    actor,
+    initialData,
+  );
   const parentRef = useRef<HTMLDivElement>(null);
 
   const virtualizer = useVirtualizer({
@@ -34,8 +38,8 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
 
   if (posts.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground text-sm">
-        No posts yet. Be the first to post!
+      <div className="py-6 text-center text-sm text-muted-foreground">
+        No posts yet.
       </div>
     );
   }
@@ -46,7 +50,7 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
         ref={parentRef}
         onScroll={handleScroll}
         className="overflow-auto rounded-md"
-        style={{ height: 600 }}
+        style={{ height: "clamp(400px, 50vh, 700px)" }}
       >
         <div
           style={{
@@ -74,16 +78,16 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
         </div>
       </div>
       {loading && (
-        <div className="text-center py-3 text-muted-foreground text-sm">
+        <div className="py-3 text-center text-sm text-muted-foreground">
           Loading...
         </div>
       )}
       {error && (
-        <div className="text-center py-3 text-muted-foreground text-sm">
-          {error}
+        <div className="py-3 text-center text-sm text-muted-foreground">
+          {error}{" "}
           <button
             onClick={loadMore}
-            className="text-primary hover:underline ml-1"
+            className="text-primary hover:underline"
           >
             Retry
           </button>

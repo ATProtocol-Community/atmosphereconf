@@ -33,6 +33,7 @@ export interface SerializedPost {
   likeCount: number;
   repostCount: number;
   replyCount: number;
+  repostedBy?: string;
 }
 
 export interface FeedPage {
@@ -50,7 +51,7 @@ export function getBlobCDNUrl(
   return `https://cdn.bsky.app/img/feed_thumbnail/plain/${did}/${blob.ref.$link}@${type}`;
 }
 
-function parseRichText(
+export function parseRichText(
   text: string,
   facets?: unknown[],
 ): RichTextSegment[] {
@@ -76,7 +77,10 @@ function parseRichText(
   return segments;
 }
 
-function serializePost(post: AppBskyFeedDefs.PostView): SerializedPost {
+function serializePost(
+  post: AppBskyFeedDefs.PostView,
+  reason?: AppBskyFeedDefs.FeedViewPost["reason"],
+): SerializedPost {
   const record = post.record as {
     text: string;
     facets?: unknown[];
@@ -96,6 +100,28 @@ function serializePost(post: AppBskyFeedDefs.PostView): SerializedPost {
     likeCount: post.likeCount ?? 0,
     repostCount: post.repostCount ?? 0,
     replyCount: post.replyCount ?? 0,
+    repostedBy:
+      reason?.$type === "app.bsky.feed.defs#reasonRepost"
+        ? ((reason as AppBskyFeedDefs.ReasonRepost).by.displayName ||
+          (reason as AppBskyFeedDefs.ReasonRepost).by.handle)
+        : undefined,
+  };
+}
+
+export async function fetchAuthorFeedPage(
+  actor: string,
+  cursor?: string,
+): Promise<FeedPage> {
+  const agent = new AtpAgent({ service: BSKY_PUBLIC_API });
+  const res = await agent.app.bsky.feed.getAuthorFeed({
+    actor,
+    limit: PAGE_SIZE,
+    cursor,
+  });
+
+  return {
+    posts: res.data.feed.map((item) => serializePost(item.post, item.reason)),
+    cursor: res.data.cursor,
   };
 }
 
@@ -108,7 +134,7 @@ export async function fetchFeedPage(cursor?: string): Promise<FeedPage> {
   });
 
   return {
-    posts: res.data.feed.map((item) => serializePost(item.post)),
+    posts: res.data.feed.map((item) => serializePost(item.post, item.reason)),
     cursor: res.data.cursor,
   };
 }

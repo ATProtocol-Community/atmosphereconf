@@ -1,9 +1,8 @@
 ---
-import Card from "@/components/ui/card.astro";
-import { ProfileView } from "@/components/profile/ProfileView";
+import { FlippableProfileCard } from "@/components/profile/FlippableProfileCard";
 import { getActiveIcons } from "@/components/profile/lexicon-icons";
 import { getTalksByHandle } from "@/lib/talks";
-import StarringCard from "@/components/home/StarringCard.astro";
+import { fetchAuthorFeedPage } from "@/lib/bsky";
 import type { LoadedProfile } from "@/lib/profile";
 import type { ProfileEditData } from "@/components/profile/ProfileView";
 
@@ -11,9 +10,10 @@ interface Props {
   profile: LoadedProfile;
   editData?: ProfileEditData;
   viewerDid?: string;
+  viewerHandle?: string;
 }
 
-const { profile, editData, viewerDid } = Astro.props;
+const { profile, editData, viewerDid, viewerHandle } = Astro.props;
 
 const svgFiles = import.meta.glob<string>(
   "/src/components/profile/icons/*.svg",
@@ -37,36 +37,25 @@ const activeIcons = getActiveIcons(profile.collections).map((icon) => ({
 }));
 
 const talks = await getTalksByHandle(profile.handle);
+
+let authorFeedInitialData;
+try {
+  authorFeedInitialData = await fetchAuthorFeedPage(profile.did);
+} catch {
+  authorFeedInitialData = { posts: [], cursor: undefined };
+}
 ---
 
 <div class="w-full">
-  <Card class="mt-20">
-    <ProfileView
-      client:load
-      {...profile}
-      viewerDid={viewerDid}
-      isOwnProfile={!!editData}
-      activeIcons={activeIcons}
-      editData={editData}
-    />
-    {
-      talks.length > 0 && (
-        <div class="mt-4">
-          <div class="mb-2 text-xs tracking-wide text-gray-500 uppercase">
-            Talk
-          </div>
-          <div class="flex flex-col gap-2">
-            {talks.map((talk) => (
-              <StarringCard
-                talkId={talk.id}
-                title={talk.title}
-                speakers={talk.speakers}
-                typeName={talk.typeName}
-              />
-            ))}
-          </div>
-        </div>
-      )
-    }
-  </Card>
+  <FlippableProfileCard
+    client:load
+    {...profile}
+    viewerDid={viewerDid}
+    isOwnProfile={!!editData}
+    activeIcons={activeIcons}
+    editData={editData}
+    talks={talks}
+    authorFeedInitialData={authorFeedInitialData}
+    viewerHandle={viewerHandle}
+  />
 </div>
