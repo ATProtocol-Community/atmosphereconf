@@ -1,12 +1,14 @@
 export type ClientTheme = "bluesky" | "blacksky";
 
-const CLIENT_THEME_DOMAINS: Record<Exclude<ClientTheme, "bluesky">, string[]> =
-  {
-    blacksky: [".blacksky.", ".myatproto.social", ".cryptoanarchy.network"],
-    // To add a new theme, add its CSS vars in global.css under [data-theme="name"]
-    // then add an entry here, e.g.:
-    // whitewind: [".whitewind."],
-  };
+const CLIENT_THEME_DOMAINS: Record<
+  Exclude<ClientTheme, "bluesky">,
+  string[]
+> = {
+  blacksky: [".blacksky.", ".myatproto.social", ".cryptoanarchy.network"],
+  // To add a new theme, add its CSS vars in global.css under [data-theme="name"]
+  // then add an entry here, e.g.:
+  // pckt: [".pckt."],
+};
 
 export function detectClientTheme(handle: string): ClientTheme {
   const h = `.${handle.toLowerCase()}`;
