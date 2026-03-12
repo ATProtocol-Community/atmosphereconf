@@ -1,17 +1,50 @@
 ---
 import Card from "@/components/ui/card.astro";
+import DaySchedule from "@/components/ui/DaySchedule.astro";
+import { getCollection } from "astro:content";
+
+const schedule = await getCollection("schedule");
+
+const workshopTypes = new Set(["workshop", "info", "activity"]);
+const allWorkshops = schedule.filter(
+  (e) => workshopTypes.has(e.data.type) && e.data.start,
+);
+
+const rooms = [
+  "2301 Classroom",
+  "2311 Classroom",
+  "Performance Theatre",
+  "Bukhman Lounge",
+];
+
+const days = [
+  { date: "2026-03-26", heading: "Thursday, March 26th: Workshops" },
+  { date: "2026-03-27", heading: "Friday, March 27th: Workshops & ATScience" },
+] as const;
 ---
 
 <section>
   <Card title="workshops">
     <p class="text-gray-700">
-      (Static list? Grist via Ted? we are unblocked from showing these, they are
-      confirmed)
+      We have two days of pre-conference events and activities, happening
+      Thursday, March 26th and Friday, March 27th. These are included in your
+      tickets. There is a maximum capacity, so please do select activities in
+      your ticket registration form.
     </p>
-    <h3 class="text-lg font-semibold text-gray-900">ATScience Friday</h3>
-    <ul class="space-y-2 text-gray-800">
-      <li>Thursday (March 26): Workshops & activities</li>
-      <li>Friday (March 27): ATScience Friday</li>
-    </ul>
+
+    {
+      days.map(({ date, heading }) => {
+        const events = allWorkshops
+          .filter((w) => w.data.start?.startsWith(date))
+          .map((w) => ({ id: w.id, ...w.data }));
+
+        return (
+          <div class="mt-8">
+            <h3 class="mb-4 text-lg font-semibold text-gray-900">{heading}</h3>
+            <DaySchedule events={events} rooms={rooms} />
+          </div>
+        );
+      })
+    }
   </Card>
 </section>

@@ -1,0 +1,781 @@
+- id: obaP26x
+  title: Who owns the group chat? Building collaborative spaces on ATProto
+  type: presentation
+  speakers:
+    - name: Brittany Ellich
+      id: brittanyellich.com
+  category: Development and Protocol
+- id: ZjL74D0
+  title: 'Jacquard Magic: how to make atproto actually easy with Rust'
+  type: presentation
+  speakers:
+    - name: Orual
+      id: nonbinary.computer
+  category: Development and Protocol
+- id: zxRkxk8
+  title: 'Blousques: Case Study on the Challenges in Translating Bluesky''s UI'
+  type: presentation
+  speakers:
+    - name: Stanislas Signoud (Signez)
+      id: signez.fr
+  category: Development and Protocol
+- id: EkexvrN
+  title: ~~Compete or kill~~ Cooperate and Succeed!
+  type: presentation
+  speakers:
+    - name: Govind Mohan
+      id: gov.glados.computer
+  category: Development and Protocol
+- id: MelQ8Ak
+  title: 'Rethinking the Client: Why User Choice is the Key to Growth for ATProto'
+  type: presentation
+  speakers:
+    - name: Tyler Fisher
+      id: tylerjfisher.com
+  category: Community
+- id: PdNOkAP
+  title: 'habitat: how to get away from skeumorphism on ATproto'
+  type: presentation
+  speakers:
+    - name: Arushi Bandi
+      id: offline.arushibandi.com
+  category: Development and Protocol
+- id: A7YLlpl
+  title: 'An artist dreaming in the Atmosphere: visions about commmunity, sustainability and creativity'
+  type: presentation
+  speakers:
+    - name: Hilke Ros
+      id: hilk.eu
+  category: Community
+- id: rjQp2Z2
+  title: 'ATProto and Osprey: Automating Moderation in the Atmosphere'
+  type: presentation
+  speakers:
+    - name: Hailey Elizabeth
+      id: hailey.at
+  category: Development and Protocol
+- id: QKqWDrG
+  title: DID:PLC War Games
+  type: presentation
+  speakers:
+    - name: Edmund Edgar
+      id: goat.navy
+  category: Development and Protocol
+- id: aQ1J9GE
+  title: 2026 Atmosphere Report
+  type: presentation
+  speakers:
+    - name: Paul Frazee
+      id: pfrazee.com
+  category: Development and Protocol
+- id: rjQ96kl
+  title: Protocol Governance & Hard Decentralization
+  type: presentation
+  speakers:
+    - name: Daniel Holmgren
+      id: dholms.xyz
+  category: Development and Protocol
+- id: q4qlVLY
+  title: Community privacy in a decentralized network
+  type: presentation
+  speakers:
+    - name: Evelyn Osman
+      id: chipnick.com
+  category: Development and Protocol
+- id: VLa69bl
+  title: 'Publishing Without Platforms: Building Native Media on AT Protocol'
+  type: presentation
+  speakers:
+    - name: Jim Ray
+      id: jimray.bsky.team
+  category: Media and Civics
+- id: EkGROKB
+  title: A Free Press needs Free Protocols
+  type: presentation
+  speakers:
+    - name: Joe Germuska
+      id: joe.germuska.com
+  category: Community
+- id: ODqQQJA
+  title: Waiting for the Future to Load
+  type: presentation
+  speakers:
+    - name: Amber Case
+      id: case.bsky.social
+  category: Media and Civics
+- id: ja4ooAa
+  title: Building Public-Interest Infrastructure on ATProto
+  type: presentation
+  speakers:
+    - name: Sebastian Vogelsang
+      id: seabass.bsky.social
+  category: Media and Civics
+- id: gDPMMa1
+  title: One Year of Graze - lessons learned funding, building, and growing in the atmosphere
+  type: presentation
+  speakers:
+    - name: Devin Gaffney
+      id: devingaffney.com
+  category: Media and Civics
+- id: q4QAgVk
+  title: Building decentralized AI on atproto
+  type: presentation
+  speakers:
+    - name: Maxine Levesque
+      id: maxine.science
+  category: Development and Protocol
+- id: QK9Ae6Y
+  title: 'Groundings with my Siblings: Lessons Learned Building for Community'
+  type: presentation
+  speakers:
+    - name: Rudy Fraser
+      id: rude1.blacksky.team
+  category: Development and Protocol
+- id: gDPLaGd
+  title: Did Lexicon just accidentally solve the enterprise data problem?
+  type: presentation
+  speakers:
+    - name: Emily Gorcenski
+      id: emily.gorcen.ski
+  category: Development and Protocol
+- id: WObY04Q
+  title: 'furryli.st: Scaling Community and Belonging in an Outrage-Driven World'
+  type: presentation
+  speakers:
+    - name: Baldemar Motomochi
+      id: baldemo.to
+  category: Community
+- id: LZxV6dv
+  title: Consent Before Cryptography
+  type: presentation
+  speakers:
+    - name: Tessa Brown
+      id: tessa.germnetwork.com
+  category: Community
+- id: 2E9XG1b
+  title: 'Creating a Safer Web: Blacksky''s Moderation Tool'
+  type: presentation
+  speakers:
+    - name: Dr. KaLyn Coghill
+      id: drkalyn.blacksky.team
+  category: Community
+- id: LZ4oWrj
+  title: 'Two Years of Skywatch: Lessons Learned for Community Moderation'
+  type: presentation
+  speakers:
+    - name: D Scarnecchia
+      id: scoiattolo.mountainherder.xyz
+  category: Community
+- id: Mej2N5X
+  title: Making space for the Protoverse
+  type: presentation
+  speakers:
+    - name: Meri Leeworthy
+      id: meri.garden
+  category: Community
+- id: ODxNLMM
+  title: Who talks to whom? Coordination gaps in decentralised infrastructure
+  type: presentation
+  speakers:
+    - name: Laurens Hof
+      id: laurenshof.online
+  category: Media and Civics
+- id: 0Qq9NlZ
+  title: 'Coop: Open source Trust & Safety infrastructure for all'
+  type: presentation
+  speakers:
+    - name: Cassidy James Blaede
+      id: cassidyjames.com
+  category: Media and Civics
+- id: rj8Xv62
+  title: TBD
+  type: presentation
+  speakers:
+    - name: Blaine Cook
+      id: blaine.bsky.social
+  category: Media and Civics
+- id: RGqppqd
+  title: 'How Streamplace Works: VODs'
+  type: presentation
+  speakers:
+    - name: Eli Mallon
+      id: iame.li
+  category: Development and Protocol
+- id: XxP4RzL
+  title: 'Building Cirrus: a single-user, serverless PDS'
+  type: presentation
+  speakers:
+    - name: Matt Kane
+      id: mk.gg
+  category: Development and Protocol
+- id: 9qjDJZG
+  title: 'From Toilets to Moths: The Future of Social Media is Weird and Not For Everyone'
+  type: presentation
+  speakers:
+    - name: Dame
+      id: dame.is
+  category: Development and Protocol
+- id: PdJ6Q8d
+  title: Journalism must create its own algorithms
+  type: presentation
+  speakers:
+    - name: Aendra Rininsland
+      id: aendra.com
+  category: Media and Civics
+- id: QKlrLXG
+  title: 'Advocating for Digital Sovereignty: European Experiences and Global Lessons'
+  type: presentation
+  speakers:
+    - name: Sandra Barthel
+      id: sandrabarthel.bsky.social
+  category: Media and Civics
+- id: 7Rrv0E0
+  title: 'Beyond Bluesky: Community infrastructure'
+  type: presentation
+  speakers:
+    - name: fig
+      id: bad-example.com
+  category: Development and Protocol
+- id: jaAWVRY
+  title: Bringing Self Sovereign Identities to the Masses via ATproto (and how to maximize coherence between upcoming DID:PLC forks)
+  type: presentation
+  speakers:
+    - name: Paul Fuxjäger
+      id: cypherhippie.bsky.social
+  category: Development and Protocol
+- id: xXWE9Dv
+  title: 'Data Sovereignty for Games (and Everything Else): Building Decentralized Industry Infrastructure on ATProto'
+  type: presentation
+  speakers:
+    - name: Trezy Who
+      id: trezy.codes
+  category: Development and Protocol
+- id: OD2G9j8
+  title: The Phoenix Architecture
+  type: presentation
+  speakers:
+    - name: Chad Fowler
+      id: chadfowler.com
+  category: Development and Protocol
+- id: 9qkWqPG
+  title: Building Future of Artificial Intelligence on AT Protocol
+  type: presentation
+  speakers:
+    - name: Cameron Pfiffer
+      id: cameron.stream
+  category: Development and Protocol
+- id: OD2PpYA
+  title: Open social tech and geopolitical risk
+  type: presentation
+  speakers:
+    - name: Ivan Sigal
+      id: ivansigal.bsky.social
+  category: Media and Civics
+- id: VLerG2y
+  title: Understanding the Landscape of Custom Feeds on Bluesky
+  type: presentation
+  speakers:
+    - name: Leijie Wang
+      id: leijiew.bsky.social
+  category: Community
+- id: eqVMWz0
+  title: Content Moderation Futures
+  type: presentation
+  speakers:
+    - name: lindsay blackwell
+      id: linguangst.bsky.social
+  category: Media and Civics
+- id: 9q8ZX5Q
+  title: Social Components
+  type: presentation
+  speakers:
+    - name: Dan Abramov
+      id: danabra.mov
+  category: Development and Protocol
+- id: BzrpDQK
+  title: 'Feature / Product / Business: A Framework for Sustainable ATProto Projects'
+  type: presentation
+  speakers:
+    - name: Mosh Lee
+      id: mosh.bsky.social
+  category: Development and Protocol
+- id: gDELD0M
+  title: Landslide
+  type: presentation
+  speakers:
+    - name: Erin Kissane
+      id: kissane.myatproto.social
+  category: Media and Civics
+- id: J9yOpYz
+  title: The Aggregation Era burned journalism institutions to the ground. The federated era is emerging from those embers
+  type: presentation
+  speakers:
+    - name: Justin Bank
+      id: bankonjustin.bsky.social
+  category: Media and Civics
+- id: VLgVWM6
+  title: 'tangled: the business end'
+  type: presentation
+  speakers:
+    - name: Anirudh Oppiliappan
+      id: anirudh.fi
+  category: Development and Protocol
+- id: RG6Nepp
+  title: Large-scale interoperability in the ATmosphere
+  type: presentation
+  speakers:
+    - name: Roscoe Rubin-Rottenberg
+      id: knotbin.com
+  category: Development and Protocol
+- id: 1AzdYWM
+  title: 'Bluenotes: Community Notes for ATProto'
+  type: presentation
+  speakers:
+    - name: Jonathan Warden
+      id: jonathanwarden.com
+  category: Development and Protocol
+- id: gDP6A8N
+  title: Account logic in ATProto using Trusted Execution Environments
+  type: presentation
+  speakers:
+    - name: Kobi Gurkan
+      id: kobi.bsky.social
+  category: Development and Protocol
+- id: J9EgEdX
+  title: 'Hypercerts on ATProto: Collective Funding, Evaluation, and Ownership as Social Data'
+  type: presentation
+  speakers:
+    - name: Holke Brammer
+      id: holke.xyz
+  category: Development and Protocol
+- id: obLbvQV
+  title: 'Building the Sovereign Media Stack: A Roadmap for AT Protocol'
+  type: presentation
+  speakers:
+    - name: Natalie Mullins
+      id: eclecticcapital.bsky.com
+  category: Development and Protocol
+- id: XxPMqvO
+  title: Build and share personal apps, using an open source tool to help get started
+  type: presentation
+  speakers:
+    - name: Jon Wilson
+      id: jon2600.bsky.social
+  category: Development and Protocol
+- id: 81gXlXP
+  title: State of the Multi-Protocol Social Web (name will change)
+  type: lightning-talk
+  speakers:
+    - name: Anuj Ahooja
+      id: quillmatiq.com
+  category: Development and Protocol
+- id: 9qP16Kp
+  title: 'Stop Hallucinating the Protocol: Grounding your AI Agents with the Official ATproto Docs'
+  type: lightning-talk
+  speakers:
+    - name: Jessie Rushing
+      id: immber.bsky.social
+  category: Development and Protocol
+- id: q4QdXj7
+  title: ATProto design philosophy behind BookHive
+  type: lightning-talk
+  speakers:
+    - name: Nicholas Perez
+      id: nickthesick.com
+  category: Development and Protocol
+- id: 5B02jaM
+  title: Keywords vs Embeddings
+  type: lightning-talk
+  speakers:
+    - name: Jasper Rädisch
+      id: raedisch.net
+  category: Development and Protocol
+- id: aQJAWl9
+  title: Affordances of the Atmosphere
+  type: lightning-talk
+  speakers:
+    - name: Tynan Purdy
+      id: tynanpurdy.com
+  category: Development and Protocol
+- id: dWGJ41y
+  title: Abstracting the AppView
+  type: lightning-talk
+  speakers:
+    - name: Chad Miller
+      id: chadtmiller.com
+  category: Development and Protocol
+- id: ob8N65V
+  title: How to use Bluesky to easily and securely preview a software product to users.
+  type: lightning-talk
+  speakers:
+    - name: Tim Burks
+      id: timburks.me
+  category: Community
+- id: 686gZde
+  title: Using GraphQL to build with ATProto
+  type: lightning-talk
+  speakers:
+    - name: Tim Ryan
+      id: timryan.org
+  category: Development and Protocol
+- id: 2EG4YMj
+  title: What 350,000 users taught me about growing on Open Social
+  type: lightning-talk
+  speakers:
+    - name: Victoria White
+      id: buildwithtori.com
+  category: Community
+- id: 2EGLPML
+  title: Burning down data walls in the US Fire Service and Beyond
+  type: lightning-talk
+  speakers:
+    - name: Stephan Noel
+      id: stephanjnoel.bsky.social
+  category: Community
+- id: xX5yRJr
+  title: 'Skylimit: A curating web client with fine-grained controls to mimic the newspaper experience'
+  type: lightning-talk
+  speakers:
+    - name: Ramalingam Saravanan
+      id: sarava.net
+  category: Development and Protocol
+- id: lbkWPeN
+  title: 'Oaklog: Building a community calendar in the Oakland Bay Area'
+  type: lightning-talk
+  speakers:
+    - name: Glenn Poppe
+      id: pop.pe
+  category: Media and Civics
+- id: Bzr448Q
+  title: Why Gander Social?
+  type: lightning-talk
+  speakers:
+    - name: Jennifer Mitchell
+      id: jennie-gander.bsky.social
+  category: Development and Protocol
+- id: 81Xovjr
+  title: Feeds Are The New Websites
+  type: lightning-talk
+  speakers:
+    - name: Mike McCue
+      id: mmccue.bsky.social
+  category: Community
+- id: ZjMOl7o
+  title: Matadata! Publishing scientific data straight to AT
+  type: lightning-talk
+  speakers:
+    - name: Robin Berjon
+      id: robin.berjon.com
+  category: Development and Protocol
+- id: 000Syverson
+  title: Paul Syverson Lightning Talk
+  type: lightning-talk
+  speakers:
+    - name: Paul Syverson
+      id: psyverson.bsky.social
+  category: Development and Protocol
+- id: OD6Gd0A
+  title: 'Cosmik: building the Noosphere on the Atmosphere'
+  type: lightning-talk
+  speakers:
+    - name: Ronen Tamari
+      id: ronentk.me
+  category: Media and Civics
+- id: MeWBzWX
+  title: A better NPM site is possible
+  type: lightning-talk
+  speakers:
+    - name: Zeu
+      id: zeu.dev
+  category: Development and Protocol
+- id: Xxd7xqj
+  title: E2EE DMs for Bluesky
+  type: lightning-talk
+  speakers:
+    - name: Ranga Krishnan
+      id: rangakrishnan1.bsky.social
+  category: Development and Protocol
+- id: QKNkKMX
+  title: Scaling the Atmosphere
+  type: lightning-talk
+  speakers:
+    - name: Jim Calabro
+      id: calabro.io
+  category: Development and Protocol
+- id: 7Rr2zW6
+  title: 'Pollen: Prototyping a toolkit for journalists and researchers to restore source transparency in an AI-saturated feed'
+  type: lightning-talk
+  speakers:
+    - name: Hypha Coop
+      id: hypha.coop
+  category: Media and Civics
+- id: QKZoLBX
+  title: How (de)centralized is Bluesky, really?
+  type: lightning-talk
+  speakers:
+    - name: Billy Pierce
+      id: billwpierce.co
+  category: Media and Civics
+- id: WOkL11Q
+  title: How to have more non-english speaking users
+  type: panel
+  speakers:
+    - name: Victoria Machado de Oliveira
+      id: vicwalker.dev.br
+  category: Community
+- id: GxEe0Vz
+  title: Designing for the social web
+  type: panel
+  speakers:
+    - name: Darrin Loeliger
+      id: darrin.bsky.team
+  category: Community
+- id: J9jEdWJ
+  title: Is this even legal?
+  type: panel
+  speakers:
+    - name: Matt Reeder
+      id: matt.bsky.team
+  category: Media and Civics
+- id: kdobWjj
+  title: 'A Fireside Chat on Resonant Computing: Why we wrote the manifesto and where we go from here'
+  type: panel
+  speakers:
+    - name: Alex Komoroske
+      id: komorama.bsky.social
+  category: Community
+- id: Y561Qv6
+  title: 'From protocol to product: How Expo powers the next wave of AT Proto applications'
+  type: panel
+  speakers:
+    - name: Eliot Hertenstein
+      id: eliot.sh
+  category: Development and Protocol
+- id: 81VNEBO
+  title: 'Creators First: Video & Media as the Foundation of a Thriving Creator Economy on ATProto'
+  type: panel
+  speakers:
+    - name: Joe Basser
+      id: joebasser.com
+  category: Media and Civics
+- id: VLXBbzJ
+  title: How and Why News Organizations Should Build on the ATProtocol
+  type: panel
+  speakers:
+    - name: Tyler Fisher
+      id: tylerjfisher.com
+  category: Media and Civics
+- id: thurs-doors
+  title: Doors Open
+  type: info
+  start: '2026-03-26T09:00'
+  end: '2026-03-26T09:30'
+- id: Y5KB1kv
+  title: OAuth Masterclass
+  type: workshop
+  speakers:
+    - name: Nick Gerakines
+      id: ngerakines.me
+  start: '2026-03-26T09:30'
+  end: '2026-03-26T12:30'
+  room: 2301 Classroom
+  category: Development and Protocol
+- id: thurs-unconf-2311
+  title: Unconf Classroom
+  type: activity
+  start: '2026-03-26T09:30'
+  end: '2026-03-26T12:30'
+  room: 2311 Classroom
+- id: thurs-unconf-bukhman
+  title: Unconf Discussions
+  type: activity
+  start: '2026-03-26T09:30'
+  end: '2026-03-26T12:30'
+  room: Bukhman Lounge
+- id: A7ebKjo
+  title: 'Hospicing social media: Personal archival practices for transition'
+  type: workshop
+  speakers:
+    - name: Dawn Walker
+      id: dcwalker.ca
+  start: '2026-03-26T10:30'
+  end: '2026-03-26T12:30'
+  room: Performance Theatre
+  category: Media and Civics
+- id: thurs-lunch
+  title: Lunch Break (Not Catered)
+  type: info
+  start: '2026-03-26T12:30'
+  end: '2026-03-26T14:00'
+- id: Y5XGQQ6
+  title: Building an Appview
+  type: workshop
+  speakers:
+    - name: Chad Miller
+      id: chadtmiller.com
+  start: '2026-03-26T14:00'
+  end: '2026-03-26T16:00'
+  room: 2301 Classroom
+  category: Development and Protocol
+- id: thurs-unconf-pm
+  title: Unconf Classroom
+  type: activity
+  start: '2026-03-26T14:00'
+  end: '2026-03-26T16:00'
+  room: 2311 Classroom
+- id: Bzy111e
+  title: What futures can we build together?
+  type: workshop
+  speakers:
+    - name: Arushi Bandi
+      id: offline.arushibandi.com
+    - name: Ivan Sigal
+      id: ivansigal.bsky.social
+    - name: Christian
+  start: '2026-03-26T14:00'
+  end: '2026-03-26T16:00'
+  room: Performance Theatre
+  category: Media and Civics
+  description: 'In this workshop, we will ask: what are new social modalities that we can build with the affordances of ATProtocol? This is a cross-disciplinary workshop with people from all tracks to ideate and co-design together possibilities for new social and communal modes on the protocol (not focusing on implementation of ideas). Attendees will walk away with an expansion of future possibilities of what it looks like to be online.'
+- id: thurs-office-hours
+  title: Office Hours Lounge
+  type: activity
+  start: '2026-03-26T14:00'
+  end: '2026-03-26T18:30'
+  room: Bukhman Lounge
+- id: 81D2Mez
+  title: Dive into user research with fellow ATProto builders and users
+  type: workshop
+  speakers:
+    - name: Tessa Brown
+      id: tessa.germnetwork.com
+    - name: Anna Mistele
+    - name: Tynan Purdy
+      id: tynanpurdy.com
+  start: '2026-03-26T16:30'
+  end: '2026-03-26T18:30'
+  room: Performance Theatre
+  category: Development and Protocol
+  description: Get feedback on your project and see what's growing! Recent talks about onboarding in the Atmosphere have drawn calls for more user research. This workshop from Germ's CEO Tessa Brown and founding engineer Anna Mistele is an opportunity for builders in the ecosystem to gain immediate insights by conducting research for their products, and for attendees to see new products in action. We're not experts, but rather fellow builders making space for us to learn from each other as a community! Supported by Tynan.
+- id: fri-doors
+  title: Doors Open
+  type: info
+  start: '2026-03-27T09:00'
+  end: '2026-03-27T09:30'
+- id: PdW72pB
+  title: Consuming the ATmosphere
+  type: workshop
+  speakers:
+    - name: Bluesky Dev Rel
+      id: alex.bsky.team
+  start: '2026-03-27T09:30'
+  end: '2026-03-27T12:30'
+  room: 2301 Classroom
+  category: Development and Protocol
+  description: This will be an introductory workshop for developers who may have some JS/TS experience but almost no AT experience, who want to learn how to read posts and other data from the Atmosphere.
+  link_url: https://news.atmosphereconf.org/3m7ptkcpedk2m
+  link_text: More »
+- id: fri-founders
+  title: Founders & Funders
+  type: activity
+  start: '2026-03-27T09:30'
+  end: '2026-03-27T13:00'
+  room: 2311 Classroom
+  description: A special invite-only event for atproto teams building products, services, and companies that they intend to fund through investment, grants, or other mechanisms. Please apply to join us.
+- id: fri-atscience-morning
+  title: ATScience Morning
+  type: activity
+  start: '2026-03-27T09:30'
+  end: '2026-03-27T12:30'
+  room: Performance Theatre
+  description: Please see the ATScience Agenda.
+  link_url: https://atscience.leaflet.pub/3mfz526irfs2y
+  link_text: ATScience Agenda
+- id: fri-atscience-lounge-am
+  title: ATScience Lounge
+  type: activity
+  start: '2026-03-27T09:30'
+  end: '2026-03-27T12:30'
+  room: Bukhman Lounge
+- id: fri-lunch
+  title: Lunch Break (Not Catered)
+  type: info
+  start: '2026-03-27T12:30'
+  end: '2026-03-27T13:30'
+- id: 81gXjdP
+  title: Creating the ATmosphere
+  type: workshop
+  speakers:
+    - name: Bluesky Dev Rel
+      id: alex.bsky.team
+  start: '2026-03-27T13:30'
+  end: '2026-03-27T16:30'
+  room: 2301 Classroom
+  category: Development and Protocol
+  description: This will be an intermediate workshop on designing AT Lexicons to support new apps, with an emphasis on reusing the social graph data that already exists in the network.
+  link_url: https://news.atmosphereconf.org/3m7ptkcpedk2m
+  link_text: More »
+- id: fri-ted
+  title: Hold for Ted
+  type: activity
+  start: '2026-03-27T13:30'
+  end: '2026-03-27T16:30'
+  room: 2311 Classroom
+- id: fri-atscience-afternoon
+  title: ATScience Afternoon
+  type: activity
+  start: '2026-03-27T13:30'
+  end: '2026-03-27T16:30'
+  room: Performance Theatre
+  description: Please see the ATScience Agenda.
+  link_url: https://atscience.leaflet.pub/3mfz526irfs2y
+  link_text: ATScience Agenda
+- id: fri-atscience-lounge-pm
+  title: ATScience Lounge
+  type: activity
+  start: '2026-03-27T13:30'
+  end: '2026-03-27T16:30'
+  room: Bukhman Lounge
+- id: XxPK17j
+  title: Atmospheric Publishing Discussion
+  type: workshop
+  speakers:
+    - name: Brendan Schlagel
+      id: schlage.town
+  start: '2026-03-27T16:30'
+  end: '2026-03-27T18:30'
+  room: 2301 Classroom
+  category: Media and Civics
+  description: Standard Site, Leaflet, Pckt, Offprint, and anyone else interested in what the opportunities are for publishing to the Atmosphere.
+- id: zx4e1Oq
+  title: at://advent, an atproto adventure
+  type: workshop
+  speakers:
+    - name: fig
+      id: bad-example.com
+    - name: bailey
+      id: baileytownsend.dev
+  start: '2026-03-27T16:30'
+  end: '2026-03-27T18:30'
+  room: 2311 Classroom
+  category: Development and Protocol
+  description: 'at://advent is an atproto adventure, teaching new explorers the ropes through a series of protocol challenges! Participants will dive in to play-test the initial set of challenges, with guidance. This will be a preview ahead of the public online release of at://advent, and will provide us with insight into what aspects are working well and what we need to improve. at://advent is about growing the atproto developer audience: we strive to make it enticing and accessible to beginner and non-devs.'
+- id: 000ChadWorkshop
+  title: Quickslice
+  type: workshop
+  speakers:
+    - name: Chad Miller
+      id: chadtmiller.com
+  category: Development and Protocol
+- id: 000ArushiWorkshop
+  title: What can we build together?
+  type: workshop
+  speakers:
+    - name: Arushi Bandi
+      id: offline.arushibandi.com
+- id: 000UXWorkshop
+  title: TKTK UX Workshop
+  type: workshop
+  speakers:
+    - name: Tessa Brown
+      id: tessa.germnetwork.com

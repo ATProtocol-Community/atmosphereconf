@@ -1,0 +1,115 @@
+---
+interface Speaker {
+  name: string;
+  id?: string;
+}
+
+interface Props {
+  event: {
+    id?: string;
+    title: string;
+    type: string;
+    speakers?: Speaker[];
+    start?: string;
+    end?: string;
+  };
+}
+
+const { event } = Astro.props;
+
+const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "panel"]);
+const href = event.id && linkableTypes.has(event.type) ? `/event/${event.id}` : null;
+const isInfo = event.type === "info";
+
+function formatTime(iso: string) {
+  const m = iso.match(/T(\d{2}):(\d{2})/);
+  if (!m) return "";
+  let h = parseInt(m[1]);
+  const min = m[2];
+  const p = h >= 12 ? "pm" : "am";
+  h = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return min === "00" ? `${h}${p}` : `${h}:${min}${p}`;
+}
+
+const time = (() => {
+  if (!event.start) return "";
+  const s = formatTime(event.start);
+  const e = event.end ? formatTime(event.end) : "";
+  return e ? `${s} – ${e}` : s;
+})();
+
+function getColors(type: string) {
+  switch (type) {
+    case "info":
+      return "bg-amber-100 text-amber-950";
+    case "activity":
+      return "bg-gray-100 text-gray-900";
+    case "workshop":
+      return "bg-emerald-100 text-emerald-950";
+    case "lightning-talk":
+      return "bg-amber-100 text-amber-950";
+    case "panel":
+      return "bg-purple-100 text-purple-950";
+    default:
+      return "bg-blue-100 text-blue-950";
+  }
+}
+
+function getSubColors(type: string) {
+  switch (type) {
+    case "info":
+      return "text-amber-800";
+    case "activity":
+      return "text-gray-700";
+    case "workshop":
+      return "text-emerald-800";
+    case "lightning-talk":
+      return "text-amber-800";
+    case "panel":
+      return "text-purple-800";
+    default:
+      return "text-blue-800";
+  }
+}
+
+const speakerNames = event.speakers?.map((s) => s.name).join(", ");
+---
+
+<Fragment>
+  {href && (
+    <a href={href} class="absolute inset-0 z-10" />
+  )}
+  <div
+    class:list={[
+      "flex-1 overflow-hidden rounded-md px-2 py-1.5 text-xs leading-tight transition-[filter]",
+      getColors(event.type),
+      isInfo && "flex flex-col items-center justify-center text-center",
+      href && "group-hover/evt:brightness-95",
+    ]}
+  >
+    {isInfo ? (
+      <>
+        <span class="font-semibold">{event.title}</span>
+        {time && (
+          <p class:list={["mt-0.5", getSubColors(event.type)]}>
+            {time}
+          </p>
+        )}
+      </>
+    ) : (
+      <>
+        <p class="font-semibold" set:html={event.title} />
+        {time && (
+          <p class:list={["mt-0.5", getSubColors(event.type)]}>
+            {time}
+          </p>
+        )}
+        {speakerNames && (
+          <p class:list={["mt-0.5", getSubColors(event.type)]}>
+            {speakerNames}
+          </p>
+        )}
+      </>
+    )}
+  </div>
+</Fragment>

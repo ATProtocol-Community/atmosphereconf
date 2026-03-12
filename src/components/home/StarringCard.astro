@@ -1,9 +1,13 @@
 ---
+interface Speaker {
+  name: string;
+  id?: string;
+}
+
 interface Props {
   talkId: string;
   title: string;
-  speakerName: string;
-  speakerId: string;
+  speakers?: Speaker[];
   typeName: string;
   anchor?: boolean;
 }
@@ -11,12 +15,10 @@ interface Props {
 const {
   talkId,
   title,
-  speakerName,
-  speakerId,
+  speakers = [],
   typeName,
   anchor = false,
 } = Astro.props;
-const handle = speakerId.replace(/^@/, "");
 
 const badgeColors: Record<string, string> = {
   Presentation: "bg-blue-100 text-blue-700",
@@ -41,7 +43,7 @@ const titleClamp = anchor ? "" : "line-clamp-2";
       >&rarr;</span
     >
     <div class="min-w-0 flex-1">
-      <a href={anchor ? `#${talkId}` : `/talks#${talkId}`}>
+      <a href={anchor ? `#${talkId}` : `/event/${talkId}`}>
         <span
           class:list={[
             "leading-5 font-semibold text-gray-900",
@@ -64,10 +66,25 @@ const titleClamp = anchor ? "" : "line-clamp-2";
         >
           {typeName}
         </span>
-        {speakerName} · <a
-          class="z-20 cursor-pointer text-blue-600 hover:underline"
-          href={`/profile/${handle}`}>@{handle}</a
-        >
+        {
+          speakers.map((s, i) => (
+            <>
+              {i > 0 && <span>, </span>}
+              {s.name}
+              {s.id && (
+                <>
+                  {" · "}
+                  <a
+                    class="z-20 cursor-pointer text-blue-600 hover:underline"
+                    href={`/profile/${s.id}`}
+                  >
+                    @{s.id}
+                  </a>
+                </>
+              )}
+            </>
+          ))
+        }
       </span>
     </div>
   </div>

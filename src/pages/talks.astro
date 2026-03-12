@@ -4,31 +4,22 @@ import Card from "@/components/ui/card.astro";
 import StarringCard from "@/components/home/StarringCard.astro";
 import { getCollection } from "astro:content";
 
-const [presentations, lightning, panels, workshops] = await Promise.all([
-  getCollection("presentations"),
-  getCollection("lightning-talks"),
-  getCollection("panels"),
-  getCollection("workshops"),
-]);
+const schedule = await getCollection("schedule");
 
-const allTalks = [
-  ...presentations.map((t) => ({
+const typeNames: Record<string, string> = {
+  presentation: "Presentation",
+  "lightning-talk": "Lightning Talk",
+  panel: "Discussion / Panel",
+  workshop: "Workshop",
+};
+
+const allTalks = schedule
+  .filter((t) => t.data.type in typeNames)
+  .map((t) => ({
     id: t.id,
     ...t.data,
-    typeName: "Presentation",
-  })),
-  ...lightning.map((t) => ({
-    id: t.id,
-    ...t.data,
-    typeName: "Lightning Talk",
-  })),
-  ...panels.map((t) => ({
-    id: t.id,
-    ...t.data,
-    typeName: "Discussion / Panel",
-  })),
-  ...workshops.map((t) => ({ id: t.id, ...t.data, typeName: "Workshop" })),
-];
+    typeName: typeNames[t.data.type],
+  }));
 
 const types = [
   "Presentation",
@@ -46,13 +37,7 @@ const grouped = Object.groupBy(allTalks, (t) => t.typeName);
 ---
 
 <Layout title="All Talks — ATmosphereConf 2026">
-  <div class="space-y-10">
-    <h1
-      class="text-primary mt-6 font-mono text-2xl font-semibold tracking-widest uppercase"
-    >
-      All Talks
-    </h1>
-
+  <div class="mt-20 space-y-10">
     {
       types.map((type) => {
         const talks = grouped[type];
@@ -64,10 +49,8 @@ const grouped = Object.groupBy(allTalks, (t) => t.typeName);
                 <StarringCard
                   talkId={talk.id}
                   title={talk.title}
-                  speakerName={talk.speaker_name}
-                  speakerId={talk.speaker_id}
+                  speakers={talk.speakers}
                   typeName={talk.typeName}
-                  anchor
                 />
               ))}
             </div>

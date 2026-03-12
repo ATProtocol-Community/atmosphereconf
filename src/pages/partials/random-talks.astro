@@ -11,8 +11,7 @@ const starred = await getRandomTalks();
     <StarringCard
       talkId={talk.id}
       title={talk.title}
-      speakerName={talk.speaker_name}
-      speakerId={talk.speaker_id}
+      speakers={talk.speakers}
       typeName={talk.typeName}
     />
   ))
