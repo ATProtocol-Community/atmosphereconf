@@ -132,22 +132,24 @@ export function FlippableProfileCard({
           </button>
         )}
       </div>
-      <div className="pt-6" />
-      <div {...dragHandleProps}>
-        <ProfileView {...profileProps} />
-      </div>
-      {talks.length > 0 && (
-        <div className="mt-4">
-          <div className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
-            Talk
-          </div>
-          <div className="flex flex-col gap-2">
-            {talks.map((talk) => (
-              <TalkCard key={talk.id} talk={talk} />
-            ))}
-          </div>
+      <div className="my-auto">
+        <div className="pt-6" />
+        <div {...dragHandleProps}>
+          <ProfileView {...profileProps} />
         </div>
-      )}
+        {talks.length > 0 && (
+          <div className="mt-4">
+            <div className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
+              Talk
+            </div>
+            <div className="flex flex-col gap-2">
+              {talks.map((talk) => (
+                <TalkCard key={talk.id} talk={talk} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 
@@ -157,7 +159,7 @@ export function FlippableProfileCard({
       <div className="mx-auto my-auto max-w-2xl" data-theme={theme}>
         {!flipped ? (
           <div
-            className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col justify-center overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
+            className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
           >
             {frontFaceContent}
           </div>
@@ -190,7 +192,7 @@ export function FlippableProfileCard({
       >
         {/* Front face — conference profile */}
         <div
-          className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col justify-center overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
+          className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
