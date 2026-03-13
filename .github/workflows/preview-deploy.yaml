@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, closed]
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   issues: write
 
@@ -24,8 +24,32 @@ jobs:
           && 'preview-cleanup' 
           || 'preview-deploy' }}
     steps:
-      - name: Checkout repository
+      - name: Determine deploy branch
+        id: branch
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          THIS_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "$HEAD_REPO" != "$THIS_REPO" ]; then
+            echo "name=railway-preview/pr-${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+            echo "is_fork=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${HEAD_REF}" >> "$GITHUB_OUTPUT"
+            echo "is_fork=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout PR head (fork)
+        if: steps.branch.outputs.is_fork == 'true'
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Push to trackable branch (fork)
+        if: steps.branch.outputs.is_fork == 'true'
+        run: |
+          git push origin HEAD:refs/heads/railway-preview/pr-${{ github.event.pull_request.number }} --force
 
       - name: Deploy to Railway
         id: railway-deploy
@@ -35,7 +59,7 @@ jobs:
           project_id: ${{ vars.RAILWAY_PROJECT_ID }}
           environment_name: "preview-deploy"
           preview_environment_name: "pr-${{ github.event.pull_request.number }}"
-          branch_name: ${{ github.head_ref }}
+          branch_name: ${{ steps.branch.outputs.name }}
           environment_variables: |
             {
               "QUICKSLICE_CLIENT_ID": "${{ '${{shared.QUICKSLICE_CLIENT_ID}}' }}",
@@ -48,19 +72,66 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { getEnvironmentId, getLatestDeploymentStatus } = await import('${{ github.workspace }}/.github/scripts/railway.mjs');
-
             const token = '${{ secrets.RAILWAY_TOKEN }}';
             const projectId = '${{ vars.RAILWAY_PROJECT_ID }}';
             const prNumber = context.payload.pull_request.number;
             const envName = `pr-${prNumber}`;
 
-            const envId = await getEnvironmentId({ token, projectId, name: envName });
+            // Embed the functions to make it easier to call them for forks
+            async function railwayQuery(query, variables = {}) {
+              const response = await fetch('https://backboard.railway.com/graphql/v2', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query, variables }),
+              });
+
+              const json = await response.json();
+              if (json.errors) {
+                throw new Error(`Railway API Error: ${json.errors.map((error) => error.message).join(', ')}`);
+              }
+
+              return json.data;
+            }
+
+            async function getEnvironmentId(name) {
+              const data = await railwayQuery(
+                `query GetEnvironments($projectId: String!) {
+                  environments(projectId: $projectId) {
+                    edges { node { id name } }
+                  }
+                }`,
+                { projectId },
+              );
+
+              const environment = data.environments.edges.find((edge) => edge.node.name === name);
+              return environment ? environment.node.id : null;
+            }
+
+            async function getLatestDeploymentStatus(environmentId) {
+              const data = await railwayQuery(
+                `query GetLatestDeployment($projectId: String!, $environmentId: String!) {
+                  deployments(first: 1, input: {
+                    projectId: $projectId,
+                    environmentId: $environmentId,
+                  }) {
+                    edges { node { id status } }
+                  }
+                }`,
+                { projectId, environmentId },
+              );
+
+              return data.deployments?.edges?.[0]?.node?.status;
+            }
+
+            const envId = await getEnvironmentId(envName);
             if (!envId) throw new Error(`Environment ${envName} not found`);
 
             // Try listening for 10 minutes
             for (let i = 0; i < 60; i++) {
-              const status = await getLatestDeploymentStatus({ token, projectId, environmentId: envId });
+              const status = await getLatestDeploymentStatus(envId);
               core.info(`Attempt ${i + 1}: status=${status}`);
 
               if (status === 'SUCCESS') return;
@@ -115,12 +186,45 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Determine cleanup branch
+        id: branch
+        env:
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          THIS_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          if [ "$HEAD_REPO" != "$THIS_REPO" ]; then
+            echo "name=railway-preview/pr-${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+            echo "is_fork=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${HEAD_REF}" >> "$GITHUB_OUTPUT"
+            echo "is_fork=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check mirrored preview branch
+        id: preview_branch
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.name }}
+        run: |
+          if git ls-remote --exit-code origin "refs/heads/${BRANCH_NAME}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Cleanup Railway Environment
+        if: steps.branch.outputs.is_fork != 'true' || steps.preview_branch.outputs.exists == 'true'
         uses: ayungavis/railway-preview-deploy@v1.0.2
         with:
           railway_api_token: ${{ secrets.RAILWAY_TOKEN }}
           project_id: ${{ vars.RAILWAY_PROJECT_ID }}
           environment_name: "preview-deploy"
           preview_environment_name: "pr-${{ github.event.pull_request.number }}"
-          branch_name: ${{ github.event.pull_request.head.ref }}
+          branch_name: ${{ steps.branch.outputs.name }}
           cleanup: "true"
+
+      - name: Delete preview branch (fork)
+        if: steps.branch.outputs.is_fork == 'true' && steps.preview_branch.outputs.exists == 'true'
+        run: |
+          git push origin --delete railway-preview/pr-${{ github.event.pull_request.number }} || true
