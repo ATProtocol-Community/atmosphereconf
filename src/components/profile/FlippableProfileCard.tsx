@@ -133,7 +133,9 @@ export function FlippableProfileCard({
         )}
       </div>
       <div className="pt-6" />
-      <ProfileView {...profileProps} />
+      <div {...dragHandleProps}>
+        <ProfileView {...profileProps} />
+      </div>
       {talks.length > 0 && (
         <div className="mt-4">
           <div className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
@@ -152,10 +154,10 @@ export function FlippableProfileCard({
   // Reduced motion: skip 3D flip, just swap faces instantly
   if (prefersReducedMotion) {
     return (
-      <div className="mx-auto my-12 max-w-2xl" data-theme={theme}>
+      <div className="mx-auto my-auto max-w-2xl" data-theme={theme}>
         {!flipped ? (
           <div
-            className={`bg-card text-card-foreground relative flex max-h-[85dvh] min-h-[85dvh] flex-col justify-center overflow-auto ${cardClasses}`}
+            className={`bg-card text-card-foreground relative flex max-h-[85dvh] max-h-[78dvh] sm:max-h-[85dvh] flex-col overflow-auto ${cardClasses}`}
           >
             {frontFaceContent}
           </div>
@@ -175,7 +177,7 @@ export function FlippableProfileCard({
 
   return (
     <div
-      className="mx-auto my-12 max-w-2xl"
+      className="mx-auto my-auto max-w-2xl"
       data-theme={theme}
       style={{ perspective: "1200px" }}
     >
@@ -188,7 +190,7 @@ export function FlippableProfileCard({
       >
         {/* Front face — conference profile */}
         <div
-          className={`bg-card text-card-foreground relative flex min-h-[85dvh] flex-col justify-center overflow-auto ${cardClasses}`}
+          className={`bg-card text-card-foreground relative flex max-h-[78dvh] sm:max-h-[85dvh] flex-col overflow-auto ${cardClasses}`}
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",

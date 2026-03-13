@@ -32,6 +32,6 @@ const editData = isOwnProfile
   : undefined;
 ---
 
-<Layout title={`${profile.displayName} - Atmosphere Conference`}>
+<Layout title={`${profile.displayName} - Atmosphere Conference`} flush>
   <ProfilePage {profile} {editData} {viewerDid} {viewerHandle} />
 </Layout>

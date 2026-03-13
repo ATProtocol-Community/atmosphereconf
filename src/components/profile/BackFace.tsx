@@ -58,7 +58,7 @@ export function BackFace({
   return (
     <div
       data-theme={theme}
-      className={`${isBackFace ? "absolute inset-0" : "relative max-h-[85dvh] min-h-[85dvh]"} bg-card text-card-foreground flex flex-col overflow-hidden ${cardClasses}`}
+      className={`${isBackFace ? "absolute inset-0" : "relative max-h-[78dvh] sm:max-h-[85dvh]"} bg-card text-card-foreground flex flex-col overflow-auto sm:overflow-hidden ${cardClasses}`}
       style={containerStyle}
     >
       <div

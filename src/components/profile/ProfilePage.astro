@@ -46,7 +46,10 @@ try {
 }
 ---
 
-<div class="w-full">
+<style is:global>
+  html, body { overflow: hidden; height: 100%; }
+</style>
+<div class="flex w-full flex-1 items-center overflow-hidden">
   <FlippableProfileCard
     client:load
     {...profile}

@@ -4,10 +4,12 @@ import Header from "../components/shared/Header.astro";
 
 interface Props {
   title?: string;
+  flush?: boolean;
 }
 
 const {
   title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
+  flush = false,
 } = Astro.props;
 ---
 
@@ -41,7 +43,7 @@ const {
     <div class="flex min-h-screen flex-col">
       <Header transition:animate="none" />
       <main
-        class="mx-auto mb-10 flex w-full max-w-4xl flex-1 flex-col px-2 sm:px-10"
+        class={`mx-auto flex w-full max-w-4xl flex-1 flex-col px-2 sm:px-10 ${flush ? "" : "mb-10"}`}
       >
         <slot />
       </main>
