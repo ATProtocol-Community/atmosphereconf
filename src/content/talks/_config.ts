@@ -1,5 +1,5 @@
-import { file } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
+import { csvTalksLoader } from "./csv-loader";
 
 const speakerSchema = z.object({
   name: z.string(),
@@ -7,7 +7,7 @@ const speakerSchema = z.object({
 });
 
 const scheduleSchema = z.object({
-  title: z.string().transform((t) => t.replace(/~~(.+?)~~/g, "<del>$1</del>")),
+  title: z.string(),
   type: z.enum([
     "presentation",
     "lightning-talk",
@@ -30,7 +30,7 @@ const scheduleSchema = z.object({
 
 export const talkCollections = {
   schedule: defineCollection({
-    loader: file("src/content/talks/schedule.yaml"),
+    loader: csvTalksLoader("src/content/talks"),
     schema: scheduleSchema,
   }),
 };

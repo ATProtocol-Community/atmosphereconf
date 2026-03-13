@@ -9,10 +9,18 @@ interface Props {
   title: string;
   speakers?: Speaker[];
   typeName: string;
+  description?: string;
   anchor?: boolean;
 }
 
-const { talkId, title, speakers = [], typeName, anchor = false } = Astro.props;
+const {
+  talkId,
+  title,
+  speakers = [],
+  typeName,
+  description,
+  anchor = false,
+} = Astro.props;
 
 const badgeColors: Record<string, string> = {
   Presentation: "bg-blue-100 text-blue-700",
@@ -80,6 +88,11 @@ const titleClamp = anchor ? "" : "line-clamp-2";
           ))
         }
       </span>
+      {
+        description && (
+          <p class="mt-1.5 line-clamp-2 text-xs text-gray-500">{description}</p>
+        )
+      }
     </div>
   </div>
 </div>

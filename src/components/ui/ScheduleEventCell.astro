@@ -12,6 +12,7 @@ interface Props {
     speakers?: Speaker[];
     start?: string;
     end?: string;
+    description?: string;
   };
 }
 
@@ -108,6 +109,16 @@ const speakerNames = event.speakers?.map((s) => s.name).join(", ");
           {speakerNames && (
             <p class:list={["mt-0.5", getSubColors(event.type)]}>
               {speakerNames}
+            </p>
+          )}
+          {event.description && (
+            <p
+              class:list={[
+                "mt-0.5 line-clamp-2 opacity-75",
+                getSubColors(event.type),
+              ]}
+            >
+              {event.description}
             </p>
           )}
         </>
