@@ -30,6 +30,12 @@ export const LEXICON_ICONS: LexiconIconDef[] = [
     match: (col) => col.startsWith("dev.npmx."),
     url: (handle) => `https://npmx.dev/profile/${handle}`,
   },
+  {
+    label: "Cartridge",
+    svgName: "cartridge",
+    match: (col) => col.startsWith("games.gamesgamesgamesgames."),
+    url: (handle) => `https://cartridge.dev/profile/${handle}`,
+  },
   // {
   //   label: "stream.place",
   //   svgName: "streamplace",
