@@ -157,7 +157,7 @@ export function FlippableProfileCard({
       <div className="mx-auto my-auto max-w-2xl" data-theme={theme}>
         {!flipped ? (
           <div
-            className={`bg-card text-card-foreground relative flex max-h-[85dvh] max-h-[78dvh] sm:max-h-[85dvh] flex-col overflow-auto ${cardClasses}`}
+            className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col justify-center overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
           >
             {frontFaceContent}
           </div>
@@ -190,7 +190,7 @@ export function FlippableProfileCard({
       >
         {/* Front face — conference profile */}
         <div
-          className={`bg-card text-card-foreground relative flex max-h-[78dvh] sm:max-h-[85dvh] flex-col overflow-auto ${cardClasses}`}
+          className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col justify-center overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
