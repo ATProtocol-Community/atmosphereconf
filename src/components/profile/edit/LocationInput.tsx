@@ -150,7 +150,7 @@ export function LocationInput({
           placeholder={placeholder || "Search for a location..."}
           className="ui-input pr-10"
         />
-        <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
+        <div className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2">
           {isLoading ? (
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
           ) : (
@@ -160,17 +160,20 @@ export function LocationInput({
       </div>
 
       {showDropdown && suggestions.length > 0 && (
-        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+        <div className="border-border bg-popover absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border shadow-lg">
           {suggestions.map((result) => (
             <button
               key={result.place_id}
               type="button"
               onClick={() => handleSelectLocation(result)}
-              className="w-full border-b border-gray-100 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-gray-50"
+              className="border-border/50 hover:bg-accent w-full border-b px-4 py-3 text-left transition-colors last:border-b-0"
             >
               <div className="flex items-start gap-2">
-                <MapPin size={14} className="mt-1 shrink-0 text-gray-400" />
-                <div className="text-sm text-gray-700">
+                <MapPin
+                  size={14}
+                  className="text-muted-foreground mt-1 shrink-0"
+                />
+                <div className="text-foreground text-sm">
                   {formatLocationName(result)}
                 </div>
               </div>

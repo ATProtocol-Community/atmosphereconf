@@ -10,10 +10,9 @@ interface Props {
   profile: LoadedProfile;
   editData?: ProfileEditData;
   viewerDid?: string;
-  viewerHandle?: string;
 }
 
-const { profile, editData, viewerDid, viewerHandle } = Astro.props;
+const { profile, editData, viewerDid } = Astro.props;
 
 const svgFiles = import.meta.glob<string>(
   "/src/components/profile/icons/*.svg",
@@ -47,7 +46,11 @@ try {
 ---
 
 <style is:global>
-  html, body { overflow: hidden; height: 100%; }
+  html,
+  body {
+    overflow: hidden;
+    height: 100%;
+  }
 </style>
 <div class="flex w-full flex-1 items-center overflow-hidden">
   <FlippableProfileCard
@@ -59,6 +62,5 @@ try {
     editData={editData}
     talks={talks}
     authorFeedInitialData={authorFeedInitialData}
-    viewerHandle={viewerHandle}
   />
 </div>

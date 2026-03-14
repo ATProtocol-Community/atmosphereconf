@@ -1,0 +1,63 @@
+[data-theme="germ"] {
+  /* Palette — sourced from germ.network */
+  --theme-bg: #ffffff;
+  --theme-fg: #0a0a0a;
+  --theme-muted: #555555;
+  --theme-accent: #78e000;
+  --theme-surface: #f5f5f0;
+  --theme-border: #0a0a0a;
+
+  /* Full semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-bg);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-bg);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: var(--theme-fg);
+  --secondary: var(--theme-surface);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: var(--theme-surface);
+  --accent-foreground: var(--theme-fg);
+  --border: rgba(10, 10, 10, 0.15);
+  --input: rgba(10, 10, 10, 0.15);
+  --ring: var(--theme-accent);
+
+  /* Header */
+  --header-bg: var(--theme-accent);
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: rgba(10, 10, 10, 0.6);
+  --header-border: var(--theme-fg);
+  --header-logo-accent: #ff44cc;
+
+  /* atproto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(to right, #78e000, #5ebc00);
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: rgba(255, 255, 255, 0.95);
+  --atproto-profile-pill-fg: var(--theme-muted);
+  --atproto-profile-link: #ff44cc;
+
+  /* Event-type badges — bold germ colors */
+  --event-presentation-bg: #d4ffa0;
+  --event-presentation-fg: #2a5500;
+  --event-presentation-sub: #3d7a00;
+  --event-lightning-bg: #ffe0f5;
+  --event-lightning-fg: #99005c;
+  --event-lightning-sub: #cc0077;
+  --event-panel-bg: #fff3b0;
+  --event-panel-fg: #665500;
+  --event-panel-sub: #997f00;
+  --event-workshop-bg: #c0f5c0;
+  --event-workshop-fg: #0a5a0a;
+  --event-workshop-sub: #107a10;
+  --event-info-bg: #ffe0f5;
+  --event-info-fg: #99005c;
+  --event-info-sub: #cc0077;
+  --event-activity-bg: #f0f0e8;
+  --event-activity-fg: #333333;
+  --event-activity-sub: #555555;
+}

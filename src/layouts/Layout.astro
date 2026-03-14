@@ -1,16 +1,25 @@
 ---
 import "../styles/global.css";
 import Header from "../components/shared/Header.astro";
+import { detectClientTheme } from "@/components/profile/client-themes";
 
 interface Props {
   title?: string;
   flush?: boolean;
+  defaultTheme?: string;
 }
 
 const {
   title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
   flush = false,
+  defaultTheme: defaultThemeProp,
 } = Astro.props;
+
+// Priority: page-level default (e.g. profile handle) > logged-in user's handle > bluesky
+const viewerHandle = Astro.locals.loggedInUser?.handle;
+const viewerTheme = viewerHandle ? detectClientTheme(viewerHandle) : undefined;
+const defaultTheme =
+  defaultThemeProp ?? (viewerTheme !== "bluesky" ? viewerTheme : undefined);
 ---
 
 <!doctype html>
@@ -30,6 +39,17 @@ const {
       content="ATmosphereConf is the global atproto community conference. Join us in Vancouver, Canada, March 26th - 29th, 2026."
     />
     <meta name="generator" content={Astro.generator} />
+    <script is:inline define:vars={{ defaultTheme }}>
+      (function () {
+        var VALID = ["bluesky", "blacksky", "reddwarf", "pckt", "germ"];
+        var t = localStorage.getItem("atmosphereconf:theme");
+        if (t && VALID.indexOf(t) !== -1) {
+          document.documentElement.setAttribute("data-theme", t);
+        } else if (defaultTheme && VALID.indexOf(defaultTheme) !== -1) {
+          document.documentElement.setAttribute("data-theme", defaultTheme);
+        }
+      })();
+    </script>
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -30,10 +30,10 @@ const typeNames: Record<string, string> = {
 };
 
 const badgeColors: Record<string, string> = {
-  presentation: "bg-blue-100 text-blue-700",
-  "lightning-talk": "bg-amber-100 text-amber-700",
-  panel: "bg-purple-100 text-purple-700",
-  workshop: "bg-emerald-100 text-emerald-700",
+  presentation: "event-badge event-badge-presentation",
+  "lightning-talk": "event-badge event-badge-lightning",
+  panel: "event-badge event-badge-panel",
+  workshop: "event-badge event-badge-workshop",
 };
 
 const plainTitle = title.replace(/<[^>]*>/g, "");
@@ -82,7 +82,7 @@ const dateDisplay = start ? formatDate(start) : null;
         <span
           class:list={[
             "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium",
-            badgeColors[type] || "bg-gray-100 text-gray-600",
+            badgeColors[type] || "event-badge event-badge-activity",
           ]}
         >
           {typeNames[type]}
@@ -96,7 +96,7 @@ const dateDisplay = start ? formatDate(start) : null;
       </div>
 
       <h1
-        class="mt-3 text-xl leading-tight font-bold text-gray-900"
+        class="text-foreground mt-3 text-xl leading-tight font-bold"
         set:html={title}
       />
 
@@ -104,14 +104,14 @@ const dateDisplay = start ? formatDate(start) : null;
         speakers?.length && (
           <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1">
             {speakers.map((s) => (
-              <span class="text-sm text-gray-600">
+              <span class="text-muted-foreground text-sm">
                 {s.name}
                 {s.id && (
                   <>
                     {" · "}
                     <a
                       href={`/profile/${s.id}`}
-                      class="text-blue-600 hover:underline"
+                      class="text-primary hover:underline"
                     >
                       @{s.id}
                     </a>
@@ -125,11 +125,11 @@ const dateDisplay = start ? formatDate(start) : null;
 
       {
         (dateDisplay || timeDisplay || room) && (
-          <div class="mt-5 flex flex-col gap-2 text-sm text-gray-600">
+          <div class="text-muted-foreground mt-5 flex flex-col gap-2 text-sm">
             {dateDisplay && (
               <div class="flex items-center gap-2">
                 <svg
-                  class="h-4 w-4 flex-none text-gray-400"
+                  class="text-muted-foreground h-4 w-4 flex-none"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -148,7 +148,7 @@ const dateDisplay = start ? formatDate(start) : null;
             {timeDisplay && (
               <div class="flex items-center gap-2">
                 <svg
-                  class="h-4 w-4 flex-none text-gray-400"
+                  class="text-muted-foreground h-4 w-4 flex-none"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -167,7 +167,7 @@ const dateDisplay = start ? formatDate(start) : null;
             {room && (
               <div class="flex items-center gap-2">
                 <svg
-                  class="h-4 w-4 flex-none text-gray-400"
+                  class="text-muted-foreground h-4 w-4 flex-none"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -194,7 +194,7 @@ const dateDisplay = start ? formatDate(start) : null;
 
       {
         description && (
-          <p class="mt-5 text-sm leading-relaxed whitespace-pre-line text-gray-700">
+          <p class="text-muted-foreground mt-5 text-sm leading-relaxed whitespace-pre-line">
             {description}
           </p>
         )

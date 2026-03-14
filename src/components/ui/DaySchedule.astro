@@ -96,7 +96,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
           class:list={[
             "room-tab px-3 py-2.5 text-left text-xs font-semibold tracking-wide uppercase transition-colors",
             i === 0
-              ? "border-l-2 border-l-blue-600 bg-blue-50/50 text-blue-600"
+              ? "border-l-primary bg-accent/50 text-primary border-l-2"
               : "text-muted-foreground",
           ]}
         >
@@ -245,9 +245,9 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
         tabs.forEach((t) => {
           const isActive = t === tab;
           t.classList.toggle("border-l-2", isActive);
-          t.classList.toggle("border-l-blue-600", isActive);
-          t.classList.toggle("text-blue-600", isActive);
-          t.classList.toggle("bg-blue-50/50", isActive);
+          t.classList.toggle("border-l-primary", isActive);
+          t.classList.toggle("text-primary", isActive);
+          t.classList.toggle("bg-accent/50", isActive);
           t.classList.toggle("text-muted-foreground", !isActive);
         });
 

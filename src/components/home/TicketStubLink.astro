@@ -29,8 +29,8 @@ const { href = "#tickets" } = Astro.props;
   }
 
   .ticket-tab {
-    background: oklch(0.6744 0.1753 254.76);
-    color: white;
+    background: var(--primary);
+    color: var(--primary-foreground);
     padding: 0.85rem 0.85rem;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.7rem;
@@ -62,15 +62,15 @@ const { href = "#tickets" } = Astro.props;
       to bottom,
       transparent 0px,
       transparent 3px,
-      white 3px,
-      white 6px
+      var(--background) 3px,
+      var(--background) 6px
     );
     z-index: 1;
   }
 
   .ticket-body {
-    background: oklch(0.6744 0.1753 254.76 / 0.08);
-    border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
+    background: color-mix(in oklch, var(--primary), transparent 92%);
+    border: 2px dashed color-mix(in oklch, var(--primary), transparent 70%);
     border-left: none;
     padding: 0.85rem 1.5rem;
     display: flex;
@@ -82,7 +82,7 @@ const { href = "#tickets" } = Astro.props;
   .ticket-label {
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.65rem;
-    color: oklch(0.6744 0.1753 254.76);
+    color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.15em;
     font-weight: 600;

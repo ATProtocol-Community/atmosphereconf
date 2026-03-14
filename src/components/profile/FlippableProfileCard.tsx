@@ -3,10 +3,7 @@ import { RotateCcw } from "lucide-react";
 import { ProfileView } from "./ProfileView";
 import { BackFace } from "./BackFace";
 import { TalkCard } from "./TalkCard";
-import { ThemeToggle } from "./ThemeToggle";
 import { useReducedMotion } from "./useReducedMotion";
-import { detectClientTheme } from "./client-themes";
-import type { ClientTheme } from "./client-themes";
 import type { Talk } from "./TalkCard";
 import type { ProfileViewProps } from "./profile-types";
 import type { FeedPage } from "@/lib/bsky";
@@ -16,13 +13,11 @@ const DRAG_THRESHOLD = 60;
 export interface FlippableProfileCardProps extends ProfileViewProps {
   talks: Talk[];
   authorFeedInitialData: FeedPage;
-  viewerHandle?: string;
 }
 
 export function FlippableProfileCard({
   talks,
   authorFeedInitialData,
-  viewerHandle,
   ...profileProps
 }: FlippableProfileCardProps) {
   const { handle, bskyDisplayName, bskyAvatarUrl, bskyDescription } =
@@ -34,19 +29,7 @@ export function FlippableProfileCard({
   const [flipped, setFlipped] = useState(false);
   const [dragRotation, setDragRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [theme, setTheme] = useState<ClientTheme>(() => {
-    if (detectClientTheme(handle) === "blacksky") return "blacksky";
-    if (viewerHandle && detectClientTheme(viewerHandle) === "blacksky")
-      return "blacksky";
-    return "bluesky";
-  });
   const dragStartX = useRef(0);
-
-  const blackskyMode = theme === "blacksky";
-  const toggleTheme = useCallback(
-    () => setTheme((t) => (t === "blacksky" ? "bluesky" : "blacksky")),
-    [],
-  );
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -104,34 +87,24 @@ export function FlippableProfileCard({
         }
       : {};
 
-  const flipButtonLabel = blackskyMode
-    ? "Show Blacksky profile"
-    : "Show Bluesky profile";
-  const flipButtonText = blackskyMode ? "Blacksky" : "Bluesky";
-
   const frontFaceContent = (
     <>
-      <div className="absolute top-3 right-3 left-3 z-10 flex items-center justify-between">
-        <ThemeToggle
-          theme={theme}
-          onToggle={toggleTheme}
-          style={{ position: "relative", top: "auto", left: "auto" }}
-        />
-        {hasBsky && (
+      {hasBsky && (
+        <div className="absolute top-3 right-3 z-10">
           <button
             onClick={() => setFlipped(true)}
             className="border-border inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs backdrop-blur-md transition-colors"
             style={{
-              backgroundColor: "var(--back-face-pill-bg)",
-              color: "var(--back-face-pill-fg)",
+              backgroundColor: "var(--atproto-profile-pill-bg)",
+              color: "var(--atproto-profile-pill-fg)",
             }}
-            aria-label={flipButtonLabel}
+            aria-label="Show atproto profile"
           >
             <RotateCcw className="h-3 w-3" />
-            {flipButtonText}
+            atproto
           </button>
-        )}
-      </div>
+        </div>
+      )}
       <div className="my-auto">
         <div className="pt-6" />
         <div {...dragHandleProps}>
@@ -156,7 +129,7 @@ export function FlippableProfileCard({
   // Reduced motion: skip 3D flip, just swap faces instantly
   if (prefersReducedMotion) {
     return (
-      <div className="mx-auto my-auto max-w-2xl" data-theme={theme}>
+      <div className="mx-auto my-auto max-w-2xl">
         {!flipped ? (
           <div
             className={`bg-card text-card-foreground relative flex max-h-[78dvh] flex-col overflow-auto sm:max-h-[85dvh] sm:min-h-[75dvh] ${cardClasses}`}
@@ -168,8 +141,6 @@ export function FlippableProfileCard({
             cardClasses={cardClasses}
             profileProps={profileProps}
             authorFeedInitialData={authorFeedInitialData}
-            theme={theme}
-            setTheme={setTheme}
             onFlipBack={() => setFlipped(false)}
           />
         )}
@@ -180,7 +151,6 @@ export function FlippableProfileCard({
   return (
     <div
       className="mx-auto my-auto max-w-2xl"
-      data-theme={theme}
       style={{ perspective: "1200px" }}
     >
       <div
@@ -209,8 +179,6 @@ export function FlippableProfileCard({
             cardClasses={cardClasses}
             profileProps={profileProps}
             authorFeedInitialData={authorFeedInitialData}
-            theme={theme}
-            setTheme={setTheme}
             onFlipBack={() => setFlipped(false)}
             dragHandleProps={dragHandleProps}
             isBackFace

@@ -3,17 +3,13 @@ import { Avatar } from "./Avatar";
 import { AuthorFeed } from "./view/AuthorFeed";
 import { RichText } from "./view/RichText";
 import { GermButton } from "./view/GermButton";
-import { ThemeToggle } from "./ThemeToggle";
 import type { ProfileViewProps } from "./profile-types";
-import type { ClientTheme } from "./client-themes";
 import type { FeedPage } from "@/lib/bsky";
 
 interface BackFaceProps {
   cardClasses: string;
   profileProps: ProfileViewProps;
   authorFeedInitialData: FeedPage;
-  theme: ClientTheme;
-  setTheme: (t: ClientTheme) => void;
   onFlipBack: () => void;
   dragHandleProps?: Record<string, unknown>;
   isBackFace?: boolean;
@@ -24,8 +20,6 @@ export function BackFace({
   cardClasses,
   profileProps,
   authorFeedInitialData,
-  theme,
-  setTheme,
   onFlipBack,
   dragHandleProps = {},
   isBackFace = false,
@@ -43,8 +37,6 @@ export function BackFace({
     viewerDid,
   } = profileProps;
 
-  const bk = theme === "blacksky";
-
   const containerStyle: React.CSSProperties = isBackFace
     ? {
         backfaceVisibility: "hidden",
@@ -57,7 +49,6 @@ export function BackFace({
 
   return (
     <div
-      data-theme={theme}
       className={`${isBackFace ? "absolute inset-0" : "relative max-h-[78dvh] sm:max-h-[85dvh]"} bg-card text-card-foreground flex flex-col overflow-auto sm:overflow-hidden ${cardClasses}`}
       style={containerStyle}
     >
@@ -74,7 +65,7 @@ export function BackFace({
         ) : (
           <div
             className="h-24 w-full rounded-t-xl"
-            style={{ background: "var(--back-face-banner)" }}
+            style={{ background: "var(--atproto-profile-banner)" }}
           />
         )}
         <div className="-mt-10 flex flex-col items-start gap-2 px-4 sm:flex-row sm:items-end sm:gap-4 sm:px-6 md:px-12">
@@ -83,7 +74,9 @@ export function BackFace({
             src={bskyAvatarUrl ?? ""}
             alt={bskyDisplayName ?? handle}
             className="shrink-0 ring-4"
-            style={{ ["--tw-ring-color" as string]: "var(--back-face-ring)" }}
+            style={{
+              ["--tw-ring-color" as string]: "var(--atproto-profile-ring)",
+            }}
           />
           <div className="flex min-w-0 flex-1 items-end justify-between gap-2 sm:pb-1">
             <div className="min-w-0">
@@ -142,7 +135,7 @@ export function BackFace({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:underline"
-                    style={{ color: "var(--back-face-link)" }}
+                    style={{ color: "var(--atproto-profile-link)" }}
                   >
                     {content}
                   </a>
@@ -156,7 +149,7 @@ export function BackFace({
               text={bskyDescription}
               className="text-muted-foreground line-clamp-3 block text-sm break-words"
               linkClassName="hover:underline"
-              linkStyle={{ color: "var(--back-face-link)" }}
+              linkStyle={{ color: "var(--atproto-profile-link)" }}
             />
           )}
         </div>
@@ -166,17 +159,12 @@ export function BackFace({
         <AuthorFeed actor={did} initialData={authorFeedInitialData} />
       </div>
 
-      <ThemeToggle
-        theme={theme}
-        onToggle={() => setTheme(bk ? "bluesky" : "blacksky")}
-      />
-
       <button
         onClick={onFlipBack}
         className="border-border absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-xs backdrop-blur-md transition-colors"
         style={{
-          backgroundColor: "var(--back-face-pill-bg)",
-          color: "var(--back-face-pill-fg)",
+          backgroundColor: "var(--atproto-profile-pill-bg)",
+          color: "var(--atproto-profile-pill-fg)",
         }}
         aria-label="Show conference profile"
       >

@@ -96,6 +96,7 @@ export function PostQuoteEmbed({
             <PostExternalEmbed
               key={i}
               external={(embed as AppBskyEmbedExternal.View).external}
+              nested
             />
           );
         }

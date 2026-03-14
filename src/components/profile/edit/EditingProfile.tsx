@@ -95,7 +95,7 @@ export function EditingProfile({
       {/* Headshot */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         <div className="shrink-0">
-          <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-muted-foreground mb-1 text-xs tracking-wide uppercase">
             Headshot
           </div>
           <AvatarInput
@@ -114,7 +114,7 @@ export function EditingProfile({
 
       {/* Name */}
       <div>
-        <div className="text-xs tracking-wide text-gray-500 uppercase">
+        <div className="text-muted-foreground text-xs tracking-wide uppercase">
           Name
         </div>
         <input
@@ -136,7 +136,7 @@ export function EditingProfile({
       <div>
         {showPronounsField ? (
           <>
-            <div className="text-xs tracking-wide text-gray-500 uppercase">
+            <div className="text-muted-foreground text-xs tracking-wide uppercase">
               Pronouns
             </div>
             <input
@@ -151,7 +151,7 @@ export function EditingProfile({
           <button
             type="button"
             onClick={() => setShowPronounsField(true)}
-            className="text-sm font-medium text-blue-600 hover:text-blue-700"
+            className="text-primary hover:text-primary/80 text-sm font-medium"
           >
             + Add pronouns
           </button>
@@ -162,7 +162,7 @@ export function EditingProfile({
       <div>
         {showWebsiteField ? (
           <>
-            <div className="text-xs tracking-wide text-gray-500 uppercase">
+            <div className="text-muted-foreground text-xs tracking-wide uppercase">
               Website
             </div>
             <input
@@ -177,7 +177,7 @@ export function EditingProfile({
           <button
             type="button"
             onClick={() => setShowWebsiteField(true)}
-            className="text-sm font-medium text-blue-600 hover:text-blue-700"
+            className="text-primary hover:text-primary/80 text-sm font-medium"
           >
             + Add website
           </button>
@@ -187,7 +187,7 @@ export function EditingProfile({
       {/* About */}
       <div>
         <div className="flex items-center justify-between">
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-muted-foreground text-xs tracking-wide uppercase">
             About
           </div>
           <CharCount value={editDescription} max={256} />
@@ -209,7 +209,7 @@ export function EditingProfile({
 
       {/* Location */}
       <div>
-        <div className="text-xs tracking-wide text-gray-500 uppercase">
+        <div className="text-muted-foreground text-xs tracking-wide uppercase">
           Location
         </div>
         <div className="mt-1">
@@ -224,7 +224,7 @@ export function EditingProfile({
 
       {/* Interests */}
       <div>
-        <div className="text-xs tracking-wide text-gray-500 uppercase">
+        <div className="text-muted-foreground text-xs tracking-wide uppercase">
           Interests
         </div>
         <input
@@ -241,7 +241,7 @@ export function EditingProfile({
       {/* Bio */}
       <div>
         <div className="flex items-center justify-between">
-          <div className="text-xs tracking-wide text-gray-500 uppercase">
+          <div className="text-muted-foreground text-xs tracking-wide uppercase">
             Bio
           </div>
           <CharCount value={editBio} max={2000} />

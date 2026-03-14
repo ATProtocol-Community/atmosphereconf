@@ -2,8 +2,10 @@ import type { AppBskyEmbedExternal } from "@atproto/api";
 
 export function PostExternalEmbed({
   external,
+  nested,
 }: {
   external: AppBskyEmbedExternal.ViewExternal;
+  nested?: boolean;
 }) {
   let hostname: string;
   try {
@@ -12,11 +14,14 @@ export function PostExternalEmbed({
     hostname = external.uri;
   }
 
+  const Tag = nested ? "div" : "a";
+  const linkProps = nested
+    ? {}
+    : { href: external.uri, target: "_blank" as const, rel: "noopener noreferrer" };
+
   return (
-    <a
-      href={external.uri}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Tag
+      {...linkProps}
       className="border-border hover:bg-muted/50 mt-2 block overflow-hidden rounded-lg border transition-colors"
     >
       {external.thumb && (
@@ -40,6 +45,6 @@ export function PostExternalEmbed({
           </p>
         )}
       </div>
-    </a>
+    </Tag>
   );
 }

@@ -13,9 +13,9 @@ const { faqs } = Astro.props;
     faqs.map((faq) => (
       <details
         id={faq.id}
-        class="group faq-item border-border rounded-lg border bg-white px-6 py-4 transition-shadow hover:shadow-sm"
+        class="group faq-item border-border bg-card rounded-lg border px-6 py-4 transition-shadow hover:shadow-sm"
       >
-        <summary class="flex cursor-pointer list-none items-center gap-2 text-base font-semibold text-gray-900 [&::-webkit-details-marker]:hidden">
+        <summary class="text-foreground flex cursor-pointer list-none items-center gap-2 text-base font-semibold [&::-webkit-details-marker]:hidden">
           <span class="text-primary/60 text-sm transition-transform group-open:rotate-90">
             &#9654;
           </span>
@@ -29,7 +29,7 @@ const { faqs } = Astro.props;
             #
           </a>
         </summary>
-        <div class="border-border/50 mt-3 border-t pt-3 leading-relaxed text-gray-700 [&_a]:text-blue-600 [&_a]:underline [&_em]:text-gray-500 [&_p]:mb-3 [&_p:last-child]:mb-0">
+        <div class="border-border/50 text-foreground [&_a]:text-primary [&_em]:text-muted-foreground mt-3 border-t pt-3 leading-relaxed [&_a]:underline [&_p]:mb-3 [&_p:last-child]:mb-0">
           <Fragment set:html={faq.data.answer} />
         </div>
       </details>

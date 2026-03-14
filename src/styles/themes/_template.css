@@ -1,0 +1,67 @@
+/*
+ * Theme: <name>
+ * Source: <url>
+ *
+ * To add this theme, see the checklist in src/components/profile/client-themes.ts
+ */
+
+/*
+[data-theme="<name>"] {
+  --theme-bg: ;
+  --theme-fg: ;
+  --theme-muted: ;
+  --theme-accent: ;
+  --theme-surface: ;
+  --theme-border: ;
+
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: var(--theme-fg);
+  --secondary: ;
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: ;
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: ;
+  --ring: var(--theme-accent);
+
+  --header-bg: ;
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: ;
+  --header-border: ;
+  --header-logo-accent: var(--theme-accent);
+
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(to right, , );
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: ;
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  --event-presentation-bg: ;
+  --event-presentation-fg: ;
+  --event-presentation-sub: ;
+  --event-lightning-bg: ;
+  --event-lightning-fg: ;
+  --event-lightning-sub: ;
+  --event-panel-bg: ;
+  --event-panel-fg: ;
+  --event-panel-sub: ;
+  --event-workshop-bg: ;
+  --event-workshop-fg: ;
+  --event-workshop-sub: ;
+  --event-info-bg: ;
+  --event-info-fg: ;
+  --event-info-sub: ;
+  --event-activity-bg: ;
+  --event-activity-fg: ;
+  --event-activity-sub: ;
+}
+*/

@@ -16,6 +16,18 @@ For starters, we're going to have a custom conference profile. Attendees and spe
 > [!NOTE]
 > There is a tangled repo at <https://tangled.org/@atprotocol.dev/ATmosphereConf.org> that was another start to this. We are using Railway for hosting, and it has Github integration for deploys, so we're going to use this for now and then figure out how to sync both, and primarily use tangled for issues and development.
 
+## Adding a new theme
+
+The site supports multiple themes (bluesky, blacksky, reddwarf, pckt). To add a new one:
+
+1. **Copy the template** — `src/styles/themes/_template.css` → `src/styles/themes/<name>.css`, fill in your colors
+2. **Import it** — add `@import "./themes/<name>.css";` in `src/styles/global.css`
+3. **Register handle domains** — add a `<name>: [".yourdomain."]` entry in `src/components/profile/client-themes.ts`
+4. **Add to the type** — add `"<name>"` to `ClientTheme` in `src/components/profile/client-themes.ts`
+5. **Add to the toggle** — add `"<name>"` to the `THEMES` array in `src/components/shared/Header.astro`
+6. **Add to the valid themes list** — add `"<name>"` to the `VALID` array in `src/layouts/Layout.astro` (this is the inline script that applies the saved theme before paint)
+7. **Update dark icon logic** — if it's a dark theme, add it to the `isDark` check in `src/components/shared/Header.astro`
+
 # Astro Starter Kit: Basics
 
 ```sh

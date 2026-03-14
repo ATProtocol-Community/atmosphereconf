@@ -73,8 +73,8 @@
   }
 
   .ntp-tab {
-    background: oklch(0.6744 0.1753 254.76);
-    color: white;
+    background: var(--primary);
+    color: var(--primary-foreground);
     padding: 0.6rem 0.4rem;
     font-size: 0.45rem;
     font-weight: 700;
@@ -104,14 +104,14 @@
       to bottom,
       transparent 0,
       transparent 3px,
-      white 3px,
-      white 6px
+      var(--background) 3px,
+      var(--background) 6px
     );
     z-index: 1;
   }
   .ntp-body {
-    background: oklch(0.95 0.02 254.76);
-    border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
+    background: var(--card);
+    border: 2px dashed color-mix(in oklch, var(--primary), transparent 70%);
     border-left: none;
     border-top: none;
     padding: 0.6rem 1rem;
@@ -124,7 +124,7 @@
     font-size: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: oklch(0.6744 0.1753 254.76);
+    color: var(--primary);
     font-weight: 600;
   }
   .ntp-main {
@@ -153,8 +153,8 @@
   }
 
   .ntt-tab {
-    background: oklch(0.6744 0.1753 254.76);
-    color: white;
+    background: var(--primary);
+    color: var(--primary-foreground);
     padding: 0 0.45rem;
     font-size: 0.4rem;
     font-weight: 700;
@@ -185,15 +185,15 @@
       to bottom,
       transparent 0,
       transparent 3px,
-      white 3px,
-      white 6px
+      var(--background) 3px,
+      var(--background) 6px
     );
     z-index: 1;
   }
   .ntt-body {
     flex: 1;
-    background: oklch(0.95 0.02 254.76);
-    border: 2px dashed oklch(0.6744 0.1753 254.76 / 0.3);
+    background: var(--card);
+    border: 2px dashed color-mix(in oklch, var(--primary), transparent 70%);
     border-left: none;
     height: 40px;
     overflow: hidden;
@@ -224,12 +224,12 @@
   .ntt-detail {
     font-size: 0.6rem;
     font-weight: 600;
-    color: oklch(0.6744 0.1753 254.76);
+    color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
   .ntt-sep {
-    color: oklch(0.6744 0.1753 254.76 / 0.3);
+    color: color-mix(in oklch, var(--primary), transparent 70%);
     font-size: 0.7rem;
   }
 </style>

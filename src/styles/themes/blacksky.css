@@ -1,0 +1,63 @@
+[data-theme="blacksky"] {
+  /* Palette */
+  --theme-bg: #0f1729;
+  --theme-fg: #e8eaf0;
+  --theme-muted: #a8adc0;
+  --theme-accent: #6b7bf5;
+  --theme-surface: #182040;
+  --theme-border: rgba(255, 255, 255, 0.08);
+
+  /* Full semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-bg);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: var(--theme-fg);
+  --secondary: rgba(255, 255, 255, 0.1);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: var(--theme-surface);
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: var(--theme-accent);
+
+  /* Header */
+  --header-bg: #0a0e1a;
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: rgba(232, 234, 240, 0.6);
+  --header-border: rgba(255, 255, 255, 0.1);
+  --header-logo-accent: var(--theme-accent);
+
+  /* atproto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(to right, #1a2340, #2a3560);
+  --atproto-profile-ring: #070c0c;
+  --atproto-profile-pill-bg: rgba(15, 23, 41, 0.85);
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  /* Event-type badges — 3 distinct accent tints */
+  --event-presentation-bg: rgba(107, 123, 245, 0.18);
+  --event-presentation-fg: #a0adff;
+  --event-presentation-sub: #8090f0;
+  --event-lightning-bg: rgba(245, 180, 80, 0.15);
+  --event-lightning-fg: #f5c060;
+  --event-lightning-sub: #d0a050;
+  --event-panel-bg: rgba(180, 120, 245, 0.15);
+  --event-panel-fg: #c8a0f5;
+  --event-panel-sub: #b080e0;
+  --event-workshop-bg: rgba(180, 120, 245, 0.15);
+  --event-workshop-fg: #c8a0f5;
+  --event-workshop-sub: #b080e0;
+  --event-info-bg: rgba(245, 180, 80, 0.12);
+  --event-info-fg: #f5c060;
+  --event-info-sub: #d0a050;
+  --event-activity-bg: rgba(255, 255, 255, 0.06);
+  --event-activity-fg: #c0c4d0;
+  --event-activity-sub: #8b8fa3;
+}

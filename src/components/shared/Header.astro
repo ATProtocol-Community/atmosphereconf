@@ -17,15 +17,21 @@ const navLinks = [
 ];
 ---
 
-<header id="site-header" class="bg-primary sticky top-0 z-10 h-14 font-mono">
+<header
+  id="site-header"
+  class="sticky top-0 z-10 h-14 font-mono"
+  style="background: var(--header-bg, var(--primary));"
+>
   <div
-    class="bg-primary relative z-10 flex h-full items-center justify-center gap-6 border-b border-white text-base sm:border-b-4"
+    class="relative z-10 flex h-full items-center justify-center gap-6 text-base sm:border-b-4"
+    style="background: var(--header-bg, var(--primary)); border-bottom: 1px solid var(--header-border, white);"
   >
     <a
       id="site-logo"
       href="/"
       data-astro-reload
-      class="text-primary-foreground/80 flex items-center gap-1.5 text-lg font-semibold"
+      class="flex items-center gap-1.5 text-lg font-semibold opacity-80"
+      style="color: var(--header-fg, oklch(0.985 0 0));"
     >
       <Image
         id="header-goose"
@@ -35,9 +41,18 @@ const navLinks = [
         height={48}
         alt=""
       />
-      <span><span class="text-blue-900">AT</span>mosphereConf</span>
+      <span
+        ><span
+          style="color: var(--header-logo-accent, oklch(0.282 0.091 267.94));"
+          >AT</span
+        >mosphereConf</span
+      >
     </a>
-    <span class="text-white/30 select-none" aria-hidden="true">//</span>
+    <span
+      class="select-none"
+      style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
+      aria-hidden="true">//</span
+    >
     <nav class="flex items-center gap-4">
       <!-- desktop links -->
       <div class="hidden items-center gap-4 sm:flex">
@@ -46,7 +61,8 @@ const navLinks = [
             <a
               href={href}
               data-nav-section={href.replace("/#", "")}
-              class="text-white/60 transition-colors hover:text-white"
+              class="nav-link transition-colors"
+              style="color: var(--header-fg-muted, rgba(255,255,255,0.6));"
             >
               {label}
             </a>
@@ -57,7 +73,8 @@ const navLinks = [
       <div class="relative sm:hidden">
         <button
           id="nav-menu-btn"
-          class="flex items-center gap-1 text-white/60 transition-colors hover:text-white"
+          class="flex items-center gap-1 transition-colors"
+          style="color: var(--header-fg-muted, rgba(255,255,255,0.6));"
           aria-expanded="false"
           aria-haspopup="true"
         >
@@ -75,17 +92,18 @@ const navLinks = [
               d="M19 9l-7 7-7-7"></path>
           </svg>
         </button>
-        <!-- little jank, but 'hidden' overrides flex -->
         <div
           id="nav-menu"
-          class="bg-primary absolute top-full right-0 mt-1 flex hidden w-max min-w-[50vw] flex-col rounded border border-white/20 py-2"
+          class="absolute top-full right-0 mt-1 flex hidden w-max min-w-[50vw] flex-col rounded border py-2"
+          style="background: var(--header-bg, var(--primary)); border-color: var(--header-border, rgba(255,255,255,0.2));"
         >
           {
             navLinks.map(({ href, label }) => (
               <a
                 href={href}
                 data-nav-section={href.replace("/#", "")}
-                class="px-4 py-2 text-white/60 transition-colors hover:text-white"
+                class="nav-link px-4 py-2 transition-colors"
+                style="color: var(--header-fg-muted, rgba(255,255,255,0.6));"
               >
                 {label}
               </a>
@@ -94,10 +112,27 @@ const navLinks = [
         </div>
       </div>
     </nav>
-    <span class="hidden text-white/30 select-none md:inline" aria-hidden="true"
-      >//</span
+    <span
+      class="hidden select-none md:inline"
+      style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
+      aria-hidden="true">//</span
     >
-    <div class="flex h-8 items-center">
+    <div class="flex h-8 items-center gap-4">
+      <button
+        id="theme-toggle"
+        class="flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs transition-colors"
+        style="color: var(--header-fg-muted, rgba(255,255,255,0.6)); border-color: var(--header-fg-muted, rgba(255,255,255,0.3));"
+        aria-label="Toggle theme"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+          <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+          <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+          <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+        </svg>
+        <span id="theme-next-label"></span>
+      </button>
       {
         profile ? (
           <a href={`/profile/${profile.handle}`}>
@@ -111,7 +146,8 @@ const navLinks = [
         ) : (
           <a
             href="/login"
-            class="hover:text-primary rounded border border-white/40 px-3 py-1 font-mono text-base font-medium text-white transition-colors hover:bg-white"
+            class="rounded border px-3 py-1 font-mono text-base font-medium transition-colors"
+            style="color: var(--header-fg, white); border-color: var(--header-fg-muted, rgba(255,255,255,0.4));"
           >
             sign in
           </a>
@@ -187,15 +223,20 @@ const navLinks = [
     if (el) sections.set(id, el);
   });
 
-  const active =
-    "text-white underline decoration-dashed decoration-white/70 underline-offset-4";
-  const inactive = "text-white/60";
+  const active = "nav-active underline decoration-dashed underline-offset-4";
+  const inactive = "";
 
   function setActive(id: string | null) {
     navLinks.forEach((link) => {
       const isActive = link.dataset.navSection === id;
-      active.split(" ").forEach((c) => link.classList.toggle(c, isActive));
-      inactive.split(" ").forEach((c) => link.classList.toggle(c, !isActive));
+      active
+        .split(" ")
+        .filter(Boolean)
+        .forEach((c) => link.classList.toggle(c, isActive));
+      inactive
+        .split(" ")
+        .filter(Boolean)
+        .forEach((c) => link.classList.toggle(c, !isActive));
     });
   }
 
@@ -232,4 +273,38 @@ const navLinks = [
   // Set initial active from URL hash
   const hash = window.location.hash.replace("#", "");
   if (hash && sections.has(hash)) setActive(hash);
+
+  // Theme toggle
+  const THEMES = ["bluesky", "blacksky", "reddwarf", "pckt", "germ"];
+  const themeLabel = document.getElementById("theme-next-label");
+
+  function syncThemeLabel() {
+    const current = document.documentElement.getAttribute("data-theme") || "bluesky";
+    const next = THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
+    if (themeLabel) themeLabel.textContent = next;
+  }
+  syncThemeLabel();
+
+  const themeBtn = document.getElementById("theme-toggle");
+  themeBtn?.addEventListener("click", () => {
+    const current =
+      document.documentElement.getAttribute("data-theme") || "bluesky";
+    const next = THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("atmosphereconf:theme", next);
+    syncThemeLabel();
+  });
 </script>
+
+<style>
+  .nav-link:hover {
+    color: var(--header-fg, white);
+  }
+  .nav-active {
+    color: var(--header-fg, white);
+    text-decoration-color: var(--header-fg-muted, rgba(255, 255, 255, 0.7));
+  }
+  #theme-toggle:hover {
+    color: var(--header-fg, white);
+  }
+</style>

@@ -53,11 +53,11 @@ function ActorList({
   return (
     <Command.List className="py-1">
       {loading && actors.length === 0 ? (
-        <div className="py-6 text-center text-sm text-gray-500">
+        <div className="text-muted-foreground py-6 text-center text-sm">
           Searching...
         </div>
       ) : actors.length === 0 ? (
-        <div className="py-6 text-center text-sm text-gray-500">
+        <div className="text-muted-foreground py-6 text-center text-sm">
           No users found.
         </div>
       ) : (
@@ -66,7 +66,7 @@ function ActorList({
             key={actor.did}
             value={actor.handle}
             onSelect={() => handleSelect(actor)}
-            className="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors data-[selected=true]:bg-gray-50"
+            className="data-[selected=true]:bg-accent flex w-full items-center gap-2 px-3 py-2 text-left transition-colors"
           >
             <Avatar
               size="sm"
@@ -79,7 +79,7 @@ function ActorList({
                   {actor.displayName}
                 </span>
               )}
-              <span className="truncate text-xs text-gray-500">
+              <span className="text-muted-foreground truncate text-xs">
                 @{actor.handle}
               </span>
             </div>
@@ -190,7 +190,7 @@ export function ActorAutocomplete({
         </Popover.Anchor>
         <Popover.Portal>
           <Popover.Content
-            className="z-50 mt-1 max-h-60 w-(--radix-popover-trigger-width) overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg"
+            className="border-border bg-popover z-50 mt-1 max-h-60 w-(--radix-popover-trigger-width) overflow-y-auto rounded-lg border shadow-lg"
             align="start"
             sideOffset={4}
             onOpenAutoFocus={(event: Event) => event.preventDefault()}

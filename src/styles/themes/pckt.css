@@ -1,0 +1,67 @@
+[data-theme="pckt"] {
+  /* Palette — sourced from pckt.blog */
+  --theme-bg: oklch(0.145 0.02 260);
+  --theme-fg: oklch(0.984 0.005 260);
+  --theme-muted: oklch(0.65 0.02 260);
+  --theme-accent: oklch(0.723 0.219 149.579);
+  --theme-surface: oklch(0.208 0.03 260);
+  --theme-border: oklch(0.723 0.219 149.579 / 0.25);
+
+  /* Full semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: oklch(0.208 0.03 260);
+  --secondary: oklch(0.279 0.03 260);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: oklch(0.279 0.03 260);
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: oklch(0.372 0.03 260 / 0.3);
+  --ring: var(--theme-accent);
+
+  /* Header */
+  --header-bg: oklch(0.129 0.02 260);
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: oklch(0.704 0.015 260 / 0.8);
+  --header-border: oklch(0.723 0.219 149.579 / 0.3);
+  --header-logo-accent: var(--theme-accent);
+
+  /* atproto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(
+    to right,
+    oklch(0.208 0.03 260),
+    oklch(0.279 0.03 260)
+  );
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: oklch(0.145 0.02 260 / 0.85);
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  /* Event-type badges — pckt logo colors: blue, yellow, red (no green — blends with bg) */
+  --event-presentation-bg: oklch(0.546 0.245 262.881 / 0.2);
+  --event-presentation-fg: oklch(0.707 0.165 254.624);
+  --event-presentation-sub: oklch(0.546 0.245 262.881);
+  --event-lightning-bg: oklch(0.795 0.184 86.047 / 0.15);
+  --event-lightning-fg: oklch(0.905 0.182 98.111);
+  --event-lightning-sub: oklch(0.681 0.162 75.834);
+  --event-panel-bg: oklch(0.637 0.237 25.331 / 0.18);
+  --event-panel-fg: oklch(0.704 0.191 22.216);
+  --event-panel-sub: oklch(0.577 0.245 27.325);
+  --event-workshop-bg: oklch(0.637 0.237 25.331 / 0.18);
+  --event-workshop-fg: oklch(0.704 0.191 22.216);
+  --event-workshop-sub: oklch(0.577 0.245 27.325);
+  --event-info-bg: oklch(0.795 0.184 86.047 / 0.12);
+  --event-info-fg: oklch(0.905 0.182 98.111);
+  --event-info-sub: oklch(0.681 0.162 75.834);
+  --event-activity-bg: oklch(0.723 0.219 149.579 / 0.15);
+  --event-activity-fg: oklch(0.792 0.209 151.711);
+  --event-activity-sub: oklch(0.627 0.194 149.214);
+}

@@ -1,0 +1,16 @@
+[data-theme="bluesky"] {
+  /* Header */
+  --header-bg: var(--primary);
+  --header-fg: oklch(0.985 0 0);
+  --header-fg-muted: rgba(255, 255, 255, 0.6);
+  --header-border: white;
+  --header-logo-accent: oklch(0.282 0.091 267.94);
+
+  /* atproto profile tokens */
+  --atproto-profile-bg: white;
+  --atproto-profile-banner: linear-gradient(to right, #60a5fa, #3b82f6);
+  --atproto-profile-ring: white;
+  --atproto-profile-pill-bg: rgba(255, 255, 255, 0.95);
+  --atproto-profile-pill-fg: #6b7280;
+  --atproto-profile-link: #2563eb;
+}

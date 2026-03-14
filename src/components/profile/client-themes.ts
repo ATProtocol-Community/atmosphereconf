@@ -1,13 +1,20 @@
-export type ClientTheme = "bluesky" | "blacksky";
+export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ";
 
 const CLIENT_THEME_DOMAINS: Record<
   Exclude<ClientTheme, "bluesky">,
   string[]
 > = {
   blacksky: [".blacksky.", ".myatproto.social", ".cryptoanarchy.network"],
-  // To add a new theme, add its CSS vars in global.css under [data-theme="name"]
-  // then add an entry here, e.g.:
-  // pckt: [".pckt."],
+  reddwarf: [".reddwarf."],
+  pckt: [".pckt."],
+  germ: [".germnetwork."],
+  // your-server: [".yourdomain."]
+  // To add a new theme:
+  // 1. Copy src/styles/themes/_template.css → src/styles/themes/<name>.css
+  // 2. Import it in src/styles/global.css
+  // 3. Add handle domains here
+  // 4. Add to THEMES array in Header.astro and VALID in Layout.astro
+  // 5. Add to the ClientTheme type above
 };
 
 export function detectClientTheme(handle: string): ClientTheme {

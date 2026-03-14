@@ -23,15 +23,15 @@ const {
 } = Astro.props;
 
 const badgeColors: Record<string, string> = {
-  Presentation: "bg-blue-100 text-blue-700",
-  "Lightning Talk": "bg-amber-100 text-amber-700",
-  "Discussion / Panel": "bg-purple-100 text-purple-700",
-  Workshop: "bg-emerald-100 text-emerald-700",
+  Presentation: "event-badge event-badge-presentation",
+  "Lightning Talk": "event-badge event-badge-lightning",
+  "Discussion / Panel": "event-badge event-badge-panel",
+  Workshop: "event-badge event-badge-workshop",
 };
 
 const baseClass =
-  "block rounded-lg border border-border bg-white px-5 py-3 scroll-mt-24 target:ring-2 target:ring-blue-400";
-const linkClass = `${baseClass} group/card relative isolate transition-all hover:shadow-md hover:border-blue-300 hover:bg-blue-50/30`;
+  "block rounded-lg border border-border bg-card px-5 py-3 scroll-mt-24 target:ring-2 target:ring-primary";
+const linkClass = `${baseClass} group/card relative isolate transition-all hover:shadow-md hover:border-primary/50 hover:bg-accent/30`;
 
 const plainTitle = title.replace(/<[^>]*>/g, "");
 const titleSize = plainTitle.length > 50 ? "text-sm" : "text-base";
@@ -41,14 +41,14 @@ const titleClamp = anchor ? "" : "line-clamp-2";
 <div id={anchor ? talkId : undefined} class={linkClass}>
   <div class="flex items-center gap-3">
     <span
-      class="text-primary/40 shrink-0 transition-colors group-hover/card:text-blue-500"
+      class="text-primary/40 group-hover/card:text-primary shrink-0 transition-colors"
       >&rarr;</span
     >
     <div class="min-w-0 flex-1">
       <a href={anchor ? `#${talkId}` : `/event/${talkId}`}>
         <span
           class:list={[
-            "leading-5 font-semibold text-gray-900",
+            "text-foreground leading-5 font-semibold",
             titleSize,
             titleClamp,
             !anchor && "h-10",
@@ -58,12 +58,12 @@ const titleClamp = anchor ? "" : "line-clamp-2";
         <span class="absolute inset-0 z-10 h-full w-full"></span>
       </a>
       <span
-        class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-gray-500"
+        class="text-muted-foreground mt-1 flex flex-wrap items-center gap-1.5 text-xs"
       >
         <span
           class:list={[
             "rounded-full px-2 py-0.5 font-medium whitespace-nowrap",
-            badgeColors[typeName] || "bg-gray-100 text-gray-600",
+            badgeColors[typeName] || "event-badge event-badge-activity",
           ]}
         >
           {typeName}
@@ -77,7 +77,7 @@ const titleClamp = anchor ? "" : "line-clamp-2";
                 <>
                   {" · "}
                   <a
-                    class="z-20 cursor-pointer text-blue-600 hover:underline"
+                    class="text-primary z-20 cursor-pointer hover:underline"
                     href={`/profile/${s.id}`}
                   >
                     @{s.id}
@@ -90,7 +90,9 @@ const titleClamp = anchor ? "" : "line-clamp-2";
       </span>
       {
         description && (
-          <p class="mt-1.5 line-clamp-2 text-xs text-gray-500">{description}</p>
+          <p class="text-muted-foreground mt-1.5 line-clamp-2 text-xs">
+            {description}
+          </p>
         )
       }
     </div>

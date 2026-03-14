@@ -73,6 +73,26 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Event-type badge/cell colors */
+  --event-presentation-bg: oklch(0.932 0.032 255);
+  --event-presentation-fg: oklch(0.392 0.1 255);
+  --event-presentation-sub: oklch(0.488 0.12 255);
+  --event-lightning-bg: oklch(0.936 0.042 80);
+  --event-lightning-fg: oklch(0.477 0.11 65);
+  --event-lightning-sub: oklch(0.541 0.12 65);
+  --event-panel-bg: oklch(0.932 0.042 305);
+  --event-panel-fg: oklch(0.457 0.12 305);
+  --event-panel-sub: oklch(0.541 0.12 305);
+  --event-workshop-bg: oklch(0.932 0.032 165);
+  --event-workshop-fg: oklch(0.457 0.1 165);
+  --event-workshop-sub: oklch(0.541 0.1 165);
+  --event-info-bg: oklch(0.936 0.042 80);
+  --event-info-fg: oklch(0.477 0.11 65);
+  --event-info-sub: oklch(0.541 0.12 65);
+  --event-activity-bg: oklch(0.932 0 0);
+  --event-activity-fg: oklch(0.35 0 0);
+  --event-activity-sub: oklch(0.45 0 0);
 }
 
 .dark {
@@ -109,49 +129,12 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-[data-theme="blacksky"] {
-  /* Palette */
-  --theme-bg: #0f1729;
-  --theme-fg: #e8eaf0;
-  --theme-muted: #8b8fa3;
-  --theme-accent: #6b7bf5;
-  --theme-surface: #182040;
-  --theme-border: rgba(255, 255, 255, 0.08);
-
-  /* Semantic mappings */
-  --card: var(--theme-bg);
-  --card-foreground: var(--theme-fg);
-  --border: var(--theme-border);
-  --primary: var(--theme-accent);
-  --primary-foreground: var(--theme-fg);
-  --muted-foreground: var(--theme-muted);
-  --secondary: rgba(255, 255, 255, 0.1);
-  --secondary-foreground: var(--theme-fg);
-  --input: rgba(255, 255, 255, 0.15);
-  --ring: var(--theme-accent);
-
-  /* Back-face tokens */
-  --back-face-bg: var(--theme-bg);
-  --back-face-banner: linear-gradient(to right, #1a2340, #2a3560);
-  --back-face-ring: #070c0c;
-  --back-face-pill-bg: rgba(15, 23, 41, 0.85);
-  --back-face-pill-fg: var(--theme-accent);
-  --back-face-link: var(--theme-accent);
-}
-
-[data-theme="bluesky"] {
-  /* Palette */
-  --theme-accent: #2563eb;
-  --theme-muted: #6b7280;
-
-  /* Back-face tokens */
-  --back-face-bg: white;
-  --back-face-banner: linear-gradient(to right, #60a5fa, #3b82f6);
-  --back-face-ring: white;
-  --back-face-pill-bg: rgba(255, 255, 255, 0.95);
-  --back-face-pill-fg: var(--theme-muted);
-  --back-face-link: var(--theme-accent);
-}
+/* Themes — add new themes in src/styles/themes/ */
+@import "./themes/bluesky.css";
+@import "./themes/blacksky.css";
+@import "./themes/reddwarf.css";
+@import "./themes/pckt.css";
+@import "./themes/germ.css";
 
 @layer base {
   html {
@@ -179,6 +162,55 @@
 @layer components {
   .ui-input {
     @apply file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm;
+  }
+
+  /* Event-type badge/cell classes */
+  .event-badge {
+    background: var(--event-activity-bg);
+    color: var(--event-activity-fg);
+  }
+  .event-badge-presentation {
+    background: var(--event-presentation-bg);
+    color: var(--event-presentation-fg);
+  }
+  .event-badge-lightning {
+    background: var(--event-lightning-bg);
+    color: var(--event-lightning-fg);
+  }
+  .event-badge-panel {
+    background: var(--event-panel-bg);
+    color: var(--event-panel-fg);
+  }
+  .event-badge-workshop {
+    background: var(--event-workshop-bg);
+    color: var(--event-workshop-fg);
+  }
+  .event-badge-info {
+    background: var(--event-info-bg);
+    color: var(--event-info-fg);
+  }
+  .event-badge-activity {
+    background: var(--event-activity-bg);
+    color: var(--event-activity-fg);
+  }
+
+  .event-sub-presentation {
+    color: var(--event-presentation-sub);
+  }
+  .event-sub-lightning {
+    color: var(--event-lightning-sub);
+  }
+  .event-sub-panel {
+    color: var(--event-panel-sub);
+  }
+  .event-sub-workshop {
+    color: var(--event-workshop-sub);
+  }
+  .event-sub-info {
+    color: var(--event-info-sub);
+  }
+  .event-sub-activity {
+    color: var(--event-activity-sub);
   }
 
   .ui-textarea {

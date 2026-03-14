@@ -3,11 +3,11 @@ import Layout from "../../layouts/Layout.astro";
 import ProfilePage from "@/components/profile/ProfilePage.astro";
 import { loadProfile } from "@/lib/profile";
 import { getTalksByHandle } from "@/lib/talks";
+import { detectClientTheme } from "@/components/profile/client-themes";
 
 const { handle } = Astro.params;
 const profile = await loadProfile(handle!);
 const viewerDid = Astro.locals.loggedInUser?.did;
-const viewerHandle = Astro.locals.loggedInUser?.handle;
 
 if (!profile) return Astro.redirect("/404");
 
@@ -32,6 +32,10 @@ const editData = isOwnProfile
   : undefined;
 ---
 
-<Layout title={`${profile.displayName} - Atmosphere Conference`} flush>
-  <ProfilePage {profile} {editData} {viewerDid} {viewerHandle} />
+<Layout
+  title={`${profile.displayName} - Atmosphere Conference`}
+  flush
+  defaultTheme={detectClientTheme(profile.handle)}
+>
+  <ProfilePage {profile} {editData} {viewerDid} />
 </Layout>
