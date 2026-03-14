@@ -280,8 +280,7 @@ const navLinks = [
 
   function syncThemeLabel() {
     const current = document.documentElement.getAttribute("data-theme") || "bluesky";
-    const next = THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
-    if (themeLabel) themeLabel.textContent = next;
+    if (themeLabel) themeLabel.textContent = current;
   }
   syncThemeLabel();
 

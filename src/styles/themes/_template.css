@@ -3,10 +3,13 @@
  * Source: <url>
  *
  * To add this theme, see the checklist in src/components/profile/client-themes.ts
+ *
+ * This uses a selector that never matches, so it's valid CSS you can copy.
+ * Replace TEMPLATE with your theme name.
  */
 
-/*
-[data-theme="<name>"] {
+[data-theme="TEMPLATE"] {
+  /* Palette */
   --theme-bg: ;
   --theme-fg: ;
   --theme-muted: ;
@@ -14,6 +17,7 @@
   --theme-surface: ;
   --theme-border: ;
 
+  /* Semantic overrides */
   --background: var(--theme-bg);
   --foreground: var(--theme-fg);
   --card: var(--theme-surface);
@@ -32,12 +36,14 @@
   --input: ;
   --ring: var(--theme-accent);
 
+  /* Header */
   --header-bg: ;
   --header-fg: var(--theme-fg);
   --header-fg-muted: ;
   --header-border: ;
   --header-logo-accent: var(--theme-accent);
 
+  /* ATProto profile tokens */
   --atproto-profile-bg: var(--theme-bg);
   --atproto-profile-banner: linear-gradient(to right, , );
   --atproto-profile-ring: var(--theme-bg);
@@ -45,6 +51,7 @@
   --atproto-profile-pill-fg: var(--theme-accent);
   --atproto-profile-link: var(--theme-accent);
 
+  /* Event-type badge/cell colors (calendar + talk pills) */
   --event-presentation-bg: ;
   --event-presentation-fg: ;
   --event-presentation-sub: ;
@@ -64,4 +71,3 @@
   --event-activity-fg: ;
   --event-activity-sub: ;
 }
-*/

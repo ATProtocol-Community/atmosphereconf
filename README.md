@@ -18,15 +18,15 @@ For starters, we're going to have a custom conference profile. Attendees and spe
 
 ## Adding a new theme
 
-The site supports multiple themes (bluesky, blacksky, reddwarf, pckt). To add a new one:
+The site supports multiple themes (blacksky, germ, reddwarf, pckt, bluesky). To add a new one:
 
 1. **Copy the template** — `src/styles/themes/_template.css` → `src/styles/themes/<name>.css`, fill in your colors
 2. **Import it** — add `@import "./themes/<name>.css";` in `src/styles/global.css`
-3. **Register handle domains** — add a `<name>: [".yourdomain."]` entry in `src/components/profile/client-themes.ts`
+3. **Register handle domains** — add a `<name>: [".yourdomain."]` entry in `src/components/profile/client-themes.ts`. This is used to auto-apply your theme for logged-in users with matching handles and for speaker profile pages.
 4. **Add to the type** — add `"<name>"` to `ClientTheme` in `src/components/profile/client-themes.ts`
 5. **Add to the toggle** — add `"<name>"` to the `THEMES` array in `src/components/shared/Header.astro`
 6. **Add to the valid themes list** — add `"<name>"` to the `VALID` array in `src/layouts/Layout.astro` (this is the inline script that applies the saved theme before paint)
-7. **Update dark icon logic** — if it's a dark theme, add it to the `isDark` check in `src/components/shared/Header.astro`
+7. **Add event-type colors** — if it's a dark theme, add `--event-*` overrides in your theme CSS (see `_template.css` for the full list)
 
 # Astro Starter Kit: Basics
 
