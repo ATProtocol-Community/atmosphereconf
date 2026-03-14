@@ -23,7 +23,7 @@ const navLinks = [
   style="background: var(--header-bg, var(--primary));"
 >
   <div
-    class="relative z-10 flex h-full items-center justify-center gap-6 text-base sm:border-b-4"
+    class="relative z-10 flex h-full items-center justify-center gap-3 text-base sm:gap-6 sm:border-b-4"
     style="background: var(--header-bg, var(--primary)); border-bottom: 1px solid var(--header-border, white);"
   >
     <a
@@ -117,10 +117,10 @@ const navLinks = [
       style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
       aria-hidden="true">//</span
     >
-    <div class="flex h-8 items-center gap-4">
+    <div class="flex h-8 items-center gap-2 sm:gap-4">
       <button
         id="theme-toggle"
-        class="flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs transition-colors"
+        class="flex h-7 items-center gap-1.5 rounded-full px-1.5 text-xs transition-colors sm:border sm:px-2.5"
         style="color: var(--header-fg-muted, rgba(255,255,255,0.6)); border-color: var(--header-fg-muted, rgba(255,255,255,0.3));"
         aria-label="Toggle theme"
       >
@@ -131,7 +131,7 @@ const navLinks = [
           <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
           <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
         </svg>
-        <span id="theme-next-label"></span>
+        <span id="theme-next-label" class="hidden sm:inline"></span>
       </button>
       {
         profile ? (
@@ -146,7 +146,7 @@ const navLinks = [
         ) : (
           <a
             href="/login"
-            class="rounded border px-3 py-1 font-mono text-base font-medium transition-colors"
+            class="rounded border px-2 py-1 font-mono text-sm font-medium whitespace-nowrap transition-colors sm:px-3 sm:text-base"
             style="color: var(--header-fg, white); border-color: var(--header-fg-muted, rgba(255,255,255,0.4));"
           >
             sign in
