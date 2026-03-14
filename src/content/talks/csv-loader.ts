@@ -3,7 +3,6 @@ import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import Papa from "papaparse";
 import { z } from "astro/zod";
-import yaml from "js-yaml";
 
 const TYPE_MAP = {
   "Discussion / Panel": "panel",
@@ -13,6 +12,34 @@ const TYPE_MAP = {
 } as const;
 
 const emptyToUndefined = z.string().transform((s) => s.trim() || undefined);
+
+// "2026-03-26 9:30am" → "2026-03-26T09:30"
+const csvTime = z.string().transform((s) => {
+  const trimmed = s.trim();
+  if (!trimmed) return undefined;
+  const m = trimmed.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{1,2}):(\d{2})(am|pm)$/i);
+  if (!m) return undefined;
+  let h = parseInt(m[2]);
+  const period = m[4].toLowerCase();
+  if (period === "pm" && h !== 12) h += 12;
+  if (period === "am" && h === 12) h = 0;
+  return `${m[1]}T${String(h).padStart(2, "0")}:${m[3]}`;
+});
+
+const ROOM_MAP: Record<string, string> = {
+  "Room 2301": "2301 Classroom",
+  "Room 2311": "2311 Classroom",
+  "Performance Theater": "Performance Theatre",
+  "Great Hall South": "Bukhman Lounge",
+};
+
+const csvRoom = z
+  .string()
+  .transform((s) => {
+    const trimmed = s.trim();
+    if (!trimmed) return undefined;
+    return ROOM_MAP[trimmed] ?? trimmed;
+  });
 
 const speakerName = emptyToUndefined;
 const speakerId = z
@@ -36,8 +63,9 @@ const csvRowSchema = z
       .transform(
         (t) => TYPE_MAP[t as keyof typeof TYPE_MAP] ?? t.toLowerCase(),
       ),
-    "Start Time": emptyToUndefined,
-    "End Time": emptyToUndefined,
+    "Start Time": csvTime,
+    "End Time": csvTime,
+    Room: csvRoom,
     "Talk Title": z
       .string()
       .min(1)
@@ -64,6 +92,7 @@ const csvRowSchema = z
       speakers,
       start: row["Start Time"],
       end: row["End Time"],
+      room: row["Room"],
       description: row["Proposal Description"],
       category: row["Category"],
     };
@@ -101,23 +130,6 @@ export function csvTalksLoader(dir: string): Loader {
       }
 
       logger.info(`Loaded ${records.length} talks from ${csvFile}`);
-
-      // Load YAML entries that don't already exist in the store (workshops, info, activities)
-      const yamlFile = files.find((f) => f.endsWith(".yaml") || f.endsWith(".yml"));
-      if (yamlFile) {
-        const yamlRaw = await readFile(join(dir, yamlFile), "utf-8");
-        const yamlEntries = yaml.load(yamlRaw) as Array<Record<string, unknown>>;
-        let added = 0;
-        for (const entry of yamlEntries) {
-          const id = entry.id as string;
-          if (store.has(id)) continue;
-          const { id: _, ...rest } = entry;
-          const data = await parseData({ id, data: rest });
-          store.set({ id, data });
-          added++;
-        }
-        logger.info(`Loaded ${added} extra entries from ${yamlFile}`);
-      }
     },
   };
 }
