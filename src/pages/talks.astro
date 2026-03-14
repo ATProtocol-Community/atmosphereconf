@@ -4,7 +4,7 @@ import Card from "@/components/ui/card.astro";
 import StarringCard from "@/components/home/StarringCard.astro";
 import { getCollection } from "astro:content";
 
-const schedule = await getCollection("schedule");
+const schedule = await getCollection("events");
 
 const typeNames: Record<string, string> = {
   presentation: "Presentation",

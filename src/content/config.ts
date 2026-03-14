@@ -1,9 +1,10 @@
 import { glob } from "astro/loaders";
 import { defineCollection, reference, z } from "astro:content";
+import { eventCollections } from "./events/_config";
 import { faqCollections } from "./faqs/_config";
-import { talkCollections } from "./talks/_config";
 
 export const collections = {
+  ...eventCollections,
   ...faqCollections,
   agenda: defineCollection({
     loader: async () => [
@@ -60,7 +61,6 @@ export const collections = {
       bio: z.string(),
     }),
   }),
-  ...talkCollections,
   sponsors: defineCollection({
     loader: glob({ pattern: "**/*.yaml", base: "./src/content/sponsors" }),
     schema: ({ image }) =>

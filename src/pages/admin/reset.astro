@@ -1,0 +1,134 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Card from "@/components/ui/card.astro";
+import { getPdsAgent } from "@fujocoded/authproto/helpers";
+
+const ADMIN_DID =
+  import.meta.env.ADMIN_DID || "did:plc:257wekqxg4hyapkq6k47igmp";
+const loggedInUser = Astro.locals.loggedInUser;
+
+if (!loggedInUser || loggedInUser.did !== ADMIN_DID) {
+  return Astro.redirect("/");
+}
+
+type ResetResult = {
+  deleted: number;
+  errors: { uri: string; error: string }[];
+};
+
+let result: ResetResult | null = null;
+
+if (Astro.request.method === "POST") {
+  const pdsAgent = await getPdsAgent({ loggedInUser });
+  if (!pdsAgent) {
+    return new Response("Failed to connect to PDS", { status: 500 });
+  }
+
+  result = { deleted: 0, errors: [] };
+
+  // Fetch all calendar events with isAtmosphereconf
+  const toDelete: { uri: string; rkey: string }[] = [];
+  let cursor: string | undefined;
+  do {
+    const { data } = await pdsAgent.com.atproto.repo.listRecords({
+      repo: loggedInUser.did,
+      collection: "community.lexicon.calendar.event",
+      limit: 100,
+      cursor,
+    });
+    for (const rec of data.records) {
+      const value = rec.value as Record<string, unknown>;
+      const ad = value.additionalData as Record<string, unknown> | undefined;
+      if (ad?.isAtmosphereconf) {
+        toDelete.push({
+          uri: rec.uri,
+          rkey: rec.uri.split("/").pop()!,
+        });
+      }
+    }
+    cursor = data.cursor;
+  } while (cursor);
+
+  console.log(
+    `[reset] found ${toDelete.length} atmosphere calendar events to delete`,
+  );
+
+  for (const rec of toDelete) {
+    try {
+      await pdsAgent.com.atproto.repo.deleteRecord({
+        repo: loggedInUser.did,
+        collection: "community.lexicon.calendar.event",
+        rkey: rec.rkey,
+      });
+      console.log(`[reset] deleted ${rec.rkey}`);
+      result.deleted++;
+    } catch (err: any) {
+      console.error(
+        `[reset] failed to delete ${rec.rkey}:`,
+        err?.message ?? err,
+      );
+      result.errors.push({
+        uri: rec.uri,
+        error: err?.message ?? String(err),
+      });
+    }
+  }
+
+  console.log(
+    `[reset] done: ${result.deleted} deleted, ${result.errors.length} errors`,
+  );
+}
+---
+
+<Layout title="Reset Events - Admin">
+  <div
+    class="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center gap-6 p-6"
+  >
+    <Card class="w-full">
+      <h1 class="mb-4 text-2xl font-bold text-red-700">Reset Events</h1>
+      <p class="mb-6 text-sm text-gray-600">
+        This will delete all <code>community.lexicon.calendar.event</code>
+         records with <code>isAtmosphereconf</code> from your PDS.
+      </p>
+
+      <form method="POST">
+        <button
+          type="submit"
+          onclick="return confirm('Are you sure? This will delete all atmosphere calendar events.')"
+          class="rounded-md bg-destructive px-4 py-2 text-sm font-medium !text-white hover:bg-destructive/90"
+        >
+          Delete All Events
+        </button>
+      </form>
+    </Card>
+
+    {
+      result && (
+        <Card class="w-full">
+          <h2 class="mb-3 text-lg font-semibold">Reset Results</h2>
+          <dl class="mb-4 grid grid-cols-2 gap-2 text-sm">
+            <dt class="text-gray-600">Events deleted</dt>
+            <dd class="font-mono">{result.deleted}</dd>
+            <dt class="text-gray-600">Errors</dt>
+            <dd class="font-mono text-red-700">{result.errors.length}</dd>
+          </dl>
+
+          {result.errors.length > 0 && (
+            <details class="text-sm">
+              <summary class="cursor-pointer font-medium text-red-700">
+                View errors
+              </summary>
+              <ul class="mt-2 space-y-1">
+                {result.errors.map((e) => (
+                  <li class="rounded bg-red-50 px-3 py-1.5 font-mono text-xs">
+                    <strong>{e.uri}:</strong> {e.error}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </Card>
+      )
+    }
+  </div>
+</Layout>

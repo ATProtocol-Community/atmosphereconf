@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 
 const { id } = Astro.params;
 
-const schedule = await getCollection("schedule");
+const schedule = await getCollection("events");
 const entry = schedule.find((e) => e.id === id);
 
 const showTypes = new Set([

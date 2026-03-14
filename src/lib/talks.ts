@@ -10,7 +10,7 @@ const typeNames: Record<string, string> = {
 };
 
 export async function getTalksByHandle(handle: string) {
-  const schedule = await getCollection("schedule");
+  const schedule = await getCollection("events");
 
   return schedule
     .filter((t) => {
@@ -26,7 +26,7 @@ export async function getTalksByHandle(handle: string) {
 }
 
 export async function getRandomTalks() {
-  const schedule = await getCollection("schedule");
+  const schedule = await getCollection("events");
 
   const talks = schedule
     .filter((t) => t.data.type in typeNames)

@@ -1,0 +1,250 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Card from "@/components/ui/card.astro";
+import { getPdsAgent } from "@fujocoded/authproto/helpers";
+import Papa from "papaparse";
+import { TID } from "@atproto/common-web";
+import {
+  csvRowToEventData,
+  eventDataToCalendarRecord,
+} from "@/lib/calendar-event";
+
+const ADMIN_DID =
+  import.meta.env.ADMIN_DID || "did:plc:257wekqxg4hyapkq6k47igmp";
+const loggedInUser = Astro.locals.loggedInUser;
+
+if (!loggedInUser || loggedInUser.did !== ADMIN_DID) {
+  return Astro.redirect("/");
+}
+
+type ImportResult = {
+  total: number;
+  created: number;
+  updated: number;
+  skipped: number;
+  errors: { id: string; error: string }[];
+};
+
+let result: ImportResult | null = null;
+
+const sortedStringify = (v: unknown): string =>
+  JSON.stringify(v, (_, val) =>
+    val && typeof val === "object" && !Array.isArray(val)
+      ? Object.fromEntries(
+          Object.entries(val).sort(([a], [b]) => a.localeCompare(b)),
+        )
+      : val,
+  );
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const file = formData.get("csv") as File | null;
+
+  if (file && file.size > 0) {
+    const text = await file.text();
+    const { data: records } = Papa.parse<Record<string, string>>(text, {
+      header: true,
+      skipEmptyLines: true,
+    });
+
+    const pdsAgent = await getPdsAgent({ loggedInUser });
+    if (!pdsAgent) {
+      return new Response("Failed to connect to PDS", { status: 500 });
+    }
+
+    // Fetch all existing calendar event records with isAtmosphereconf,
+    // keyed by rkey for lookup
+    const existing = new Map<
+      string,
+      { uri: string; value: Record<string, unknown> }
+    >();
+    let cursor: string | undefined;
+    do {
+      const { data } = await pdsAgent.com.atproto.repo.listRecords({
+        repo: loggedInUser.did,
+        collection: "community.lexicon.calendar.event",
+        limit: 100,
+        cursor,
+      });
+      for (const rec of data.records) {
+        const value = rec.value as Record<string, unknown>;
+        const ad = value.additionalData as Record<string, unknown> | undefined;
+        if (ad?.isAtmosphereconf) {
+          const rkey = rec.uri.split("/").pop()!;
+          existing.set(rkey, { uri: rec.uri, value });
+        }
+      }
+      cursor = data.cursor;
+    } while (cursor);
+
+    console.log(
+      `[import] loaded ${existing.size} existing atmosphere calendar events`,
+    );
+
+    result = {
+      total: records.length,
+      created: 0,
+      updated: 0,
+      skipped: 0,
+      errors: [],
+    };
+
+    for (const row of records) {
+      const submissionId = row["Submission ID"]?.trim();
+      if (!submissionId) continue;
+
+      const eventData = csvRowToEventData(row);
+      if (!eventData) continue;
+
+      const now = new Date().toISOString();
+      const record = eventDataToCalendarRecord(eventData, now, submissionId);
+
+      // Look for existing record with same submissionId
+      let existingRkey: string | undefined;
+      let existingRecord: Record<string, unknown> | undefined;
+      for (const [rkey, entry] of existing) {
+        const ad = entry.value.additionalData as Record<string, unknown>;
+        if (ad?.submissionId === submissionId) {
+          existingRkey = rkey;
+          existingRecord = entry.value;
+          break;
+        }
+      }
+
+      if (existingRecord) {
+        // Compare fields (ignoring createdAt)
+        const IGNORED_KEYS = new Set(["$type", "createdAt"]);
+        const relevantKeys = new Set([
+          ...Object.keys(existingRecord),
+          ...Object.keys(record),
+        ]);
+        const diffs: string[] = [];
+        for (const key of relevantKeys) {
+          if (IGNORED_KEYS.has(key)) continue;
+          const existingVal = sortedStringify(
+            (existingRecord as any)[key],
+          );
+          const newVal = sortedStringify((record as any)[key]);
+          if (existingVal !== newVal) {
+            diffs.push(`  ${key}: ${existingVal} → ${newVal}`);
+          }
+        }
+        if (diffs.length === 0) {
+          console.log(`[import] skipped ${submissionId} (unchanged)`);
+          result.skipped++;
+          continue;
+        }
+        console.log(
+          `[import] ${submissionId} changed:\n${diffs.join("\n")}`,
+        );
+        // Preserve original createdAt
+        record.createdAt = (existingRecord.createdAt as string) ?? now;
+      }
+
+      const rkey = existingRkey ?? TID.nextStr();
+
+      try {
+        const { data } = await pdsAgent.com.atproto.repo.putRecord({
+          repo: loggedInUser.did,
+          collection: "community.lexicon.calendar.event",
+          rkey,
+          record,
+        });
+        if (existingRecord) {
+          console.log(
+            `[import] updated calendar event ${submissionId}: ${data.uri}`,
+          );
+          result.updated++;
+        } else {
+          console.log(
+            `[import] created calendar event ${submissionId}: ${data.uri}`,
+          );
+          result.created++;
+        }
+      } catch (err: any) {
+        console.error(
+          `[import] failed record ${submissionId}:`,
+          err?.message ?? err,
+        );
+        result.errors.push({
+          id: submissionId,
+          error: err?.message ?? String(err),
+        });
+      }
+    }
+  }
+}
+---
+
+<Layout title="Import Events - Admin">
+  <div
+    class="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center gap-6 p-6"
+  >
+    <Card class="w-full">
+      <h1 class="mb-4 text-2xl font-bold">Import Events from CSV</h1>
+      <p class="mb-6 text-sm text-gray-600">
+        Upload a CSV file to create <code
+          >community.lexicon.calendar.event</code
+        > records on your PDS. Uses the same format as the talks CSV.
+      </p>
+
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        class="flex flex-col gap-4"
+      >
+        <label class="flex flex-col gap-1.5">
+          <span class="text-sm font-medium">CSV File</span>
+          <input
+            type="file"
+            name="csv"
+            accept=".csv"
+            required
+            class="rounded-md border px-3 py-2 text-sm file:mr-3 file:rounded file:border-0 file:bg-gray-100 file:px-3 file:py-1 file:text-sm"
+          />
+        </label>
+        <button
+          type="submit"
+          class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+        >
+          Import
+        </button>
+      </form>
+    </Card>
+
+    {
+      result && (
+        <Card class="w-full">
+          <h2 class="mb-3 text-lg font-semibold">Import Results</h2>
+          <dl class="mb-4 grid grid-cols-2 gap-2 text-sm">
+            <dt class="text-gray-600">Total rows</dt>
+            <dd class="font-mono">{result.total}</dd>
+            <dt class="text-gray-600">Created</dt>
+            <dd class="font-mono text-green-700">{result.created}</dd>
+            <dt class="text-gray-600">Updated</dt>
+            <dd class="font-mono text-blue-700">{result.updated}</dd>
+            <dt class="text-gray-600">Skipped (unchanged)</dt>
+            <dd class="font-mono text-gray-500">{result.skipped}</dd>
+            <dt class="text-gray-600">Errors</dt>
+            <dd class="font-mono text-red-700">{result.errors.length}</dd>
+          </dl>
+
+          {result.errors.length > 0 && (
+            <details class="text-sm">
+              <summary class="cursor-pointer font-medium text-red-700">
+                View errors
+              </summary>
+              <ul class="mt-2 space-y-1">
+                {result.errors.map((e) => (
+                  <li class="rounded bg-red-50 px-3 py-1.5 font-mono text-xs">
+                    <strong>{e.id}:</strong> {e.error}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </Card>
+      )
+    }
+  </div>
+</Layout>

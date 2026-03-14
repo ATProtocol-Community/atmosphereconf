@@ -145,7 +145,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
                 {roomEvents.map((event) => (
                   <li
                     class:list={[
-                      "relative flex p-0.5",
+                      "relative flex min-w-0 overflow-hidden p-0.5",
                       isLinkable(event) && "group/evt cursor-pointer",
                     ]}
                     style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: 1`}
@@ -217,7 +217,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
               gridEvents.map((event) => (
                 <li
                   class:list={[
-                    "relative flex p-0.5",
+                    "relative flex min-w-0 overflow-hidden p-0.5",
                     isLinkable(event) && "group/evt cursor-pointer",
                   ]}
                   style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}`}

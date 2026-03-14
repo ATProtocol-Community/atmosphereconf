@@ -3,7 +3,7 @@ import Card from "@/components/ui/card.astro";
 import DaySchedule from "@/components/ui/DaySchedule.astro";
 import { getCollection } from "astro:content";
 
-const schedule = await getCollection("schedule");
+const schedule = await getCollection("events");
 
 const workshopTypes = new Set(["workshop", "info", "activity"]);
 const allWorkshops = schedule.filter(
