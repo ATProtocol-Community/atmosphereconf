@@ -608,7 +608,7 @@
   start: "2026-03-26T12:30"
   end: "2026-03-26T14:00"
 - id: Y5XGQQ6
-  title: Building an Appview
+  title: Abstracting the Appview Workshop
   type: workshop
   speakers:
     - name: Chad Miller
@@ -617,6 +617,26 @@
   end: "2026-03-26T16:00"
   room: 2301 Classroom
   category: Development and Protocol
+  description: "workshop dives into AppViews, what they are, how they work, and the different ways to implement them. He'll explore how tools like quickslice can abstract away the complexity so you can stay focused on your Lexicons and UI/UX.
+
+We'll also look at additional tools, including Tap, AIP, Constellation, and more, covering approaches from getting started all the way to production.
+
+Bring your questions. Many answers are 'it depends', shaped by your specific product and Lexicon design."
+  link_url: https://news.atmosphereconf.org/3mgu577ymks2v
+  link_text: More »
+- id: thurs-jan-wsocial
+  title: "Verified Human Users, game changer in the atmosphere"
+  description: "Bots are swarming on most social media, and dominating in some. Social media has become asocial. How can we bring sanity and social exchange back again?
+
+W Social makes a strong bet on verified human users, meaning passport scanning in order to get a W Social account. But do we always want to know who is behind every account? We propose a model with a user information firewall. One side knows exactly who each user is, but not which social media account belongs to her. The other knows everything about the user's 
+friends, likes and followers, but not her true identity."
+  type: workshop
+  start: "2026-03-26T16:00"
+  end: "2026-03-26T17:00"
+  speakers:
+    - name: Jan Lindblad 
+    - id: janlindblad.bsky.social
+  room: 2301 Classroom
 - id: thurs-unconf-pm
   title: Unconf Classroom
   type: activity
@@ -631,7 +651,8 @@
       id: offline.arushibandi.com
     - name: Ivan Sigal
       id: ivansigal.bsky.social
-    - name: Christian
+    - name: Christian Jacobs
+      id: christian.bsky.social
   start: "2026-03-26T14:00"
   end: "2026-03-26T16:00"
   room: Performance Theatre
@@ -672,7 +693,7 @@
   end: "2026-03-27T12:30"
   room: 2301 Classroom
   category: Development and Protocol
-  description: This will be an introductory workshop for developers who may have some JS/TS experience but almost no AT experience, who want to learn how to read posts and other data from the Atmosphere.
+  description: "This will be an introductory workshop for developers who may have some JS/TS experience but almost no AT experience, who want to learn how to read posts and other data from the Atmosphere."
   link_url: https://news.atmosphereconf.org/3m7ptkcpedk2m
   link_text: More »
 - id: fri-founders
@@ -715,12 +736,16 @@
   description: This will be an intermediate workshop on designing AT Lexicons to support new apps, with an emphasis on reusing the social graph data that already exists in the network.
   link_url: https://news.atmosphereconf.org/3m7ptkcpedk2m
   link_text: More »
-- id: fri-ted
-  title: Hold for Ted
-  type: activity
+- id: fri-np
+  title: "New_ Public New Social & Open Social Awards"
+  type: workshop
   start: "2026-03-27T13:30"
   end: "2026-03-27T16:30"
   room: 2311 Classroom
+  speakers:
+    - name: New_ Public
+      id: newpublic.org
+  description: "New_ Public will be announcing its collaboration with Public Spaces 2026 conference: The New Social program track. There will be a call for submissions to the Open Social Awards. Join Catherine Tait and Angelica Quicksey on what's behind the Awards and go through submission guidelines, meet the New_ Team and their work on Roundabout and other plans."
 - id: fri-atscience-afternoon
   title: ATScience Afternoon
   type: activity
@@ -748,7 +773,7 @@
   category: Media and Civics
   description: Standard Site, Leaflet, Pckt, Offprint, and anyone else interested in what the opportunities are for publishing to the Atmosphere.
 - id: zx4e1Oq
-  title: at://advent, an atproto adventure
+  title: "at://advent, an atproto adventure"
   type: workshop
   speakers:
     - name: fig
@@ -760,22 +785,3 @@
   room: 2311 Classroom
   category: Development and Protocol
   description: "at://advent is an atproto adventure, teaching new explorers the ropes through a series of protocol challenges! Participants will dive in to play-test the initial set of challenges, with guidance. This will be a preview ahead of the public online release of at://advent, and will provide us with insight into what aspects are working well and what we need to improve. at://advent is about growing the atproto developer audience: we strive to make it enticing and accessible to beginner and non-devs."
-- id: 000ChadWorkshop
-  title: Quickslice
-  type: workshop
-  speakers:
-    - name: Chad Miller
-      id: chadtmiller.com
-  category: Development and Protocol
-- id: 000ArushiWorkshop
-  title: What can we build together?
-  type: workshop
-  speakers:
-    - name: Arushi Bandi
-      id: offline.arushibandi.com
-- id: 000UXWorkshop
-  title: TKTK UX Workshop
-  type: workshop
-  speakers:
-    - name: Tessa Brown
-      id: tessa.germnetwork.com
