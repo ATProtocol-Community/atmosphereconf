@@ -617,25 +617,18 @@
   end: "2026-03-26T16:00"
   room: 2301 Classroom
   category: Development and Protocol
-  description: "workshop dives into AppViews, what they are, how they work, and the different ways to implement them. He'll explore how tools like quickslice can abstract away the complexity so you can stay focused on your Lexicons and UI/UX.
-
-We'll also look at additional tools, including Tap, AIP, Constellation, and more, covering approaches from getting started all the way to production.
-
-Bring your questions. Many answers are 'it depends', shaped by your specific product and Lexicon design."
+  description: "Chad's workshop dives into AppViews, what they are, how they work, and the different ways to implement them. He'll explore how tools like quickslice can abstract away the complexity so you can stay focused on your Lexicons and UI/UX. We'll also look at additional tools, including Tap, AIP, Constellation, and more, covering approaches from getting started all the way to production. Bring your questions. Many answers are 'it depends', shaped by your specific product and Lexicon design."
   link_url: https://news.atmosphereconf.org/3mgu577ymks2v
   link_text: More »
 - id: thurs-jan-wsocial
   title: "Verified Human Users, game changer in the atmosphere"
-  description: "Bots are swarming on most social media, and dominating in some. Social media has become asocial. How can we bring sanity and social exchange back again?
-
-W Social makes a strong bet on verified human users, meaning passport scanning in order to get a W Social account. But do we always want to know who is behind every account? We propose a model with a user information firewall. One side knows exactly who each user is, but not which social media account belongs to her. The other knows everything about the user's 
-friends, likes and followers, but not her true identity."
+  description: "Bots are swarming on most social media, and dominating in some. Social media has become asocial. How can we bring sanity and social exchange back again? W Social makes a strong bet on verified human users, meaning passport scanning in order to get a W Social account. But do we always want to know who is behind every account? We propose a model with a user information firewall. One side knows exactly who each user is, but not which social media account belongs to her. The other knows everything about the user's friends, likes and followers, but not her true identity."
   type: workshop
   start: "2026-03-26T16:00"
   end: "2026-03-26T17:00"
   speakers:
-    - name: Jan Lindblad 
-    - id: janlindblad.bsky.social
+    - name: Jan Lindblad
+      id: janlindblad.bsky.social
   room: 2301 Classroom
 - id: thurs-unconf-pm
   title: Unconf Classroom
