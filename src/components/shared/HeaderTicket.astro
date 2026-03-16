@@ -73,8 +73,8 @@
   }
 
   .ntp-tab {
-    background: var(--primary);
-    color: var(--primary-foreground);
+    background: var(--ticket-tab-bg, var(--primary));
+    color: var(--ticket-tab-fg, var(--primary-foreground));
     padding: 0.6rem 0.4rem;
     font-size: 0.45rem;
     font-weight: 700;
@@ -110,8 +110,9 @@
     z-index: 1;
   }
   .ntp-body {
-    background: var(--card);
-    border: 2px dashed color-mix(in oklch, var(--primary), transparent 70%);
+    background: var(--ticket-body-bg, var(--card));
+    border: 2px dashed
+      var(--ticket-border, color-mix(in oklch, var(--primary), transparent 70%));
     border-left: none;
     border-top: none;
     padding: 0.6rem 1rem;
@@ -124,13 +125,13 @@
     font-size: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--primary);
+    color: var(--ticket-label, var(--primary));
     font-weight: 600;
   }
   .ntp-main {
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--foreground);
+    color: var(--ticket-main, var(--foreground));
     white-space: nowrap;
   }
 
@@ -153,8 +154,8 @@
   }
 
   .ntt-tab {
-    background: var(--primary);
-    color: var(--primary-foreground);
+    background: var(--ticket-tab-bg, var(--primary));
+    color: var(--ticket-tab-fg, var(--primary-foreground));
     padding: 0 0.45rem;
     font-size: 0.4rem;
     font-weight: 700;
@@ -192,8 +193,9 @@
   }
   .ntt-body {
     flex: 1;
-    background: var(--card);
-    border: 2px dashed color-mix(in oklch, var(--primary), transparent 70%);
+    background: var(--ticket-body-bg, var(--card));
+    border: 2px dashed
+      var(--ticket-border, color-mix(in oklch, var(--primary), transparent 70%));
     border-left: none;
     height: 40px;
     overflow: hidden;
@@ -219,12 +221,12 @@
   .ntt-cta {
     font-size: 0.7rem;
     font-weight: 700;
-    color: var(--foreground);
+    color: var(--ticket-main, var(--foreground));
   }
   .ntt-detail {
     font-size: 0.6rem;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--ticket-label, var(--primary));
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }

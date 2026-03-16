@@ -29,8 +29,8 @@ const { href = "#tickets" } = Astro.props;
   }
 
   .ticket-tab {
-    background: var(--primary);
-    color: var(--primary-foreground);
+    background: var(--ticket-tab-bg, var(--primary));
+    color: var(--ticket-tab-fg, var(--primary-foreground));
     padding: 0.85rem 0.85rem;
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.7rem;
@@ -69,8 +69,12 @@ const { href = "#tickets" } = Astro.props;
   }
 
   .ticket-body {
-    background: color-mix(in oklch, var(--primary), transparent 92%);
-    border: 2px dashed color-mix(in oklch, var(--primary), transparent 70%);
+    background: var(
+      --ticket-body-bg,
+      color-mix(in oklch, var(--primary), transparent 92%)
+    );
+    border: 2px dashed
+      var(--ticket-border, color-mix(in oklch, var(--primary), transparent 70%));
     border-left: none;
     padding: 0.85rem 1.5rem;
     display: flex;
@@ -82,7 +86,7 @@ const { href = "#tickets" } = Astro.props;
   .ticket-label {
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.65rem;
-    color: var(--primary);
+    color: var(--ticket-label, var(--primary));
     text-transform: uppercase;
     letter-spacing: 0.15em;
     font-weight: 600;
@@ -91,7 +95,7 @@ const { href = "#tickets" } = Astro.props;
   .ticket-main {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--foreground);
+    color: var(--ticket-main, var(--foreground));
   }
 
   .ticket-arrow {
