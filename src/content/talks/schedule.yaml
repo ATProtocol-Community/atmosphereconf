@@ -691,7 +691,7 @@
   link_text: More »
 - id: fri-founders
   title: Founders & Funders
-  type: activity
+  type: workshop
   start: "2026-03-27T09:30"
   end: "2026-03-27T13:00"
   room: 2311 Classroom
@@ -738,7 +738,7 @@
   speakers:
     - name: New_ Public
       id: newpublic.org
-  description: "New_ Public will be announcing its collaboration with Public Spaces 2026 conference: The New Social program track. There will be a call for submissions to the Open Social Awards. Join Catherine Tait and Angelica Quicksey on what's behind the Awards and go through submission guidelines, meet the New_ Team and their work on Roundabout and other plans."
+  description: "New_ Public will be announcing its collaboration with Public Spaces 2026 conference: The New Social program track. There will be a call for submissions to the Open Social Awards. Join Catherine Tait and Angelica Quicksey on what's behind the Awards and go through submission guidelines, meet the New_ Public Team and their work on Roundabout and other plans."
 - id: fri-atscience-afternoon
   title: ATScience Afternoon
   type: activity
