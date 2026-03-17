@@ -1,0 +1,505 @@
+---
+import Card from "@/components/ui/card.astro";
+import Button from "@/components/ui/button.astro";
+import { BlueskyPost } from "@astro-community/astro-embed-bluesky";
+import { getLiveCollection } from "astro:content";
+import { BlueskyFeed } from "./BlueskyFeed";
+import { FEED_URL, fetchFeedPage } from "@/lib/bsky";
+
+let initialData;
+try {
+  initialData = await fetchFeedPage();
+} catch (e) {
+  console.error("Failed to fetch initial feed:", e);
+  initialData = { posts: [], cursor: undefined };
+}
+
+const blueskyResult = await getLiveCollection("blueskyPosts", {
+  limit: 20,
+  type: "posts_no_replies",
+});
+const latestPost = blueskyResult.entries?.find(
+  (entry) => entry.data.author.handle === "atprotocol.dev",
+) ?? blueskyResult.entries?.at(0);
+
+const leafletResult = await getLiveCollection("leafletPosts");
+const newsPosts = (leafletResult.entries ?? [])
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishedAt).getTime() -
+      new Date(a.data.publishedAt).getTime(),
+  )
+  .slice(0, 5);
+
+function formatNewsDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function buildNewsUrl(basePath: string, rkey: string) {
+  const base = basePath
+    ? basePath.startsWith("http")
+      ? basePath
+      : `https://${basePath}`
+    : "https://leaflet.pub";
+  return `${base.replace(/\/$/, "")}/${rkey}`;
+}
+---
+
+<section id="feed" class="updates-breakout">
+  <Card title="Dispatches from the ATmosphere" class="updates-shell">
+    <div class="updates-grid">
+      <section class="updates-feed-card">
+        <div class="updates-panel-header">
+          <div class="min-w-0">
+            <p class="updates-panel-kicker">// Conference feed</p>
+          </div>
+        </div>
+
+        <p class="text-muted-foreground mb-4 max-w-[64ch] text-sm sm:text-base">
+          Follow the AtmosphereConf conversation as it unfolds. This stream keeps
+          the main feed front and center, with Leaflet updates and official
+          protocol notes pinned alongside it.
+        </p>
+
+        <div class="updates-feed-frame">
+          <BlueskyFeed
+            client:visible
+            initialData={initialData}
+            height="100%"
+            emptyMessage="Goodstuff is still gathering dispatches."
+            loadingMessage="Gathering more dispatches..."
+          />
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <Button
+            href={FEED_URL}
+            size="lg"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open the full feed
+          </Button>
+          <a
+            href="https://www.graze.social/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="updates-inline-link"
+          >
+            Powered by Graze
+          </a>
+        </div>
+      </section>
+
+      <div class="updates-side-rail">
+        <section
+          id="news"
+          class="updates-note"
+          data-panel="news"
+        >
+          <div class="updates-note-header">
+            <div>
+              <p class="updates-panel-kicker">// Leaflet clippings</p>
+            </div>
+            <a
+              href="https://news.atmosphereconf.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="updates-inline-link"
+            >
+              open archive
+            </a>
+          </div>
+
+          {
+            newsPosts.length > 0 ? (
+              <ol class="updates-clips">
+                {newsPosts.map((post) => {
+                  const newsUrl = buildNewsUrl(post.data.basePath, post.data.rkey);
+                  const imageUrl = post.data.imageUrl || undefined;
+                  return (
+                    <li>
+                      <a
+                        href={newsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="updates-clip group"
+                      >
+                        {
+                          imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt=""
+                              class="updates-clip-image"
+                            />
+                          ) : (
+                            <div class="updates-clip-image updates-clip-placeholder">
+                              wire
+                            </div>
+                          )
+                        }
+                        <div class="min-w-0">
+                          <time
+                            datetime={post.data.publishedAt}
+                            class="updates-clip-date"
+                          >
+                            {formatNewsDate(post.data.publishedAt)}
+                          </time>
+                          <p class="updates-clip-title">
+                            {post.data.title}
+                          </p>
+                          {post.data.description && (
+                            <p class="updates-clip-summary">
+                              {post.data.description}
+                            </p>
+                          )}
+                        </div>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ol>
+            ) : (
+              <p class="updates-note-fallback">
+                The news desk is quiet for the moment. Fresh dispatches will show
+                up here as soon as they land.
+              </p>
+            )
+          }
+        </section>
+
+        <section
+          class="updates-note updates-signal"
+          data-panel="signal"
+        >
+          <div class="updates-note-header">
+            <div>
+              <p class="updates-panel-kicker">// Latest from atprotocol.dev</p>
+            </div>
+            <a
+              href="https://bsky.app/profile/atprotocol.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="updates-inline-link"
+            >
+              profile
+            </a>
+          </div>
+
+          {
+            latestPost ? (
+              <div class="updates-signal-embed">
+                <BlueskyPost post={latestPost.data} />
+              </div>
+            ) : (
+              <p class="updates-note-fallback">
+                No official bulletin is pinned yet. Check back soon for the next
+                note from the protocol team.
+              </p>
+            )
+          }
+        </section>
+      </div>
+    </div>
+  </Card>
+</section>
+
+<script>
+  function syncUpdatesHeight() {
+    const section = document.querySelector("#feed");
+    if (!section) return;
+
+    const sideRail = section.querySelector(".updates-side-rail");
+    if (!sideRail) return;
+
+    if (!window.matchMedia("(min-width: 960px)").matches) {
+      section.style.removeProperty("--updates-rail-height");
+      return;
+    }
+
+    const railHeight = Math.ceil(sideRail.getBoundingClientRect().height);
+    section.style.setProperty("--updates-rail-height", `${railHeight}px`);
+  }
+
+  const updatesSection = document.querySelector("#feed");
+  const updatesRail = updatesSection?.querySelector(".updates-side-rail");
+
+  if (updatesRail && "ResizeObserver" in window) {
+    const observer = new ResizeObserver(() => {
+      requestAnimationFrame(syncUpdatesHeight);
+    });
+    observer.observe(updatesRail);
+  }
+
+  window.addEventListener("load", syncUpdatesHeight);
+  window.addEventListener("resize", syncUpdatesHeight);
+  document.addEventListener("astro:page-load", syncUpdatesHeight);
+  syncUpdatesHeight();
+</script>
+
+<style>
+  .updates-breakout {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    width: 100vw;
+    padding: clamp(1.5rem, 3vw, 3rem) 0;
+  }
+
+  :global(.updates-shell) {
+    --updates-accent: var(--primary);
+    --updates-accent-muted: var(--muted-foreground);
+    --updates-accent-soft: color-mix(in oklch, var(--border), transparent 35%);
+    --updates-accent-faint: var(--primary);
+    --updates-accent-surface: var(--muted);
+    --updates-accent-tape: color-mix(in oklch, var(--primary), white 82%);
+    --updates-accent-tape-border: color-mix(in oklch, var(--primary), transparent 45%);
+    --updates-embed-background: var(--card);
+    --updates-embed-background-hover: var(--muted);
+    --updates-embed-border: var(--updates-accent-soft);
+    --updates-embed-text: var(--foreground);
+    --updates-embed-muted: var(--muted-foreground);
+    --updates-embed-link: var(--primary);
+    width: min(74rem, calc(100vw - 1.5rem));
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  .updates-panel-kicker,
+  .updates-clip-date {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .updates-grid {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .updates-feed-card {
+    position: relative;
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    background: var(--card);
+    box-shadow: none;
+  }
+
+  .updates-feed-card::after {
+    display: none;
+  }
+
+  .updates-panel-header,
+  .updates-note-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .updates-note-title {
+    font-size: clamp(1.1rem, 1.35vw, 1.35rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .updates-panel-kicker {
+    margin-top: 0.2rem;
+    margin-bottom: 0.35rem;
+    color: var(--primary);
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  .updates-feed-frame {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .updates-inline-link {
+    color: var(--muted-foreground);
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: color 180ms ease;
+  }
+
+  .updates-inline-link:hover {
+    color: var(--foreground);
+  }
+
+  .updates-side-rail {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .updates-note {
+    position: relative;
+    padding: 1.2rem;
+    border-radius: 1rem;
+    border: 1px solid var(--updates-accent-soft);
+    background: var(--card);
+    box-shadow: 0 4px 14px rgb(15 23 42 / 0.05);
+  }
+
+  .updates-note::before {
+    content: "";
+    position: absolute;
+    top: -0.6rem;
+    left: 1.25rem;
+    width: 4.5rem;
+    height: 1rem;
+    border-radius: 0.3rem;
+    border: 2px dashed var(--updates-accent-tape-border);
+    background: var(--updates-accent-tape);
+    box-shadow: 0 1px 0 rgb(15 23 42 / 0.08);
+    transform: rotate(-3deg);
+    z-index: 2;
+  }
+
+  .updates-signal::before {
+    left: auto;
+    right: 1.2rem;
+    transform: rotate(4deg);
+  }
+
+  .updates-clips {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .updates-clip {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: start;
+    text-decoration: none;
+    padding-bottom: 0.85rem;
+    border-bottom: 2px dotted var(--updates-accent);
+  }
+
+  .updates-clips li:last-child .updates-clip {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .updates-clip-image {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    border: 1px solid var(--updates-accent-soft);
+    background: var(--updates-accent-surface);
+  }
+
+  .updates-clip-placeholder {
+    display: grid;
+    place-items: center;
+    color: var(--updates-accent-muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .updates-clip-date {
+    display: inline-block;
+    margin-bottom: 0.3rem;
+    color: var(--muted-foreground);
+    font-size: 0.66rem;
+    font-weight: 700;
+  }
+
+  .updates-clip-title {
+    color: var(--foreground);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+    transition: color 180ms ease;
+  }
+
+  .group:hover .updates-clip-title {
+    color: var(--updates-accent);
+  }
+
+  .updates-clip-summary {
+    margin-top: 0.35rem;
+    color: var(--muted-foreground);
+    font-size: 0.88rem;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .updates-note-fallback {
+    margin-top: 1rem;
+    color: var(--muted-foreground);
+    line-height: 1.55;
+  }
+
+  .updates-signal-embed {
+    margin-top: 1rem;
+    --bluesky-color-background: var(--updates-embed-background);
+    --bluesky-color-background-hover: var(--updates-embed-background-hover);
+    --bluesky-color-text: var(--updates-embed-text);
+    --bluesky-color-text-secondary: var(--updates-embed-muted);
+    --bluesky-color-link: var(--updates-embed-link);
+    --bluesky-color-border: var(--updates-embed-border);
+    --bluesky-card-border: 1px solid var(--updates-embed-border);
+  }
+
+  @media (min-width: 960px) {
+    .updates-grid {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+    }
+
+    .updates-feed-card {
+      flex: 2.3 1 0%;
+      height: var(--updates-rail-height);
+      min-width: 0;
+    }
+
+    .updates-side-rail {
+      flex: 0.58 1 16.75rem;
+      min-width: 16.75rem;
+      align-self: flex-start;
+    }
+  }
+
+  @media (max-width: 959px) {
+    .updates-breakout {
+      padding: 1.25rem 0;
+    }
+
+    :global(.updates-shell) {
+      width: calc(100vw - 0.75rem);
+    }
+
+    .updates-clip {
+      grid-template-columns: 5rem minmax(0, 1fr);
+    }
+
+    .updates-clips li:nth-child(n + 4) {
+      display: none;
+    }
+
+    .updates-feed-frame {
+      flex: none;
+      height: clamp(24rem, 48vh, 31rem);
+      min-height: 0;
+    }
+  }
+</style>

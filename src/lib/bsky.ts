@@ -43,12 +43,45 @@ export interface FeedPage {
 
 // --- Functions ---
 
+function extractBlobRefLink(ref: unknown): string | undefined {
+  if (typeof ref === "string" && ref.length > 0) {
+    return ref;
+  }
+
+  if (ref && typeof ref === "object") {
+    if ("$link" in ref && typeof ref.$link === "string") {
+      return ref.$link;
+    }
+
+    const serialized = JSON.parse(JSON.stringify(ref)) as { $link?: string };
+    if (typeof serialized.$link === "string" && serialized.$link.length > 0) {
+      return serialized.$link;
+    }
+
+    if ("toString" in ref && typeof ref.toString === "function") {
+      const value = ref.toString();
+      if (value && value !== "[object Object]") {
+        return value;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+export function getBlobRefLink(blob: { ref: unknown } | null | undefined): string | undefined {
+  return blob ? extractBlobRefLink(blob.ref) : undefined;
+}
+
 export function getBlobCDNUrl(
   did: string,
-  blob: { $type: "blob"; ref: { $link: string } },
+  blob: { ref: unknown },
   type: "webp" | "jpeg" = "webp",
 ): string {
-  return `https://cdn.bsky.app/img/feed_thumbnail/plain/${did}/${blob.ref.$link}@${type}`;
+  const refLink = getBlobRefLink(blob);
+  return refLink
+    ? `https://cdn.bsky.app/img/feed_thumbnail/plain/${did}/${refLink}@${type}`
+    : "";
 }
 
 export function parseRichText(
