@@ -8,11 +8,21 @@ const SCROLL_THRESHOLD = 200;
 
 interface BlueskyFeedProps {
   initialData: FeedPage;
+  height?: number | string;
+  emptyMessage?: string;
+  loadingMessage?: string;
 }
 
-export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
+export function BlueskyFeed({
+  initialData,
+  height = 600,
+  emptyMessage = "No posts yet. Be the first to post!",
+  loadingMessage = "Loading...",
+}: BlueskyFeedProps) {
   const { posts, loading, error, loadMore } = useFeedPagination(initialData);
   const parentRef = useRef<HTMLDivElement>(null);
+  const resolvedHeight =
+    typeof height === "number" ? `${height}px` : height;
 
   const virtualizer = useVirtualizer({
     count: posts.length,
@@ -34,20 +44,23 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
   if (posts.length === 0) {
     return (
       <div className="text-muted-foreground py-8 text-center text-sm">
-        No posts yet. Be the first to post!
+        {emptyMessage}
       </div>
     );
   }
 
   return (
-    <div>
+    <div
+      className="flex min-h-0 flex-col"
+      style={{ height: resolvedHeight }}
+    >
       <div
         ref={parentRef}
         onScroll={handleScroll}
-        className="overflow-auto rounded-md"
-        style={{ height: 600 }}
+        className="feed-scroll-area min-h-0 flex-1 overflow-auto rounded-md"
       >
         <div
+          className="feed-scroll-content"
           style={{
             height: virtualizer.getTotalSize(),
             width: "100%",
@@ -64,6 +77,8 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
                 top: 0,
                 left: 0,
                 width: "100%",
+                paddingRight: "0.85rem",
+                boxSizing: "border-box",
                 transform: `translateY(${virtualItem.start}px)`,
               }}
             >
@@ -74,7 +89,7 @@ export function BlueskyFeed({ initialData }: BlueskyFeedProps) {
       </div>
       {loading && (
         <div className="text-muted-foreground py-3 text-center text-sm">
-          Loading...
+          {loadingMessage}
         </div>
       )}
       {error && (

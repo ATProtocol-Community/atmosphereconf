@@ -23,7 +23,7 @@ interface LeafletDocumentView {
 interface LeafletBlock {
   block?: {
     $type?: string;
-    image?: { ref: string };
+    image?: { ref: unknown };
   };
 }
 
@@ -71,7 +71,7 @@ function extractFirstImageUrl(value: LeafletDocumentValue, did: string): string 
   for (const b of firstPage?.blocks ?? []) {
     const block = b?.block;
     if (block?.["$type"] === "pub.leaflet.blocks.image" && block.image?.ref) {
-      return getBlobCDNUrl(did, block.image, "jpeg");
+      return getBlobCDNUrl(did, block.image, "jpeg") || null;
     }
   }
   return null;
