@@ -41,7 +41,7 @@ const defaultTheme =
     <meta name="generator" content={Astro.generator} />
     <script is:inline define:vars={{ defaultTheme }}>
       (function () {
-        var VALID = ["bluesky", "blacksky", "reddwarf", "pckt", "germ", "northsky"];
+        var VALID = ["bluesky", "blacksky", "reddwarf", "pckt", "germ", "northsky", "plyr.fm"];
         var t = localStorage.getItem("atmosphereconf:theme");
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);

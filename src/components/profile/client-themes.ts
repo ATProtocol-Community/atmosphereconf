@@ -1,7 +1,7 @@
-export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ" | "northsky";
+export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ" | "northsky" | "plyr.fm";
 
 const CLIENT_THEME_DOMAINS: Record<
-  Exclude<ClientTheme, "bluesky">,
+  Exclude<ClientTheme, "bluesky" | "plyr.fm">,
   string[]
 > = {
   blacksky: [".blacksky.", ".myatproto.social", ".cryptoanarchy.network"],
