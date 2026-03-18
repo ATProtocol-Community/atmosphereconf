@@ -1,0 +1,76 @@
+/*
+ * Theme: plyr.fm
+ * Source: https://plyr.fm
+ *
+ * True-black dark theme with warm-white text and bright sky-blue accent.
+ * Deliberately neutral (zero chroma backgrounds) to contrast with
+ * blacksky's navy tint.
+ */
+
+[data-theme="plyr.fm"] {
+  /* Palette — true black, zero chroma, warm-white text */
+  --theme-bg: oklch(0.10 0 0);
+  --theme-fg: oklch(0.93 0.005 80);
+  --theme-muted: oklch(0.58 0.005 80);
+  --theme-accent: oklch(0.72 0.15 240);
+  --theme-surface: oklch(0.16 0 0);
+  --theme-border: oklch(0.25 0 0 / 0.6);
+
+  /* Semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.20 0 0);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: oklch(0.20 0 0);
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: oklch(1 0 0 / 0.08);
+  --ring: var(--theme-accent);
+
+  /* Header — near-black, clean separation */
+  --header-bg: oklch(0.07 0 0);
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: oklch(0.60 0.005 80 / 0.8);
+  --header-border: oklch(0.25 0 0 / 0.5);
+  --header-logo-accent: var(--theme-accent);
+
+  /* ATProto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(
+    135deg,
+    oklch(0.14 0.06 240),
+    oklch(0.10 0 0)
+  );
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: oklch(0.10 0 0 / 0.9);
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  /* Event-type badge/cell colors — cooler blue tints on black */
+  --event-presentation-bg: oklch(0.22 0.08 240 / 0.35);
+  --event-presentation-fg: oklch(0.82 0.1 240);
+  --event-presentation-sub: oklch(0.72 0.08 240);
+  --event-lightning-bg: oklch(0.28 0.08 80 / 0.3);
+  --event-lightning-fg: oklch(0.84 0.1 80);
+  --event-lightning-sub: oklch(0.74 0.08 80);
+  --event-panel-bg: oklch(0.22 0.08 300 / 0.3);
+  --event-panel-fg: oklch(0.82 0.1 300);
+  --event-panel-sub: oklch(0.72 0.08 300);
+  --event-workshop-bg: oklch(0.22 0.06 155 / 0.3);
+  --event-workshop-fg: oklch(0.82 0.08 155);
+  --event-workshop-sub: oklch(0.72 0.07 155);
+  --event-info-bg: oklch(0.28 0.08 80 / 0.25);
+  --event-info-fg: oklch(0.84 0.1 80);
+  --event-info-sub: oklch(0.74 0.08 80);
+  --event-activity-bg: oklch(0.18 0 0 / 0.4);
+  --event-activity-fg: oklch(0.82 0.005 80);
+  --event-activity-sub: oklch(0.65 0.005 80);
+}
