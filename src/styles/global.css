@@ -135,6 +135,7 @@
 @import "./themes/reddwarf.css";
 @import "./themes/pckt.css";
 @import "./themes/germ.css";
+@import "./themes/northsky.css";
 
 @layer base {
   html {

@@ -1,4 +1,4 @@
-export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ";
+export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ" | "northsky";
 
 const CLIENT_THEME_DOMAINS: Record<
   Exclude<ClientTheme, "bluesky">,
@@ -8,6 +8,7 @@ const CLIENT_THEME_DOMAINS: Record<
   reddwarf: [".reddwarf."],
   pckt: [".pckt."],
   germ: [".germnetwork."],
+  northsky: [".northsky.social", ".northsky.team"],
   // your-server: [".yourdomain."]
   // To add a new theme:
   // 1. Copy src/styles/themes/_template.css → src/styles/themes/<name>.css

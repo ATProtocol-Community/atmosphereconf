@@ -1,0 +1,59 @@
+[data-theme="northsky"] {
+    /* Palette */
+    --theme-bg: #170823;
+    --theme-fg: #f1f1f1;
+    --theme-muted: #9A45EC;
+    --theme-accent: #40DAC4;
+    --theme-surface: #1F0B35;
+    --theme-border: rgba(255, 255, 255, 0.15);
+    /* Semantic overrides */
+    --background: var(--theme-bg);
+    --foreground: var(--theme-fg);
+    --card: var(--theme-surface);
+    --card-foreground: var(--theme-fg);
+    --popover: var(--theme-surface);
+    --popover-foreground: var(--theme-fg);
+    --primary: var(--theme-accent);
+    --primary-foreground: var(--theme-fg);
+    --secondary: rgba(255, 255, 255, 0.1);
+    --secondary-foreground: var(--theme-fg);
+    --muted: var(--theme-surface);
+    --muted-foreground: var(--theme-muted);
+    --accent: var(--theme-surface);
+    --accent-foreground: var(--theme-fg);
+    --border: var(--theme-border);
+    --input: rgba(255, 255, 255, 0.15);
+    --ring: var(--theme-accent);
+    /* Header */
+    --header-bg: #1F0B35;
+    --header-fg: var(--theme-fg);
+    --header-fg-muted: rgba(235, 232, 240, 0.6);
+    --header-border: rgba(255, 255, 255, 0.1);
+    --header-logo-accent: var(--theme-accent);
+    /* ATProto profile tokens */
+    --atproto-profile-bg: var(--theme-bg);
+    --atproto-profile-banner: linear-gradient(to right, #251a40, #3a2a60);
+    --atproto-profile-ring: #070c0c;
+    --atproto-profile-pill-bg: rgba(23, 15, 41, 0.85);
+    --atproto-profile-pill-fg: var(--theme-accent);
+    --atproto-profile-link: var(--theme-accent);
+    /* Event-type badge/cell colors (calendar + talk pills) */
+    --event-presentation-bg: rgba(34.9, 69.8, 81.6, 0.5);
+    --event-presentation-fg: #40DAC4;
+    --event-presentation-sub: #dee4e4;
+    --event-lightning-bg: rgba(60.8, 27.5, 92.5, 0.5);
+    --event-lightning-fg: #40DAC4;
+    --event-lightning-sub: #dee4e4;
+    --event-panel-bg: rgba(60.8, 27.5, 92.5, 0.5);
+    --event-panel-fg: #c8a0f5;
+    --event-panel-sub: #dee4e4;
+    --event-workshop-bg: rgba(91, 102, 219, 0.5);
+    --event-workshop-fg: #40DAC4;
+    --event-workshop-sub: #dee4e4;
+    --event-info-bg: rgba(12.5, 3.9, 21.2, 0.90);
+    --event-info-fg: #d8e4e2;
+    --event-info-sub: #adc6ce;
+    --event-activity-bg: rgba(35, 114, 97, 0.5);
+    --event-activity-fg: #40DAC4;
+    --event-activity-sub: #dee4e4;
+}
