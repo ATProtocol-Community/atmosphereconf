@@ -1,34 +1,26 @@
 ---
 import Card from "@/components/ui/card.astro";
-import StarringCard from "./StarringCard.astro";
+import RandomTalkDeck from "./RandomTalkDeck.astro";
 import { getRandomTalks } from "@/lib/talks";
 
 const starred = await getRandomTalks();
 ---
 
 <section>
-  <Card title="starring">
-    <p class="text-muted-foreground mb-4">
-      A random sample from our gaggle of speakers
+  <Card title="talks" class="talks-shell">
+    <p class="text-muted-foreground max-w-[62ch]">
+      A shuffled sample from the program. Pull another stack if you want a
+      different slice of the lineup.
     </p>
-    <div id="starring-list" class="flex flex-col gap-3">
-      {
-        starred.map((talk) => (
-          <StarringCard
-            talkId={talk.id}
-            title={talk.title}
-            speakers={talk.speakers}
-            typeName={talk.typeName}
-          />
-        ))
-      }
+    <div id="starring-list" class="mt-5">
+      <RandomTalkDeck talks={starred} />
     </div>
-    <div class="starring-actions mt-3 flex flex-wrap items-center justify-center gap-2">
+    <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <button
         id="show-more-talks"
-        class="border-primary/60 text-primary hover:border-primary hover:bg-accent flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border-2 border-dashed py-2.5 px-4 text-sm font-semibold transition-all hover:border-solid"
+        class="talks-refresh"
       >
-        🪿 I'm feeling curious
+        Pull another stack
       </button>
       <a
         href="/talks"
@@ -56,31 +48,57 @@ const starred = await getRandomTalks();
     }
   });
 
-  function fitToViewport() {
-    const cards = Array.from(list!.children);
-    if (!cards.length) return;
-    cards.forEach((c) => ((c as HTMLElement).style.display = ""));
-    const cardH = cards[0].getBoundingClientRect().height;
-    const gap = 12; // gap-3
-    // Budget: one viewport minus card chrome (title bar ~80px + buttons ~56px + section padding ~40px)
-    const available = window.innerHeight - 176;
-    const max = Math.max(3, Math.floor((available + gap) / (cardH + gap)));
-    cards.forEach(
-      (c, i) => ((c as HTMLElement).style.display = i < max ? "" : "none"),
-    );
-  }
-
-  fitToViewport();
-
   btn?.addEventListener("click", async () => {
-    btn.textContent = "🪿 Loading...";
+    btn.textContent = "Pulling...";
+    btn.setAttribute("disabled", "true");
     try {
       const res = await fetch("/partials/random-talks");
       list!.innerHTML = await res.text();
-      fitToViewport();
     } catch {
       btn.textContent = "Something went wrong";
+      btn.removeAttribute("disabled");
+      return;
     }
-    btn.textContent = "🪿 I'm feeling curious";
+    btn.textContent = "Pull another stack";
+    btn.removeAttribute("disabled");
   });
 </script>
+
+<style>
+  :global(.talks-shell) {
+    overflow: visible;
+  }
+
+  .talks-refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 12rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px dashed color-mix(in oklch, var(--primary), transparent 35%);
+    border-radius: 9999px;
+    background: color-mix(in oklch, var(--card), var(--background) 12%);
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease,
+      color 160ms ease;
+  }
+
+  .talks-refresh:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: color-mix(in oklch, var(--primary), transparent 12%);
+    background: color-mix(in oklch, var(--primary), transparent 93%);
+  }
+
+  .talks-refresh:disabled {
+    opacity: 0.75;
+    cursor: wait;
+  }
+</style>

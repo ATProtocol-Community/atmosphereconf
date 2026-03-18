@@ -1,18 +1,9 @@
 ---
 export const partial = true;
-import StarringCard from "@/components/home/StarringCard.astro";
+import RandomTalkDeck from "@/components/home/RandomTalkDeck.astro";
 import { getRandomTalks } from "@/lib/talks";
 
 const starred = await getRandomTalks();
 ---
 
-{
-  starred.map((talk) => (
-    <StarringCard
-      talkId={talk.id}
-      title={talk.title}
-      speakers={talk.speakers}
-      typeName={talk.typeName}
-    />
-  ))
-}
+<RandomTalkDeck talks={starred} />

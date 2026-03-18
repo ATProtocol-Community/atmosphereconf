@@ -1,0 +1,2 @@
+- [ ] Add "topic" on the talks thing
+- [ ] Fix talk page

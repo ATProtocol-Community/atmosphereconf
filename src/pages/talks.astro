@@ -56,6 +56,7 @@ const grouped = Object.groupBy(allTalks, (t) => t.typeName);
                   title={talk.title}
                   speakers={talk.speakers}
                   typeName={talk.typeName}
+                  start={talk.start}
                   description={talk.description}
                 />
               ))}

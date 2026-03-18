@@ -1,0 +1,195 @@
+---
+import StarringCard from "./StarringCard.astro";
+
+interface Speaker {
+  name: string;
+  id?: string;
+}
+
+interface Talk {
+  id: string;
+  title: string;
+  speakers?: Speaker[];
+  typeName: string;
+  start?: string;
+  description?: string;
+}
+
+interface Props {
+  talks: Talk[];
+}
+
+const { talks } = Astro.props;
+const [featured, ...rest] = talks;
+const slips = rest.slice(0, 3);
+---
+
+{
+  featured ? (
+    <div class="talks-board">
+      <article class="talks-paper talks-paper-featured">
+        <p class="talks-paper-kicker">// picked at random</p>
+        <StarringCard
+          talkId={featured.id}
+          title={featured.title}
+          speakers={featured.speakers}
+          typeName={featured.typeName}
+          start={featured.start}
+          description={featured.description}
+          variant="featured"
+          class="talks-entry-featured"
+        />
+      </article>
+
+      <aside class="talks-side-stack" aria-label="More featured talks">
+        <p class="talks-side-kicker">// more in the stack</p>
+        <div class="talks-slip-list">
+          {
+            slips.map((talk, index) => (
+              <article class:list={["talks-paper talks-slip", `talks-slip-${index}`]}>
+                <StarringCard
+                  talkId={talk.id}
+                  title={talk.title}
+                  speakers={talk.speakers}
+                  typeName={talk.typeName}
+                  start={talk.start}
+                  description={talk.description}
+                  variant="compact"
+                  class="talks-entry-compact"
+                />
+              </article>
+            ))
+          }
+        </div>
+      </aside>
+    </div>
+  ) : (
+    <p class="text-muted-foreground">Talks are still lining up.</p>
+  )
+}
+
+<style>
+  .talks-board {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .talks-paper {
+    position: relative;
+    border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    border-radius: 1.25rem;
+    background: var(--card);
+    box-shadow: 0 12px 32px rgb(15 23 42 / 0.08);
+  }
+
+  .talks-paper::before {
+    content: "";
+    position: absolute;
+    top: -0.45rem;
+    left: 1.3rem;
+    width: 2.9rem;
+    height: 0.85rem;
+    border: 1px dashed color-mix(in oklch, var(--primary), transparent 50%);
+    border-radius: 0.35rem;
+    background: color-mix(in oklch, var(--primary), white 84%);
+    box-shadow: 0 2px 6px rgb(15 23 42 / 0.06);
+    pointer-events: none;
+  }
+
+  .talks-paper-featured {
+    padding: 1.2rem 1.3rem 1.1rem;
+    transform: rotate(-0.45deg);
+  }
+
+  .talks-paper-kicker,
+  .talks-side-kicker {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+
+  .talks-side-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .talks-side-kicker {
+    margin-bottom: 0;
+    padding-left: 0.4rem;
+  }
+
+  .talks-slip-list {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .talks-slip {
+    padding: 0.95rem 1rem;
+  }
+
+  .talks-slip-0 {
+    transform: rotate(0.5deg);
+  }
+
+  .talks-slip-1 {
+    transform: rotate(-0.35deg);
+  }
+
+  .talks-slip-2 {
+    transform: rotate(0.3deg);
+  }
+
+  :global(.talks-entry-featured .starring-card-title) {
+    display: block;
+    margin-bottom: 0.1rem;
+  }
+
+  :global(.talks-entry-featured .starring-card-meta) {
+    gap: 0.5rem 0.7rem;
+    margin-top: 0.75rem;
+  }
+
+  :global(.talks-entry-featured .starring-card-arrow) {
+    margin-top: 0.15rem;
+  }
+
+  :global(.talks-entry-compact .starring-card-title) {
+    display: block;
+    line-height: 1.35;
+  }
+
+  :global(.talks-entry-compact .starring-card-meta) {
+    gap: 0.3rem 0.55rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .talks-board {
+      grid-template-columns: minmax(0, 1.35fr) minmax(15rem, 0.92fr);
+      gap: 1.15rem;
+    }
+
+    .talks-side-stack {
+      padding-top: 1.1rem;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .talks-paper-featured,
+    .talks-slip {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .talks-slip:nth-child(n + 4) {
+      display: none;
+    }
+  }
+</style>

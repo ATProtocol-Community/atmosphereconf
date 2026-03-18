@@ -1,0 +1,111 @@
+---
+import type { ProgramRail } from "@/lib/program";
+import { formatMiniTime } from "@/lib/program";
+import StarringCard from "./StarringCard.astro";
+
+interface Props {
+  rail: ProgramRail;
+}
+
+const { rail } = Astro.props;
+---
+
+<section class="program-sampled-panel">
+  <div class="program-sampled-header">
+    <p class="program-panel-kicker">
+      {`// ${rail.dayLabel.toUpperCase()} PICKS`}
+    </p>
+    <a href="/talks" class="program-inline-link"> see all talks </a>
+  </div>
+
+  <div class="program-sampled-board">
+    {
+      rail.spotlight && (
+        <article class="program-sampled-paper program-sampled-featured">
+          <p class="program-sampled-kicker">// RANDOM HIGHLIGHT</p>
+          <StarringCard
+            talkId={rail.spotlight.id}
+            title={rail.spotlight.title}
+            speakers={rail.spotlight.speakers}
+            typeName={rail.spotlight.typeName}
+            start={rail.spotlight.start}
+            description={rail.spotlight.description}
+            variant="featured"
+            metaLayout="stacked"
+            class="program-sampled-entry-featured"
+          />
+        </article>
+      )
+    }
+
+    <aside class="program-sampled-side">
+      <p class="program-sampled-kicker">// A FEW MORE</p>
+      <div class="program-sampled-slip-list">
+        {
+          rail.suggestions.map((event) => (
+            <article class="program-sampled-paper program-sampled-slip">
+              <StarringCard
+                talkId={event.id}
+                title={event.title}
+                speakers={event.speakers}
+                typeName={event.typeName}
+                start={event.start}
+                variant="compact"
+                metaLayout="stacked"
+                class="program-sampled-entry-compact"
+              />
+            </article>
+          ))
+        }
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="program-preview-panel">
+  <div class="program-preview-header">
+    <p class="program-panel-kicker">// FROM THE OTHER DAYS</p>
+  </div>
+
+  <div class="program-other-days-list">
+    {
+      rail.otherDays.map((otherDay) => (
+        <article class="program-other-day-card">
+          <div class="program-other-day-header">
+            <div>
+              <p class="program-other-day-meta">{`${otherDay.dayLabel} · ${otherDay.seriesLabel}`}</p>
+              <h4 class="program-other-day-title">{otherDay.dateLabel}</h4>
+            </div>
+            <button
+              type="button"
+              class="program-other-day-button"
+              data-show-day={otherDay.date}
+              aria-label={`Show ${otherDay.heading} in the main schedule`}
+            >
+              Show day
+            </button>
+          </div>
+
+          <ol class="program-other-day-agenda">
+            {otherDay.picks.map((event) => (
+              <li class="program-other-day-item">
+                <span class="program-other-day-time">
+                  {formatMiniTime(event.start)}
+                </span>
+                <div class="min-w-0">
+                  <p
+                    class="program-other-day-item-title"
+                    set:html={event.title}
+                  />
+                  {event.room && (
+                    <p class="program-other-day-room">{event.room}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </article>
+      ))
+    }
+  </div>
+</section>
