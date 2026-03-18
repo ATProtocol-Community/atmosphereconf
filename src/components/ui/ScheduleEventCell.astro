@@ -101,9 +101,37 @@ const speakerNames = event.speakers?.map((s) => s.name).join(", ");
       href && "group-hover/evt:brightness-95",
     ]}
   >
-    <p class="truncate font-semibold" set:html={event.title} />
-    {time && (
-      <p class:list={["truncate", getSubColors(event.type)]}>{time}</p>
-    )}
+    {
+      isInfo ? (
+        <>
+          <span class="font-semibold">{event.title}</span>
+          {time && (
+            <p class:list={["mt-0.5", getSubColors(event.type)]}>{time}</p>
+          )}
+        </>
+      ) : (
+        <>
+          <p class="font-semibold" set:html={event.title} />
+          {time && (
+            <p class:list={["mt-0.5", getSubColors(event.type)]}>{time}</p>
+          )}
+          {speakerNames && (
+            <p class:list={["mt-0.5", getSubColors(event.type)]}>
+              {speakerNames}
+            </p>
+          )}
+          {event.description && (
+            <p
+              class:list={[
+                "mt-0.5 line-clamp-3 opacity-75",
+                getSubColors(event.type),
+              ]}
+            >
+              {event.description}
+            </p>
+          )}
+        </>
+      )
+    }
   </div>
 </Fragment>

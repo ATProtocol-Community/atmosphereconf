@@ -1,0 +1,15 @@
+---
+export const partial = true;
+
+import ProgramDayRail from "@/components/home/ProgramDayRail.astro";
+import { getProgramDays, getRandomProgramRail } from "@/lib/program";
+
+const requestedDate = Astro.url.searchParams.get("date") ?? "";
+const days = await getProgramDays();
+const fallbackDate = days[0]?.date ?? "";
+const rail =
+  getRandomProgramRail(requestedDate, days) ??
+  getRandomProgramRail(fallbackDate, days);
+---
+
+{rail && <ProgramDayRail rail={rail} />}
