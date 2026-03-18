@@ -15,15 +15,19 @@
     6133 University Blvd [GMap](https://maps.app.goo.gl/S5z3Ninc3hgsp5qW7) · [CoMaps](https://comaps.at/0pGgTRymIh/AMS_Nest_%28Student_Union_Building%29)
     Vancouver, BC V6T 1Z1
 - id: vancouver-airport
-  question: How do I get from the airport?
+  question: How do I get to UBC from the airport?
   answer: |
-    The Skytrain goes to and from the airport. The most direct route is to take the Canada Line (there is only one line leaving the airport) and get out at Oakridge - 41st Avenue. Cross the street and take the R4 fast bus to the end of the line UBC Bus Exchange Bay 1, and it's a 5min walk to the Gage Suites conference hotel.
+    Leave the Airport via Skytrain and get off at the Oakridge - 41st Avenue stop. Cross the street and take the R4 rapid bus westbound to the end of the line, UBC Bus Exchange Bay 1, from there it's a 5 minute walk to the Gage Suites conference hotel.
 - id: vancouver-transportation
-  question: How do I get around Vancouver generally?
+  question: How do I get around Vancouver via Transit?
   answer: |
-    Vancouver's public transit is quite good. There is a fast bus to UBC along Broadway, so will take 30-40min from downtown Vancouver. Public transit is enabled with tap-to-pay that works with major credit cards, or you can buy a stored value [Compass Card](https://www.compasscard.ca/) and use that to tap.
+    Vancouver's public transit is quite good. Public transit is enabled with tap-to-pay that works with major credit cards, or you can buy a stored value [Compass Card](https://www.compasscard.ca/) and use that to pay.
 
-    Uber and Lyft are both available.
+    We recommend the Transit App for [iOS](https://apps.apple.com/us/app/transit-subway-bus-times/id498151501?pt=2090552&ct=transit_homepage&mt=8) and [Android](https://play.google.com/store/apps/details?id=com.thetransitapp.droid&referrer=utm_source%3Dtransit%26utm_medium%3Dwebsite-homepage%26utm_campaign%3Dwebsite-homepage&pli=1) that can help you navigate public transit routes for a car-free experience.
+
+    To get to downtown Vancouver from the UBC campus take one of the following buses: #4, #44, #14 or #N17. The Bus terminal at UBC is located conveniently next to The Nest and near the Gage Suites conference hotel.
+
+    Uber and Lyft are both available as ride-share alternatives to public transit.
 - id: vancouver-restaurants
   question: What kind of restaurants are around?
   answer: |
