@@ -278,8 +278,8 @@ async function generateThumbnail(
                 props: {
                   src: s.avatarDataUri,
                   style: {
-                    width: 72,
-                    height: 72,
+                    width: 96,
+                    height: 96,
                     borderRadius: "50%",
                     border: "3px solid rgba(255,255,255,0.5)",
                   },
@@ -293,7 +293,7 @@ async function generateThumbnail(
           props: {
             style: {
               color: "rgba(255,255,255,0.9)",
-              fontSize: 32,
+              fontSize: 40,
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
               lineHeight: 1.3,
@@ -335,7 +335,7 @@ async function generateThumbnail(
                     style: {
                       backgroundColor: badge.bg,
                       color: badge.fg,
-                      fontSize: 28,
+                      fontSize: 32,
                       fontWeight: 700,
                       fontFamily: "IBM Plex Mono",
                       borderRadius: "9999px",
@@ -360,14 +360,14 @@ async function generateThumbnail(
                 color: "white",
                 fontSize:
                   title.replace(/~~/g, "").length > 80
-                    ? 48
+                    ? 56
                     : title.replace(/~~/g, "").length > 50
-                      ? 56
-                      : 64,
+                      ? 64
+                      : 72,
                 fontWeight: 700,
                 fontFamily: "IBM Plex Mono",
                 lineHeight: 1.15,
-                marginBottom: speakers.length > 0 ? "28px" : "0",
+                marginBottom: speakers.length > 0 ? "32px" : "0",
               },
               children: parseTitle(title),
             },
@@ -442,8 +442,8 @@ async function generateHeader(
                 props: {
                   src: s.avatarDataUri,
                   style: {
-                    width: 56,
-                    height: 56,
+                    width: 80,
+                    height: 80,
                     borderRadius: "50%",
                     border: "3px solid rgba(255,255,255,0.5)",
                   },
@@ -456,7 +456,7 @@ async function generateHeader(
           props: {
             style: {
               color: "rgba(255,255,255,0.9)",
-              fontSize: 26,
+              fontSize: 34,
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
               lineHeight: 1.3,
@@ -500,7 +500,7 @@ async function generateHeader(
                     style: {
                       backgroundColor: badge.bg,
                       color: badge.fg,
-                      fontSize: 22,
+                      fontSize: 26,
                       fontWeight: 700,
                       fontFamily: "IBM Plex Mono",
                       borderRadius: "9999px",
@@ -525,10 +525,10 @@ async function generateHeader(
                 color: "white",
                 fontSize:
                   cleanTitle.length > 80
-                    ? 32
+                    ? 40
                     : cleanTitle.length > 50
-                      ? 38
-                      : 46,
+                      ? 46
+                      : 54,
                 fontWeight: 700,
                 fontFamily: "IBM Plex Mono",
                 lineHeight: 1.15,
@@ -537,7 +537,7 @@ async function generateHeader(
               children: parseTitle(title),
             },
           },
-          // Speakers
+          // Speakers — horizontal, wrapping
           ...(speakers.length > 0
             ? [
                 {
@@ -545,8 +545,8 @@ async function generateHeader(
                   props: {
                     style: {
                       display: "flex",
-                      flexDirection: "column" as const,
-                      gap: "10px",
+                      flexWrap: "wrap" as const,
+                      gap: "16px",
                     },
                     children: speakerElements,
                   },
