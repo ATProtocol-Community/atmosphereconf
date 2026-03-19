@@ -1,12 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
-import { getCollection } from "astro:content";
+import { getLiveEntry } from "astro:content";
 
 const { id } = Astro.params;
 
-const schedule = await getCollection("schedule");
-const entry = schedule.find((e) => e.id === id);
+const { entry, error } = await getLiveEntry("events", id!);
+if (error) {
+  throw error;
+}
 
 const showTypes = new Set([
   "presentation",
@@ -39,13 +41,13 @@ const badgeColors: Record<string, string> = {
 const plainTitle = title.replace(/<[^>]*>/g, "");
 
 function formatTime(iso: string) {
-  const m = iso.match(/T(\d{2}):(\d{2})/);
-  if (!m) return iso;
-  let h = parseInt(m[1]);
-  const min = m[2];
-  const p = h >= 12 ? "PM" : "AM";
-  h = h === 0 ? 12 : h > 12 ? h - 12 : h;
-  return min === "00" ? `${h} ${p}` : `${h}:${min} ${p}`;
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return iso;
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
 }
 
 function formatDate(iso: string) {

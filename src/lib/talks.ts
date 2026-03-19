@@ -1,4 +1,4 @@
-import { getCollection } from "astro:content";
+import { getLiveCollection } from "astro:content";
 
 const MAX_CARDS = 8;
 
@@ -10,12 +10,17 @@ const typeNames: Record<string, string> = {
 };
 
 export async function getTalksByHandle(handle: string) {
-  const schedule = await getCollection("schedule");
+  const { entries: events, error } = await getLiveCollection("events");
+  if (error) {
+    throw error;
+  }
 
-  return schedule
+  return (events ?? [])
     .filter((t) => {
       const type = t.data.type;
-      if (!(type in typeNames)) return false;
+      if (!(type in typeNames)) {
+        return false;
+      }
       return t.data.speakers?.some((s) => s.id === handle);
     })
     .map((t) => ({
@@ -26,9 +31,12 @@ export async function getTalksByHandle(handle: string) {
 }
 
 export async function getRandomTalks() {
-  const schedule = await getCollection("schedule");
+  const { entries: events, error } = await getLiveCollection("events");
+  if (error) {
+    throw error;
+  }
 
-  const talks = schedule
+  const talks = (events ?? [])
     .filter((t) => t.data.type in typeNames)
     .map((t) => ({
       id: t.id,

@@ -7,8 +7,19 @@ import node from "@astrojs/node";
 
 import tailwindcss from "@tailwindcss/vite";
 
+import { envField } from "astro/config";
+
 // https://astro.build/config
 export default defineConfig({
+  env: {
+    schema: {
+      EVENTS_OWNER_DID_OR_HANDLE: envField.string({
+        context: "server",
+        access: "public",
+        default: "atmosphereconf.org",
+      }),
+    },
+  },
   output: "server",
   adapter: node({
     mode: "standalone",
@@ -39,5 +50,8 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+  },
+  experimental: {
+    liveContentCollections: true,
   },
 });
