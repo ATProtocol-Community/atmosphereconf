@@ -81,16 +81,14 @@
     sans-serif;
 
 
-  /* Marquee: show on all screen sizes */
   --marquee-desktop-display: flex;
 
-  /* Ticket marquee — neon magenta bar */
-  --ticket-tab-bg: #1a0030;
-  --ticket-tab-fg: #ff00ff;
-  --ticket-body-bg: #0a001a;
-  --ticket-border: rgba(255, 0, 255, 0.5);
-  --ticket-label: #ff69b4;
-  --ticket-main: #00ffff;
+  --ticket-tab-bg: #0a0020;
+  --ticket-tab-fg: #ffff00;
+  --ticket-body-bg: #0a0020;
+  --ticket-border: #ffff00;
+  --ticket-label: #ffff00;
+  --ticket-main: #ffff00;
 
   --border-style: solid;
   --border-width: 2px;
@@ -113,8 +111,6 @@
     0 0 40px rgba(139, 0, 255, 0.25), 0 0 80px rgba(139, 0, 255, 0.1),
     inset 0 0 16px rgba(255, 0, 255, 0.08);
 }
-
-/* ── Header neon glow ── */
 
 [data-theme="kandake"] #site-header {
   border-bottom: 2px solid rgba(255, 0, 255, 0.5);
@@ -154,18 +150,30 @@
 }
 
 [data-theme="kandake"] #site-header a[href="/login"] {
-  border-color: rgba(0, 255, 255, 0.5) !important;
-  text-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(135deg, #ff00ff, #8b00ff, #ff69b4) !important;
+  background-size: 200% 200% !important;
+  animation: kandake-gradient-move 3s ease infinite;
+  color: #fff !important;
+  border: 2px solid #ff69b4 !important;
+  border-radius: 6px;
+  font-weight: bold;
+  text-shadow: 0 0 6px #fff;
+  box-shadow: 0 0 10px #ff00ff66;
+  transition: box-shadow 0.2s ease, text-shadow 0.2s ease;
 }
 
 [data-theme="kandake"] #site-header a[href="/login"]:hover {
-  border-color: #00ffff !important;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
-    0 0 20px rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff88;
+  text-shadow: 0 0 10px #fff;
 }
 
-/* ── Nostalgic extras ── */
+@keyframes kandake-gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── RaInBoW ── */
 
 @keyframes y2k-rainbow-border {
   0% { border-color: #ff00ff; box-shadow: 0 2px 16px rgba(255, 0, 255, 0.4); }
@@ -191,10 +199,10 @@
   text-shadow: 0 0 8px #ff69b4, 0 0 16px rgba(255, 0, 255, 0.4);
 }
 
-/* I don't know what is is about cross-hairs but they're cool */
+/* ur a st4r */
 [data-theme="kandake"],
 [data-theme="kandake"] * {
-  cursor: crosshair;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5z' fill='%23ff00ff' fill-opacity='0.9'/%3E%3Cpath d='M12 4l1.5 5.5L19 12l-5.5 1.5L12 19l-1.5-5.5L5 12l5.5-1.5z' fill='%23ffffff'/%3E%3C/svg%3E") 12 12, crosshair;
 }
 
 [data-theme="kandake"] a,
@@ -203,7 +211,7 @@
 [data-theme="kandake"] input,
 [data-theme="kandake"] select,
 [data-theme="kandake"] textarea {
-  cursor: pointer;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 0l2.5 9.5L24 12l-9.5 2.5L12 24l-2.5-9.5L0 12l9.5-2.5z' fill='%2300ffff' fill-opacity='0.9'/%3E%3Cpath d='M12 4l1.5 5.5L19 12l-5.5 1.5L12 19l-1.5-5.5L5 12l5.5-1.5z' fill='%23ffffff'/%3E%3C/svg%3E") 12 12, pointer;
 }
 
 [data-theme="kandake"] ::selection {
@@ -266,7 +274,7 @@
   text-shadow: 0 0 6px currentColor;
 }
 
-/* ── Scrolling marquee — thanks Nick ── */
+
 
 @keyframes kandake-rainbow {
   0% { color: #ff0000; text-shadow: 0 0 8px #ff0000; }
@@ -283,6 +291,11 @@
   100% { transform: translateX(-100%); }
 }
 
+@keyframes kandake-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
 @keyframes kandake-rainbow-border {
   0% { border-color: #ff000066; box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2); }
   16% { border-color: #ff880066; box-shadow: 0 2px 10px rgba(255, 136, 0, 0.2); }
@@ -292,6 +305,37 @@
   83% { border-color: #8b00ff66; box-shadow: 0 2px 10px rgba(139, 0, 255, 0.2); }
   100% { border-color: #ff000066; box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2); }
 }
+
+[data-theme="kandake"] .ticket-stub {
+  border: 1px dashed #ffff00 !important;
+  border-radius: 6px !important;
+  background: #0a0020 !important;
+  color: #ffff00 !important;
+  text-shadow: 0 0 6px #ffff00;
+  animation: kandake-float 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.15), 0 0 20px rgba(255, 255, 0, 0.06);
+}
+[data-theme="kandake"] .ticket-stub .ticket-tab {
+  background: transparent !important;
+  color: #ffff00 !important;
+  text-shadow: 0 0 4px #ffff00;
+}
+[data-theme="kandake"] .ticket-stub .ticket-body {
+  border: none !important;
+  border-left: 1px dashed #ffff0066 !important;
+}
+[data-theme="kandake"] .ticket-stub .ticket-label {
+  color: #ffff00 !important;
+}
+[data-theme="kandake"] .ticket-stub .ticket-main {
+  color: #ffff00 !important;
+  text-shadow: 0 0 6px #ffff00;
+}
+[data-theme="kandake"] .ticket-stub .ticket-arrow {
+  color: #ffff00 !important;
+}
+
+/* ── thanks Nick ── */
 
 [data-theme="kandake"] .nav-ticket-tape {
   display: flex !important;
