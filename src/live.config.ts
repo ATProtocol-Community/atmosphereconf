@@ -18,11 +18,26 @@ const events = defineLiveCollection({
       const ad = value.additionalData as Record<string, unknown> | undefined;
       return !!ad?.isAtmosphereconf;
     },
-    transform: (value, rkey) => {
+    transform: (value, rkey, did) => {
       const ad = value.additionalData as Record<string, unknown> | undefined;
+      const data = calendarRecordToEventData(value);
+
+      // Extract header image CDN URL from media array
+      const media = value.media as
+        | Array<{
+            role: string;
+            content: { ref: { $link: string } };
+          }>
+        | undefined;
+      const header = media?.find((m) => m.role === "header");
+      if (header?.content?.ref?.$link) {
+        (data as Record<string, unknown>).headerUrl =
+          `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${header.content.ref.$link}@jpeg`;
+      }
+
       return {
         id: (ad?.sourceId as string) || (ad?.submissionId as string) || rkey,
-        data: calendarRecordToEventData(value),
+        data,
       };
     },
   }),
@@ -39,6 +54,7 @@ const events = defineLiveCollection({
     description: z.string().optional(),
     link_url: z.string().optional(),
     link_text: z.string().optional(),
+    headerUrl: z.string().optional(),
   }),
 });
 

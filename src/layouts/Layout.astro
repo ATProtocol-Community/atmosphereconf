@@ -7,12 +7,14 @@ interface Props {
   title?: string;
   flush?: boolean;
   defaultTheme?: string;
+  ogImage?: string;
 }
 
 const {
   title = "ATmosphereConf • Global ATProto Community Conference • Vancouver, Canada, March 26th - 29th, 2026",
   flush = false,
   defaultTheme: defaultThemeProp,
+  ogImage = "https://atmosphereconf.org/blue-goose-og.png",
 } = Astro.props;
 
 // Priority: page-level default (e.g. profile handle) > logged-in user's handle > bluesky
@@ -31,7 +33,7 @@ const defaultTheme =
     <link rel="apple-touch-icon" href="/favicon-@.png" sizes="512x512" />
     <meta
       property="og:image"
-      content="https://atmosphereconf.org/blue-goose-og.png"
+      content={ogImage}
     />
     <meta property="og:title" content="ATmosphereConf 2026" />
     <meta
