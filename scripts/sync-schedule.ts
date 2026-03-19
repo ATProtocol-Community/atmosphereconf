@@ -35,7 +35,6 @@ const TYPE_LABELS = Object.fromEntries(
   Object.entries(TYPE_MAP).map(([label, key]) => [key, label]),
 );
 
-
 // --- CSV parsing ---
 
 function getScheduleType(row: CsvRow): string {
@@ -548,7 +547,8 @@ async function handlePull() {
 
   const outputPath = await p.text({
     message: "Output CSV path",
-    initialValue: "schedule-pull.csv",
+    placeholder: "schedule-pull.csv",
+    defaultValue: "schedule-pull.csv",
   });
   if (p.isCancel(outputPath)) {
     p.cancel("Cancelled.");
@@ -577,8 +577,8 @@ try {
   if (command === "push") {
     const csvPath = await p.text({
       message: "Path to CSV file",
-      placeholder: "src/content/talks/Atmosphere Conference 2026 Schedule.csv",
-      defaultValue: "src/content/talks/Atmosphere Conference 2026 Schedule.csv",
+      placeholder: "schedule-pull.csv",
+      defaultValue: "schedule-pull.csv",
     });
     if (p.isCancel(csvPath)) {
       p.cancel("Cancelled.");
