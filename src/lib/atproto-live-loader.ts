@@ -11,6 +11,7 @@ interface AtprotoLiveLoaderOptions<
   transform: (
     value: Record<string, unknown>,
     rkey: string,
+    did: string,
   ) => { id: string; data: LexiconType };
   cacheTtl?: number;
 }
@@ -30,6 +31,7 @@ async function fetchAllFromPds<TData extends Record<string, unknown>>(
   transform: (
     value: Record<string, unknown>,
     rkey: string,
+    did: string,
   ) => { id: string; data: TData },
 ): Promise<LiveDataEntry<TData>[]> {
   const agent = await getAgent(did);
@@ -50,7 +52,9 @@ async function fetchAllFromPds<TData extends Record<string, unknown>>(
       }
 
       const rkey = rec.uri.split("/").pop()!;
-      entries.push(transform(value, rkey));
+      // Extract DID from record URI (handles case where `did` param is a handle)
+      const resolvedDid = rec.uri.split("/")[2];
+      entries.push(transform(value, rkey, resolvedDid));
     }
     cursor = data.cursor;
   } while (cursor);
@@ -65,6 +69,7 @@ async function fetchSingleFromPds<TData extends Record<string, unknown>>(
   transform: (
     value: Record<string, unknown>,
     rkey: string,
+    did: string,
   ) => { id: string; data: TData },
 ): Promise<LiveDataEntry<TData>> {
   const agent = await getAgent(did);
@@ -74,7 +79,8 @@ async function fetchSingleFromPds<TData extends Record<string, unknown>>(
     rkey,
   });
 
-  return transform(data.value as Record<string, unknown>, rkey);
+  const resolvedDid = data.uri.split("/")[2];
+  return transform(data.value as Record<string, unknown>, rkey, resolvedDid);
 }
 
 export function atprotoLiveLoader<TData extends Record<string, unknown>>(

@@ -21,8 +21,17 @@ if (!entry || !showTypes.has(entry.data.type)) {
   return Astro.redirect("/talks");
 }
 
-const { title, type, speakers, description, category, room, start, end } =
-  entry.data;
+const {
+  title,
+  type,
+  speakers,
+  description,
+  category,
+  room,
+  start,
+  end,
+  headerUrl,
+} = entry.data;
 
 const typeNames: Record<string, string> = {
   presentation: "Presentation",
@@ -70,7 +79,7 @@ const timeDisplay =
 const dateDisplay = start ? formatDate(start) : null;
 ---
 
-<Layout title={`${plainTitle} — ATmosphereConf 2026`}>
+<Layout title={`${plainTitle} — ATmosphereConf 2026`} ogImage={headerUrl}>
   <div class="mt-20 space-y-10">
     <Card>
       <a

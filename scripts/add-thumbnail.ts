@@ -16,7 +16,10 @@ const LIMIT = (() => {
   return Infinity;
 })();
 const THUMBNAIL_SIZE = 1024;
-const PRESET_PATH = "public/preset.png";
+const HEADER_WIDTH = 1200;
+const HEADER_HEIGHT = 630;
+const THUMBNAIL_PRESET_PATH = "public/preset.png";
+const HEADER_PRESET_PATH = "public/header-preset.png";
 const PREVIEW_DIR = "thumbnail-preview";
 
 // Badge colors per event type — converted from oklch to hex (bluesky/default theme)
@@ -145,12 +148,20 @@ async function loadTalkEvents(
   return events;
 }
 
-function hasThumbnail(event: EventRecord): boolean {
+function hasMediaRole(event: EventRecord, role: string): boolean {
   const media = event.value.media as
     | Array<Record<string, unknown>>
     | undefined;
   if (!Array.isArray(media)) return false;
-  return media.some((m) => m.role === "thumbnail");
+  return media.some((m) => m.role === role);
+}
+
+function hasThumbnail(event: EventRecord): boolean {
+  return hasMediaRole(event, "thumbnail");
+}
+
+function hasHeader(event: EventRecord): boolean {
+  return hasMediaRole(event, "header");
 }
 
 function getEventType(event: EventRecord): string {
@@ -244,7 +255,7 @@ async function generateThumbnail(
   speakers: SpeakerInfo[],
   fonts: { regular: ArrayBuffer; bold: ArrayBuffer },
 ): Promise<Buffer> {
-  const presetBuffer = readFileSync(PRESET_PATH);
+  const presetBuffer = readFileSync(THUMBNAIL_PRESET_PATH);
   const presetBase64 = presetBuffer.toString("base64");
   const presetDataUri = `data:image/png;base64,${presetBase64}`;
 
@@ -403,6 +414,171 @@ async function generateThumbnail(
   return await sharp(Buffer.from(svg)).png().toBuffer();
 }
 
+async function generateHeader(
+  title: string,
+  eventType: string,
+  speakers: SpeakerInfo[],
+  fonts: { regular: ArrayBuffer; bold: ArrayBuffer },
+): Promise<Buffer> {
+  const presetBuffer = readFileSync(HEADER_PRESET_PATH);
+  const presetBase64 = presetBuffer.toString("base64");
+  const presetDataUri = `data:image/png;base64,${presetBase64}`;
+
+  const badge = BADGE_STYLES[eventType] ?? BADGE_STYLES.presentation;
+
+  const speakerElements = speakers.map((s) => ({
+    type: "div",
+    props: {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: "14px",
+      },
+      children: [
+        ...(s.avatarDataUri
+          ? [
+              {
+                type: "img",
+                props: {
+                  src: s.avatarDataUri,
+                  style: {
+                    width: 56,
+                    height: 56,
+                    borderRadius: "50%",
+                    border: "3px solid rgba(255,255,255,0.5)",
+                  },
+                },
+              },
+            ]
+          : []),
+        {
+          type: "div",
+          props: {
+            style: {
+              color: "rgba(255,255,255,0.9)",
+              fontSize: 26,
+              fontFamily: "IBM Plex Mono",
+              fontWeight: 400,
+              lineHeight: 1.3,
+            },
+            children: s.name,
+          },
+        },
+      ],
+    },
+  }));
+
+  const cleanTitle = title.replace(/~~/g, "");
+
+  const svg = await satori(
+    {
+      type: "div",
+      props: {
+        style: {
+          width: HEADER_WIDTH,
+          height: HEADER_HEIGHT,
+          display: "flex",
+          backgroundImage: `url(${presetDataUri})`,
+          backgroundSize: `${HEADER_WIDTH}px ${HEADER_HEIGHT}px`,
+          flexDirection: "column",
+          padding: "50px",
+          paddingRight: "250px",
+        },
+        children: [
+          // Badge
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                marginBottom: "20px",
+              },
+              children: [
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      backgroundColor: badge.bg,
+                      color: badge.fg,
+                      fontSize: 22,
+                      fontWeight: 700,
+                      fontFamily: "IBM Plex Mono",
+                      borderRadius: "9999px",
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      paddingTop: "6px",
+                      paddingBottom: "6px",
+                    },
+                    children: badge.label,
+                  },
+                },
+              ],
+            },
+          },
+          // Title
+          {
+            type: "div",
+            props: {
+              style: {
+                display: "flex",
+                flexWrap: "wrap",
+                color: "white",
+                fontSize:
+                  cleanTitle.length > 80
+                    ? 32
+                    : cleanTitle.length > 50
+                      ? 38
+                      : 46,
+                fontWeight: 700,
+                fontFamily: "IBM Plex Mono",
+                lineHeight: 1.15,
+                marginBottom: speakers.length > 0 ? "24px" : "0",
+              },
+              children: parseTitle(title),
+            },
+          },
+          // Speakers
+          ...(speakers.length > 0
+            ? [
+                {
+                  type: "div",
+                  props: {
+                    style: {
+                      display: "flex",
+                      flexDirection: "column" as const,
+                      gap: "10px",
+                    },
+                    children: speakerElements,
+                  },
+                },
+              ]
+            : []),
+        ],
+      },
+    },
+    {
+      width: HEADER_WIDTH,
+      height: HEADER_HEIGHT,
+      fonts: [
+        {
+          name: "IBM Plex Mono",
+          data: fonts.regular,
+          weight: 400,
+          style: "normal" as const,
+        },
+        {
+          name: "IBM Plex Mono",
+          data: fonts.bold,
+          weight: 700,
+          style: "normal" as const,
+        },
+      ],
+    },
+  );
+
+  return await sharp(Buffer.from(svg)).png().toBuffer();
+}
+
 // --- Preview mode: generate all thumbnails to disk, no auth needed ---
 
 async function handlePreview() {
@@ -455,19 +631,34 @@ async function handlePreview() {
     const outPath = `${PREVIEW_DIR}/${filename}.png`;
 
     try {
-      const pngBuffer = await generateThumbnail(
+      const thumbBuffer = await generateThumbnail(
         title,
         eventType,
         speakers,
         fonts,
       );
-      writeFileSync(outPath, pngBuffer);
-      const has = hasThumbnail(event) ? " (already has thumbnail)" : "";
+      writeFileSync(outPath, thumbBuffer);
+
+      const headerPath = `${PREVIEW_DIR}/${filename}-header.png`;
+      const headerBuffer = await generateHeader(
+        title,
+        eventType,
+        speakers,
+        fonts,
+      );
+      writeFileSync(headerPath, headerBuffer);
+
+      const flags = [
+        hasThumbnail(event) ? "has thumb" : null,
+        hasHeader(event) ? "has header" : null,
+      ]
+        .filter(Boolean)
+        .join(", ");
       const spk =
         speakers.length > 0
           ? ` [${speakers.map((s) => s.name).join(", ")}]`
           : "";
-      p.log.step(`${outPath}${spk}${has}`);
+      p.log.step(`${filename}${spk}${flags ? ` (${flags})` : ""}`);
     } catch (error) {
       p.log.error(`Error generating ${title}: ${error}`);
     }
@@ -490,23 +681,31 @@ async function handleUpload() {
   const events = await loadTalkEvents(unauthClient, did);
   s.stop(`Found ${events.length} talk event(s)`);
 
-  const allNeedsThumbnail = events.filter((e) => !hasThumbnail(e));
-  const needsThumbnail = allNeedsThumbnail.slice(0, LIMIT);
-  const alreadyHas = events.length - allNeedsThumbnail.length;
+  const needsMedia = events.filter(
+    (e) => !hasThumbnail(e) || !hasHeader(e),
+  );
+  const toProcess = needsMedia.slice(0, LIMIT);
 
-  if (needsThumbnail.length === 0) {
-    p.log.info("All talk events already have thumbnails. Nothing to do.");
+  if (toProcess.length === 0) {
+    p.log.info(
+      "All talk events already have both thumbnail and header. Nothing to do.",
+    );
     process.exit(0);
   }
 
   const lines = [
     `Total talk events: ${events.length}`,
-    `Already have thumbnail: ${alreadyHas}`,
-    `Need thumbnail: ${needsThumbnail.length}`,
+    `Need media: ${toProcess.length}`,
     "",
-    ...needsThumbnail.map(
-      (e) => `  + ${e.rkey} — ${e.value.name ?? "(untitled)"}`,
-    ),
+    ...toProcess.map((e) => {
+      const needs = [
+        !hasThumbnail(e) ? "thumb" : null,
+        !hasHeader(e) ? "header" : null,
+      ]
+        .filter(Boolean)
+        .join("+");
+      return `  + ${e.rkey} — ${e.value.name ?? "(untitled)"} (${needs})`;
+    }),
   ];
   p.note(lines.join("\n"), "Preview");
 
@@ -516,7 +715,7 @@ async function handleUpload() {
   }
 
   const ok = await p.confirm({
-    message: `Generate and upload thumbnails for ${needsThumbnail.length} event(s)?`,
+    message: `Generate and upload media for ${toProcess.length} event(s)?`,
   });
   if (p.isCancel(ok) || !ok) {
     p.cancel("Aborted.");
@@ -532,51 +731,80 @@ async function handleUpload() {
   s2.stop("Fonts loaded");
 
   const s3 = p.spinner();
-  s3.start("Generating thumbnails and updating events");
+  s3.start("Generating media and updating events");
 
   let updated = 0;
   let errors = 0;
   const avatarCache = new Map<string, string | undefined>();
 
-  for (const event of needsThumbnail) {
+  for (const event of toProcess) {
     const title = String(event.value.name ?? "");
     const eventType = getEventType(event);
     const rawSpeakers = getRawSpeakers(event);
     const speakers = await resolveSpeakers(rawSpeakers, avatarCache);
+    const needsThumb = !hasThumbnail(event);
+    const needsHead = !hasHeader(event);
 
     try {
-      const pngBuffer = await generateThumbnail(
-        title,
-        eventType,
-        speakers,
-        fonts,
-      );
-
-      const { data: blobData } = await agent.com.atproto.repo.uploadBlob(
-        new Uint8Array(pngBuffer),
-        { encoding: "image/png" },
-      );
-
-      const thumbnailMedia = {
-        alt: "",
-        role: "thumbnail",
-        $type: "community.lexicon.calendar.event#media",
-        content: {
-          $type: "blob",
-          ref: { $link: blobData.blob.ref.toString() },
-          mimeType: "image/png",
-          size: pngBuffer.length,
-        },
-        aspect_ratio: {
-          width: THUMBNAIL_SIZE,
-          height: THUMBNAIL_SIZE,
-        },
-      };
-
       const media = Array.isArray(event.value.media)
         ? [...(event.value.media as Array<Record<string, unknown>>)]
         : [];
-      media.push(thumbnailMedia);
+
+      if (needsThumb) {
+        const thumbBuffer = await generateThumbnail(
+          title,
+          eventType,
+          speakers,
+          fonts,
+        );
+        const { data: thumbBlob } = await agent.com.atproto.repo.uploadBlob(
+          new Uint8Array(thumbBuffer),
+          { encoding: "image/png" },
+        );
+        media.push({
+          alt: "",
+          role: "thumbnail",
+          $type: "community.lexicon.calendar.event#media",
+          content: {
+            $type: "blob",
+            ref: { $link: thumbBlob.blob.ref.toString() },
+            mimeType: "image/png",
+            size: thumbBuffer.length,
+          },
+          aspect_ratio: {
+            width: THUMBNAIL_SIZE,
+            height: THUMBNAIL_SIZE,
+          },
+        });
+      }
+
+      if (needsHead) {
+        const headerBuffer = await generateHeader(
+          title,
+          eventType,
+          speakers,
+          fonts,
+        );
+        const { data: headerBlob } = await agent.com.atproto.repo.uploadBlob(
+          new Uint8Array(headerBuffer),
+          { encoding: "image/png" },
+        );
+        media.push({
+          alt: "",
+          role: "header",
+          $type: "community.lexicon.calendar.event#media",
+          content: {
+            $type: "blob",
+            ref: { $link: headerBlob.blob.ref.toString() },
+            mimeType: "image/png",
+            size: headerBuffer.length,
+          },
+          aspect_ratio: {
+            width: HEADER_WIDTH,
+            height: HEADER_HEIGHT,
+          },
+        });
+      }
 
       const record = { ...event.value, media };
 
@@ -587,7 +815,10 @@ async function handleUpload() {
         record,
       });
       updated++;
-      p.log.step(`${title}`);
+      const added = [needsThumb ? "thumb" : null, needsHead ? "header" : null]
+        .filter(Boolean)
+        .join("+");
+      p.log.step(`${title} (${added})`);
     } catch (error) {
       p.log.error(`Error updating ${event.rkey} (${title}): ${error}`);
       errors++;
