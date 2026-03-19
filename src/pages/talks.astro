@@ -2,9 +2,12 @@
 import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
 import StarringCard from "@/components/home/StarringCard.astro";
-import { getCollection } from "astro:content";
+import { getLiveCollection } from "astro:content";
 
-const schedule = await getCollection("schedule");
+const { entries: events = [], error } = await getLiveCollection("events");
+if (error) {
+  throw error;
+}
 
 const typeNames: Record<string, string> = {
   presentation: "Presentation",
@@ -13,7 +16,7 @@ const typeNames: Record<string, string> = {
   workshop: "Workshop",
 };
 
-const allTalks = schedule
+const allTalks = events
   .filter((t) => t.data.type in typeNames)
   .map((t) => ({
     id: t.id,
@@ -41,7 +44,9 @@ const grouped = Object.groupBy(allTalks, (t) => t.typeName);
     {
       types.map((type) => {
         const talks = grouped[type];
-        if (!talks?.length) return null;
+        if (!talks?.length) {
+          return null;
+        }
         return (
           <Card title={typeLabels[type]}>
             <div class="mt-2 flex flex-col gap-3">
