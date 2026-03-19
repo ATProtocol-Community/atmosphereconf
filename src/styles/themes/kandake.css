@@ -167,6 +167,35 @@
   text-shadow: 0 0 10px #fff;
 }
 
+/* ── All buttons get the gradient treatment ── */
+[data-theme="kandake"] .feed-subscribe-btn,
+[data-theme="kandake"] .bg-primary,
+[data-theme="kandake"] #show-more-talks,
+[data-theme="kandake"] .starring-see-all,
+[data-theme="kandake"] .schedule-tab,
+[data-theme="kandake"] button[type="submit"] {
+  background: linear-gradient(135deg, #ff00ff, #8b00ff, #ff69b4) !important;
+  background-size: 200% 200% !important;
+  animation: kandake-gradient-move 3s ease infinite;
+  color: #fff !important;
+  border: 2px solid #ff69b4 !important;
+  border-radius: 6px;
+  font-weight: bold;
+  text-shadow: 0 0 6px #fff;
+  box-shadow: 0 0 10px #ff00ff66;
+  transition: box-shadow 0.2s ease, text-shadow 0.2s ease;
+}
+
+[data-theme="kandake"] .feed-subscribe-btn:hover,
+[data-theme="kandake"] .bg-primary:hover,
+[data-theme="kandake"] #show-more-talks:hover,
+[data-theme="kandake"] .starring-see-all:hover,
+[data-theme="kandake"] .schedule-tab:hover,
+[data-theme="kandake"] button[type="submit"]:hover {
+  box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff88;
+  text-shadow: 0 0 10px #fff;
+}
+
 @keyframes kandake-gradient-move {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
