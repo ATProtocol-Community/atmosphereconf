@@ -376,6 +376,8 @@
 [data-theme="ngerakines"] .nav-ticket-tape {
   display: flex !important;
   max-height: 40px !important;
+  width: 100% !important;
+  background: #cc0000 !important;
 }
 [data-theme="ngerakines"] .nav-ticket-peel {
   display: none !important;
@@ -387,6 +389,17 @@
 [data-theme="ngerakines"] .ntt-body {
   border: none !important;
   height: 32px;
+  flex: 1 !important;
+  width: 100% !important;
+}
+[data-theme="ngerakines"] .ntt-scroll {
+  gap: 1.5rem !important;
+  min-width: auto !important;
+  animation: ngerakines-marquee 15s linear infinite !important;
+}
+@keyframes ngerakines-marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
 }
 [data-theme="ngerakines"] .ntt-cta {
   color: #ffffff;
