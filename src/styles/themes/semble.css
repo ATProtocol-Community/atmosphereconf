@@ -1,0 +1,72 @@
+/*
+ * Theme: Semble
+ * Source: https://semble.so
+ */
+
+[data-theme="semble"] {
+  /* Palette — warm stone base, tangerine accent */
+  --theme-bg: oklch(0.98 0.003 80);
+  --theme-fg: oklch(0.1 0.005 60);
+  --theme-muted: oklch(0.49 0.015 60);
+  --theme-accent: oklch(0.69 0.21 42.88);
+  --theme-surface: oklch(0.96 0.003 80);
+  --theme-border: oklch(0.91 0.005 60 / 0.7);
+
+  /* Semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--theme-fg);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.93 0.005 60);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: oklch(0.93 0.005 60);
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: oklch(0.91 0.005 60);
+  --ring: var(--theme-accent);
+
+  /* Header — white with warm stone border */
+  --header-bg: oklch(1 0 0);
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: oklch(0.49 0.015 60 / 0.8);
+  --header-border: oklch(0.91 0.005 60 / 0.5);
+  --header-logo-accent: var(--theme-accent);
+
+  /* ATProto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(
+    135deg,
+    oklch(0.88 0.08 42),
+    oklch(0.96 0.02 60)
+  );
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: oklch(1 0 0 / 0.9);
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  /* Event-type badge/cell colors — light, tinted backgrounds */
+  --event-presentation-bg: oklch(0.93 0.03 240);
+  --event-presentation-fg: oklch(0.38 0.12 240);
+  --event-presentation-sub: oklch(0.48 0.12 240);
+  --event-lightning-bg: oklch(0.93 0.04 42);
+  --event-lightning-fg: oklch(0.46 0.15 42);
+  --event-lightning-sub: oklch(0.54 0.13 42);
+  --event-panel-bg: oklch(0.93 0.04 305);
+  --event-panel-fg: oklch(0.44 0.12 305);
+  --event-panel-sub: oklch(0.52 0.12 305);
+  --event-workshop-bg: oklch(0.93 0.03 155);
+  --event-workshop-fg: oklch(0.44 0.1 155);
+  --event-workshop-sub: oklch(0.52 0.1 155);
+  --event-info-bg: oklch(0.93 0.04 42);
+  --event-info-fg: oklch(0.46 0.15 42);
+  --event-info-sub: oklch(0.54 0.13 42);
+  --event-activity-bg: oklch(0.93 0.003 80);
+  --event-activity-fg: oklch(0.35 0.005 60);
+  --event-activity-sub: oklch(0.45 0.01 60);
+}
