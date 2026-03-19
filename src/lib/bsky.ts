@@ -10,7 +10,7 @@ export const FEED_URI =
   "at://did:plc:3xewinw4wtimo2lqfy5fm5sw/app.bsky.feed.generator/atmosphereconf";
 
 export const FEED_URL =
-  "https://bsky.app/profile/atmosphereconf.org/feed/atmosphereconf;
+  "https://bsky.app/profile/atmosphereconf.org/feed/atmosphereconf";
 
 // --- Types ---
 
