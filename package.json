@@ -33,6 +33,8 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.68.0",
+    "satori": "^0.25.0",
+    "sharp": "^0.34.5",
     "slugify": "^1.6.6",
     "tailwindcss": "^4.1.17",
     "zod": "^3.25.76"
