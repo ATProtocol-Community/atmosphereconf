@@ -31,12 +31,89 @@ const TYPE_LABELS = Object.fromEntries(
   Object.entries(TYPE_MAP).map(([label, key]) => [key, label]),
 );
 
-// Internal: "2026-03-28T10:30"  CSV: "March 28th, 2026 10:30am"  Timeslot: "March 28, 2026 10:30 AM"
-const INTERNAL_FORMAT = "yyyy-MM-dd'T'HH:mm";
+const TIMEZONE = "America/Vancouver";
 const CSV_DATE_FORMAT = "MMMM do, yyyy h:mmaaa";
 const TIMESLOT_FORMAT = "MMMM d, yyyy hh:mm aa";
 const TIMESLOT_END_FORMAT = "hh:mm aa";
 const REF = new Date();
+
+/** Return the UTC offset in minutes for a given IANA timezone at a specific instant. */
+function tzOffsetMinutes(date: Date, tz: string): number {
+  const utcParts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+  const tzParts = new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+
+  const get = (parts: Intl.DateTimeFormatPart[], type: string) =>
+    parseInt(parts.find((p) => p.type === type)!.value);
+
+  const utcMin =
+    Date.UTC(get(utcParts, "year"), get(utcParts, "month") - 1, get(utcParts, "day"),
+      get(utcParts, "hour"), get(utcParts, "minute"), get(utcParts, "second"));
+  const tzMin =
+    Date.UTC(get(tzParts, "year"), get(tzParts, "month") - 1, get(tzParts, "day"),
+      get(tzParts, "hour"), get(tzParts, "minute"), get(tzParts, "second"));
+
+  return (tzMin - utcMin) / 60_000;
+}
+
+/**
+ * Reinterpret a Date (whose UTC-agnostic components represent wall-clock time
+ * in the given timezone) as a proper UTC Date.
+ *
+ * date-fns/parse produces a Date using the *system* timezone. We extract the
+ * year/month/day/hour/minute components and treat them as belonging to `tz`.
+ */
+function wallClockToUtc(date: Date, tz: string): Date {
+  const y = date.getFullYear();
+  const m = date.getMonth();
+  const d = date.getDate();
+  const h = date.getHours();
+  const min = date.getMinutes();
+  const s = date.getSeconds();
+  const ms = date.getMilliseconds();
+
+  // First approximation: assume UTC, then correct for the timezone offset.
+  const approx = new Date(Date.UTC(y, m, d, h, min, s, ms));
+  const offset = tzOffsetMinutes(approx, tz);
+  const corrected = new Date(approx.getTime() - offset * 60_000);
+
+  // Re-check offset at the corrected time (handles DST edge cases).
+  const offset2 = tzOffsetMinutes(corrected, tz);
+  if (offset2 !== offset) {
+    return new Date(approx.getTime() - offset2 * 60_000);
+  }
+  return corrected;
+}
+
+/**
+ * Convert a UTC Date to a Date whose *local-time* getters (getFullYear, getHours, …)
+ * return the wall-clock values in the given timezone.
+ * This lets date-fns `format()` (which reads local-time components) produce the
+ * correct output for the target timezone regardless of the system timezone.
+ */
+function utcToLocalDate(date: Date, tz: string): Date {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+
+  const get = (type: string) =>
+    parseInt(parts.find((p) => p.type === type)!.value);
+
+  return new Date(get("year"), get("month") - 1, get("day"),
+    get("hour"), get("minute"), get("second"));
+}
 
 function parseScheduleDate(value?: string): string | undefined {
   const trimmed = value?.trim();
@@ -47,33 +124,36 @@ function parseScheduleDate(value?: string): string | undefined {
   if (isNaN(date.getTime())) {
     return trimmed;
   }
-  return format(date, INTERNAL_FORMAT);
+  return wallClockToUtc(date, TIMEZONE).toISOString();
 }
 
 function formatScheduleDate(value?: string): string {
   if (!value) {
     return "";
   }
-  const date = parse(value, INTERNAL_FORMAT, REF);
-  if (isNaN(date.getTime())) {
-    return value;
+  const isoDate = new Date(value);
+  if (!isNaN(isoDate.getTime())) {
+    const local = utcToLocalDate(isoDate, TIMEZONE);
+    return format(local, CSV_DATE_FORMAT);
   }
-  return format(date, CSV_DATE_FORMAT);
+  return value;
 }
 
 function formatTimeslot(start?: string, end?: string): string {
   if (!start || !end) {
     return "";
   }
-  const startDate = parse(start, INTERNAL_FORMAT, REF);
-  const endDate = parse(end, INTERNAL_FORMAT, REF);
+  const startDate = new Date(start);
+  const endDate = new Date(end);
   if (isNaN(startDate.getTime())) {
     return start;
   }
+  const localStart = utcToLocalDate(startDate, TIMEZONE);
   if (isNaN(endDate.getTime())) {
-    return `${format(startDate, TIMESLOT_FORMAT)} - ${end}`;
+    return `${format(localStart, TIMESLOT_FORMAT)} - ${end}`;
   }
-  return `${format(startDate, TIMESLOT_FORMAT)} - ${format(endDate, TIMESLOT_END_FORMAT)}`;
+  const localEnd = utcToLocalDate(endDate, TIMEZONE);
+  return `${format(localStart, TIMESLOT_FORMAT)} - ${format(localEnd, TIMESLOT_END_FORMAT)}`;
 }
 
 // --- CSV parsing ---
