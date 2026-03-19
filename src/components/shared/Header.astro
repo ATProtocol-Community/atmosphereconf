@@ -19,7 +19,8 @@ const navLinks = [
 
 <header
   id="site-header"
-  class="sticky top-0 z-10 h-14 font-mono"
+  class="sticky top-0 z-10 h-14"
+  style="font-family: var(--font-ui);"
   style="background: var(--header-bg, var(--primary));"
 >
   <div
@@ -146,7 +147,7 @@ const navLinks = [
         ) : (
           <a
             href="/login"
-            class="rounded border px-2 py-1 font-mono text-sm font-medium whitespace-nowrap transition-colors sm:px-3 sm:text-base"
+            class="rounded border px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors sm:px-3 sm:text-base"
             style="color: var(--header-fg, white); border-color: var(--header-fg-muted, rgba(255,255,255,0.4));"
           >
             sign in
@@ -275,7 +276,7 @@ const navLinks = [
   if (hash && sections.has(hash)) setActive(hash);
 
   // Theme toggle
-  const THEMES = ["bluesky", "blacksky", "reddwarf", "pckt", "germ", "northsky", "plyr.fm", "semble"];
+  const THEMES = ["bluesky", "blacksky", "reddwarf", "pckt", "germ", "northsky", "plyr.fm", "semble", "ngerakines"];
   const themeLabel = document.getElementById("theme-next-label");
 
   function syncThemeLabel() {

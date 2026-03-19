@@ -23,16 +23,16 @@ const starred = await getRandomTalks();
         ))
       }
     </div>
-    <button
-      id="show-more-talks"
-      class="border-primary/60 text-primary hover:border-primary hover:bg-accent mt-3 flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border-2 border-dashed py-2.5 text-sm font-semibold transition-all hover:border-solid"
-    >
-      🪿 I'm feeling curious
-    </button>
-    <div class="mt-3 flex justify-end">
+    <div class="starring-actions mt-3 flex flex-wrap items-center justify-center gap-2">
+      <button
+        id="show-more-talks"
+        class="border-primary/60 text-primary hover:border-primary hover:bg-accent flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border-2 border-dashed py-2.5 px-4 text-sm font-semibold transition-all hover:border-solid"
+      >
+        🪿 I'm feeling curious
+      </button>
       <a
         href="/talks"
-        class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+        class="starring-see-all text-muted-foreground hover:text-foreground text-sm transition-colors"
       >
         See them all &rarr;
       </a>

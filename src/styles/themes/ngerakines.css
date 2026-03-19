@@ -1,0 +1,502 @@
+[data-theme="ngerakines"] {
+  /* Palette */
+  --theme-bg: #ccccff;
+  --theme-fg: #000000;
+  --theme-muted: #555555;
+  --theme-accent: #0000ff;
+  --theme-surface: #ffffcc;
+  --theme-border: #800080;
+
+  /* Semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: #cc0000;
+  --primary-foreground: #ffffff;
+  --secondary: #ffffcc;
+  --secondary-foreground: var(--theme-fg);
+  --muted: #ddddee;
+  --muted-foreground: var(--theme-muted);
+  --accent: #ffffcc;
+  --accent-foreground: var(--theme-fg);
+  --destructive: #ff0000;
+  --border: var(--theme-border);
+  --input: #800080;
+  --ring: #0000ff;
+
+  /* Typography */
+  --font-body: "Comic Sans MS", "Comic Sans", cursive;
+  --font-heading: "Comic Sans MS", "Comic Sans", cursive;
+  --font-ui: "Comic Sans MS", "Comic Sans", cursive;
+
+  /* Borders — ridge/dashed ngerakines look */
+  --radius: 0px;
+  --border-style: ridge;
+  --border-width: 3px;
+  --card-border-style: ridge;
+  --card-border-width: 3px;
+  --card-shadow: none;
+  --card-radius: 0px;
+
+  /* Hero — black bg with dashed red border */
+  --hero-bg: #000000;
+  --hero-fg: #00ff00;
+  --hero-title: #ff0000;
+  --hero-title-accent: #00ff00;
+  --hero-subtitle: #00ff00;
+  --hero-border-style: dashed;
+  --hero-border-width: 5px;
+  --hero-border-color: #ff0000;
+
+  /* Header — navy bg, lime/yellow text */
+  --header-bg: #000080;
+  --header-fg: #00ff00;
+  --header-fg-muted: #ffff00;
+  --header-border: #ff0000;
+  --header-logo-accent: #ff0000;
+
+  /* ATProto profile */
+  --atproto-profile-bg: #ccccff;
+  --atproto-profile-banner: linear-gradient(
+    to right,
+    #ff0000,
+    #ffff00,
+    #00ff00,
+    #0000ff
+  );
+  --atproto-profile-ring: #800080;
+  --atproto-profile-pill-bg: #ffffcc;
+  --atproto-profile-pill-fg: #0000ff;
+  --atproto-profile-link: #0000ff;
+
+  /* Event badges — bright flat ngerakines colors */
+  --event-presentation-bg: #ffcccc;
+  --event-presentation-fg: #cc0000;
+  --event-presentation-sub: #cc0000;
+  --event-lightning-bg: #ffffcc;
+  --event-lightning-fg: #886600;
+  --event-lightning-sub: #886600;
+  --event-panel-bg: #ccffcc;
+  --event-panel-fg: #006600;
+  --event-panel-sub: #006600;
+  --event-workshop-bg: #ccccff;
+  --event-workshop-fg: #000080;
+  --event-workshop-sub: #000080;
+  --event-info-bg: #ffccff;
+  --event-info-fg: #880088;
+  --event-info-sub: #880088;
+  --event-activity-bg: #ccffff;
+  --event-activity-fg: #006666;
+  --event-activity-sub: #006666;
+
+  /* Marquee: show on all screen sizes */
+  --marquee-desktop-display: flex;
+
+  /* Ticket marquee — simple red bar */
+  --ticket-tab-bg: #cc0000;
+  --ticket-tab-fg: #ffff00;
+  --ticket-body-bg: #cc0000;
+  --ticket-border: #cc0000;
+  --ticket-label: #ffff00;
+  --ticket-main: #ffffff;
+}
+
+/* --- ngerakines layout overrides (need full selectors for specificity) --- */
+
+/* Per-section card colors — ngerakines rainbow */
+[data-theme="ngerakines"] #workshops .themed-card {
+  --card: #ffffcc; /* yellow */
+}
+[data-theme="ngerakines"] #talks .themed-card {
+  --card: #ffffcc; /* yellow, same as workshops */
+}
+[data-theme="ngerakines"] #tickets .themed-card {
+  --card: #ffffcc; /* yellow */
+}
+[data-theme="ngerakines"] #feed .themed-card {
+  --card: #ccffcc; /* green */
+}
+[data-theme="ngerakines"] #faqs .themed-card {
+  --card: #ccccff; /* lavender */
+}
+[data-theme="ngerakines"] #sponsors .themed-card {
+  --card: #ffffcc; /* yellow */
+}
+
+/* Schedule tables — different colors per day */
+/* Thursday table — navy frame, blue alternating rows */
+[data-theme="ngerakines"] [data-table-index="0"] {
+  --table-header-bg: #000080;
+  --table-header-fg: #ffff00;
+  --table-cell-bg: #ddeeff;
+  --table-cell-bg-alt: #bbddff;
+  --table-border-color: #000080;
+  --table-border-width: 2px;
+  --table-frame-width: 3px;
+}
+/* Friday table — green frame, green alternating rows */
+[data-theme="ngerakines"] [data-table-index="1"] {
+  --table-header-bg: #008800;
+  --table-header-fg: #ffff00;
+  --table-cell-bg: #ddffdd;
+  --table-cell-bg-alt: #bbffbb;
+  --table-border-color: #008800;
+  --table-border-width: 2px;
+  --table-frame-width: 3px;
+}
+
+/* Card title bars — yellow background */
+[data-theme="ngerakines"] .themed-card h2 {
+  background: #ffff00;
+  color: #000080;
+  margin: -1.5rem -2rem 1rem -2rem;
+  padding: 0.5rem 2rem;
+}
+@media (min-width: 768px) {
+  [data-theme="ngerakines"] .themed-card h2 {
+    margin: -2rem -3rem 1rem -3rem;
+    padding: 0.5rem 3rem;
+  }
+}
+
+/* Starring cards — inline flat rows: → Title — Type — Speaker */
+[data-theme="ngerakines"] #talks .group\/card {
+  border-radius: 0;
+  border: 2px solid #800080;
+  background: #ffddff;
+  padding: 0.3rem 0.5rem;
+  box-shadow: none;
+  margin-bottom: 0.25rem;
+}
+[data-theme="ngerakines"] #talks .group\/card:hover {
+  box-shadow: none;
+  background: #eeccee;
+}
+/* Make everything inline */
+[data-theme="ngerakines"] #talks .group\/card .flex.items-center.gap-3 {
+  display: inline;
+}
+[data-theme="ngerakines"] #talks .group\/card .min-w-0.flex-1 {
+  display: inline;
+}
+[data-theme="ngerakines"] #talks .group\/card .text-foreground {
+  color: #000080;
+  display: inline;
+  height: auto;
+  line-clamp: unset;
+  -webkit-line-clamp: unset;
+}
+[data-theme="ngerakines"] #talks .group\/card .text-muted-foreground {
+  display: inline;
+  font-size: 0.85rem;
+}
+/* Badge pill — inline italic, no background */
+[data-theme="ngerakines"] #talks .group\/card .rounded-full {
+  border-radius: 0;
+  background: transparent !important;
+  color: #800080;
+  padding: 0;
+  font-style: italic;
+}
+/* Arrow */
+[data-theme="ngerakines"] #talks .group\/card .text-primary\/40 {
+  color: #800080;
+}
+/* Profile links */
+[data-theme="ngerakines"] #talks .text-primary {
+  color: #0000ff;
+}
+/* Hide description in ngerakines */
+[data-theme="ngerakines"] #talks .group\/card .line-clamp-2.text-xs {
+  display: none;
+}
+/* Buttons — side by side, purple + teal */
+[data-theme="ngerakines"] #talks #show-more-talks {
+  background: #800080;
+  color: #ffffff;
+  border: 2px outset #cc00cc;
+  border-radius: 0;
+  padding: 0.3rem 1rem;
+  font-weight: 700;
+}
+[data-theme="ngerakines"] #talks #show-more-talks:hover {
+  background: #aa00aa;
+}
+[data-theme="ngerakines"] #talks .starring-see-all {
+  background: #008080;
+  color: #ffffff;
+  border: 2px outset #00cccc;
+  border-radius: 0;
+  padding: 0.3rem 1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+[data-theme="ngerakines"] #talks .starring-see-all:hover {
+  background: #00aaaa;
+  color: #ffffff;
+}
+
+/* Tickets — flashing buy button, hide the big ATmosphereConf text */
+[data-theme="ngerakines"] #ticket-section .text-4xl {
+  display: none;
+}
+[data-theme="ngerakines"] #ticket-section .show-remote {
+  display: none;
+}
+[data-theme="ngerakines"] .ngerakines-buy-btn {
+  display: block !important;
+  text-align: center;
+  margin: 1rem auto;
+  width: fit-content;
+  background: #008800;
+  color: #ffffff;
+  border: 3px outset #00cc00;
+  padding: 0.6rem 2rem;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+  animation: ngerakines-flash-green 0.8s infinite;
+}
+@keyframes ngerakines-flash-green {
+  0%,
+  100% {
+    background: #008800;
+    color: #ffff00;
+  }
+  50% {
+    background: #ffff00;
+    color: #008800;
+  }
+}
+
+/* Details grid — separate boxes, green bg, thick yellow border */
+[data-theme="ngerakines"] #ticket-details {
+  border: none !important;
+  border-radius: 0 !important;
+  gap: 0.5rem !important;
+  display: flex !important;
+}
+[data-theme="ngerakines"] #ticket-details > div {
+  background: #eeffee !important;
+  border: 4px ridge #ffcc00 !important;
+  border-radius: 0 !important;
+  flex: 1;
+  text-align: center;
+}
+
+/* Feed subscribe button — deepskyblue, smaller */
+[data-theme="ngerakines"] .feed-subscribe-btn {
+  background: deepskyblue !important;
+  color: #000080 !important;
+  border: 3px outset #4488ff !important;
+  border-radius: 0 !important;
+  padding: 0.4rem 1.2rem !important;
+  font-size: 0 !important;
+}
+[data-theme="ngerakines"] .feed-subscribe-btn::after {
+  content: "📡 Subscribe on Bluesky";
+  font-size: 0.9rem;
+}
+
+/* Tito widget — ngerakines styling */
+[data-theme="ngerakines"] tito-widget .tito-release {
+  border: 2px ridge #800080 !important;
+  border-radius: 0 !important;
+}
+[data-theme="ngerakines"] tito-widget .tito-submit {
+  border: 2px outset #cc0000 !important;
+  border-radius: 0 !important;
+  background: #cc0000 !important;
+  color: #ffff00 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+}
+[data-theme="ngerakines"] tito-widget .tito-submit:hover {
+  background: #ff0000 !important;
+}
+[data-theme="ngerakines"] tito-widget .tito-quantity-button,
+[data-theme="ngerakines"] tito-widget button[class*="quantity"] {
+  border-radius: 0 !important;
+  border: 2px outset #000080 !important;
+  background: #000080 !important;
+}
+[data-theme="ngerakines"] tito-widget input,
+[data-theme="ngerakines"] tito-widget select,
+[data-theme="ngerakines"] tito-widget textarea {
+  border-radius: 0 !important;
+  border: 2px inset #800080 !important;
+}
+[data-theme="ngerakines"] tito-widget .tito-submit--discount-code {
+  border-radius: 0 !important;
+  border: 2px outset #008080 !important;
+  background: #008080 !important;
+  color: #ffffff !important;
+}
+
+/* Layout: full-width, no max-width constraint */
+[data-theme="ngerakines"] main {
+  max-width: none !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+/* Navbar: plain underlined links, hide decorative separators */
+[data-theme="ngerakines"] #site-header {
+  border-bottom: 3px solid #ff0000;
+}
+[data-theme="ngerakines"] #site-header .select-none[aria-hidden="true"] {
+  display: none !important;
+}
+[data-theme="ngerakines"] #site-header .nav-link {
+  text-decoration: underline !important;
+  color: #ffff00 !important;
+  font-size: 1.1rem;
+}
+[data-theme="ngerakines"] #site-header .nav-link:hover {
+  color: #ffffff !important;
+}
+[data-theme="ngerakines"] #site-header a[href="/login"] {
+  border: 1px solid #ffff00 !important;
+  border-radius: 0 !important;
+  color: #ffff00 !important;
+  text-decoration: none !important;
+}
+[data-theme="ngerakines"] #theme-toggle {
+  border: 1px solid #ffff00 !important;
+  border-radius: 0 !important;
+  color: #ffff00 !important;
+}
+
+/* Marquee: always show as simple red bar */
+[data-theme="ngerakines"] .nav-ticket-tape {
+  display: flex !important;
+  max-height: 40px !important;
+  width: 100% !important;
+  background: #cc0000 !important;
+}
+[data-theme="ngerakines"] .nav-ticket-peel {
+  display: none !important;
+}
+[data-theme="ngerakines"] .ntt-tab,
+[data-theme="ngerakines"] .ntt-perf {
+  display: none !important;
+}
+[data-theme="ngerakines"] .ntt-body {
+  border: none !important;
+  height: 32px;
+  flex: 1 !important;
+  width: 100% !important;
+}
+[data-theme="ngerakines"] .ntt-scroll {
+  gap: 1.5rem !important;
+  min-width: auto !important;
+  animation: ngerakines-marquee 15s linear infinite !important;
+}
+@keyframes ngerakines-marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+[data-theme="ngerakines"] .ntt-cta {
+  color: #ffffff;
+  font-size: 0.85rem;
+}
+[data-theme="ngerakines"] .ntt-detail {
+  color: #ffff00;
+}
+[data-theme="ngerakines"] .ntt-sep {
+  color: #ffffff;
+}
+
+/* Schedule: show table, hide grid */
+[data-theme="ngerakines"] .schedule-grid-view {
+  display: none;
+}
+[data-theme="ngerakines"] .schedule-table-view {
+  display: block;
+}
+
+/* Hero: override text colors, force stacked */
+[data-theme="ngerakines"] [data-hero] {
+  --foreground: var(--hero-fg);
+  --muted-foreground: var(--hero-fg);
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center;
+}
+[data-theme="ngerakines"] [data-hero] h1 {
+  text-shadow: 3px 3px 0 #ffff00;
+  font-style: italic;
+  text-align: center;
+}
+/* Subtitle — cyan, smaller */
+[data-theme="ngerakines"] [data-hero] h1 + p {
+  color: #00cccc !important;
+  font-size: 1rem !important;
+  font-style: italic;
+}
+/* Dates — smaller */
+[data-theme="ngerakines"] [data-hero] .grid {
+  font-size: 1rem !important;
+  text-align: center;
+  justify-content: center;
+}
+[data-theme="ngerakines"] [data-hero] .grid time {
+  font-size: 1rem !important;
+}
+/* Location text — smaller, cyan */
+[data-theme="ngerakines"] [data-hero] .text-xl {
+  font-size: 0.85rem !important;
+  color: #00cccc !important;
+}
+[data-theme="ngerakines"] [data-hero] .text-xl a {
+  color: #00cccc !important;
+}
+
+/* Hero: hide artwork goose, show big goose emoji */
+[data-theme="ngerakines"] [data-hero-goose] {
+  display: none !important;
+}
+[data-theme="ngerakines"] [data-hero]::before {
+  content: "🪿";
+  font-size: 5rem;
+  display: block;
+  text-align: center;
+  order: -1;
+}
+
+/* Hero: hide the fancy ticket stub, show a flashing button instead */
+[data-theme="ngerakines"] .ticket-stub {
+  display: none !important;
+}
+[data-theme="ngerakines"] .ngerakines-ticket-btn {
+  display: inline-block !important;
+}
+
+/* Flashing ticket button animation */
+@keyframes ngerakines-flash {
+  0%,
+  100% {
+    background: #cc0000;
+    color: #ffff00;
+  }
+  50% {
+    background: #ffff00;
+    color: #cc0000;
+  }
+}
+[data-theme="ngerakines"] .ngerakines-ticket-btn {
+  animation: ngerakines-flash 1s infinite;
+  border: 3px outset #ffff00;
+  padding: 0.5rem 1.5rem;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}

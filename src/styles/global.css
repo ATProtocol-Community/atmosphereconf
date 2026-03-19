@@ -3,6 +3,9 @@
 
 @theme inline {
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-body: var(--font-mono);
+  --font-heading: var(--font-mono);
+  --font-ui: var(--font-mono);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -93,6 +96,19 @@
   --event-activity-bg: oklch(0.932 0 0);
   --event-activity-fg: oklch(0.35 0 0);
   --event-activity-sub: oklch(0.45 0 0);
+
+  /* Typography */
+  --font-body: "IBM Plex Mono", ui-monospace, monospace;
+  --font-heading: "IBM Plex Mono", ui-monospace, monospace;
+  --font-ui: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Border decoration */
+  --border-style: solid;
+  --border-width: 1px;
+  --card-border-style: solid;
+  --card-border-width: 1px;
+  --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --card-radius: var(--radius-xl);
 }
 
 .dark {
@@ -138,6 +154,7 @@
 @import "./themes/northsky.css";
 @import "./themes/plyrfm.css";
 @import "./themes/semble.css";
+@import "./themes/ngerakines.css";
 
 @layer base {
   html {
@@ -149,6 +166,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
   }
   button,
   [role="button"] {
@@ -214,6 +235,19 @@
   }
   .event-sub-activity {
     color: var(--event-activity-sub);
+  }
+
+  .themed-card {
+    border-style: var(--card-border-style);
+    border-width: var(--card-border-width);
+    border-color: var(--border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+  }
+
+  /* Schedule layout switching: grid (default) or table (retro themes) */
+  .schedule-table-view {
+    display: none;
   }
 
   .ui-textarea {
