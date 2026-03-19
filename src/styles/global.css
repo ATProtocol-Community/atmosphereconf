@@ -155,6 +155,7 @@
 @import "./themes/plyrfm.css";
 @import "./themes/semble.css";
 @import "./themes/ngerakines.css";
+@import "./themes/kandake.css";
 
 @layer base {
   html {

@@ -1,0 +1,352 @@
+/*
+ * I r3gret n0th1g
+ */
+
+[data-theme="kandake"] {
+  /* Palette — lifted from the Stratos webapp MySpace retro theme */
+  --theme-bg: #0a001a;
+  --theme-fg: #eeeef4;
+  --theme-muted: #888899;
+  --theme-accent: #ff00ff;
+  --theme-surface: #1a0030;
+  --theme-border: rgba(255, 0, 255, 0.18);
+
+  /* Semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: #ffffff;
+  --secondary: rgba(139, 0, 255, 0.15);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: rgba(0, 255, 255, 0.12);
+  --accent-foreground: #00ffff;
+  --destructive: #ff4444;
+  --border: var(--theme-border);
+  --input: rgba(255, 0, 255, 0.12);
+  --ring: #ff69b4;
+  --hero-title-accent: oklch(0.6744 0.1753 254.76);
+
+  /* Header */
+  --header-bg: #06000f;
+  --header-fg: #eeeef4;
+  --header-fg-muted: rgba(238, 238, 244, 0.55);
+  --header-border: rgba(255, 0, 255, 0.4);
+  --header-logo-accent: oklch(0.6744 0.1753 254.76);
+
+  /* ATProto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(
+    to right,
+    #ff00ff,
+    #8b00ff,
+    #4400cc,
+    #00ffff
+  );
+  --atproto-profile-ring: #0a001a;
+  --atproto-profile-pill-bg: rgba(10, 0, 26, 0.88);
+  --atproto-profile-pill-fg: #ff69b4;
+  --atproto-profile-link: #ff69b4;
+
+  /* Event-type badge/cell colors */
+  --event-presentation-bg: rgba(255, 0, 255, 0.16);
+  --event-presentation-fg: #ff69b4;
+  --event-presentation-sub: #ff00ff;
+  --event-lightning-bg: rgba(255, 255, 0, 0.14);
+  --event-lightning-fg: #ffff00;
+  --event-lightning-sub: #cccc00;
+  --event-panel-bg: rgba(0, 255, 255, 0.14);
+  --event-panel-fg: #00ffff;
+  --event-panel-sub: #00cccc;
+  --event-workshop-bg: rgba(139, 0, 255, 0.16);
+  --event-workshop-fg: #bb77ff;
+  --event-workshop-sub: #8b00ff;
+  --event-info-bg: rgba(255, 255, 255, 0.06);
+  --event-info-fg: #bbbbcc;
+  --event-info-sub: #888899;
+  --event-activity-bg: rgba(0, 255, 0, 0.1);
+  --event-activity-fg: #66ff66;
+  --event-activity-sub: #00cc00;
+
+  --font-body: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive,
+    sans-serif;
+  --font-heading: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive,
+    sans-serif;
+  --font-ui: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive,
+    sans-serif;
+
+
+  /* Marquee: show on all screen sizes */
+  --marquee-desktop-display: flex;
+
+  /* Ticket marquee — neon magenta bar */
+  --ticket-tab-bg: #1a0030;
+  --ticket-tab-fg: #ff00ff;
+  --ticket-body-bg: #0a001a;
+  --ticket-border: rgba(255, 0, 255, 0.5);
+  --ticket-label: #ff69b4;
+  --ticket-main: #00ffff;
+
+  --border-style: solid;
+  --border-width: 2px;
+  --card-border-style: solid;
+  --card-border-width: 2px;
+  --card-shadow: 0 0 12px rgba(255, 0, 255, 0.35),
+    0 0 30px rgba(139, 0, 255, 0.18), 0 0 60px rgba(139, 0, 255, 0.08),
+    inset 0 0 12px rgba(255, 0, 255, 0.06);
+  --card-radius: 8px;
+}
+
+[data-theme="kandake"] .themed-card {
+  border-color: rgba(255, 0, 255, 0.45);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="kandake"] .themed-card:hover {
+  border-color: rgba(255, 0, 255, 0.7);
+  box-shadow: 0 0 16px rgba(255, 0, 255, 0.45),
+    0 0 40px rgba(139, 0, 255, 0.25), 0 0 80px rgba(139, 0, 255, 0.1),
+    inset 0 0 16px rgba(255, 0, 255, 0.08);
+}
+
+/* ── Header neon glow ── */
+
+[data-theme="kandake"] #site-header {
+  border-bottom: 2px solid rgba(255, 0, 255, 0.5);
+  box-shadow: 0 2px 16px rgba(255, 0, 255, 0.35),
+    0 4px 40px rgba(139, 0, 255, 0.15),
+    inset 0 -4px 12px rgba(255, 0, 255, 0.08);
+  background: linear-gradient(
+    180deg,
+    #0d0018 0%,
+    #06000f 100%
+  ) !important;
+}
+
+[data-theme="kandake"] #site-logo {
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.4), 0 0 20px rgba(139, 0, 255, 0.3);
+}
+
+[data-theme="kandake"] #site-header .nav-link {
+  text-shadow: 0 0 6px rgba(255, 105, 180, 0.4);
+  transition: text-shadow 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="kandake"] #site-header .nav-link:hover {
+  color: #00ffff !important;
+  text-shadow: 0 0 8px #00ffff, 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+[data-theme="kandake"] #theme-toggle {
+  border-color: rgba(255, 0, 255, 0.4) !important;
+  text-shadow: 0 0 4px rgba(255, 105, 180, 0.5);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="kandake"] #theme-toggle:hover {
+  border-color: #ff00ff !important;
+  box-shadow: 0 0 8px rgba(255, 0, 255, 0.5), 0 0 16px rgba(255, 0, 255, 0.2);
+}
+
+[data-theme="kandake"] #site-header a[href="/login"] {
+  border-color: rgba(0, 255, 255, 0.5) !important;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.4);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="kandake"] #site-header a[href="/login"]:hover {
+  border-color: #00ffff !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.2);
+}
+
+/* ── Nostalgic extras ── */
+
+@keyframes y2k-rainbow-border {
+  0% { border-color: #ff00ff; box-shadow: 0 2px 16px rgba(255, 0, 255, 0.4); }
+  16% { border-color: #ff0066; box-shadow: 0 2px 16px rgba(255, 0, 102, 0.4); }
+  33% { border-color: #ffff00; box-shadow: 0 2px 16px rgba(255, 255, 0, 0.3); }
+  50% { border-color: #00ff00; box-shadow: 0 2px 16px rgba(0, 255, 0, 0.3); }
+  66% { border-color: #00ffff; box-shadow: 0 2px 16px rgba(0, 255, 255, 0.4); }
+  83% { border-color: #8b00ff; box-shadow: 0 2px 16px rgba(139, 0, 255, 0.4); }
+  100% { border-color: #ff00ff; box-shadow: 0 2px 16px rgba(255, 0, 255, 0.4); }
+}
+
+[data-theme="kandake"] #site-header {
+  animation: y2k-rainbow-border 6s linear infinite;
+}
+
+/* Neon for days */
+[data-theme="kandake"] a:not(#site-header a):not(.themed-card a) {
+  text-shadow: 0 0 4px rgba(255, 105, 180, 0.3);
+  transition: text-shadow 0.2s ease;
+}
+
+[data-theme="kandake"] a:not(#site-header a):not(.themed-card a):hover {
+  text-shadow: 0 0 8px #ff69b4, 0 0 16px rgba(255, 0, 255, 0.4);
+}
+
+/* I don't know what is is about cross-hairs but they're cool */
+[data-theme="kandake"],
+[data-theme="kandake"] * {
+  cursor: crosshair;
+}
+
+[data-theme="kandake"] a,
+[data-theme="kandake"] button,
+[data-theme="kandake"] [role="button"],
+[data-theme="kandake"] input,
+[data-theme="kandake"] select,
+[data-theme="kandake"] textarea {
+  cursor: pointer;
+}
+
+[data-theme="kandake"] ::selection {
+  background: #ff00ff;
+  color: #ffffff;
+}
+
+[data-theme="kandake"] ::-webkit-scrollbar {
+  width: 10px;
+}
+
+[data-theme="kandake"] ::-webkit-scrollbar-track {
+  background: #0a001a;
+  border-left: 1px solid rgba(255, 0, 255, 0.15);
+}
+
+[data-theme="kandake"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff00ff, #8b00ff);
+  border-radius: 6px;
+}
+
+[data-theme="kandake"] ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff69b4, #ff00ff);
+}
+
+/* ── Hovers are back baby ── */
+
+[data-theme="kandake"] [class*="event-badge"] {
+  transition: box-shadow 0.2s ease, text-shadow 0.2s ease;
+  overflow: visible;
+}
+
+[data-theme="kandake"] .event-badge-presentation:hover {
+  box-shadow: 0 0 8px rgba(255, 0, 255, 0.5), 0 0 18px rgba(255, 0, 255, 0.25);
+  text-shadow: 0 0 6px currentColor;
+}
+
+[data-theme="kandake"] .event-badge-lightning:hover {
+  box-shadow: 0 0 8px rgba(255, 255, 0, 0.5), 0 0 18px rgba(255, 255, 0, 0.25);
+  text-shadow: 0 0 6px currentColor;
+}
+
+[data-theme="kandake"] .event-badge-panel:hover {
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.5), 0 0 18px rgba(0, 255, 255, 0.25);
+  text-shadow: 0 0 6px currentColor;
+}
+
+[data-theme="kandake"] .event-badge-workshop:hover {
+  box-shadow: 0 0 8px rgba(139, 0, 255, 0.5), 0 0 18px rgba(139, 0, 255, 0.25);
+  text-shadow: 0 0 6px currentColor;
+}
+
+[data-theme="kandake"] .event-badge-info:hover {
+  box-shadow: 0 0 8px rgba(187, 187, 204, 0.3), 0 0 18px rgba(187, 187, 204, 0.15);
+  text-shadow: 0 0 6px currentColor;
+}
+
+[data-theme="kandake"] .event-badge-activity:hover {
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.45), 0 0 18px rgba(0, 255, 0, 0.2);
+  text-shadow: 0 0 6px currentColor;
+}
+
+/* ── Scrolling marquee — thanks Nick ── */
+
+@keyframes kandake-rainbow {
+  0% { color: #ff0000; text-shadow: 0 0 8px #ff0000; }
+  16% { color: #ff8800; text-shadow: 0 0 8px #ff8800; }
+  33% { color: #ffff00; text-shadow: 0 0 8px #ffff00; }
+  50% { color: #00ff00; text-shadow: 0 0 8px #00ff00; }
+  66% { color: #0088ff; text-shadow: 0 0 8px #0088ff; }
+  83% { color: #8b00ff; text-shadow: 0 0 8px #8b00ff; }
+  100% { color: #ff0000; text-shadow: 0 0 8px #ff0000; }
+}
+
+@keyframes kandake-marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes kandake-rainbow-border {
+  0% { border-color: #ff000066; box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2); }
+  16% { border-color: #ff880066; box-shadow: 0 2px 10px rgba(255, 136, 0, 0.2); }
+  33% { border-color: #ffff0066; box-shadow: 0 2px 10px rgba(255, 255, 0, 0.2); }
+  50% { border-color: #00ff0066; box-shadow: 0 2px 10px rgba(0, 255, 0, 0.2); }
+  66% { border-color: #0088ff66; box-shadow: 0 2px 10px rgba(0, 136, 255, 0.2); }
+  83% { border-color: #8b00ff66; box-shadow: 0 2px 10px rgba(139, 0, 255, 0.2); }
+  100% { border-color: #ff000066; box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2); }
+}
+
+[data-theme="kandake"] .nav-ticket-tape {
+  display: flex !important;
+  max-height: 40px !important;
+  width: 100% !important;
+  background: linear-gradient(90deg, #1a003088, #0a0020, #1a003088) !important;
+  border-bottom: 2px solid #ffff0044;
+  box-shadow: 0 2px 10px rgba(255, 255, 0, 0.15),
+    inset 0 0 8px rgba(255, 0, 255, 0.06);
+  animation: kandake-rainbow-border 4s linear infinite;
+}
+[data-theme="kandake"] .nav-ticket-peel {
+  display: none !important;
+}
+[data-theme="kandake"] .ntt-tab,
+[data-theme="kandake"] .ntt-perf {
+  display: none !important;
+}
+[data-theme="kandake"] .ntt-body {
+  border: none !important;
+  height: 36px;
+  flex: 1 !important;
+  width: 100% !important;
+  overflow: hidden;
+}
+[data-theme="kandake"] .ntt-scroll {
+  gap: 1.5rem !important;
+  min-width: auto !important;
+  animation: kandake-marquee 18s linear infinite !important;
+}
+[data-theme="kandake"] .ntt-cta {
+  color: #ffff00;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 0 0 8px #ffff00;
+  animation: kandake-rainbow 4s linear infinite;
+}
+[data-theme="kandake"] .ntt-detail {
+  color: #ffff00;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 0 0 8px #ffff00;
+  animation: kandake-rainbow 4s linear infinite;
+  animation-delay: -2s;
+}
+[data-theme="kandake"] .ntt-sep {
+  color: #ff69b4;
+  font-size: 0;
+  text-shadow: none;
+}
+[data-theme="kandake"] .ntt-sep::before {
+  content: "★彡";
+  font-size: 0.8rem;
+  color: #ff69b4;
+  text-shadow: 0 0 6px #ff69b4;
+  animation: kandake-rainbow 4s linear infinite;
+  animation-delay: -1s;
+}
