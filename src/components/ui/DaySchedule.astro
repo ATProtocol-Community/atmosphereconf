@@ -28,10 +28,19 @@ const { events, rooms } = Astro.props;
 
 // --- Time helpers ---
 
+const TZ = "America/Vancouver";
+
 function isoToMinutes(iso: string): number {
-  const m = iso.match(/T(\d{2}):(\d{2})/);
-  if (!m) return 0;
-  return parseInt(m[1]) * 60 + parseInt(m[2]);
+  const d = new Date(iso);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
+  const h = parseInt(parts.find((p) => p.type === "hour")!.value);
+  const m = parseInt(parts.find((p) => p.type === "minute")!.value);
+  return h * 60 + m;
 }
 
 function formatHour(minutes: number) {
@@ -51,10 +60,11 @@ const parsed = events
     return { ...e, startMin: start, endMin: end };
   });
 
+const SLOT = 10;
 const minTime =
-  Math.floor(Math.min(...parsed.map((e) => e.startMin)) / 60) * 60;
-const maxTime = Math.ceil(Math.max(...parsed.map((e) => e.endMin)) / 60) * 60;
-const totalSlots = (maxTime - minTime) / 30;
+  Math.floor(Math.min(...parsed.map((e) => e.startMin)) / SLOT) * SLOT;
+const maxTime = Math.ceil(Math.max(...parsed.map((e) => e.endMin)) / SLOT) * SLOT;
+const totalSlots = (maxTime - minTime) / SLOT;
 
 const isInfo = (type: string) => type === "info";
 
@@ -70,19 +80,21 @@ function isLinkable(event: { id?: string; type: string }) {
 
 const gridEvents = parsed
   .filter((e) => isInfo(e.type) || rooms.includes(e.room || ""))
-  .map((e) => {
+  .filter((e) => !/breakfast/i.test(e.title))
+  .map((e, i, arr) => {
     const fullWidth = isInfo(e.type);
     return {
       ...e,
-      startRow: Math.round((e.startMin - minTime) / 30) + 2,
-      spanRows: Math.max(1, Math.round((e.endMin - e.startMin) / 30)),
+      startRow: Math.round((e.startMin - minTime) / SLOT) + 2,
+      spanRows: Math.max(1, Math.round((e.endMin - e.startMin) / SLOT)),
       colStart: fullWidth ? 1 : rooms.indexOf(e.room!) + 1,
       colSpan: fullWidth ? rooms.length : 1,
+      zIndex: e.startMin,
     };
   });
 
 // Shared time grid template
-const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
+const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 2rem)`;
 ---
 
 <div class="day-schedule border-border rounded-lg border">
@@ -130,9 +142,9 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
                 <div />
                 {Array.from({ length: totalSlots }).map((_, i) => (
                   <div>
-                    {i % 2 === 0 && (
+                    {(minTime + i * SLOT) % 60 === 0 && (
                       <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
-                        {formatHour(minTime + i * 30)}
+                        {formatHour(minTime + i * SLOT)}
                       </div>
                     )}
                   </div>
@@ -145,10 +157,10 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
                 {roomEvents.map((event) => (
                   <li
                     class:list={[
-                      "relative flex p-0.5",
+                      "relative flex min-h-5 p-0.5",
                       isLinkable(event) && "group/evt cursor-pointer",
                     ]}
-                    style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: 1`}
+                    style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: 1; z-index: ${event.zIndex}`}
                   >
                     <ScheduleEventCell event={event} />
                   </li>
@@ -162,13 +174,13 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
   }
 
   <!-- ========== DESKTOP: Full multi-column layout ========== -->
-  <div class="hidden overflow-x-auto md:block">
-    <div style={`min-width: ${rooms.length * 10 + 4}rem`}>
-      <div class="border-border bg-card flex overflow-hidden rounded-t-lg border-b">
+  <div class="hidden md:block">
+    <div>
+      <div class="border-border bg-card flex rounded-t-lg border-b">
         <div class="border-border w-14 flex-none border-r"></div>
         <div
           class="divide-border grid flex-auto divide-x"
-          style={`grid-template-columns: repeat(${rooms.length}, 1fr)`}
+          style={`grid-template-columns: repeat(${rooms.length}, minmax(0, 1fr))`}
         >
           {
             rooms.map((room) => (
@@ -192,9 +204,9 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
             {
               Array.from({ length: totalSlots }).map((_, i) => (
                 <div>
-                  {i % 2 === 0 && (
+                  {(minTime + i * SLOT) % 60 === 0 && (
                     <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
-                      {formatHour(minTime + i * 30)}
+                      {formatHour(minTime + i * SLOT)}
                     </div>
                   )}
                 </div>
@@ -204,23 +216,23 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3rem)`;
 
           <div
             class="divide-border/40 col-start-1 col-end-2 row-start-1 grid grid-rows-1 divide-x"
-            style={`grid-template-columns: repeat(${rooms.length}, 1fr)`}
+            style={`grid-template-columns: repeat(${rooms.length}, minmax(0, 1fr))`}
           >
             {rooms.map(() => <div class="row-span-full" />)}
           </div>
 
           <ol
             class="col-start-1 col-end-2 row-start-1 grid"
-            style={`grid-template-columns: repeat(${rooms.length}, 1fr); ${timeGridRows}`}
+            style={`grid-template-columns: repeat(${rooms.length}, minmax(0, 1fr)); ${timeGridRows}`}
           >
             {
               gridEvents.map((event) => (
                 <li
                   class:list={[
-                    "relative flex p-0.5",
+                    "relative flex min-h-5 p-0.5",
                     isLinkable(event) && "group/evt cursor-pointer",
                   ]}
-                  style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}`}
+                  style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}; z-index: ${event.zIndex}`}
                 >
                   <ScheduleEventCell event={event} />
                 </li>

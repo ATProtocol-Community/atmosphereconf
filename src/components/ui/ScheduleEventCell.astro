@@ -33,6 +33,7 @@ function formatTime(iso: string) {
   if (isNaN(date.getTime())) return "";
   return date
     .toLocaleTimeString("en-US", {
+      timeZone: "America/Vancouver",
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
@@ -41,8 +42,13 @@ function formatTime(iso: string) {
     .replace(" ", "");
 }
 
+const durationMin =
+  event.start && event.end
+    ? (new Date(event.end).getTime() - new Date(event.start).getTime()) / 60_000
+    : 0;
+
 const time = (() => {
-  if (!event.start) return "";
+  if (!event.start || durationMin <= 10) return "";
   const s = formatTime(event.start);
   const e = event.end ? formatTime(event.end) : "";
   return e ? `${s} – ${e}` : s;
@@ -95,37 +101,9 @@ const speakerNames = event.speakers?.map((s) => s.name).join(", ");
       href && "group-hover/evt:brightness-95",
     ]}
   >
-    {
-      isInfo ? (
-        <>
-          <span class="font-semibold">{event.title}</span>
-          {time && (
-            <p class:list={["mt-0.5", getSubColors(event.type)]}>{time}</p>
-          )}
-        </>
-      ) : (
-        <>
-          <p class="font-semibold" set:html={event.title} />
-          {time && (
-            <p class:list={["mt-0.5", getSubColors(event.type)]}>{time}</p>
-          )}
-          {speakerNames && (
-            <p class:list={["mt-0.5", getSubColors(event.type)]}>
-              {speakerNames}
-            </p>
-          )}
-          {event.description && (
-            <p
-              class:list={[
-                "mt-0.5 line-clamp-2 opacity-75",
-                getSubColors(event.type),
-              ]}
-            >
-              {event.description}
-            </p>
-          )}
-        </>
-      )
-    }
+    <p class="truncate font-semibold" set:html={event.title} />
+    {time && (
+      <p class:list={["truncate", getSubColors(event.type)]}>{time}</p>
+    )}
   </div>
 </Fragment>

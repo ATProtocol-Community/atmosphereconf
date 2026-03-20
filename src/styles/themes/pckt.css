@@ -74,9 +74,9 @@
   --event-workshop-bg: oklch(0.88 0.08 150);
   --event-workshop-fg: oklch(0.35 0.13 150);
   --event-workshop-sub: oklch(0.35 0.13 150);
-  --event-info-bg: oklch(0.90 0.06 262);
-  --event-info-fg: oklch(0.35 0.15 262);
-  --event-info-sub: oklch(0.35 0.15 262);
+  --event-info-bg: oklch(0.95 0.01 85);
+  --event-info-fg: oklch(0.40 0.02 85);
+  --event-info-sub: oklch(0.50 0.02 85);
   --event-activity-bg: oklch(0.93 0.06 85);
   --event-activity-fg: oklch(0.45 0.12 85);
   --event-activity-sub: oklch(0.45 0.12 85);

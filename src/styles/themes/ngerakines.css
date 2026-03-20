@@ -147,6 +147,26 @@
   --table-border-width: 2px;
   --table-frame-width: 3px;
 }
+/* Saturday table — purple frame, lavender alternating rows */
+[data-theme="ngerakines"] [data-table-index="2"] {
+  --table-header-bg: #800080;
+  --table-header-fg: #ffff00;
+  --table-cell-bg: #eeddff;
+  --table-cell-bg-alt: #ddbbff;
+  --table-border-color: #800080;
+  --table-border-width: 2px;
+  --table-frame-width: 3px;
+}
+/* Sunday table — red frame, pink alternating rows */
+[data-theme="ngerakines"] [data-table-index="3"] {
+  --table-header-bg: #cc0000;
+  --table-header-fg: #ffff00;
+  --table-cell-bg: #ffdddd;
+  --table-cell-bg-alt: #ffbbbb;
+  --table-border-color: #cc0000;
+  --table-border-width: 2px;
+  --table-frame-width: 3px;
+}
 
 /* Card title bars — yellow background */
 [data-theme="ngerakines"] .themed-card h2 {
@@ -412,12 +432,36 @@
   color: #ffffff;
 }
 
+/* Schedule: remove overflow clipping so table isn't cut off */
+[data-theme="ngerakines"] [data-schedule-panel] .mt-6.overflow-hidden {
+  overflow: visible;
+}
+
 /* Schedule: show table, hide grid */
 [data-theme="ngerakines"] .schedule-grid-view {
   display: none;
 }
 [data-theme="ngerakines"] .schedule-table-view {
   display: block;
+}
+[data-theme="ngerakines"] .schedule-table-view {
+  width: 100%;
+  overflow: visible;
+}
+[data-theme="ngerakines"] .schedule-table-wrap {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  overflow: visible;
+}
+[data-theme="ngerakines"] .schedule-table {
+  table-layout: fixed;
+  width: 100%;
+}
+[data-theme="ngerakines"] .schedule-table td,
+[data-theme="ngerakines"] .schedule-table th {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Hero: override text colors, force stacked */

@@ -54,9 +54,9 @@
   --event-workshop-bg: rgba(180, 120, 245, 0.15);
   --event-workshop-fg: #c8a0f5;
   --event-workshop-sub: #b080e0;
-  --event-info-bg: rgba(245, 180, 80, 0.12);
-  --event-info-fg: #f5c060;
-  --event-info-sub: #d0a050;
+  --event-info-bg: rgba(255, 255, 255, 0.08);
+  --event-info-fg: #c0c4d0;
+  --event-info-sub: #9098a8;
   --event-activity-bg: rgba(255, 255, 255, 0.06);
   --event-activity-fg: #c0c4d0;
   --event-activity-sub: #8b8fa3;
