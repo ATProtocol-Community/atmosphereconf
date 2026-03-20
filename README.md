@@ -12,7 +12,7 @@ Suggestions, code, and design contributions welcome! Join the [ATProto Touchers 
 
 ## Adding a new theme
 
-The site supports multiple themes (blacksky, germ, reddwarf, pckt, bluesky). To add a new one:
+The site supports multiple themes (blacksky, germ, reddwarf, pckt, bluesky, and more.). To add a new one:
 
 1. **Copy the template** — `src/styles/themes/_template.css` → `src/styles/themes/<name>.css`, fill in your colors
 2. **Import it** — add `@import "./themes/<name>.css";` in `src/styles/global.css`
