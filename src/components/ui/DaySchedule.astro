@@ -22,16 +22,9 @@ interface ScheduleEvent {
 interface Props {
   events: ScheduleEvent[];
   rooms: string[];
-  class?: string;
-  desktopOverflow?: "scroll" | "bleed";
 }
 
-const {
-  events,
-  rooms,
-  class: className = "",
-  desktopOverflow = "scroll",
-} = Astro.props;
+const { events, rooms } = Astro.props;
 
 // --- Time helpers ---
 
@@ -101,10 +94,10 @@ const gridEvents = parsed
   });
 
 // Shared time grid template
-const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3.6rem)`;
+const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 2rem)`;
 ---
 
-<div class:list={["day-schedule border-border rounded-lg border", className]}>
+<div class="day-schedule border-border rounded-lg border isolate">
   <!-- ========== MOBILE: Vertical room tabs + single-room panels ========== -->
 
   <div class="divide-border flex flex-col divide-y md:hidden">
@@ -181,14 +174,9 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 3.6rem)`;
   }
 
   <!-- ========== DESKTOP: Full multi-column layout ========== -->
-  <div
-    class:list={[
-      "hidden md:block",
-      desktopOverflow === "scroll" ? "overflow-x-auto" : "overflow-visible",
-    ]}
-  >
-    <div style={`min-width: ${rooms.length * 10 + 4}rem`}>
-      <div class="border-border bg-card flex overflow-hidden rounded-t-lg border-b">
+  <div class="hidden md:block">
+    <div>
+      <div class="border-border bg-card flex rounded-t-lg border-b">
         <div class="border-border w-14 flex-none border-r"></div>
         <div
           class="divide-border grid flex-auto divide-x"

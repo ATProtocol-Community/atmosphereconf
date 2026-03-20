@@ -1,4 +1,4 @@
-import { getCollection } from "astro:content";
+import { getLiveCollection } from "astro:content";
 
 const visibleTypes = new Set([
   "presentation",
@@ -35,9 +35,20 @@ const spotlightTypeNames: Record<string, string> = {
   info: "Info",
 };
 
-type ScheduleEntry = Awaited<
-  ReturnType<typeof getCollection<"schedule">>
->[number];
+type EventEntry = {
+  id: string;
+  data: {
+    title: string;
+    type: string;
+    speakers?: ProgramSpeaker[];
+    start?: string;
+    end?: string;
+    room?: string;
+    description?: string;
+    link_url?: string;
+    link_text?: string;
+  };
+};
 
 export interface ProgramSpeaker {
   name: string;
@@ -139,7 +150,7 @@ export function formatMiniTime(iso?: string) {
   });
 }
 
-function getDaySubheading(events: ScheduleEntry[], roomCount: number) {
+function getDaySubheading(events: EventEntry[], roomCount: number) {
   const hasTalks = events.some((event) => talkTypes.has(event.data.type));
   const hasWorkshops = events.some((event) =>
     workshopTypes.has(event.data.type),
@@ -166,12 +177,21 @@ function sortRooms(rooms: string[]) {
   });
 }
 
+const TZ = "America/Vancouver";
+function localDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-CA", { timeZone: TZ });
+}
+
 function shuffleItems<T>(items: T[]) {
   return [...items].sort(() => Math.random() - 0.5);
 }
 
 export async function getProgramDays() {
-  const schedule = await getCollection("schedule");
+  const { entries: schedule = [], error } =
+    await getLiveCollection("events");
+  if (error) {
+    throw error;
+  }
 
   const timedEntries = schedule
     .filter((entry) => entry.data.start && visibleTypes.has(entry.data.type))
@@ -185,8 +205,8 @@ export async function getProgramDays() {
 
   return allDates
     .map((date, index) => {
-      const dayEntries = timedEntries.filter((entry) =>
-        entry.data.start?.startsWith(date),
+      const dayEntries = timedEntries.filter(
+        (entry) => entry.data.start && localDate(entry.data.start) === date,
       );
       const events = dayEntries.map((entry) => ({
         id: entry.id,
