@@ -20,6 +20,11 @@ const { rail } = Astro.props;
     linkText="see all"
   />
 
+  <button class="rail-lucky-btn" data-rail-shuffle>
+    <span class="rail-lucky-goose" aria-hidden="true">🪿</span>
+    <span class="rail-lucky-label">I'm feeling curious</span>
+  </button>
+
   <div class="rail-sampled-board">
     {
       rail.spotlight && (
@@ -73,7 +78,7 @@ const { rail } = Astro.props;
 </section>
 
 <section class="rail-preview-panel">
-  <PanelHeader kicker="from the other days" />
+  <PanelHeader kicker="Sampling the other days" />
 
   <div class="rail-other-days-list">
     {
@@ -364,9 +369,137 @@ const { rail } = Astro.props;
     }
   }
 
+  .rail-lucky-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+    padding: 0.65rem 1rem;
+    border: 1px dashed color-mix(in oklch, var(--primary), transparent 55%);
+    border-radius: var(--pill-radius);
+    background: color-mix(in oklch, var(--card), var(--primary) 8%);
+    color: color-mix(in oklch, var(--foreground), var(--primary) 18%);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease;
+  }
+
+  .rail-lucky-goose {
+    display: inline-block;
+    font-size: 1.1em;
+    transition: transform 200ms ease;
+  }
+
+  .rail-lucky-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: color-mix(in oklch, var(--primary), transparent 28%);
+    background: color-mix(in oklch, var(--card), var(--primary) 14%);
+  }
+
+  .rail-lucky-btn:hover:not(:disabled) .rail-lucky-goose {
+    animation: goose-waddle 400ms ease infinite;
+  }
+
+  .rail-lucky-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    transition-duration: 60ms;
+  }
+
+  .rail-lucky-btn:disabled {
+    cursor: wait;
+  }
+
+  .rail-lucky-btn:disabled .rail-lucky-goose {
+    animation: goose-walk 600ms ease infinite;
+  }
+
+  @keyframes goose-waddle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-8deg);
+    }
+    75% {
+      transform: rotate(8deg);
+    }
+  }
+
+  @keyframes goose-walk {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-2px) rotate(-5deg);
+    }
+    75% {
+      transform: translateX(2px) rotate(5deg);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .rail-other-day-button {
+    .rail-other-day-button,
+    .rail-lucky-btn {
       transition: none;
+    }
+
+    .rail-lucky-btn:hover:not(:disabled) .rail-lucky-goose,
+    .rail-lucky-btn:disabled .rail-lucky-goose {
+      animation: none;
     }
   }
 </style>
+
+<script>
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as HTMLElement).closest(
+      "[data-rail-shuffle]",
+    ) as HTMLButtonElement | null;
+    if (!btn) return;
+
+    const panel = btn.closest("[data-program-side]") as HTMLElement | null;
+    const date = panel?.dataset.programSide ?? "";
+
+    const label = btn.querySelector(".rail-lucky-label");
+    const shuffleMessages = [
+      "Rummaging through talks\u2026",
+      "Asking the goose\u2026",
+      "Shuffling the deck\u2026",
+      "Picking at random\u2026",
+      "Consulting the schedule\u2026",
+    ];
+
+    if (label) {
+      label.textContent =
+        shuffleMessages[Math.floor(Math.random() * shuffleMessages.length)];
+    }
+    btn.disabled = true;
+
+    try {
+      const [res] = await Promise.all([
+        fetch(`/partials/program-day-rail?date=${encodeURIComponent(date)}`),
+        new Promise((r) => setTimeout(r, 600)),
+      ]);
+      if (!(res as Response).ok) throw new Error("fetch failed");
+      const parent = btn.closest(".rail-sampled-panel") as HTMLElement;
+      const tmp = document.createElement("div");
+      tmp.innerHTML = await (res as Response).text();
+      const newPanel = tmp.querySelector(".rail-sampled-panel");
+      if (newPanel && parent) {
+        parent.replaceWith(newPanel);
+      }
+    } catch {
+      if (label) label.textContent = "Honk! Something went wrong";
+      btn.disabled = false;
+    }
+  });
+</script>

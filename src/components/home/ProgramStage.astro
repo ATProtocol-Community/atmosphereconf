@@ -54,10 +54,15 @@ const { days, initialDate } = Astro.props;
   }
 
   .program-stage {
+    --program-paper-tilt: -0.35deg;
+    --program-stack-after-tilt: -0.6deg;
+    --program-stack-before-tilt: -0.9deg;
+    --program-stack-step-x: 0.32rem;
+    --program-stack-step-y: 0.24rem;
     position: relative;
     isolation: isolate;
     margin-top: 0.75rem;
-    padding: 0.45rem 1rem 2rem 0.15rem;
+    padding: 0.45rem 0.8rem 1.15rem 0.15rem;
     transition: height 220ms ease;
   }
 
@@ -65,7 +70,7 @@ const { days, initialDate } = Astro.props;
   .program-stage::after {
     content: "";
     position: absolute;
-    inset: 0 0.65rem 1rem 0.2rem;
+    inset: 0.05rem 0.55rem 0.45rem 0.16rem;
     border-radius: var(--paper-radius-lg);
     border: 1px solid color-mix(in oklch, var(--primary), transparent 76%);
     background: color-mix(in oklch, var(--card), var(--background) 5%);
@@ -74,15 +79,23 @@ const { days, initialDate } = Astro.props;
 
   .program-stage::before {
     z-index: 0;
-    opacity: 0.92;
-    transform: translate(1.2rem, 0.9rem) rotate(1deg);
+    opacity: 0.46;
+    transform: translate(
+        calc(var(--program-stack-step-x) * 2),
+        calc(var(--program-stack-step-y) * 2)
+      )
+      rotate(var(--program-stack-before-tilt));
     box-shadow: var(--paper-shadow-lg);
   }
 
   .program-stage::after {
     z-index: 1;
-    opacity: 0.97;
-    transform: translate(0.65rem, 0.45rem) rotate(-0.75deg);
+    opacity: 0.72;
+    transform: translate(
+        var(--program-stack-step-x),
+        var(--program-stack-step-y)
+      )
+      rotate(var(--program-stack-after-tilt));
     box-shadow: var(--paper-shadow-lg);
   }
 
@@ -127,7 +140,7 @@ const { days, initialDate } = Astro.props;
 
   .program-paper.is-active {
     opacity: 1;
-    transform: translate(0, 0) rotate(-0.35deg);
+    transform: translate(0, 0) rotate(var(--program-paper-tilt));
     box-shadow: var(--paper-shadow-lg);
     filter: none;
     pointer-events: auto;
@@ -135,7 +148,12 @@ const { days, initialDate } = Astro.props;
 
   .program-paper.is-under {
     opacity: 0;
-    transform: translate(0.65rem, 0.75rem) rotate(0.65deg) scale(0.992);
+    transform: translate(
+        var(--program-stack-step-x),
+        calc(var(--program-stack-step-y) * 1.65)
+      )
+      rotate(0.2deg)
+      scale(0.992);
     box-shadow: none;
     filter: saturate(0.94);
     pointer-events: none;
@@ -223,16 +241,10 @@ const { days, initialDate } = Astro.props;
     }
 
     .program-stage {
+      --program-stack-step-x: 0.22rem;
+      --program-stack-step-y: 0.16rem;
       padding-right: 0.2rem;
-      padding-bottom: 1.2rem;
-    }
-
-    .program-stage::before {
-      transform: translate(0.55rem, 0.5rem) rotate(0.85deg);
-    }
-
-    .program-stage::after {
-      transform: translate(0.3rem, 0.22rem) rotate(-0.45deg);
+      padding-bottom: 0.82rem;
     }
 
     .program-paper-header {
