@@ -39,9 +39,9 @@ const initialDayDate = days[0]?.date ?? "";
                   class:list={["program-day-chip", index === 0 && "is-active"]}
                   data-day-select={day.date}
                 >
-                  <span class="program-day-chip-kicker">{`// ${day.dayLabel}`}</span>
-                  <span class="program-day-chip-title">{day.dateLabel}</span>
-                  <span class="program-day-chip-meta">{day.seriesLabel}</span>
+                  <span class="program-day-chip-kicker">{`// ${day.seriesLabel}`}</span>
+                  <span class="program-day-chip-title">{day.dayLabel}</span>
+                  <span class="program-day-chip-meta">{day.dateLabel}</span>
                 </button>
               ))
             }
@@ -73,16 +73,11 @@ const initialDayDate = days[0]?.date ?? "";
                         <p class="program-paper-subtitle">{day.subheading}</p>
                       </div>
                       <div class="program-paper-summary">
-                        <span>{day.rooms.length} rooms</span>
+                        <span>{day.seriesLabel} </span>
                       </div>
                     </div>
 
-                    <DaySchedule
-                      events={day.events}
-                      rooms={day.rooms}
-                      class="program-day-schedule"
-                      desktopOverflow="bleed"
-                    />
+                    <DaySchedule events={day.events} rooms={day.rooms} />
                   </article>
                 ))
               }
