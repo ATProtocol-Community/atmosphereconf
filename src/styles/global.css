@@ -117,6 +117,7 @@
   --paper-tape-radius: 0.35rem;
   --paper-shadow: 0 12px 32px rgb(15 23 42 / 0.08);
   --paper-shadow-lg: 0 16px 36px rgb(15 23 42 / 0.08);
+  --paper-tape-shadow: 0 2px 6px rgb(15 23 42 / 0.06);
   --pill-radius: 9999px;
   --pill-border-style: solid;
 }

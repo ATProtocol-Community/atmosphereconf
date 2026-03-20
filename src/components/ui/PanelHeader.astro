@@ -4,6 +4,7 @@ import InlineLink from "./InlineLink.astro";
 
 interface Props {
   kicker: string;
+  anchor?: boolean;
   linkHref?: string;
   linkText?: string;
   linkExternal?: boolean;
@@ -12,6 +13,7 @@ interface Props {
 
 const {
   kicker,
+  anchor = true,
   linkHref,
   linkText,
   linkExternal = false,
@@ -21,7 +23,7 @@ const {
 
 <div class:list={["panel-header", className]}>
   <div class="min-w-0">
-    <SectionKicker text={kicker} />
+    <SectionKicker text={kicker} anchor={anchor} />
   </div>
   {
     linkHref && linkText && (
@@ -36,7 +38,7 @@ const {
   .panel-header {
     display: flex;
     gap: 0.75rem;
-    align-items: flex-start;
+    align-items: baseline;
     justify-content: space-between;
   }
 </style>

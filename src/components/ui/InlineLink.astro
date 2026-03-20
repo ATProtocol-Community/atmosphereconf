@@ -30,8 +30,7 @@ const { href, external = false, class: className = "" } = Astro.props;
   }
 
   .inline-link:focus-visible {
-    outline: none;
-    box-shadow: inset 0 0 0 2px
-      color-mix(in oklch, var(--primary), transparent 30%);
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: -2px;
   }
 </style>

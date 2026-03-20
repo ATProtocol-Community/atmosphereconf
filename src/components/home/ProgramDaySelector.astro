@@ -20,7 +20,7 @@ const { days, initialDate } = Astro.props;
         <button
           type="button"
           role="tab"
-          id={`program-day-tab-${day.date}`}
+          id={day.anchorId}
           aria-controls={`program-day-panel-${day.date}`}
           aria-selected={day.date === initialDate ? "true" : "false"}
           tabindex={day.date === initialDate ? "0" : "-1"}

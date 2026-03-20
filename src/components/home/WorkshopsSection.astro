@@ -120,6 +120,7 @@ const initialDayDate = days[0]?.date ?? "";
 
     dayButtons.forEach((button) => {
       button.addEventListener("click", async () => {
+        history.replaceState(null, "", `#${button.id}`);
         await setSelectedDay(button.dataset.daySelect, { refreshRail: true });
       });
     });
@@ -131,18 +132,46 @@ const initialDayDate = days[0]?.date ?? "";
       const { showDay } = jumpButton.dataset;
       if (!showDay) return;
 
+      event.preventDefault();
+
+      const anchorButton = dayButtons.find(
+        (btn) => btn.dataset.daySelect === showDay,
+      );
+      if (anchorButton) {
+        history.replaceState(null, "", `#${anchorButton.id}`);
+      }
+
       await setSelectedDay(showDay, { refreshRail: true });
 
-      if (window.matchMedia("(max-width: 1023px)").matches) {
-        const activePaper = board.querySelector(
-          `[data-program-day="${showDay}"]`,
-        );
-        activePaper?.scrollIntoView({
+      const scrollTarget = anchorButton || board;
+      scrollTarget.scrollIntoView({
+        block: "start",
+        behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+      });
+    });
+
+    const applyHash = async (scroll = true) => {
+      const hash = location.hash.replace("#", "");
+      if (!hash) return;
+
+      const matchedButton = dayButtons.find((btn) => btn.id === hash);
+      if (!matchedButton) return;
+
+      const date = matchedButton.dataset.daySelect;
+      if (!date) return;
+
+      await setSelectedDay(date, { refreshRail: true });
+
+      if (scroll) {
+        matchedButton.scrollIntoView({
           block: "start",
           behavior: prefersReducedMotion.matches ? "auto" : "smooth",
         });
       }
-    });
+    };
+
+    applyHash();
+    window.addEventListener("hashchange", () => applyHash());
 
     const resizeObserver =
       "ResizeObserver" in window

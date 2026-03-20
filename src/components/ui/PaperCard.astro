@@ -80,7 +80,7 @@ const rotateStyle = rotation !== 0 ? `transform: rotate(${rotation}deg);` : "";
     border-radius: var(--paper-tape-radius);
     border: 1px dashed color-mix(in oklch, var(--primary), transparent 50%);
     background: color-mix(in oklch, var(--primary), white 84%);
-    box-shadow: 0 2px 6px rgb(15 23 42 / 0.06);
+    box-shadow: var(--paper-tape-shadow);
     pointer-events: none;
     z-index: 2;
   }
@@ -118,7 +118,7 @@ const rotateStyle = rotation !== 0 ? `transform: rotate(${rotation}deg);` : "";
       transparent 44%
     );
     background: color-mix(in oklch, var(--event-workshop-bg), white 34%);
-    box-shadow: 0 1px 4px rgb(15 23 42 / 0.03);
+    box-shadow: var(--paper-tape-shadow);
   }
 
   @media (max-width: 767px) {
