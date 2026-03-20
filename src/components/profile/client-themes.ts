@@ -1,4 +1,4 @@
-export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ" | "northsky" | "plyr.fm" | "semble" | "ngerakines" | "kandake";
+export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ" | "northsky" | "plyr.fm" | "semble" | "spark" | "ngerakines" | "kandake";
 
 const CLIENT_THEME_DOMAINS: Record<
   Exclude<ClientTheme, "bluesky" | "plyr.fm">,
@@ -10,6 +10,7 @@ const CLIENT_THEME_DOMAINS: Record<
   germ: [".germnetwork."],
   northsky: [".northsky.social", ".northsky.team"],
   semble: [".semble."],
+  spark: [".sprk.so"],
   ngerakines: [".ngerakines."],
   kandake: [".kandake."],
   // your-server: [".yourdomain."]

@@ -167,6 +167,7 @@
 @import "./themes/semble.css";
 @import "./themes/ngerakines.css";
 @import "./themes/kandake.css";
+@import "./themes/spark.css";
 
 @layer base {
   html {

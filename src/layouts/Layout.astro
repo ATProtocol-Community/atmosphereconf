@@ -43,7 +43,7 @@ const defaultTheme =
     <meta name="generator" content={Astro.generator} />
     <script is:inline define:vars={{ defaultTheme }}>
       (function () {
-        var VALID = ["bluesky", "blacksky", "reddwarf", "pckt", "germ", "northsky", "plyr.fm", "semble", "ngerakines", "kandake"];
+        var VALID = ["bluesky", "blacksky", "reddwarf", "pckt", "germ", "northsky", "plyr.fm", "semble", "spark", "ngerakines", "kandake"];
         var t = localStorage.getItem("atmosphereconf:theme");
         if (t && VALID.indexOf(t) !== -1) {
           document.documentElement.setAttribute("data-theme", t);
@@ -57,6 +57,10 @@ const defaultTheme =
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap"
       rel="stylesheet"
     />
     <!-- <ViewTransitions /> -->

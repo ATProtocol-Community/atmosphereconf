@@ -1,0 +1,64 @@
+[data-theme="spark"] {
+  --theme-bg: #000000;
+  --theme-fg: #ffffff;
+  --theme-muted: rgba(255, 0, 144, 0.72);
+  --theme-accent: #ff0090;
+  --theme-surface: #0a0a0a;
+  --theme-border: rgba(255, 0, 144, 0.36);
+
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: var(--theme-fg);
+  --secondary: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: rgba(255, 0, 144, 0.18);
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: rgba(255, 255, 255, 0.16);
+  --ring: var(--theme-accent);
+
+  --header-bg: #000000;
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: rgba(255, 255, 255, 0.72);
+  --header-border: rgba(255, 0, 144, 0.45);
+  --header-logo-accent: var(--theme-accent);
+
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(to right, #12000b, #2a0018);
+  --atproto-profile-ring: #000000;
+  --atproto-profile-pill-bg: rgba(0, 0, 0, 0.88);
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  --event-presentation-bg: rgba(255, 0, 144, 0.2);
+  --event-presentation-fg: #ff6ec7;
+  --event-presentation-sub: #ffd4ed;
+  --event-lightning-bg: rgba(255, 0, 144, 0.14);
+  --event-lightning-fg: #ff5fbd;
+  --event-lightning-sub: #ffd4ed;
+  --event-panel-bg: rgba(255, 0, 144, 0.1);
+  --event-panel-fg: #ff85d2;
+  --event-panel-sub: #ffd4ed;
+  --event-workshop-bg: rgba(255, 0, 144, 0.16);
+  --event-workshop-fg: #ff6ec7;
+  --event-workshop-sub: #ffd4ed;
+  --event-info-bg: rgba(255, 255, 255, 0.06);
+  --event-info-fg: #e8e8e8;
+  --event-info-sub: #cfcfcf;
+  --event-activity-bg: rgba(255, 255, 255, 0.08);
+  --event-activity-fg: #ececec;
+  --event-activity-sub: #cfcfcf;
+
+  --font-heading: "Fraunces", serif;
+  --font-body: "SN Pro", "SF Pro Text", "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-ui: "SN Pro", "SF Pro Text", "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
