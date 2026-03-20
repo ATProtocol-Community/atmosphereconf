@@ -1,0 +1,55 @@
+---
+import NewsClip from "./NewsClip.astro";
+
+interface NewsItem {
+  href: string;
+  imageUrl?: string;
+  date: string;
+  title: string;
+  description?: string;
+}
+
+interface Props {
+  items: NewsItem[];
+  class?: string;
+}
+
+const { items, class: className = "" } = Astro.props;
+---
+
+<ol class:list={["news-clip-list", className]}>
+  {
+    items.map((item) => (
+      <li>
+        <NewsClip
+          href={item.href}
+          imageUrl={item.imageUrl}
+          date={item.date}
+          title={item.title}
+          description={item.description}
+        />
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .news-clip-list {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .news-clip-list li:last-child :global(.news-clip) {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  @media (max-width: 959px) {
+    .news-clip-list li:nth-child(n + 4) {
+      display: none;
+    }
+  }
+</style>

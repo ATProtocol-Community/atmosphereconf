@@ -1,0 +1,27 @@
+---
+interface Props {
+  typeName: string;
+  class?: string;
+}
+
+const { typeName, class: className = "" } = Astro.props;
+
+const badgeClass: Record<string, string> = {
+  Presentation: "event-badge event-badge-presentation",
+  "Lightning Talk": "event-badge event-badge-lightning",
+  "Discussion / Panel": "event-badge event-badge-panel",
+  Workshop: "event-badge event-badge-workshop",
+};
+
+const resolvedClass = badgeClass[typeName] || "event-badge event-badge-activity";
+---
+
+<span
+  class:list={[
+    "pill-badge px-2 py-0.5 font-medium whitespace-nowrap",
+    resolvedClass,
+    className,
+  ]}
+>
+  {typeName}
+</span>

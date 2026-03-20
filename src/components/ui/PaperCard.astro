@@ -1,0 +1,130 @@
+---
+/**
+ * PaperCard — the core card container used across the site.
+ *
+ * Variants:
+ *  - "solid" (default): filled card with border, shadow, and optional tape
+ *  - "outline": lighter version, subtle background blend
+ *  - "dashed": dashed border, transparent bg, used for secondary cards
+ *
+ * Tape decoration:
+ *  - "left" / "right" / "none" — position of the decorative tape strip
+ *  - tapeWidth: "sm" (2.6rem) / "md" (2.9rem) / "lg" (4.5rem)
+ */
+interface Props {
+  variant?: "solid" | "outline" | "dashed";
+  rotation?: number;
+  tapePosition?: "left" | "right" | "none";
+  tapeWidth?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const {
+  variant = "solid",
+  rotation = 0,
+  tapePosition = "left",
+  tapeWidth = "md",
+  class: className = "",
+} = Astro.props;
+
+const rotateStyle = rotation !== 0 ? `transform: rotate(${rotation}deg);` : "";
+---
+
+<div
+  class:list={[
+    "paper-card",
+    `paper-card--${variant}`,
+    tapePosition !== "none" && `paper-card--tape-${tapePosition}`,
+    tapePosition !== "none" && `paper-card--tape-${tapeWidth}`,
+    className,
+  ]}
+  style={rotateStyle}
+>
+  <slot />
+</div>
+
+<style>
+  /* ── Base ── */
+  .paper-card {
+    position: relative;
+    border-radius: var(--paper-radius);
+  }
+
+  /* ── Variants ── */
+  .paper-card--solid {
+    border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    background: var(--card);
+    box-shadow: var(--paper-shadow);
+  }
+
+  .paper-card--outline {
+    border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    background: color-mix(in oklch, var(--card), var(--background) 2%);
+    box-shadow: var(--paper-shadow);
+  }
+
+  .paper-card--dashed {
+    border: 1px dashed
+      color-mix(in oklch, var(--event-workshop-sub), transparent 56%);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* ── Tape decoration (::before) ── */
+  .paper-card--tape-left::before,
+  .paper-card--tape-right::before {
+    content: "";
+    position: absolute;
+    top: -0.45rem;
+    height: 0.85rem;
+    border-radius: var(--paper-tape-radius);
+    border: 1px dashed color-mix(in oklch, var(--primary), transparent 50%);
+    background: color-mix(in oklch, var(--primary), white 84%);
+    box-shadow: 0 2px 6px rgb(15 23 42 / 0.06);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .paper-card--tape-left::before {
+    left: 1.2rem;
+    transform: rotate(-3deg);
+  }
+
+  .paper-card--tape-right::before {
+    right: 1.2rem;
+    transform: rotate(4deg);
+  }
+
+  /* Tape widths */
+  .paper-card--tape-sm::before {
+    width: 2.6rem;
+    height: 0.72rem;
+  }
+  .paper-card--tape-md::before {
+    width: 2.9rem;
+  }
+  .paper-card--tape-lg::before {
+    width: 4.5rem;
+    height: 1rem;
+    border-width: 2px;
+  }
+
+  /* ── Dashed variant tape override ── */
+  .paper-card--dashed.paper-card--tape-left::before,
+  .paper-card--dashed.paper-card--tape-right::before {
+    border-color: color-mix(
+      in oklch,
+      var(--event-workshop-sub),
+      transparent 44%
+    );
+    background: color-mix(in oklch, var(--event-workshop-bg), white 34%);
+    box-shadow: 0 1px 4px rgb(15 23 42 / 0.03);
+  }
+
+  @media (max-width: 767px) {
+    .paper-card {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+</style>

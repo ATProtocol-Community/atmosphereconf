@@ -1,0 +1,174 @@
+---
+import EventBadge from "./EventBadge.astro";
+import TimeBadge from "./TimeBadge.astro";
+
+interface Speaker {
+  name: string;
+  id?: string;
+}
+
+interface Props {
+  typeName: string;
+  timeLabel?: string;
+  speakers?: Speaker[];
+  layout?: "default" | "stacked" | "compact";
+  size?: "sm" | "base";
+  class?: string;
+}
+
+const {
+  typeName,
+  timeLabel,
+  speakers = [],
+  layout = "default",
+  size = "base",
+  class: className = "",
+} = Astro.props;
+---
+
+{
+  layout === "stacked" ? (
+    <div class:list={["card-meta card-meta--stacked text-muted-foreground", className]}>
+      <span class="card-meta-row card-meta-row--primary">
+        <EventBadge typeName={typeName} />
+        {timeLabel && <TimeBadge time={timeLabel} />}
+      </span>
+      {speakers.length > 0 && (
+        <span class="card-meta-speaker-list">
+          {speakers.map((speaker) => (
+            <span class="card-meta-speaker-line">
+              {speaker.id && (
+                <a
+                  class="text-primary z-20 cursor-pointer hover:underline"
+                  href={`/profile/${speaker.id}`}
+                >
+                  @{speaker.id}
+                </a>
+              )}
+              {speaker.id && <span class="card-meta-separator">-</span>}
+              <span>{speaker.name}</span>
+            </span>
+          ))}
+        </span>
+      )}
+    </div>
+  ) : layout === "compact" ? (
+    <div class:list={["card-meta card-meta--compact text-muted-foreground", className]}>
+      <span class="card-meta-row card-meta-row--primary">
+        {timeLabel && <TimeBadge time={timeLabel} />}
+        <EventBadge typeName={typeName} />
+      </span>
+      {speakers.length > 0 && (
+        <span class="card-meta-row card-meta-row--secondary">
+          {speakers.map((speaker, index) => (
+            <span class="card-meta-speaker-unit">
+              {index > 0 && <span class="card-meta-separator">,</span>}
+              <span>{speaker.name}</span>
+              {speaker.id && (
+                <>
+                  <span class="card-meta-separator">&middot;</span>
+                  <a
+                    class="text-primary z-20 cursor-pointer hover:underline"
+                    href={`/profile/${speaker.id}`}
+                  >
+                    @{speaker.id}
+                  </a>
+                </>
+              )}
+            </span>
+          ))}
+        </span>
+      )}
+    </div>
+  ) : (
+    <span
+      class:list={[
+        "card-meta card-meta--default text-muted-foreground flex flex-wrap items-center gap-1.5",
+        size === "sm" ? "text-sm" : "text-xs",
+        className,
+      ]}
+    >
+      {timeLabel && <TimeBadge time={timeLabel} />}
+      <EventBadge typeName={typeName} />
+      {speakers.map((s, i) => (
+        <>
+          {i > 0 && <span>, </span>}
+          {s.name}
+          {s.id && (
+            <>
+              {" · "}
+              <a
+                class="text-primary z-20 cursor-pointer hover:underline"
+                href={`/profile/${s.id}`}
+              >
+                @{s.id}
+              </a>
+            </>
+          )}
+        </>
+      ))}
+    </span>
+  )
+}
+
+<style>
+  .card-meta--stacked {
+    display: grid;
+    gap: 0.42rem;
+    margin-top: 1.5;
+    font-size: 0.76rem;
+    line-height: 1.3;
+  }
+
+  .card-meta--compact {
+    display: grid;
+    gap: 0.32rem;
+    margin-top: 1.5;
+    font-size: 0.73rem;
+    line-height: 1.25;
+  }
+
+  .card-meta--default {
+    margin-top: 0.25rem;
+  }
+
+  .card-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.45rem;
+    min-width: 0;
+  }
+
+  .card-meta-row--secondary {
+    color: color-mix(in oklch, var(--foreground), var(--background) 42%);
+    font-weight: 500;
+  }
+
+  .card-meta-speaker-list {
+    display: grid;
+    gap: 0.22rem;
+    color: color-mix(in oklch, var(--foreground), var(--background) 42%);
+    font-weight: 500;
+  }
+
+  .card-meta-speaker-line {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    gap: 0.3rem;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .card-meta-speaker-unit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.24rem;
+    white-space: nowrap;
+  }
+
+  .card-meta-separator {
+    color: color-mix(in oklch, var(--foreground), var(--background) 64%);
+  }
+</style>

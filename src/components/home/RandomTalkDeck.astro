@@ -1,4 +1,6 @@
 ---
+import PaperCard from "@/components/ui/PaperCard.astro";
+import SectionKicker from "@/components/ui/SectionKicker.astro";
 import StarringCard from "./StarringCard.astro";
 
 interface Speaker {
@@ -22,13 +24,21 @@ interface Props {
 const { talks } = Astro.props;
 const [featured, ...rest] = talks;
 const slips = rest.slice(0, 3);
+
+const slipRotations = [0.5, -0.35, 0.3];
 ---
 
 {
   featured ? (
     <div class="talks-board">
-      <article class="talks-paper talks-paper-featured">
-        <p class="talks-paper-kicker">// picked at random</p>
+      <PaperCard
+        variant="solid"
+        rotation={-0.45}
+        tapePosition="left"
+        tapeWidth="md"
+        class="talks-paper-featured"
+      >
+        <SectionKicker text="picked at random" class="talks-kicker" />
         <StarringCard
           talkId={featured.id}
           title={featured.title}
@@ -39,14 +49,20 @@ const slips = rest.slice(0, 3);
           variant="featured"
           class="talks-entry-featured"
         />
-      </article>
+      </PaperCard>
 
       <aside class="talks-side-stack" aria-label="More featured talks">
-        <p class="talks-side-kicker">// more in the stack</p>
+        <SectionKicker text="more in the stack" class="talks-side-kicker" />
         <div class="talks-slip-list">
           {
             slips.map((talk, index) => (
-              <article class:list={["talks-paper talks-slip", `talks-slip-${index}`]}>
+              <PaperCard
+                variant="solid"
+                rotation={slipRotations[index]}
+                tapePosition="left"
+                tapeWidth="md"
+                class="talks-slip"
+              >
                 <StarringCard
                   talkId={talk.id}
                   title={talk.title}
@@ -57,7 +73,7 @@ const slips = rest.slice(0, 3);
                   variant="compact"
                   class="talks-entry-compact"
                 />
-              </article>
+              </PaperCard>
             ))
           }
         </div>
@@ -75,42 +91,12 @@ const slips = rest.slice(0, 3);
     align-items: start;
   }
 
-  .talks-paper {
-    position: relative;
-    border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
-    border-radius: 1.25rem;
-    background: var(--card);
-    box-shadow: 0 12px 32px rgb(15 23 42 / 0.08);
-  }
-
-  .talks-paper::before {
-    content: "";
-    position: absolute;
-    top: -0.45rem;
-    left: 1.3rem;
-    width: 2.9rem;
-    height: 0.85rem;
-    border: 1px dashed color-mix(in oklch, var(--primary), transparent 50%);
-    border-radius: 0.35rem;
-    background: color-mix(in oklch, var(--primary), white 84%);
-    box-shadow: 0 2px 6px rgb(15 23 42 / 0.06);
-    pointer-events: none;
-  }
-
-  .talks-paper-featured {
+  :global(.talks-paper-featured) {
     padding: 1.2rem 1.3rem 1.1rem;
-    transform: rotate(-0.45deg);
   }
 
-  .talks-paper-kicker,
-  .talks-side-kicker {
+  :global(.talks-kicker) {
     margin: 0 0 0.75rem;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--primary);
   }
 
   .talks-side-stack {
@@ -120,7 +106,7 @@ const slips = rest.slice(0, 3);
     min-width: 0;
   }
 
-  .talks-side-kicker {
+  :global(.talks-side-kicker) {
     margin-bottom: 0;
     padding-left: 0.4rem;
   }
@@ -130,20 +116,8 @@ const slips = rest.slice(0, 3);
     gap: 0.8rem;
   }
 
-  .talks-slip {
+  :global(.talks-slip) {
     padding: 0.95rem 1rem;
-  }
-
-  .talks-slip-0 {
-    transform: rotate(0.5deg);
-  }
-
-  .talks-slip-1 {
-    transform: rotate(-0.35deg);
-  }
-
-  .talks-slip-2 {
-    transform: rotate(0.3deg);
   }
 
   :global(.talks-entry-featured .starring-card-title) {
@@ -182,13 +156,13 @@ const slips = rest.slice(0, 3);
   }
 
   @media (max-width: 639px) {
-    .talks-paper-featured,
-    .talks-slip {
+    :global(.talks-paper-featured),
+    :global(.talks-slip) {
       padding-left: 1rem;
       padding-right: 1rem;
     }
 
-    .talks-slip:nth-child(n + 4) {
+    :global(.talks-slip:nth-child(n + 4)) {
       display: none;
     }
   }

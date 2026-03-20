@@ -1,0 +1,17 @@
+---
+interface Props {
+  time: string;
+  class?: string;
+}
+
+const { time, class: className = "" } = Astro.props;
+---
+
+<span
+  class:list={[
+    "pill-badge border-border/70 border px-2 py-0.5 font-medium whitespace-nowrap",
+    className,
+  ]}
+>
+  {time}
+</span>
