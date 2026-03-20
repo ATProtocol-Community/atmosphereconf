@@ -11,7 +11,11 @@ import UpdatesSection from "@/components/home/UpdatesSection.astro";
 <Layout title="ATmosphereConf 2026">
   <div class="space-y-10">
     <Hero />
-    <WorkshopsSection />
+    <div id="schedule">
+      <!-- Fallback for older name -->
+      <span id="talks"></span>
+      <WorkshopsSection />
+    </div>
     <div id="tickets"><TicketsSection /></div>
     <UpdatesSection />
     <div id="faqs"><FaqsSection /></div>

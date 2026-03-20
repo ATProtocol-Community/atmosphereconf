@@ -10,8 +10,8 @@ const { loggedInUser } = Astro.locals;
 const profile = loggedInUser ? await loadProfile(loggedInUser.did) : null;
 
 const navLinks = [
+  { href: "/#schedule", label: "schedule" },
   { href: "/#tickets", label: "tickets" },
-  { href: "/#talks", label: "talks" },
   { href: "/#feed", label: "feed" },
   { href: "/#faqs", label: "faqs" },
 ];
