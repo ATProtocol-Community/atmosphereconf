@@ -1,0 +1,42 @@
+---
+import SectionKicker from "./SectionKicker.astro";
+import InlineLink from "./InlineLink.astro";
+
+interface Props {
+  kicker: string;
+  linkHref?: string;
+  linkText?: string;
+  linkExternal?: boolean;
+  class?: string;
+}
+
+const {
+  kicker,
+  linkHref,
+  linkText,
+  linkExternal = false,
+  class: className = "",
+} = Astro.props;
+---
+
+<div class:list={["panel-header", className]}>
+  <div class="min-w-0">
+    <SectionKicker text={kicker} />
+  </div>
+  {
+    linkHref && linkText && (
+      <InlineLink href={linkHref} external={linkExternal}>
+        {linkText}
+      </InlineLink>
+    )
+  }
+</div>
+
+<style>
+  .panel-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+</style>

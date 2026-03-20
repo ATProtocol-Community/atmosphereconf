@@ -40,6 +40,14 @@
   --card-border-width: 3px;
   --card-shadow: none;
   --card-radius: 0px;
+  --paper-radius: 0px;
+  --paper-radius-lg: 0px;
+  --paper-radius-sm: 0px;
+  --paper-tape-radius: 0px;
+  --paper-shadow: none;
+  --paper-shadow-lg: none;
+  --pill-radius: 0px;
+  --pill-border-style: inset;
 
   /* Hero — black bg with dashed red border */
   --hero-bg: #000000;

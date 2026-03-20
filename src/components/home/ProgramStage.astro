@@ -1,0 +1,248 @@
+---
+import DaySchedule from "@/components/ui/DaySchedule.astro";
+import SectionKicker from "@/components/ui/SectionKicker.astro";
+import type { ProgramDay } from "@/lib/program";
+
+interface Props {
+  days: ProgramDay[];
+  initialDate: string;
+}
+
+const { days, initialDate } = Astro.props;
+---
+
+<section class="program-main-panel">
+  <div class="program-stage" data-program-stage>
+    {
+      days.map((day) => (
+        <article
+          id={`program-day-panel-${day.date}`}
+          role="tabpanel"
+          aria-labelledby={`program-day-tab-${day.date}`}
+          aria-hidden={day.date === initialDate ? "false" : "true"}
+          inert={day.date !== initialDate}
+          data-program-day={day.date}
+          class:list={[
+            "program-paper",
+            day.accentClass,
+            day.date === initialDate ? "is-active" : "is-under",
+          ]}
+        >
+          <div class="program-paper-header">
+            <div>
+              <SectionKicker text={day.dayLabel} class="program-paper-kicker" />
+              <h3 class="program-paper-title">{day.dateLabel}</h3>
+              <p class="program-paper-subtitle">{day.subheading}</p>
+            </div>
+            <div class="program-paper-summary">
+              <span>{day.seriesLabel} </span>
+            </div>
+          </div>
+
+          <DaySchedule events={day.events} rooms={day.rooms} />
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .program-main-panel {
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .program-stage {
+    position: relative;
+    isolation: isolate;
+    margin-top: 0.75rem;
+    padding: 0.45rem 1rem 2rem 0.15rem;
+    transition: height 220ms ease;
+  }
+
+  .program-stage::before,
+  .program-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0 0.65rem 1rem 0.2rem;
+    border-radius: var(--paper-radius-lg);
+    border: 1px solid color-mix(in oklch, var(--primary), transparent 76%);
+    background: color-mix(in oklch, var(--card), var(--background) 5%);
+    pointer-events: none;
+  }
+
+  .program-stage::before {
+    z-index: 0;
+    opacity: 0.92;
+    transform: translate(1.2rem, 0.9rem) rotate(1deg);
+    box-shadow: var(--paper-shadow-lg);
+  }
+
+  .program-stage::after {
+    z-index: 1;
+    opacity: 0.97;
+    transform: translate(0.65rem, 0.45rem) rotate(-0.75deg);
+    box-shadow: var(--paper-shadow-lg);
+  }
+
+  .program-paper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 1.3rem;
+    border-radius: var(--paper-radius);
+    border: 1px solid color-mix(in oklch, var(--border), transparent 20%);
+    background: var(--card);
+    box-shadow: var(--paper-shadow-lg);
+    transition:
+      transform 240ms ease,
+      opacity 220ms ease,
+      box-shadow 220ms ease,
+      filter 220ms ease;
+  }
+
+  .program-paper::before {
+    content: "";
+    position: absolute;
+    top: -0.55rem;
+    width: 4.75rem;
+    height: 1rem;
+    border-radius: var(--paper-tape-radius);
+    border: 2px dashed color-mix(in oklch, var(--primary), transparent 45%);
+    background: color-mix(in oklch, var(--primary), white 82%);
+  }
+
+  .program-paper-a::before {
+    left: 1.4rem;
+    transform: rotate(-3deg);
+  }
+
+  .program-paper-b::before {
+    right: 1.5rem;
+    transform: rotate(3deg);
+  }
+
+  .program-paper.is-active {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-0.35deg);
+    box-shadow: var(--paper-shadow-lg);
+    filter: none;
+    pointer-events: auto;
+  }
+
+  .program-paper.is-under {
+    opacity: 0;
+    transform: translate(0.65rem, 0.75rem) rotate(0.65deg) scale(0.992);
+    box-shadow: none;
+    filter: saturate(0.94);
+    pointer-events: none;
+  }
+
+  .program-paper-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  :global(.program-paper-kicker) {
+    margin-bottom: 0.3rem;
+  }
+
+  .program-paper-title {
+    font-size: clamp(1.3rem, 2vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .program-paper-subtitle {
+    margin-top: 0.2rem;
+    color: var(--muted-foreground);
+    font-size: 0.98rem;
+  }
+
+  .program-paper-summary {
+    display: inline-flex;
+    flex: none;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px dashed color-mix(in oklch, var(--primary), transparent 35%);
+    border-radius: var(--paper-radius-sm);
+    background: color-mix(in oklch, var(--primary), transparent 94%);
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .program-paper :global(.day-schedule) {
+    border-color: color-mix(in oklch, var(--primary), transparent 72%);
+    background: color-mix(in oklch, var(--card), var(--background) 6%);
+    overflow: hidden;
+  }
+
+  .program-paper :global(.day-schedule .border-border),
+  .program-paper :global(.day-schedule .divide-border) {
+    border-color: color-mix(in oklch, var(--primary), transparent 78%);
+  }
+
+  .program-paper :global(.day-schedule .divide-border\/40) {
+    border-color: color-mix(in oklch, var(--primary), transparent 84%);
+  }
+
+  @media (min-width: 1024px) {
+    .program-paper {
+      padding-right: 1.65rem;
+    }
+
+    .program-paper :global(.program-day-schedule) {
+      margin-left: -1rem;
+      margin-right: -1.05rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .program-paper {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .program-stage {
+      padding-right: 0.2rem;
+      padding-bottom: 1.2rem;
+    }
+
+    .program-stage::before {
+      transform: translate(0.55rem, 0.5rem) rotate(0.85deg);
+    }
+
+    .program-stage::after {
+      transform: translate(0.3rem, 0.22rem) rotate(-0.45deg);
+    }
+
+    .program-paper-header {
+      flex-direction: column;
+    }
+
+    .program-paper-summary {
+      align-self: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .program-paper,
+    .program-stage {
+      transition: none;
+    }
+  }
+</style>

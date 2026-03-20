@@ -1,0 +1,153 @@
+---
+import type { ProgramDay } from "@/lib/program";
+
+interface Props {
+  days: ProgramDay[];
+  initialDate: string;
+}
+
+const { days, initialDate } = Astro.props;
+---
+
+<section class="program-selector-panel">
+  <div
+    class="program-day-selector"
+    role="tablist"
+    aria-label="Program day"
+  >
+    {
+      days.map((day) => (
+        <button
+          type="button"
+          role="tab"
+          id={`program-day-tab-${day.date}`}
+          aria-controls={`program-day-panel-${day.date}`}
+          aria-selected={day.date === initialDate ? "true" : "false"}
+          tabindex={day.date === initialDate ? "0" : "-1"}
+          class:list={["program-day-chip", day.date === initialDate && "is-active"]}
+          data-day-select={day.date}
+        >
+          <span class="program-day-chip-kicker">{`// ${day.seriesLabel}`}</span>
+          <span class="program-day-chip-title">{day.dayLabel}</span>
+          <span class="program-day-chip-meta">{day.dateLabel}</span>
+        </button>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .program-selector-panel {
+    min-width: 0;
+  }
+
+  .program-day-selector {
+    display: grid;
+    gap: 0;
+    margin-top: 0.35rem;
+    padding: 0;
+    border: 1px solid color-mix(in oklch, var(--border), transparent 28%);
+    border-radius: var(--paper-radius-sm);
+    background: color-mix(in oklch, var(--card), var(--background) 4%);
+    overflow: hidden;
+    box-shadow: none;
+  }
+
+  .program-day-chip {
+    position: relative;
+    display: grid;
+    gap: 0.22rem;
+    justify-items: start;
+    min-height: 4.85rem;
+    padding: 0.82rem 1rem 0.9rem;
+    border: 0;
+    background: transparent;
+    color: var(--muted-foreground);
+    text-align: left;
+    transition:
+      color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .program-day-chip + .program-day-chip {
+    border-left: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+  }
+
+  .program-day-chip:hover {
+    color: var(--foreground);
+    background: color-mix(in oklch, var(--card), var(--primary) 2%);
+  }
+
+  .program-day-chip:focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: -2px;
+  }
+
+  .program-day-chip.is-active {
+    background: color-mix(in oklch, var(--primary), transparent 94%);
+    color: var(--foreground);
+    outline: 1px solid color-mix(in oklch, var(--primary), transparent 78%);
+    outline-offset: -1px;
+  }
+
+  .program-day-chip-kicker {
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .program-day-chip-title {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .program-day-chip-meta {
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  @media (min-width: 1024px) {
+    .program-day-selector {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: stretch;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .program-day-selector {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .program-day-chip:nth-child(n + 3) {
+      border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .program-day-selector {
+      grid-template-columns: 1fr;
+    }
+
+    .program-day-chip + .program-day-chip {
+      border-left: 0;
+      border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+
+    .program-day-chip:nth-child(n + 3) {
+      border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .program-day-chip {
+      transition: none;
+    }
+  }
+</style>

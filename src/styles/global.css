@@ -109,6 +109,16 @@
   --card-border-width: 1px;
   --card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --card-radius: var(--radius-xl);
+
+  /* Paper card / section radii */
+  --paper-radius: 1.25rem;
+  --paper-radius-lg: 1.3rem;
+  --paper-radius-sm: 1.05rem;
+  --paper-tape-radius: 0.35rem;
+  --paper-shadow: 0 12px 32px rgb(15 23 42 / 0.08);
+  --paper-shadow-lg: 0 16px 36px rgb(15 23 42 / 0.08);
+  --pill-radius: 9999px;
+  --pill-border-style: solid;
 }
 
 .dark {
@@ -264,6 +274,10 @@
   }
   .event-sub-activity {
     color: var(--event-activity-sub);
+  }
+
+  .pill-badge {
+    border-radius: var(--pill-radius);
   }
 
   .themed-card {
