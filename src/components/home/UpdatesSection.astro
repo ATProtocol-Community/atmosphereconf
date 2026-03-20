@@ -24,9 +24,10 @@ const blueskyResult = await getLiveCollection("blueskyPosts", {
   limit: 20,
   type: "posts_no_replies",
 });
-const latestPost = blueskyResult.entries?.find(
-  (entry) => entry.data.author.handle === "atprotocol.dev",
-) ?? blueskyResult.entries?.at(0);
+const latestPost =
+  blueskyResult.entries?.find(
+    (entry) => entry.data.author.handle === "atprotocol.dev",
+  ) ?? blueskyResult.entries?.at(0);
 
 const leafletResult = await getLiveCollection("leafletPosts");
 const newsPosts = (leafletResult.entries ?? [])
@@ -62,9 +63,8 @@ const newsItems = newsPosts.map((post) => ({
         <PanelHeader kicker="Conference feed" />
 
         <p class="text-muted-foreground mb-4 max-w-[64ch] text-sm sm:text-base">
-          Follow the AtmosphereConf conversation as it unfolds. This stream keeps
-          the main feed front and center, with Leaflet updates and official
-          protocol notes pinned alongside it.
+          Follow the AtmosphereConf conversation as it unfolds in our feed, or
+          head to our leaflet and profile for more of our voice.
         </p>
 
         <div class="updates-feed-frame">
@@ -112,8 +112,8 @@ const newsItems = newsPosts.map((post) => ({
                 <NewsClipList items={newsItems} />
               ) : (
                 <p class="updates-note-fallback">
-                  The news desk is quiet for the moment. Fresh dispatches will show
-                  up here as soon as they land.
+                  The news desk is quiet for the moment. Fresh dispatches will
+                  show up here as soon as they land.
                 </p>
               )
             }
@@ -141,8 +141,8 @@ const newsItems = newsPosts.map((post) => ({
                 </div>
               ) : (
                 <p class="updates-note-fallback">
-                  No official bulletin is pinned yet. Check back soon for the next
-                  note from the protocol team.
+                  No official bulletin is pinned yet. Check back soon for the
+                  next note from the protocol team.
                 </p>
               )
             }
@@ -167,7 +167,10 @@ const newsItems = newsPosts.map((post) => ({
     }
 
     const railHeight = Math.ceil(sideRail.getBoundingClientRect().height);
-    (section as HTMLElement).style.setProperty("--updates-rail-height", `${railHeight}px`);
+    (section as HTMLElement).style.setProperty(
+      "--updates-rail-height",
+      `${railHeight}px`,
+    );
   }
 
   const updatesSection = document.querySelector("#feed");
@@ -245,7 +248,8 @@ const newsItems = newsPosts.map((post) => ({
     --bluesky-color-text-secondary: var(--muted-foreground);
     --bluesky-color-link: var(--primary);
     --bluesky-color-border: color-mix(in oklch, var(--border), transparent 35%);
-    --bluesky-card-border: 1px solid color-mix(in oklch, var(--border), transparent 35%);
+    --bluesky-card-border: 1px solid
+      color-mix(in oklch, var(--border), transparent 35%);
   }
 
   @media (min-width: 960px) {

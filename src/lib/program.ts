@@ -74,6 +74,7 @@ export interface ProgramDay {
   dayLabel: string;
   dateLabel: string;
   seriesLabel: string;
+  anchorId: string;
   heading: string;
   subheading: string;
   rooms: string[];
@@ -87,6 +88,7 @@ export interface ProgramRailOtherDay {
   dayLabel: string;
   dateLabel: string;
   seriesLabel: string;
+  anchorId: string;
   heading: string;
   picks: ProgramEvent[];
 }
@@ -137,6 +139,16 @@ function getSeriesLabel(date: string) {
   if (talkIndex !== -1) return `Conference Day #${talkIndex + 1}`;
 
   return "Program Day";
+}
+
+function getAnchorId(date: string) {
+  const workshopIndex = workshopDates.indexOf(date);
+  if (workshopIndex !== -1) return `schedule-preshow${workshopIndex + 1}`;
+
+  const talkIndex = talkDates.indexOf(date);
+  if (talkIndex !== -1) return `schedule-conf${talkIndex + 1}`;
+
+  return `schedule-${date}`;
 }
 
 export function formatMiniTime(iso?: string) {
@@ -230,6 +242,7 @@ export async function getProgramDays() {
         dayLabel: formatDayLabel(date),
         dateLabel: formatDateLabel(date),
         seriesLabel: getSeriesLabel(date),
+        anchorId: getAnchorId(date),
         heading: formatDayHeading(date),
         subheading: getDaySubheading(dayEntries, rooms.length || 1),
         rooms: rooms.length ? rooms : ["Program"],
@@ -258,6 +271,7 @@ export function getRandomProgramRail(
       dayLabel: day.dayLabel,
       dateLabel: day.dateLabel,
       seriesLabel: day.seriesLabel,
+      anchorId: day.anchorId,
       heading: day.heading,
       picks: shuffleItems(day.spotlightPool).slice(0, 2),
     }));

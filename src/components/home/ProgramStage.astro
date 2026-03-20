@@ -18,7 +18,7 @@ const { days, initialDate } = Astro.props;
         <article
           id={`program-day-panel-${day.date}`}
           role="tabpanel"
-          aria-labelledby={`program-day-tab-${day.date}`}
+          aria-labelledby={day.anchorId}
           aria-hidden={day.date === initialDate ? "false" : "true"}
           inert={day.date !== initialDate}
           data-program-day={day.date}
@@ -30,13 +30,13 @@ const { days, initialDate } = Astro.props;
         >
           <div class="program-paper-header">
             <div>
-              <SectionKicker text={day.dayLabel} class="program-paper-kicker" />
+              <SectionKicker text={day.dayLabel} href={`#${day.anchorId}`} class="program-paper-kicker" />
               <h3 class="program-paper-title">{day.dateLabel}</h3>
               <p class="program-paper-subtitle">{day.subheading}</p>
             </div>
-            <div class="program-paper-summary">
+            <a href={`#${day.anchorId}`} class="program-paper-summary">
               <span>{day.seriesLabel} </span>
-            </div>
+            </a>
           </div>
 
           <DaySchedule events={day.events} rooms={day.rooms} />
@@ -182,7 +182,12 @@ const { days, initialDate } = Astro.props;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    text-decoration: none;
     white-space: nowrap;
+  }
+
+  .program-paper-summary:hover {
+    background: color-mix(in oklch, var(--primary), transparent 88%);
   }
 
   .program-paper :global(.day-schedule) {

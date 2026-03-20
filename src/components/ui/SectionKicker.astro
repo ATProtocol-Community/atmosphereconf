@@ -1,14 +1,31 @@
 ---
+import slugify from "slugify";
+
 interface Props {
   text: string;
+  anchor?: boolean;
+  href?: string;
   class?: string;
 }
 
-const { text, class: className = "" } = Astro.props;
+const { text, anchor = true, href, class: className = "" } = Astro.props;
+const slug = href
+  ? href.replace(/^#/, "")
+  : anchor
+    ? slugify(text, { lower: true, strict: true })
+    : undefined;
 ---
 
-<p class:list={["section-kicker", className]}>
-  {`// ${text.toUpperCase()}`}
+<p id={slug} class:list={["section-kicker", className]}>
+  {
+    slug ? (
+      <a href={`#${slug}`} class="section-kicker-link">
+        {`// ${text.toUpperCase()}`}
+      </a>
+    ) : (
+      `// ${text.toUpperCase()}`
+    )
+  }
 </p>
 
 <style>
@@ -19,5 +36,14 @@ const { text, class: className = "" } = Astro.props;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--primary);
+  }
+
+  .section-kicker-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .section-kicker-link:hover {
+    text-decoration: underline;
   }
 </style>

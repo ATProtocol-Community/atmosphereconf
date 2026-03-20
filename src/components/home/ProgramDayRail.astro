@@ -15,16 +15,20 @@ const { rail } = Astro.props;
 
 <section class="rail-sampled-panel">
   <PanelHeader
-    kicker={`${rail.dayLabel} picks`}
+    kicker={`Some random (${rail.dayLabel}) picks`}
     linkHref="/talks"
-    linkText="see all talks"
+    linkText="see all"
   />
 
   <div class="rail-sampled-board">
     {
       rail.spotlight && (
-        <PaperCard variant="outline" tapePosition="left" tapeWidth="md" class="rail-sampled-featured">
-          <SectionKicker text="random highlight" class="rail-kicker" />
+        <PaperCard
+          variant="outline"
+          tapePosition="left"
+          tapeWidth="md"
+          class="rail-sampled-featured"
+        >
           <StarringCard
             talkId={rail.spotlight.id}
             title={rail.spotlight.title}
@@ -41,11 +45,15 @@ const { rail } = Astro.props;
     }
 
     <aside class="rail-sampled-side">
-      <SectionKicker text="a few more" class="rail-kicker" />
       <div class="rail-slip-list">
         {
           rail.suggestions.map((event) => (
-            <PaperCard variant="outline" tapePosition="left" tapeWidth="md" class="rail-sampled-slip">
+            <PaperCard
+              variant="outline"
+              tapePosition="left"
+              tapeWidth="md"
+              class="rail-sampled-slip"
+            >
               <StarringCard
                 talkId={event.id}
                 title={event.title}
@@ -70,20 +78,29 @@ const { rail } = Astro.props;
   <div class="rail-other-days-list">
     {
       rail.otherDays.map((otherDay) => (
-        <PaperCard variant="dashed" tapePosition="left" tapeWidth="sm" class="rail-other-day-card">
+        <PaperCard
+          variant="dashed"
+          tapePosition="left"
+          tapeWidth="sm"
+          class="rail-other-day-card"
+        >
           <div class="rail-other-day-header">
-            <div>
+            <a
+              href={`#${otherDay.anchorId}`}
+              class="rail-other-day-link"
+              data-show-day={otherDay.date}
+            >
               <p class="rail-other-day-meta">{`${otherDay.dayLabel} · ${otherDay.seriesLabel}`}</p>
               <h4 class="rail-other-day-title">{otherDay.dateLabel}</h4>
-            </div>
-            <button
-              type="button"
+            </a>
+            <a
+              href={`#${otherDay.anchorId}`}
               class="rail-other-day-button"
               data-show-day={otherDay.date}
               aria-label={`Show ${otherDay.heading} in the main schedule`}
             >
               Show day
-            </button>
+            </a>
           </div>
 
           <ol class="rail-other-day-agenda">
@@ -122,7 +139,10 @@ const { rail } = Astro.props;
 
   :global(.rail-sampled-featured) {
     z-index: 2;
-    padding: 1.1rem 1.1rem 1.05rem;
+    padding: 1.4rem 1.35rem 1.3rem;
+    background: color-mix(in oklch, var(--primary), transparent 97%);
+    border-color: color-mix(in oklch, var(--primary), transparent 78%);
+    box-shadow: var(--paper-shadow-lg);
   }
 
   .rail-sampled-side {
@@ -136,7 +156,8 @@ const { rail } = Astro.props;
   }
 
   :global(.rail-sampled-slip) {
-    padding: 0.85rem 0.9rem;
+    padding: 0.75rem 0.85rem;
+    opacity: 0.88;
   }
 
   :global(.rail-kicker) {
@@ -144,10 +165,17 @@ const { rail } = Astro.props;
     margin-bottom: 0.35rem;
   }
 
+  :global(.rail-entry-featured .starring-card-arrow) {
+    font-size: 1.15rem;
+    color: var(--primary);
+    opacity: 0.6;
+  }
+
   :global(.rail-entry-featured .starring-card-title) {
     display: block;
-    font-size: clamp(1.15rem, 2vw, 1.5rem);
-    line-height: 1.16;
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    font-weight: 700;
+    line-height: 1.12;
     letter-spacing: -0.03em;
     text-wrap: balance;
   }
@@ -159,21 +187,34 @@ const { rail } = Astro.props;
     line-height: 1.5;
   }
 
-  :global(.rail-entry-featured .starring-card-meta),
+  :global(.rail-entry-featured .starring-card-meta) {
+    gap: 0.3rem 0.5rem;
+    margin-top: 0.65rem;
+    font-size: 0.73rem;
+  }
+
   :global(.rail-entry-compact .starring-card-meta) {
     gap: 0.25rem 0.45rem;
-    margin-top: 0.45rem;
-    font-size: 0.7rem;
+    margin-top: 0.35rem;
+    font-size: 0.68rem;
   }
 
   :global(.rail-entry-compact .starring-card-title) {
     display: block;
-    font-size: 0.88rem;
-    line-height: 1.3;
+    font-size: 0.84rem;
+    line-height: 1.28;
   }
 
-  :global(.rail-entry-featured .starring-card-meta :is(.starring-card-time, .event-badge)),
-  :global(.rail-entry-compact .starring-card-meta :is(.starring-card-time, .event-badge)) {
+  :global(
+    .rail-entry-featured
+      .starring-card-meta
+      :is(.starring-card-time, .event-badge)
+  ),
+  :global(
+    .rail-entry-compact
+      .starring-card-meta
+      :is(.starring-card-time, .event-badge)
+  ) {
     padding: 0.18rem 0.5rem;
   }
 
@@ -193,6 +234,15 @@ const { rail } = Astro.props;
     align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 0.85rem;
+  }
+
+  .rail-other-day-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .rail-other-day-link:hover .rail-other-day-title {
+    color: var(--primary);
   }
 
   .rail-other-day-meta {
@@ -248,9 +298,8 @@ const { rail } = Astro.props;
   }
 
   .rail-other-day-button:focus-visible {
-    outline: none;
-    box-shadow: inset 0 0 0 2px
-      color-mix(in oklch, var(--primary), transparent 30%);
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: -2px;
   }
 
   .rail-other-day-agenda {
