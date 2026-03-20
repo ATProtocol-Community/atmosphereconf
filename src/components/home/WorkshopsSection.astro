@@ -106,16 +106,24 @@ const initialDayDate = days[0]?.date ?? "";
       let activeSidePanel = null;
       sidePanels.forEach((panel) => {
         const isActive = panel.dataset.programSide === date;
-        panel.classList.toggle("hidden", !isActive);
-        panel.setAttribute("aria-hidden", String(!isActive));
+        if (!isActive) {
+          panel.classList.add("hidden");
+          panel.setAttribute("aria-hidden", "true");
+        }
         if (isActive) activeSidePanel = panel;
       });
 
-      requestAnimationFrame(() => syncProgramStageHeight(board));
-
+      // If refreshing, fetch new content before showing the panel
       if (refreshRail && activeSidePanel) {
         await refreshSidePanel(activeSidePanel, date);
       }
+
+      if (activeSidePanel) {
+        activeSidePanel.classList.remove("hidden");
+        activeSidePanel.setAttribute("aria-hidden", "false");
+      }
+
+      requestAnimationFrame(() => syncProgramStageHeight(board));
     };
 
     dayButtons.forEach((button) => {
