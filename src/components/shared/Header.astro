@@ -9,6 +9,7 @@ import HeaderTicket from "./HeaderTicket.astro";
 const { loggedInUser } = Astro.locals;
 const profile = loggedInUser ? await loadProfile(loggedInUser.did) : null;
 
+const isHome = Astro.url.pathname === "/";
 const navLinks = [
   { href: "/#schedule", label: "schedule" },
   { href: "/#tickets", label: "tickets" },
@@ -24,14 +25,17 @@ const navLinks = [
   style="background: var(--header-bg, var(--primary));"
 >
   <div
-    class="relative z-10 flex h-full items-center justify-between px-3 text-base sm:justify-center sm:gap-6 sm:px-0 sm:border-b-4"
+    class="relative z-10 flex h-full items-center"
     style="background: var(--header-bg, var(--primary)); border-bottom: 1px solid var(--header-border, white);"
+  >
+  <div
+    class="mx-auto flex h-full w-full max-w-5xl items-center justify-between px-3 text-base min-[765px]:justify-center min-[765px]:gap-3 min-[850px]:gap-6 min-[765px]:px-4"
   >
     <a
       id="site-logo"
       href="/"
       data-astro-reload
-      class="flex items-center gap-1.5 text-lg font-semibold opacity-80"
+      class="flex items-center gap-1.5 text-lg font-semibold opacity-80 min-[765px]:flex-1 min-[765px]:min-w-0"
       style="color: var(--header-fg, oklch(0.985 0 0));"
     >
       <Image
@@ -49,14 +53,14 @@ const navLinks = [
         >mosphereConf</span
       >
     </a>
-    <span
-      class="select-none"
-      style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
-      aria-hidden="true">//</span
-    >
     <nav class="flex items-center gap-4">
+      <span
+        class="select-none"
+        style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
+        aria-hidden="true">//</span
+      >
       <!-- desktop links -->
-      <div class="hidden items-center gap-4 sm:flex">
+      <div class="hidden items-center gap-4 min-[765px]:flex">
         {
           navLinks.map(({ href, label }) => (
             <a
@@ -65,13 +69,13 @@ const navLinks = [
               class="nav-link transition-colors"
               style="color: var(--header-fg-muted, rgba(255,255,255,0.6));"
             >
-              {label}
+              {label}{href.includes('#') ? <svg class:list={["inline h-2.5 w-2.5 ml-0.5 opacity-50", !isHome && "invisible"]} viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M2 7l4 4 4-4"/></svg> : ""}
             </a>
           ))
         }
       </div>
       <!-- mobile dropdown -->
-      <div class="relative sm:hidden">
+      <div class="relative min-[765px]:hidden">
         <button
           id="nav-menu-btn"
           class="flex items-center gap-1 transition-colors"
@@ -106,7 +110,7 @@ const navLinks = [
                 class="nav-link px-4 py-2 transition-colors"
                 style="color: var(--header-fg-muted, rgba(255,255,255,0.6));"
               >
-                {label}
+                {label}{href.includes('#') ? <svg class:list={["inline h-2.5 w-2.5 ml-0.5 opacity-50", !isHome && "invisible"]} viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M2 7l4 4 4-4"/></svg> : ""}
               </a>
             ))
           }
@@ -114,14 +118,14 @@ const navLinks = [
       </div>
     </nav>
     <span
-      class="hidden select-none md:inline"
+      class="hidden select-none min-[765px]:inline"
       style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
       aria-hidden="true">//</span
     >
-    <div class="flex h-8 items-center gap-2 sm:gap-4">
+    <div class="flex h-8 items-center gap-2 min-[765px]:flex-1 min-[765px]:min-w-0 min-[765px]:justify-end min-[765px]:gap-4">
       <button
         id="theme-toggle"
-        class="flex h-7 items-center gap-1.5 rounded-full px-1.5 text-xs transition-colors sm:border sm:px-2.5"
+        class="flex h-7 items-center gap-0 min-[850px]:gap-1.5 rounded-full px-1.5 text-xs transition-colors min-[850px]:border min-[850px]:px-2.5"
         style="color: var(--header-fg-muted, rgba(255,255,255,0.6)); border-color: var(--header-fg-muted, rgba(255,255,255,0.3));"
         aria-label="Toggle theme"
       >
@@ -132,7 +136,7 @@ const navLinks = [
           <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
           <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
         </svg>
-        <span id="theme-next-label" class="hidden sm:inline"></span>
+        <span id="theme-next-label" class="hidden min-[850px]:inline w-[7ch] truncate"></span>
       </button>
       {
         profile ? (
@@ -147,7 +151,7 @@ const navLinks = [
         ) : (
           <a
             href="/login"
-            class="rounded border px-2 py-1 text-sm font-medium whitespace-nowrap transition-colors sm:px-3 sm:text-base"
+            class="shrink-0 w-[5.7rem] text-center rounded border px-3 py-1 text-base font-medium whitespace-nowrap transition-colors"
             style="color: var(--header-fg, white); border-color: var(--header-fg-muted, rgba(255,255,255,0.4));"
           >
             sign in
@@ -155,6 +159,7 @@ const navLinks = [
         )
       }
     </div>
+  </div>
   </div>
 
   <HeaderTicket />
