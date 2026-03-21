@@ -1,4 +1,6 @@
 ---
+import { formatLocalDate } from "@/lib/datetime";
+
 interface Props {
   href: string;
   imageUrl?: string;
@@ -10,7 +12,7 @@ interface Props {
 const { href, imageUrl, date, title, description } = Astro.props;
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
+  return formatLocalDate(dateString, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -32,7 +34,12 @@ function formatDate(dateString: string) {
     )
   }
   <div class="min-w-0">
-    <time datetime={date} class="news-clip-date">
+    <time
+      datetime={date}
+      class="news-clip-date"
+      data-local-date
+      data-local-date-format="news"
+    >
       {formatDate(date)}
     </time>
     <p class="news-clip-title">{title}</p>

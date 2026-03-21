@@ -1,4 +1,5 @@
 import { getLiveCollection } from "astro:content";
+import { formatConferenceDate, getConferenceDateKey } from "@/lib/datetime";
 
 const visibleTypes = new Set([
   "presentation",
@@ -152,11 +153,7 @@ function getAnchorId(date: string) {
 }
 
 export function formatMiniTime(iso?: string) {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "";
-
-  return date.toLocaleTimeString("en-US", {
+  return formatConferenceDate(iso, {
     hour: "numeric",
     minute: "2-digit",
   });
@@ -189,9 +186,8 @@ function sortRooms(rooms: string[]) {
   });
 }
 
-const TZ = "America/Vancouver";
 function localDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-CA", { timeZone: TZ });
+  return getConferenceDateKey(iso);
 }
 
 function shuffleItems<T>(items: T[]) {
@@ -199,8 +195,7 @@ function shuffleItems<T>(items: T[]) {
 }
 
 export async function getProgramDays() {
-  const { entries: schedule = [], error } =
-    await getLiveCollection("events");
+  const { entries: schedule = [], error } = await getLiveCollection("events");
   if (error) {
     throw error;
   }
