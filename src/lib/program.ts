@@ -22,8 +22,8 @@ const roomPriority = [
 
 const workshopTypes = new Set(["workshop", "activity"]);
 const talkTypes = new Set(["presentation", "lightning-talk", "panel"]);
-const workshopDates = ["2026-03-26", "2026-03-27"];
-const talkDates = ["2026-03-28", "2026-03-29"];
+export const workshopDates = ["2026-03-26", "2026-03-27"];
+export const talkDates = ["2026-03-28", "2026-03-29"];
 const allDates = [...workshopDates, ...talkDates];
 
 const spotlightTypeNames: Record<string, string> = {

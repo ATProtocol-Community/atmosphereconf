@@ -77,57 +77,59 @@ const { rail } = Astro.props;
   </div>
 </section>
 
-<section class="rail-preview-panel">
-  <PanelHeader kicker="Sampling the other days" />
+{rail.otherDays.length > 0 && (
+  <section class="rail-preview-panel">
+    <PanelHeader kicker="Sampling the other days" />
 
-  <div class="rail-other-days-list">
-    {
-      rail.otherDays.map((otherDay) => (
-        <PaperCard
-          variant="dashed"
-          tapePosition="left"
-          tapeWidth="sm"
-          class="rail-other-day-card"
-        >
-          <div class="rail-other-day-header">
-            <a
-              href={`#${otherDay.anchorId}`}
-              class="rail-other-day-link"
-              data-show-day={otherDay.date}
-            >
-              <p class="rail-other-day-meta">{`${otherDay.dayLabel} · ${otherDay.seriesLabel}`}</p>
-              <h4 class="rail-other-day-title">{otherDay.dateLabel}</h4>
-            </a>
-            <a
-              href={`#${otherDay.anchorId}`}
-              class="rail-other-day-button"
-              data-show-day={otherDay.date}
-              aria-label={`Show ${otherDay.heading} in the main schedule`}
-            >
-              Show day
-            </a>
-          </div>
+    <div class="rail-other-days-list">
+      {
+        rail.otherDays.map((otherDay) => (
+          <PaperCard
+            variant="dashed"
+            tapePosition="left"
+            tapeWidth="sm"
+            class="rail-other-day-card"
+          >
+            <div class="rail-other-day-header">
+              <a
+                href={`#${otherDay.anchorId}`}
+                class="rail-other-day-link"
+                data-show-day={otherDay.date}
+              >
+                <p class="rail-other-day-meta">{`${otherDay.dayLabel} · ${otherDay.seriesLabel}`}</p>
+                <h4 class="rail-other-day-title">{otherDay.dateLabel}</h4>
+              </a>
+              <a
+                href={`#${otherDay.anchorId}`}
+                class="rail-other-day-button"
+                data-show-day={otherDay.date}
+                aria-label={`Show ${otherDay.heading} in the main schedule`}
+              >
+                Show day
+              </a>
+            </div>
 
-          <ol class="rail-other-day-agenda">
-            {otherDay.picks.map((event) => (
-              <li class="rail-other-day-item">
-                <span class="rail-other-day-time">
-                  {formatMiniTime(event.start)}
-                </span>
-                <div class="min-w-0">
-                  <p class="rail-other-day-item-title" set:html={event.title} />
-                  {event.room && (
-                    <p class="rail-other-day-room">{event.room}</p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ol>
-        </PaperCard>
-      ))
-    }
-  </div>
-</section>
+            <ol class="rail-other-day-agenda">
+              {otherDay.picks.map((event) => (
+                <li class="rail-other-day-item">
+                  <span class="rail-other-day-time">
+                    {formatMiniTime(event.start)}
+                  </span>
+                  <div class="min-w-0">
+                    <p class="rail-other-day-item-title" set:html={event.title} />
+                    {event.room && (
+                      <p class="rail-other-day-room">{event.room}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </PaperCard>
+        ))
+      }
+    </div>
+  </section>
+)}
 
 <style>
   .rail-sampled-panel,
