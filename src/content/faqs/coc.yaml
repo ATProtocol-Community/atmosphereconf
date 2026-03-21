@@ -1,4 +1,5 @@
 - id: code-of-conduct
+  curated: true
   question: Does the conference have a code of conduct?
   answer: |
     The code of conduct that the AT Community Fund events and spaces is covered under is posted on the blog at [atprotocol.dev/code-of-conduct](https://atprotocol.dev/code-of-conduct/).

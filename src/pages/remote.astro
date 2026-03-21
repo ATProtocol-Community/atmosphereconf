@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "@/components/home/Hero.astro";
 import TicketsSection from "@/components/home/TicketsSection.astro";
-import FaqsSection from "@/components/home/FaqsSection.astro";
+
 import RemoteIntro from "@/components/home/RemoteIntro.astro";
 import ScheduleSection from "@/components/home/ScheduleSection.astro";
 import SponsorsSection from "@/components/home/SponsorsSection.astro";
@@ -13,9 +13,8 @@ import StarringSection from "@/components/home/StarringSection.astro";
   <div class="space-y-10">
     <Hero />
     <div id="remote-intro"><RemoteIntro /></div>
-    <div id="tickets"><TicketsSection mode="remote" /></div>
+    <TicketsSection mode="remote" />
     <div id="talks"><StarringSection /></div>
-    <div id="faqs"><FaqsSection /></div>
     <!-- <ScheduleSection /> -->
     <SponsorsSection />
   </div>

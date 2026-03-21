@@ -1,4 +1,5 @@
 - id: remote-options
+  curated: true
   question: Are there options for attending the conference remotely?
   answer: |
     Yes, you can read the [initial announcement on Remote / Hybrid participation](https://news.atmosphereconf.org/3mdm4s4psws2a).
@@ -18,6 +19,7 @@
 
     Stream links will be available on the [remote page](/remote).
 - id: remote-video-recording
+  curated: true
   question: Will the videos be recorded?
   answer: |
     Yes, the videos will be recorded and made available after the conference for watching on demand.

@@ -1,4 +1,5 @@
 - id: info
+  curated: true
   question: What is AtmosphereConf?
   answer: |
     AtmosphereConf is the global conference for the [atproto](https://atproto.com) community, an open protocol powering Bluesky and 100s of other applications.
@@ -8,6 +9,7 @@
     You can reach the conference producers using our [contact form](https://forms.atprotocol.community/r/nPadKP).
 
 - id: venue
+  curated: true
   question: Where is the venue?
   answer: |
     The main venue is the **AMS Student Nest**, on the University of British Columbia (UBC) campus, located at:

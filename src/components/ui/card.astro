@@ -20,7 +20,7 @@ const slug = title ? slugify(title, { lower: true, strict: true }) : undefined;
     title && (
       <h2
         id={slug}
-        class="text-primary mb-1.5 text-lg font-semibold tracking-widest uppercase"
+        class="text-primary mb-3 text-xl font-semibold tracking-widest uppercase"
         style="font-family: var(--font-ui);"
       >
         <a href={`#${slug}`} class="hover:underline">{`// ${title}`}</a>

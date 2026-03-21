@@ -5,6 +5,7 @@ import { parse, parseInline } from "marked";
 const faqSchema = z.object({
   question: z.string().transform((q) => parseInline(q) as string),
   answer: z.string().transform((a) => parse(a) as string),
+  curated: z.boolean().default(false),
 });
 
 export const faqCollections = {

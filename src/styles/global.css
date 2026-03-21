@@ -2,6 +2,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-size-xl: 1.375rem;
+  --font-size-xl--line-height: 1.875rem;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --font-body: var(--font-mono);
   --font-heading: var(--font-mono);
