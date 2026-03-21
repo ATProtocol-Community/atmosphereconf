@@ -1,71 +1,103 @@
 ---
 import Card from "@/components/ui/card.astro";
+import BreakoutSection from "@/components/ui/BreakoutSection.astro";
+import PanelHeader from "@/components/ui/PanelHeader.astro";
+import PaperCard from "@/components/ui/PaperCard.astro";
 import SponsorsCard from "@/components/shared/SponsorsCard.astro";
 import { getCollection, getEntry } from "astro:content";
 
 const sponsors = await getCollection("sponsors");
 const bskySponsor = await getEntry("sponsors", "bsky")!;
 const streamplaceSponsor = await getEntry("sponsors", "streamplace")!;
+
+const majorSponsors = sponsors.filter((s) => s.data.level === "major");
+const tierSponsors = sponsors.filter((s) => s.data.level === "sponsor");
+const communitySponsors = sponsors.filter((s) => s.data.level === "community");
 ---
 
-<section>
-  <Card title="sponsors">
-    <p class="text-muted-foreground mt-3">
-      A huge thank you to Bluesky for being our title sponsor.
-    </p>
-    <SponsorsCard sponsor={bskySponsor} class="mt-3" />
-    <p class="text-muted-foreground mt-3">
-      <a href="https://stream.place">Streamplace</a> is our video provider for the
-      conference, and will be streaming up to 3 rooms and powering chat as part of
-      our remote track.
-    </p>
-    <SponsorsCard sponsor={streamplaceSponsor} class="mt-3" />
-    <div class="mt-6 flex flex-col gap-6">
-      <div>
-        <h3
-          class="text-primary mb-3 text-xs font-semibold tracking-widest uppercase"
-          style="font-family: var(--font-ui);"
-        >
-          // major
-        </h3>
-        <div class="grid grid-cols-3 items-stretch gap-2">
-          {
-            sponsors
-              .filter((sponsor) => sponsor.data.level === "major")
-              .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
-          }
+<BreakoutSection maxWidth="74rem" id="sponsors">
+  <Card title="sponsors" class="!overflow-visible">
+    <div class="grid gap-4 sm:grid-cols-2 sm:gap-[1.1rem]">
+      <PaperCard
+        variant="outline"
+        tapePosition="left"
+        tapeWidth="lg"
+        class="!rounded-[var(--paper-radius-sm)]"
+      >
+        <div class="p-[1.2rem] sm:p-6">
+          <PanelHeader kicker="Title sponsor" />
+          <p class="text-muted-foreground mt-2 mb-4 text-sm">
+            A huge thank you to Bluesky for being our title sponsor.
+          </p>
+          <SponsorsCard sponsor={bskySponsor} />
         </div>
-      </div>
-      <div>
-        <h3
-          class="text-primary mb-3 text-xs font-semibold tracking-widest uppercase"
-          style="font-family: var(--font-ui);"
-        >
-          // sponsors
-        </h3>
-        <div class="grid grid-cols-3 items-stretch gap-2">
-          {
-            sponsors
-              .filter((sponsor) => sponsor.data.level === "sponsor")
-              .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
-          }
+      </PaperCard>
+
+      <PaperCard
+        variant="outline"
+        tapePosition="right"
+        tapeWidth="lg"
+        class="!rounded-[var(--paper-radius-sm)]"
+      >
+        <div class="p-[1.2rem] sm:p-6">
+          <PanelHeader kicker="Video partner" />
+          <p class="text-muted-foreground mt-2 mb-4 text-sm">
+            <a href="https://stream.place" class="text-primary underline"
+              >Streamplace</a
+            > is streaming up to 3 rooms and powering chat as part of our remote
+            track.
+          </p>
+          <SponsorsCard sponsor={streamplaceSponsor} />
         </div>
-      </div>
-      <div>
-        <h3
-          class="text-primary mb-3 text-xs font-semibold tracking-widest uppercase"
-          style="font-family: var(--font-ui);"
+      </PaperCard>
+    </div>
+
+    {
+      majorSponsors.length > 0 && (
+        <PaperCard
+          variant="outline"
+          tapePosition="left"
+          tapeWidth="lg"
+          class="mt-5 !rounded-[var(--paper-radius-sm)]"
         >
-          // community
-        </h3>
-        <div class="grid grid-cols-3 items-stretch gap-2">
-          {
-            sponsors
-              .filter((sponsor) => sponsor.data.level === "community")
-              .map((sponsor) => <SponsorsCard sponsor={sponsor} />)
-          }
-        </div>
-      </div>
+          <div class="p-[1.2rem] sm:p-6">
+            <PanelHeader kicker="Major sponsors" />
+            <div class="grid grid-cols-2 sm:grid-cols-3 items-stretch gap-3 mt-2">
+              {majorSponsors.map((sponsor) => (
+                <SponsorsCard sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        </PaperCard>
+      )
+    }
+
+    <div class="mt-6 grid gap-5">
+      {
+        tierSponsors.length > 0 && (
+          <div>
+            <PanelHeader kicker="Other sponsors" />
+            <div class="grid grid-cols-2 sm:grid-cols-3 items-stretch gap-3 mt-2">
+              {tierSponsors.map((sponsor) => (
+                <SponsorsCard sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      {
+        communitySponsors.length > 0 && (
+          <div>
+            <PanelHeader kicker="Community" />
+            <div class="grid grid-cols-2 sm:grid-cols-3 items-stretch gap-3 mt-2">
+              {communitySponsors.map((sponsor) => (
+                <SponsorsCard sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </Card>
-</section>
+</BreakoutSection>
