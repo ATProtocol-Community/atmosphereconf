@@ -4,10 +4,9 @@ import type { CollectionEntry } from "astro:content";
 
 interface Props {
   sponsor: CollectionEntry<"sponsors">;
-  class: string;
 }
 
-const { sponsor, class: className } = Astro.props;
+const { sponsor } = Astro.props;
 const { name, logo, url } = sponsor.data;
 ---
 
@@ -16,9 +15,8 @@ const { name, logo, url } = sponsor.data;
   target={url !== "TBD" ? "_blank" : undefined}
   rel={url !== "TBD" ? "noopener noreferrer" : undefined}
   class:list={[
-    "border-border bg-card flex flex-col items-center justify-center gap-3 rounded-2xl border p-6",
-    url !== "TBD" && "hover:bg-primary/10 hover:border-primary/50",
-    className,
+    "border-border bg-card flex flex-col items-center justify-center gap-3 border p-6 rounded-[var(--paper-radius-sm)] transition-[transform,box-shadow] duration-[160ms] ease-out motion-reduce:transition-none",
+    url !== "TBD" && "hover:-translate-y-0.5 hover:shadow-[var(--paper-shadow)] active:translate-y-0 active:duration-[60ms]",
   ]}
 >
   <Image src={logo} alt={name} class="h-12 w-auto max-w-full object-contain" />
