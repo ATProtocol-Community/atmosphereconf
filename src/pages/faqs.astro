@@ -4,38 +4,43 @@ import Card from "@/components/ui/card.astro";
 import FaqList from "@/components/shared/FaqList.astro";
 import { getCollection } from "astro:content";
 
-const allFaqs = [
-  ...(await getCollection("faqs-hotel")),
-  ...(await getCollection("faqs-remote")),
-];
-
 const sections = [
-  ...new Map(
-    allFaqs.map((f) => [f.data.category, f.data.categoryName]),
-  ).entries(),
+  { faqs: await getCollection("faqs-info") },
+  { faqs: await getCollection("faqs-hotel") },
+  { faqs: await getCollection("faqs-remote") },
+  { faqs: await getCollection("faqs-coc") },
 ];
 ---
 
 <Layout title="FAQs – ATmosphereConf 2026">
-  {
-    sections.map(([category, displayName]) => {
-      const sectionFaqs = allFaqs.filter((f) => f.data.category === category);
-      return (
-        <section id={category} class="my-10">
-          <Card class="px-6">
-            <h2 class="text-primary mb-3 text-lg font-semibold tracking-widest uppercase" style="font-family: var(--font-ui);">
-              <a
-                href={`#${category}`}
-                class="section-link hover:underline"
-                data-section={category}
+  <div class="space-y-10">
+    <section>
+      <Card title="FAQs">
+        <p class="text-muted-foreground mb-4">
+          More than you ever knew to ask
+        </p>
+        {
+          sections.map(({ faqs }, i) => (
+            <div id={faqs[0].data.category} class="faq-section">
+              <h3
+                class:list={[
+                  "text-primary mb-4 text-sm font-semibold tracking-widest uppercase",
+                  i === 0 ? "mt-2" : "mt-8",
+                ]}
               >
-                // {displayName.toLowerCase()}
-              </a>
-            </h2>
-            <FaqList faqs={sectionFaqs} />
-          </Card>
-        </section>
-      );
-    })
-  }
+                <a
+                  href={`#${faqs[0].data.category}`}
+                  class="section-link hover:underline"
+                  data-section={faqs[0].data.category}
+                >
+                  // {faqs[0].data.categoryName.toLowerCase()}
+                </a>
+              </h3>
+              <FaqList faqs={faqs} />
+            </div>
+          ))
+        }
+      </Card>
+    </section>
+  </div>
 </Layout>

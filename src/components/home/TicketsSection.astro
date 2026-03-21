@@ -1,47 +1,108 @@
 ---
 import Card from "@/components/ui/card.astro";
+import BreakoutSection from "@/components/ui/BreakoutSection.astro";
+import PanelHeader from "@/components/ui/PanelHeader.astro";
+import PaperCard from "@/components/ui/PaperCard.astro";
 import DetailsGrid from "@/components/home/DetailsGrid.astro";
 import TicketsToggle from "@/components/home/TicketsToggle.astro";
+import FaqList from "@/components/shared/FaqList.astro";
+import InlineLink from "@/components/ui/InlineLink.astro";
+import { getCollection } from "astro:content";
 
 interface Props {
   mode?: "live" | "remote";
 }
 
 const { mode = "live" } = Astro.props;
+
+const allFaqs = [
+  ...(await getCollection("faqs-info")),
+  ...(await getCollection("faqs-hotel")),
+  ...(await getCollection("faqs-remote")),
+  ...(await getCollection("faqs-coc")),
+];
+
+const curatedFaqs = allFaqs.filter((faq) => faq.data.curated);
 ---
 
-<section id="ticket-section" class:list={["group", mode]}>
-  <Card class="gap-4" title="tickets">
-    <p class="text-foreground max-w-[65ch]">
-      Come join 300+ in-person attendees, and 100s more online. Arrive <span
-        class="font-semibold">two days early</span
-      > for extended events, deep dives, and local activities; then gather for
-      <span class="font-semibold">two full days</span> of conference—with topics for
-      everyone!
-    </p>
-    <div>
-      <p class="mt-6 text-center text-4xl text-balance">
-        <strong class="font-bold">ATmosphereConf</strong>
-        <span class="show-live group-[.remote]:hidden"
-          >is at <a
-            class="text-primary underline"
-            href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
-          > on</span
-        >
-        <span class="show-remote group-[.live]:hidden"
-          >is <em>wherever you are*</em>,</span
-        >
-        March 26-27 & 28-29, 2026
-      </p>
-      <span
-        class="show-remote mt-0.5 mb-1 inline-block w-full text-center text-sm italic group-[.live]:invisible"
-        >*but also at <a
-          class="text-primary underline"
-          href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
-        ></span
-      >
+<BreakoutSection maxWidth="74rem" class="tickets-faqs-section" id="tickets">
+  <Card title="join us" class="!overflow-visible">
+    <div class:list={["flex flex-col gap-5 group", mode]}>
+      <div class="grid gap-5 items-start min-[960px]:flex min-[960px]:items-start min-[960px]:gap-[1.1rem]">
+        <section id="ticket-section" class="flex flex-col gap-4 min-[960px]:flex-[1.6_1_0%] min-[960px]:min-w-0">
+          <PanelHeader kicker="Get your tickets" />
+
+          <p class="text-foreground max-w-[65ch]">
+            Come join 300+ in-person attendees, and 100s more online. Arrive <span
+              class="font-semibold">two days early</span
+            > for extended events, deep dives, and local activities; then gather for
+            <span class="font-semibold">two full days</span> of conference—with topics
+            for everyone!
+          </p>
+          <div>
+            <p class="mt-6 text-center text-4xl text-balance">
+              <strong class="font-bold">ATmosphereConf</strong>
+              <span class="show-live group-[.remote]:hidden"
+                >is at <a
+                  class="text-primary underline"
+                  href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
+                > on</span
+              >
+              <span class="show-remote group-[.live]:hidden"
+                >is <em>wherever you are*</em>,</span
+              >
+              March 26-27 & 28-29, 2026
+            </p>
+            <span
+              class="show-remote mt-0.5 mb-1 inline-block w-full text-center text-sm italic group-[.live]:invisible"
+              >*but also at <a
+                class="text-primary underline"
+                href="https://maps.app.goo.gl/nHrbn1fzRpjv1Udk9">UBC campus</a
+              ></span
+            >
+          </div>
+          <DetailsGrid />
+          <p class="mt-2 text-center text-2xl text-balance">
+            <span class="group-[.remote]:hidden"
+              >Can't make it there? <a
+                href="/remote#tickets"
+                class="text-primary underline">Go remote →</a
+              ></span
+            >
+            <span class="group-[.live]:hidden"
+              >Want to mingle? <a
+                href="/#tickets"
+                class="text-primary underline">Join us on campus ←</a
+              ></span
+            >
+          </p>
+        </section>
+
+        <div class="grid gap-4 min-[960px]:flex-[0.7_1_16rem] min-[960px]:min-w-64 min-[960px]:h-0 min-[960px]:min-h-0 min-[960px]:overflow-visible" id="faqs">
+          <PaperCard
+            variant="outline"
+            tapePosition="left"
+            tapeWidth="lg"
+            class="rounded-[var(--paper-radius-sm)] shadow-[var(--paper-shadow)]"
+          >
+            <div class="p-4 md:p-6">
+              <PanelHeader
+                kicker="FAQs"
+                linkHref="/faqs"
+                linkText="see all"
+              />
+              <p class="text-muted-foreground mb-4 text-sm">
+                Quick answers before you grab a ticket
+              </p>
+              <FaqList faqs={curatedFaqs} exclusive compact />
+            </div>
+          </PaperCard>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <TicketsToggle />
+      </div>
     </div>
-    <DetailsGrid />
-    <TicketsToggle />
   </Card>
-</section>
+</BreakoutSection>

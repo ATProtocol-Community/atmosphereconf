@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "@/components/home/Hero.astro";
 import TicketsSection from "@/components/home/TicketsSection.astro";
-import FaqsSection from "@/components/home/FaqsSection.astro";
+
 import WorkshopsSection from "@/components/home/WorkshopsSection.astro";
 import SponsorsSection from "@/components/home/SponsorsSection.astro";
 import UpdatesSection from "@/components/home/UpdatesSection.astro";
@@ -16,9 +16,8 @@ import UpdatesSection from "@/components/home/UpdatesSection.astro";
       <span id="talks"></span>
       <WorkshopsSection />
     </div>
-    <div id="tickets"><TicketsSection /></div>
+    <TicketsSection />
     <UpdatesSection />
-    <div id="faqs"><FaqsSection /></div>
     <!-- <ScheduleSection /> -->
     <div id="sponsors"><SponsorsSection /></div>
   </div>

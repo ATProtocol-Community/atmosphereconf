@@ -3,34 +3,63 @@ import type { CollectionEntry } from "astro:content";
 
 interface Props {
   faqs: CollectionEntry<"faqs-hotel" | "faqs-remote">[];
+  exclusive?: boolean;
+  compact?: boolean;
 }
 
-const { faqs } = Astro.props;
+const { faqs, exclusive = false, compact = false } = Astro.props;
 ---
 
-<div class="flex flex-col gap-3">
+<div class:list={["flex flex-col", compact ? "gap-2" : "gap-3"]}>
   {
     faqs.map((faq) => (
       <details
         id={faq.id}
-        class="group faq-item border-border bg-card rounded-lg border px-6 py-4 transition-shadow hover:shadow-sm"
+        class:list={[
+          "group faq-item border-border bg-card rounded-lg border transition-shadow hover:shadow-sm",
+          compact ? "px-4 py-2.5" : "px-6 py-4",
+        ]}
+        {...(exclusive ? { name: "faq-accordion" } : {})}
       >
-        <summary class="text-foreground flex cursor-pointer list-none items-center gap-2 text-base font-semibold [&::-webkit-details-marker]:hidden">
+        <summary
+          class:list={[
+            "text-foreground flex cursor-pointer list-none items-center gap-2 font-semibold [&::-webkit-details-marker]:hidden",
+            compact ? "text-sm" : "text-base",
+          ]}
+        >
           <span class="text-primary/60 text-sm transition-transform group-open:rotate-90">
             &#9654;
           </span>
           <span set:html={faq.data.question} />
           <a
             href={`#${faq.id}`}
-            class="faq-link text-primary/50 hover:text-primary/80 -m-2 ml-1 p-2 text-base font-semibold opacity-30 transition-opacity group-hover:opacity-100 sm:opacity-0"
+            class:list={[
+              "faq-link text-primary/50 hover:text-primary/80 -m-2 ml-1 p-2 font-semibold opacity-30 transition-opacity group-hover:opacity-100 sm:opacity-0",
+              compact ? "text-sm" : "text-base",
+            ]}
             data-faq-id={faq.id}
             title="Copy link"
           >
             #
           </a>
         </summary>
-        <div class="border-border/50 text-foreground [&_a]:text-primary [&_em]:text-muted-foreground mt-3 border-t pt-3 leading-relaxed [&_a]:underline [&_p]:mb-3 [&_p:last-child]:mb-0">
+        <div
+          class:list={[
+            "border-border/50 text-foreground [&_a]:text-primary [&_em]:text-muted-foreground border-t [&_a]:underline [&_p:last-child]:mb-0",
+            compact
+              ? "mt-2 pt-2 text-sm leading-normal [&_p]:mb-2"
+              : "mt-3 pt-3 leading-relaxed [&_p]:mb-3",
+          ]}
+        >
           <Fragment set:html={faq.data.answer} />
+          {exclusive && (
+            <p class="text-muted-foreground mt-2 text-xs">
+              See all FAQs in{" "}
+              <a href={`/faqs#${faq.data.category}`} class="text-primary underline">
+                {faq.data.categoryName}
+              </a>
+            </p>
+          )}
         </div>
       </details>
     ))
