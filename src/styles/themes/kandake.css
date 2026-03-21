@@ -324,7 +324,6 @@
 
 [data-theme="kandake"] .space-y-10 [class*="grid"] > * {
   min-width: 0;
-  overflow: hidden;
 }
 
 /* ── Talk cards — inline flat rows like ngerakines ── */
