@@ -1,5 +1,6 @@
 ---
 import ScheduleEventCell from "./ScheduleEventCell.astro";
+import { getConferenceDateTimeParts } from "@/lib/datetime";
 
 interface Speaker {
   name: string;
@@ -28,19 +29,10 @@ const { events, rooms } = Astro.props;
 
 // --- Time helpers ---
 
-const TZ = "America/Vancouver";
-
 function isoToMinutes(iso: string): number {
-  const d = new Date(iso);
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: TZ,
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: false,
-  }).formatToParts(d);
-  const h = parseInt(parts.find((p) => p.type === "hour")!.value);
-  const m = parseInt(parts.find((p) => p.type === "minute")!.value);
-  return h * 60 + m;
+  const parts = getConferenceDateTimeParts(iso);
+  if (!parts) return 0;
+  return parts.hour * 60 + parts.minute;
 }
 
 function formatHour(minutes: number) {
@@ -63,7 +55,8 @@ const parsed = events
 const SLOT = 10;
 const minTime =
   Math.floor(Math.min(...parsed.map((e) => e.startMin)) / SLOT) * SLOT;
-const maxTime = Math.ceil(Math.max(...parsed.map((e) => e.endMin)) / SLOT) * SLOT;
+const maxTime =
+  Math.ceil(Math.max(...parsed.map((e) => e.endMin)) / SLOT) * SLOT;
 const totalSlots = (maxTime - minTime) / SLOT;
 
 const isInfo = (type: string) => type === "info";
@@ -97,7 +90,7 @@ const gridEvents = parsed
 const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 2rem)`;
 ---
 
-<div class="day-schedule border-border rounded-lg border isolate">
+<div class="day-schedule border-border isolate rounded-lg border">
   <!-- ========== MOBILE: Vertical room tabs + single-room panels ========== -->
 
   <div class="divide-border flex flex-col divide-y md:hidden">

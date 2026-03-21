@@ -1,5 +1,6 @@
 ---
 import CardMeta from "@/components/ui/CardMeta.astro";
+import { formatConferenceDate } from "@/lib/datetime";
 
 interface Speaker {
   name: string;
@@ -65,15 +66,13 @@ const resolvedMetaLayout =
       : "default";
 
 function formatCardTime(iso?: string) {
-  if (!iso) return undefined;
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return undefined;
-
-  return date.toLocaleString("en-US", {
+  const formatted = formatConferenceDate(iso, {
     weekday: "short",
     hour: "numeric",
     minute: "2-digit",
   });
+
+  return formatted || undefined;
 }
 
 const timeLabel = formatCardTime(start);

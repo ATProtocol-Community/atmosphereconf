@@ -52,6 +52,43 @@ const defaultTheme =
         }
       })();
     </script>
+    <script is:inline>
+      (function () {
+        function getLocalDateOptions(formatName) {
+          if (formatName === "news") {
+            return { month: "short", day: "numeric", year: "numeric" };
+          }
+
+          return { month: "short", day: "numeric", year: "numeric" };
+        }
+
+        function localizeDates() {
+          var nodes = document.querySelectorAll("time[data-local-date]");
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            var value = node.getAttribute("datetime");
+            if (!value) continue;
+
+            var date = new Date(value);
+            if (Number.isNaN(date.getTime())) continue;
+
+            var formatName = node.getAttribute("data-local-date-format") || "";
+            node.textContent = new Intl.DateTimeFormat(
+              "en-US",
+              getLocalDateOptions(formatName),
+            ).format(date);
+          }
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", localizeDates, {
+            once: true,
+          });
+        } else {
+          localizeDates();
+        }
+      })();
+    </script>
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

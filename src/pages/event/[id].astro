@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
 import { getLiveEntry } from "astro:content";
+import { formatConferenceDay, formatConferenceTime } from "@/lib/datetime";
 
 const { id } = Astro.params;
 
@@ -49,34 +50,14 @@ const badgeColors: Record<string, string> = {
 
 const plainTitle = title.replace(/<[^>]*>/g, "");
 
-function formatTime(iso: string) {
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return iso;
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
-
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 const timeDisplay =
   start && end
-    ? `${formatTime(start)} – ${formatTime(end)}`
+    ? `${formatConferenceTime(start)} – ${formatConferenceTime(end)}`
     : start
-      ? formatTime(start)
+      ? formatConferenceTime(start)
       : null;
 
-const dateDisplay = start ? formatDate(start) : null;
+const dateDisplay = start ? formatConferenceDay(start) : null;
 ---
 
 <Layout title={`${plainTitle} — ATmosphereConf 2026`} ogImage={headerUrl}>

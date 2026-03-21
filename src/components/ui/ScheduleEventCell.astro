@@ -1,4 +1,6 @@
 ---
+import { formatConferenceTime } from "@/lib/datetime";
+
 interface Speaker {
   name: string;
   id?: string;
@@ -29,17 +31,7 @@ const href =
 const isInfo = event.type === "info";
 
 function formatTime(iso: string) {
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "";
-  return date
-    .toLocaleTimeString("en-US", {
-      timeZone: "America/Vancouver",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .toLowerCase()
-    .replace(" ", "");
+  return formatConferenceTime(iso).toLowerCase().replace(" ", "");
 }
 
 const durationMin =

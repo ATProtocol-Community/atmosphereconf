@@ -1,6 +1,7 @@
 ---
 import Card from "@/components/ui/card.astro";
 import { getLiveCollection } from "astro:content";
+import { formatLocalDate } from "@/lib/datetime";
 
 const result = await getLiveCollection("leafletPosts");
 const posts = (result.entries ?? [])
@@ -19,7 +20,7 @@ const posts = (result.entries ?? [])
         <ul class="divide-y divide-gray-200">
           {posts.map((post) => {
             const date = new Date(post.data.publishedAt);
-            const formatted = date.toLocaleDateString("en-US", {
+            const formatted = formatLocalDate(date, {
               month: "short",
               day: "numeric",
               year: "numeric",
@@ -46,9 +47,14 @@ const posts = (result.entries ?? [])
                     <span class="text-gray-900 group-hover:text-blue-700 group-hover:underline">
                       {post.data.title}
                     </span>
-                    <span class="shrink-0 text-sm text-gray-500">
+                    <time
+                      datetime={post.data.publishedAt}
+                      class="shrink-0 text-sm text-gray-500"
+                      data-local-date
+                      data-local-date-format="news"
+                    >
                       {formatted}
-                    </span>
+                    </time>
                   </div>
                 </a>
               </li>
