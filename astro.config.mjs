@@ -18,6 +18,11 @@ export default defineConfig({
         access: "public",
         default: "atmosphereconf.org",
       }),
+      TITO_API_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
     },
   },
   output: "server",
