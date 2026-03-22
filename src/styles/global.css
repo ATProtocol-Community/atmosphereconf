@@ -170,6 +170,7 @@
 @import "./themes/ngerakines.css";
 @import "./themes/kandake.css";
 @import "./themes/spark.css";
+@import "./themes/fujocoded.css";
 
 @layer base {
   html {
