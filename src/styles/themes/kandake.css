@@ -99,6 +99,10 @@
   --card-radius: 8px;
 }
 
+[data-theme="kandake"] [data-hero] {
+  padding-top: 48px;
+}
+
 [data-theme="kandake"] .themed-card {
   border-color: rgba(255, 0, 255, 0.45);
   transition:

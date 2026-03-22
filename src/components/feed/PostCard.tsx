@@ -38,7 +38,7 @@ export function PostCard({ post }: { post: SerializedPost }) {
   const bskyUrl = buildPostUrl(post.authorDid, post.uri);
 
   return (
-    <div className="border-border rounded-lg border p-3 sm:p-4">
+    <div className="bsky-post-card border-border rounded-lg border p-3 sm:p-4">
       {post.repostedBy && (
         <div className="text-muted-foreground mb-2 flex items-center gap-1.5 text-xs">
           <Repeat2 className="h-3.5 w-3.5" />

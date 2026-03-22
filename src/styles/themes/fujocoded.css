@@ -34,6 +34,7 @@
   --header-fg-muted: rgba(77, 46, 145, 0.6);
   --header-border: #4360f7;
   --header-logo-accent: #ff38eb;
+  --header-glass-opacity: 0.60;
 
   --atproto-profile-bg: #b89ffc;
   --atproto-profile-banner: linear-gradient(
@@ -47,22 +48,22 @@
   --atproto-profile-pill-fg: #4d2e91;
   --atproto-profile-link: #ce00ff;
 
-  --event-presentation-bg: rgba(255, 56, 235, 0.14);
+  --event-presentation-bg: rgba(255, 56, 235, 0.26);
   --event-presentation-fg: #a80098;
   --event-presentation-sub: #ce00ff;
-  --event-lightning-bg: rgba(67, 96, 247, 0.12);
+  --event-lightning-bg: rgba(67, 96, 247, 0.24);
   --event-lightning-fg: #2d3fb0;
   --event-lightning-sub: #4360f7;
-  --event-panel-bg: rgba(77, 46, 145, 0.12);
+  --event-panel-bg: rgba(77, 46, 145, 0.24);
   --event-panel-fg: #3a2070;
   --event-panel-sub: #4d2e91;
-  --event-workshop-bg: rgba(167, 255, 144, 0.18);
+  --event-workshop-bg: rgba(167, 255, 144, 0.3);
   --event-workshop-fg: #2d7a1a;
   --event-workshop-sub: #3da828;
-  --event-info-bg: rgba(77, 46, 145, 0.06);
+  --event-info-bg: rgba(77, 46, 145, 0.15);
   --event-info-fg: #5c3fa5;
   --event-info-sub: #7a5fbd;
-  --event-activity-bg: rgba(255, 191, 0, 0.14);
+  --event-activity-bg: rgba(255, 191, 0, 0.26);
   --event-activity-fg: #8a6800;
   --event-activity-sub: #b88a00;
 
@@ -94,8 +95,13 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cg stroke-width='1.25' stroke='white' fill='none'%3E%3Crect width='66.667' height='66.667' x='0' y='0'/%3E%3Crect width='66.667' height='66.667' x='66.667' y='0'/%3E%3Crect width='66.667' height='66.667' x='133.333' y='0'/%3E%3Crect width='66.667' height='66.667' x='200' y='0'/%3E%3Crect width='66.667' height='66.667' x='266.667' y='0'/%3E%3Crect width='66.667' height='66.667' x='333.333' y='0'/%3E%3Crect width='66.667' height='66.667' x='400' y='0'/%3E%3Crect width='66.667' height='66.667' x='466.667' y='0'/%3E%3Crect width='66.667' height='66.667' x='533.333' y='0'/%3E%3Crect width='66.667' height='66.667' x='600' y='0'/%3E%3Crect width='66.667' height='66.667' x='666.667' y='0'/%3E%3Crect width='66.667' height='66.667' x='733.333' y='0'/%3E%3Crect width='66.667' height='66.667' x='0' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='66.667' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='133.333' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='200' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='266.667' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='333.333' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='400' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='466.667' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='533.333' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='600' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='666.667' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='733.333' y='66.667'/%3E%3Crect width='66.667' height='66.667' x='0' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='66.667' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='133.333' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='200' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='266.667' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='333.333' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='400' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='466.667' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='533.333' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='600' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='666.667' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='733.333' y='133.333'/%3E%3Crect width='66.667' height='66.667' x='0' y='200'/%3E%3Crect width='66.667' height='66.667' x='66.667' y='200'/%3E%3Crect width='66.667' height='66.667' x='133.333' y='200'/%3E%3Crect width='66.667' height='66.667' x='200' y='200'/%3E%3Crect width='66.667' height='66.667' x='266.667' y='200'/%3E%3Crect width='66.667' height='66.667' x='333.333' y='200'/%3E%3Crect width='66.667' height='66.667' x='400' y='200'/%3E%3Crect width='66.667' height='66.667' x='466.667' y='200'/%3E%3Crect width='66.667' height='66.667' x='533.333' y='200'/%3E%3Crect width='66.667' height='66.667' x='600' y='200'/%3E%3Crect width='66.667' height='66.667' x='666.667' y='200'/%3E%3Crect width='66.667' height='66.667' x='733.333' y='200'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 350px;
+  background-image:
+    linear-gradient(to right, white 1px, transparent 1px),
+    linear-gradient(to bottom, white 1px, transparent 1px);
+  background-repeat: repeat;
+  background-size:
+    calc((350px / 12) - 2px) calc((350px / 12) - 2px),
+    calc((350px / 12) - 2px) calc((350px / 12) - 2px);
   opacity: 0.08;
   z-index: -1;
   pointer-events: none;
@@ -116,8 +122,8 @@
   position: relative;
   background: transparent !important;
   border-bottom: none !important;
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(70%) brightness(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(70%) brightness(1.15);
 }
 
 [data-theme="fujocoded"] [data-header-bar]::before {
@@ -130,6 +136,11 @@
   filter: drop-shadow(2px 2px 7px rgba(67, 96, 247, 0.5));
   animation: fujocoded-nav-gradient 10s ease infinite;
   z-index: -2;
+  clip-path: polygon(
+    evenodd,
+    0 0, 100% 0, 100% 100%, 0 100%,
+    3px 3px, 3px calc(100% - 3px), calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) 3px
+  );
 }
 
 [data-theme="fujocoded"] [data-header-bar]::after {
@@ -137,8 +148,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04)),
-    linear-gradient(180deg, rgb(197 187 247 / 0.84), rgb(182 170 236 / 0.72));
+    linear-gradient(180deg, rgb(255 255 255 / var(--header-glass-opacity)) 0%, rgb(255 255 255 / var(--header-glass-opacity)) 100%);
   z-index: -1;
 }
 
@@ -242,19 +252,31 @@
   --ticket-label: #ff38eb;
   --ticket-main: #a7ff90;
   position: relative;
-  filter: drop-shadow(0 0 12px rgba(255, 56, 235, 0.25));
+  filter: drop-shadow(0 0 8px rgba(167, 255, 144, 0.5))
+    drop-shadow(0 0 20px rgba(167, 255, 144, 0.35))
+    drop-shadow(0 0 40px rgba(167, 255, 144, 0.2))
+    drop-shadow(0 0 6px rgba(255, 56, 235, 0.3));
+}
+
+[data-theme="fujocoded"] .ticket-tab {
+  background-image: linear-gradient(135deg, #ff38eb, #4360f7, #ff38eb) !important;
+  background-size: 300% 300% !important;
+  animation: fujocoded-nav-gradient 6s ease infinite;
 }
 
 [data-theme="fujocoded"] .ticket-body {
-  border: 3px solid transparent !important;
+  border: 4px solid transparent !important;
   border-left: none !important;
-  background:
-    linear-gradient(to bottom, #260f56, #4d2e91) padding-box,
-    radial-gradient(circle at center, #ff21e9, #4360f7) border-box !important;
-  background-size:
-    auto,
-    500% 500% !important;
-  animation: fujocoded-nav-gradient 12s ease infinite;
+  background-image:
+    linear-gradient(to bottom, #1a0a3d, #3a1f78),
+    linear-gradient(135deg, #ff38eb, #4360f7, #ff38eb) !important;
+  background-origin: padding-box, border-box !important;
+  background-clip: padding-box, border-box !important;
+  background-size: auto, 300% 300% !important;
+  animation: fujocoded-nav-gradient 6s ease infinite;
+  box-shadow:
+    inset 0 0 12px rgba(255, 56, 235, 0.25),
+    inset 0 0 24px rgba(67, 96, 247, 0.15);
 }
 
 [data-theme="fujocoded"] .ticket-main {
@@ -278,23 +300,28 @@
 }
 
 [data-theme="fujocoded"] .nav-ticket-peel {
-  --ticket-tab-bg: #260f56;
+  --ticket-tab-bg: transparent;
   --ticket-tab-fg: #ffffff;
   --ticket-border: transparent;
   --ticket-label: #ff38eb;
   --ticket-main: #a7ff90;
-  filter: drop-shadow(0 0 12px rgba(255, 56, 235, 0.25));
+  background-image: linear-gradient(135deg, #ff38eb, #4360f7, #ff38eb);
+  background-size: 300% 300%;
+  animation: fujocoded-nav-gradient 6s ease infinite;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+  filter: drop-shadow(0 0 8px rgba(167, 255, 144, 0.5))
+    drop-shadow(0 0 20px rgba(167, 255, 144, 0.35))
+    drop-shadow(0 0 40px rgba(167, 255, 144, 0.2))
+    drop-shadow(0 0 6px rgba(255, 56, 235, 0.3));
 }
 
 [data-theme="fujocoded"] .ntp-body {
   border: 3px solid transparent !important;
   border-left: none !important;
   border-top: none !important;
-  background:
-    linear-gradient(to bottom, #260f56, #4d2e91) padding-box,
-    radial-gradient(circle at center, #ff21e9, #4360f7) border-box !important;
-  background-size: auto, 500% 500% !important;
-  animation: fujocoded-nav-gradient 12s ease infinite;
+  background: linear-gradient(to bottom, #1a0a3d, #3a1f78) !important;
+  background-clip: padding-box !important;
 }
 
 [data-theme="fujocoded"] .ntp-main {
@@ -317,13 +344,19 @@
     1px -1px 3px rgba(255, 56, 235, 0.1);
 }
 
+[data-theme="fujocoded"] .space-y-10 > * + * {
+  margin-top: 1.75rem;
+}
+
 [data-theme="fujocoded"] .themed-card {
   position: relative;
   overflow: hidden;
-  padding-top: 3.5rem;
+  padding-top: 3.75rem;
   border-width: 0;
   border-radius: 8px;
-  background: #ffffff;
+  background: rgb(248 246 255 / 0.75);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
   box-shadow:
     0 10px 22px rgba(77, 46, 145, 0.16),
     0 3px 8px rgba(42, 26, 76, 0.1);
@@ -338,13 +371,13 @@
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
-  height: 2.25rem;
+  height: 2.7rem;
   background:
-    var(--fujo-browser-grip) -4px 50% / 24px 24px no-repeat,
-    var(--fujo-browser-grip) -3px 50% / 24px 24px no-repeat,
-    var(--fujo-browser-goose) 0.95rem 50% / 24px 24px no-repeat,
+    var(--fujo-browser-grip) 0.25rem 50% / 24px 24px no-repeat,
+    var(--fujo-browser-grip) 0.3rem 50% / 24px 24px no-repeat,
+    var(--fujo-browser-goose) 1.5rem calc(50% - 1px) / 24px 24px no-repeat,
     #4d2e91;
-  border: 2px solid #2a1a4c;
+  border: 3px solid #2a1a4c;
   border-bottom: 0;
   border-radius: 8px 8px 0 0;
 }
@@ -352,8 +385,8 @@
 [data-theme="fujocoded"] .themed-card::after {
   content: "";
   position: absolute;
-  inset: 2.25rem 0 0 0;
-  border: 2px solid #4d2e91;
+  inset: 2.7rem 0 0 0;
+  border: 3px solid #4d2e91;
   border-top: 0;
   border-radius: 0 0 8px 8px;
   pointer-events: none;
@@ -368,28 +401,42 @@
   box-shadow:
     0 14px 28px rgba(77, 46, 145, 0.18),
     0 4px 10px rgba(42, 26, 76, 0.12);
-  transform: rotate(var(--fujo-card-tilt, 0deg)) translateY(-2px);
+  transform: rotate(var(--fujo-card-tilt, 0deg)) translateY(0);
+}
+
+[data-theme="fujocoded"] .themed-card::before {
+  transition: background-position 0.15s ease;
+}
+
+[data-theme="fujocoded"] .themed-card:hover::before {
+  animation: fujo-goose-wiggle 0.4s ease-in-out infinite;
+}
+
+@keyframes fujo-goose-wiggle {
+  0%, 100% { background-position: 0.25rem 50%, 0.3rem 50%, 1.5rem calc(50% - 1px), 0 0; }
+  25% { background-position: 0.25rem 50%, 0.3rem 50%, 1.5rem calc(40% - 1px), 0 0; }
+  75% { background-position: 0.25rem 50%, 0.3rem 50%, 1.5rem calc(60% - 1px), 0 0; }
 }
 
 @media (min-width: 768px) {
   [data-theme="fujocoded"] .themed-card {
-    padding-top: 4.25rem;
+    padding-top: 4.5rem;
   }
 
   [data-theme="fujocoded"] #schedule .themed-card {
-    --fujo-card-tilt: -0.65deg;
+    --fujo-card-tilt: 0deg;
   }
 
   [data-theme="fujocoded"] #tickets .themed-card {
-    --fujo-card-tilt: 0.8deg;
+    --fujo-card-tilt: 0deg;
   }
 
   [data-theme="fujocoded"] #feed .themed-card {
-    --fujo-card-tilt: -0.55deg;
+    --fujo-card-tilt: 0deg;
   }
 
   [data-theme="fujocoded"] #sponsors .themed-card {
-    --fujo-card-tilt: 0.7deg;
+    --fujo-card-tilt: 0deg;
   }
 }
 
@@ -408,23 +455,6 @@
   color: #ffffff;
 }
 
-[data-theme="fujocoded"] ::-webkit-scrollbar {
-  width: 10px;
-}
-
-[data-theme="fujocoded"] ::-webkit-scrollbar-track {
-  background: #c4b4f8;
-}
-
-[data-theme="fujocoded"] ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #ce00ff, #a700cf);
-  border-radius: 6px;
-}
-
-[data-theme="fujocoded"] ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #ff38eb, #ce00ff);
-}
-
 [data-theme="fujocoded"] #header-goose {
   content: url("/fujocoded-bobatan.png");
 }
@@ -434,7 +464,163 @@
   object-fit: contain;
 }
 
+[data-theme="fujocoded"] main {
+  max-width: none !important;
+  padding-inline: 0 !important;
+}
+
+[data-theme="fujocoded"] main > * {
+  display: grid !important;
+  grid-template-columns: 1fr min(100% - 1rem, 64rem) 1fr;
+}
+
+@media (min-width: 640px) {
+  [data-theme="fujocoded"] main > * {
+    grid-template-columns: 1fr min(100% - 5rem, 64rem) 1fr;
+  }
+}
+
+[data-theme="fujocoded"] main > * > * {
+  grid-column: 2;
+}
+
 [data-theme="fujocoded"] [data-hero] {
-  margin-top: -3.5rem;
-  padding-top: 5.5rem;
+  grid-column: 1 / -1;
+  --hero-tilt: 0deg;
+  position: relative;
+  width: auto !important;
+  max-width: 42rem;
+  margin: calc(5rem - 20px) auto 0 !important;
+  padding: 2.5rem !important;
+  border-radius: 12px;
+  border: 3px solid transparent !important;
+  border-style: solid !important;
+  background:
+    rgb(242 240 255 / 0.75) padding-box,
+    linear-gradient(180deg, #4d2e91, #ff38eb) border-box !important;
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  box-shadow:
+    0 10px 22px rgba(77, 46, 145, 0.16),
+    0 3px 8px rgba(42, 26, 76, 0.1),
+    0 0 0 1px rgba(77, 46, 145, 0.08);
+  overflow: visible;
+  transform: rotate(var(--hero-tilt));
+  transform-origin: top center;
+}
+
+[data-theme="fujocoded"] [data-hero] > div:last-child {
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+[data-theme="fujocoded"] [data-hero] > div:last-child > div:first-child {
+  width: 100%;
+  min-width: 0;
+}
+
+[data-theme="fujocoded"] [data-hero]::before {
+  content: "";
+  position: absolute;
+  width: 1.5rem;
+  top: -100vh;
+  height: calc(100vh + 5px);
+  left: 35%;
+  transform: translateX(-50%) rotate(calc(-1 * var(--hero-tilt)));
+  transform-origin: center bottom;
+  z-index: -1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(77, 46, 145, 0.06),
+      rgba(77, 46, 145, 0.35)
+    ) center / 2px calc(100% - 0.5rem) no-repeat,
+    radial-gradient(circle at center,
+      #4d2e91 48%, transparent 48%
+    ) center bottom / 1rem 1rem no-repeat;
+}
+
+[data-theme="fujocoded"] [data-hero]::after {
+  content: "";
+  position: absolute;
+  width: 1.5rem;
+  top: -100vh;
+  height: calc(100vh + 5px);
+  right: 35%;
+  transform: translateX(50%) rotate(calc(-1 * var(--hero-tilt)));
+  transform-origin: center bottom;
+  z-index: -1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(77, 46, 145, 0.06),
+      rgba(77, 46, 145, 0.35)
+    ) center / 2px calc(100% - 0.5rem) no-repeat,
+    radial-gradient(circle at center,
+      #4d2e91 48%, transparent 48%
+    ) center bottom / 1rem 1rem no-repeat;
+}
+
+[data-theme="fujocoded"] [data-hero] [data-hero-goose] {
+  width: 18rem;
+  height: auto;
+  min-width: 0;
+  flex-shrink: 0;
+  object-fit: contain;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  [data-theme="fujocoded"] [data-hero] {
+    --hero-tilt: -1.2deg;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-theme="fujocoded"] [data-hero] {
+    max-width: none;
+    padding: 3rem !important;
+    gap: 2.5rem !important;
+    grid-column: 1 / -1;
+  }
+  [data-theme="fujocoded"] [data-hero] [data-hero-goose] {
+    width: 24rem;
+  }
+}
+
+[data-theme="fujocoded"] .paper-card,
+[data-theme="fujocoded"] #ticket-details {
+  background: #ffffff;
+}
+
+[data-theme="fujocoded"] tito-widget .tito-widget-form {
+  background: #ffffff !important;
+}
+
+[data-theme="fujocoded"] .updates-feed-card {
+  background: transparent !important;
+}
+
+[data-theme="fujocoded"] .day-schedule {
+  background: #ffffff;
+}
+
+[data-theme="fujocoded"] .paper-card--dashed {
+  background: rgb(255 255 255 / 0.8) !important;
+}
+
+[data-theme="fujocoded"] .bsky-post-card {
+  background: #ffffff;
+}
+
+[data-theme="fujocoded"] .day-schedule .divide-y > * + * {
+  border-style: dashed;
+}
+
+[data-theme="fujocoded"] .day-schedule {
+  border-style: solid !important;
+}
+
+[data-theme="fujocoded"] .day-schedule .divide-x > * + * {
+  border-color: rgba(255, 56, 235, 0.25);
 }
