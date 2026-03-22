@@ -427,8 +427,12 @@
   animation: ngerakines-marquee 15s linear infinite !important;
 }
 @keyframes ngerakines-marquee {
-  0% { transform: translateX(100vw); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(100vw);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 [data-theme="ngerakines"] .ntt-cta {
   color: #ffffff;

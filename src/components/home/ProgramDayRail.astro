@@ -77,13 +77,13 @@ const { rail } = Astro.props;
   </div>
 </section>
 
-{rail.otherDays.length > 0 && (
-  <section class="rail-preview-panel">
-    <PanelHeader kicker="Sampling the other days" />
+{
+  rail.otherDays.length > 0 && (
+    <section class="rail-preview-panel">
+      <PanelHeader kicker="Sampling the other days" />
 
-    <div class="rail-other-days-list">
-      {
-        rail.otherDays.map((otherDay) => (
+      <div class="rail-other-days-list">
+        {rail.otherDays.map((otherDay) => (
           <PaperCard
             variant="dashed"
             tapePosition="left"
@@ -116,7 +116,10 @@ const { rail } = Astro.props;
                     {formatMiniTime(event.start)}
                   </span>
                   <div class="min-w-0">
-                    <p class="rail-other-day-item-title" set:html={event.title} />
+                    <p
+                      class="rail-other-day-item-title"
+                      set:html={event.title}
+                    />
                     {event.room && (
                       <p class="rail-other-day-room">{event.room}</p>
                     )}
@@ -125,11 +128,11 @@ const { rail } = Astro.props;
               ))}
             </ol>
           </PaperCard>
-        ))
-      }
-    </div>
-  </section>
-)}
+        ))}
+      </div>
+    </section>
+  )
+}
 
 <style>
   .rail-sampled-panel,

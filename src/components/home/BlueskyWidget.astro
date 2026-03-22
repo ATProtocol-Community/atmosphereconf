@@ -7,9 +7,10 @@ const result = await getLiveCollection("blueskyPosts", {
   limit: 20,
   type: "posts_no_replies",
 });
-const latestPost = result.entries?.find(
-  (entry) => entry.data.author.handle === "atprotocol.dev"
-) ?? result.entries?.at(0);
+const latestPost =
+  result.entries?.find(
+    (entry) => entry.data.author.handle === "atprotocol.dev",
+  ) ?? result.entries?.at(0);
 ---
 
 {

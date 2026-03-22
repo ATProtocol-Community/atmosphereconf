@@ -57,8 +57,10 @@
   --event-activity-sub: #cfcfcf;
 
   --font-heading: "Fraunces", serif;
-  --font-body: "SN Pro", "SF Pro Text", "SF Pro Display", -apple-system,
+  --font-body:
+    "SN Pro", "SF Pro Text", "SF Pro Display", -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-ui: "SN Pro", "SF Pro Text", "SF Pro Display", -apple-system,
+  --font-ui:
+    "SN Pro", "SF Pro Text", "SF Pro Display", -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
 }

@@ -21,7 +21,7 @@ const rails = talkDays.flatMap((day) => {
       <span class="starring-goose" aria-hidden="true">🪿</span>
       <span class="starring-shuffle-label">I'm feeling curious</span>
     </button>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-8">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-8">
       {
         rails.map(({ date, rail }) => (
           <div data-program-side={date}>
@@ -34,7 +34,9 @@ const rails = talkDays.flatMap((day) => {
 </BreakoutSection>
 
 <script>
-  const btn = document.getElementById("starring-shuffle") as HTMLButtonElement | null;
+  const btn = document.getElementById(
+    "starring-shuffle",
+  ) as HTMLButtonElement | null;
   const label = btn?.querySelector(".starring-shuffle-label");
 
   const shuffleMessages = [
@@ -72,7 +74,10 @@ const rails = talkDays.flatMap((day) => {
         new Promise((r) => setTimeout(r, 600)),
       ]);
 
-      for (const { panel, html } of results as { panel: Element; html: string }[]) {
+      for (const { panel, html } of results as {
+        panel: Element;
+        html: string;
+      }[]) {
         const tmp = document.createElement("div");
         tmp.innerHTML = html;
         const newContent = tmp.querySelector(".rail-sampled-panel");

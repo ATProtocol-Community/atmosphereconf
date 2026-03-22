@@ -10,11 +10,7 @@ const { days, initialDate } = Astro.props;
 ---
 
 <section class="program-selector-panel">
-  <div
-    class="program-day-selector"
-    role="tablist"
-    aria-label="Program day"
-  >
+  <div class="program-day-selector" role="tablist" aria-label="Program day">
     {
       days.map((day) => (
         <button
@@ -24,7 +20,10 @@ const { days, initialDate } = Astro.props;
           aria-controls={`program-day-panel-${day.date}`}
           aria-selected={day.date === initialDate ? "true" : "false"}
           tabindex={day.date === initialDate ? "0" : "-1"}
-          class:list={["program-day-chip", day.date === initialDate && "is-active"]}
+          class:list={[
+            "program-day-chip",
+            day.date === initialDate && "is-active",
+          ]}
           data-day-select={day.date}
         >
           <span class="program-day-chip-kicker">{`// ${day.seriesLabel}`}</span>

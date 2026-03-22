@@ -9,26 +9,44 @@ export const TIMESLOT_END_FORMAT = "hh:mm aa";
 export function tzOffsetMinutes(date: Date, tz: string): number {
   const utcParts = new Intl.DateTimeFormat("en-US", {
     timeZone: "UTC",
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: false,
   }).formatToParts(date);
   const tzParts = new Intl.DateTimeFormat("en-US", {
     timeZone: tz,
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: false,
   }).formatToParts(date);
 
   const get = (parts: Intl.DateTimeFormatPart[], type: string) =>
     parseInt(parts.find((p) => p.type === type)!.value);
 
-  const utcMin =
-    Date.UTC(get(utcParts, "year"), get(utcParts, "month") - 1, get(utcParts, "day"),
-      get(utcParts, "hour"), get(utcParts, "minute"), get(utcParts, "second"));
-  const tzMin =
-    Date.UTC(get(tzParts, "year"), get(tzParts, "month") - 1, get(tzParts, "day"),
-      get(tzParts, "hour"), get(tzParts, "minute"), get(tzParts, "second"));
+  const utcMin = Date.UTC(
+    get(utcParts, "year"),
+    get(utcParts, "month") - 1,
+    get(utcParts, "day"),
+    get(utcParts, "hour"),
+    get(utcParts, "minute"),
+    get(utcParts, "second"),
+  );
+  const tzMin = Date.UTC(
+    get(tzParts, "year"),
+    get(tzParts, "month") - 1,
+    get(tzParts, "day"),
+    get(tzParts, "hour"),
+    get(tzParts, "minute"),
+    get(tzParts, "second"),
+  );
 
   return (tzMin - utcMin) / 60_000;
 }
@@ -71,16 +89,26 @@ export function wallClockToUtc(date: Date, tz: string): Date {
 export function utcToLocalDate(date: Date, tz: string): Date {
   const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: tz,
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: false,
   }).formatToParts(date);
 
   const get = (type: string) =>
     parseInt(parts.find((p) => p.type === type)!.value);
 
-  return new Date(get("year"), get("month") - 1, get("day"),
-    get("hour"), get("minute"), get("second"));
+  return new Date(
+    get("year"),
+    get("month") - 1,
+    get("day"),
+    get("hour"),
+    get("minute"),
+    get("second"),
+  );
 }
 
 const REF = new Date();

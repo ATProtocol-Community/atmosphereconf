@@ -208,9 +208,7 @@ describe("ISO 8601 compliance", () => {
     const result = parseScheduleDate("March 28th, 2026 1:30pm");
     // AT Protocol requires: Full-precision date and time, with timezone information
     // Format: YYYY-MM-DDTHH:mm:ss.sssZ
-    expect(result).toMatch(
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
-    );
+    expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
   });
 
   it("output is parseable by native Date constructor", () => {

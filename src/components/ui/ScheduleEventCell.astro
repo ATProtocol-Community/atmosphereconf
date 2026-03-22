@@ -94,8 +94,6 @@ const speakerNames = event.speakers?.map((s) => s.name).join(", ");
     ]}
   >
     <p class="truncate font-semibold" set:html={event.title} />
-    {time && (
-      <p class:list={["truncate", getSubColors(event.type)]}>{time}</p>
-    )}
+    {time && <p class:list={["truncate", getSubColors(event.type)]}>{time}</p>}
   </div>
 </Fragment>

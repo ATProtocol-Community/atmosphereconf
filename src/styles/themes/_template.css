@@ -45,7 +45,7 @@
 
   /* ATProto profile tokens */
   --atproto-profile-bg: var(--theme-bg);
-  --atproto-profile-banner: linear-gradient(to right, , );
+  --atproto-profile-banner: linear-gradient(to right, );
   --atproto-profile-ring: var(--theme-bg);
   --atproto-profile-pill-bg: ;
   --atproto-profile-pill-fg: var(--theme-accent);

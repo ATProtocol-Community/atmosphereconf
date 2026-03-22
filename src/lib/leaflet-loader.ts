@@ -63,7 +63,10 @@ class LeafletLoaderError extends Error {
   }
 }
 
-function extractFirstImageUrl(value: LeafletDocumentValue, did: string): string | null {
+function extractFirstImageUrl(
+  value: LeafletDocumentValue,
+  did: string,
+): string | null {
   const pages = value.pages;
   const firstPage = Array.isArray(pages)
     ? pages[0]

@@ -54,28 +54,26 @@ const slipRotations = [0.5, -0.35, 0.3];
       <aside class="talks-side-stack" aria-label="More featured talks">
         <SectionKicker text="more in the stack" class="talks-side-kicker" />
         <div class="talks-slip-list">
-          {
-            slips.map((talk, index) => (
-              <PaperCard
-                variant="solid"
-                rotation={slipRotations[index]}
-                tapePosition="left"
-                tapeWidth="md"
-                class="talks-slip"
-              >
-                <StarringCard
-                  talkId={talk.id}
-                  title={talk.title}
-                  speakers={talk.speakers}
-                  typeName={talk.typeName}
-                  start={talk.start}
-                  description={talk.description}
-                  variant="compact"
-                  class="talks-entry-compact"
-                />
-              </PaperCard>
-            ))
-          }
+          {slips.map((talk, index) => (
+            <PaperCard
+              variant="solid"
+              rotation={slipRotations[index]}
+              tapePosition="left"
+              tapeWidth="md"
+              class="talks-slip"
+            >
+              <StarringCard
+                talkId={talk.id}
+                title={talk.title}
+                speakers={talk.speakers}
+                typeName={talk.typeName}
+                start={talk.start}
+                description={talk.description}
+                variant="compact"
+                class="talks-entry-compact"
+              />
+            </PaperCard>
+          ))}
         </div>
       </aside>
     </div>

@@ -12,7 +12,8 @@ const DRY_RUN = process.argv.includes("--dry-run");
 const PREVIEW = process.argv.includes("--preview");
 const LIMIT = (() => {
   const idx = process.argv.findIndex((a) => a === "--limit");
-  if (idx !== -1 && process.argv[idx + 1]) return parseInt(process.argv[idx + 1], 10);
+  if (idx !== -1 && process.argv[idx + 1])
+    return parseInt(process.argv[idx + 1], 10);
   return Infinity;
 })();
 const THUMBNAIL_SIZE = 1024;
@@ -149,9 +150,7 @@ async function loadTalkEvents(
 }
 
 function hasMediaRole(event: EventRecord, role: string): boolean {
-  const media = event.value.media as
-    | Array<Record<string, unknown>>
-    | undefined;
+  const media = event.value.media as Array<Record<string, unknown>> | undefined;
   if (!Array.isArray(media)) return false;
   return media.some((m) => m.role === role);
 }
@@ -180,9 +179,7 @@ function getRawSpeakers(
 }
 
 // Fetch avatar via Bluesky public API, returns a data URI or undefined
-async function fetchAvatarDataUri(
-  handle: string,
-): Promise<string | undefined> {
+async function fetchAvatarDataUri(handle: string): Promise<string | undefined> {
   try {
     const profileRes = await fetch(
       `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(handle)}`,
@@ -614,7 +611,9 @@ async function handlePreview() {
 
   const eventsToProcess = events.slice(0, LIMIT);
   if (LIMIT < events.length) {
-    p.log.info(`Limiting to first ${eventsToProcess.length} of ${events.length} events`);
+    p.log.info(
+      `Limiting to first ${eventsToProcess.length} of ${events.length} events`,
+    );
   }
 
   const s3 = p.spinner();
@@ -681,9 +680,7 @@ async function handleUpload() {
   const events = await loadTalkEvents(unauthClient, did);
   s.stop(`Found ${events.length} talk event(s)`);
 
-  const needsMedia = events.filter(
-    (e) => !hasThumbnail(e) || !hasHeader(e),
-  );
+  const needsMedia = events.filter((e) => !hasThumbnail(e) || !hasHeader(e));
   const toProcess = needsMedia.slice(0, LIMIT);
 
   if (toProcess.length === 0) {

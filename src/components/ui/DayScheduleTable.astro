@@ -48,7 +48,12 @@ const sorted = [...events]
 
 const infoEvents = events.filter((e) => e.type === "info" && e.start);
 
-const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "panel"]);
+const linkableTypes = new Set([
+  "workshop",
+  "presentation",
+  "lightning-talk",
+  "panel",
+]);
 ---
 
 <div class="schedule-table-wrap" data-table-index={tableIndex}>
@@ -79,13 +84,20 @@ const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "pa
         sorted.map((event) => {
           const time = `${formatTime(event.start!)}${event.end ? `–${formatTime(event.end)}` : ""}`;
           const speakers = event.speakers?.map((s) => s.name).join(", ");
-          const href = event.id && linkableTypes.has(event.type) ? `/event/${event.id}` : null;
+          const href =
+            event.id && linkableTypes.has(event.type)
+              ? `/event/${event.id}`
+              : null;
           return (
             <tr>
               <td>{time}</td>
               <td>
                 {href ? (
-                  <a href={href} class="text-primary underline" set:html={event.title} />
+                  <a
+                    href={href}
+                    class="text-primary underline"
+                    set:html={event.title}
+                  />
                 ) : (
                   <span set:html={event.title} />
                 )}
@@ -108,7 +120,8 @@ const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "pa
   .schedule-table th {
     background: var(--table-header-bg, var(--primary));
     color: var(--table-header-fg, var(--primary-foreground));
-    border: var(--table-border-width, 1px) solid var(--table-border-color, var(--border));
+    border: var(--table-border-width, 1px) solid
+      var(--table-border-color, var(--border));
     padding: 0.35rem 0.5rem;
     text-align: left;
     font-weight: 600;
@@ -116,7 +129,8 @@ const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "pa
   }
   .schedule-table td {
     background: var(--table-cell-bg, transparent);
-    border: var(--table-border-width, 1px) solid var(--table-border-color, var(--border));
+    border: var(--table-border-width, 1px) solid
+      var(--table-border-color, var(--border));
     padding: 0.25rem 0.5rem;
     vertical-align: top;
   }
@@ -124,7 +138,8 @@ const linkableTypes = new Set(["workshop", "presentation", "lightning-talk", "pa
     background: var(--table-cell-bg-alt, var(--table-cell-bg, transparent));
   }
   .schedule-table {
-    border: var(--table-frame-width, 0) solid var(--table-border-color, var(--border));
+    border: var(--table-frame-width, 0) solid
+      var(--table-border-color, var(--border));
   }
   .schedule-table-wrap {
     margin-left: calc(-1 * var(--card-px, 2rem));

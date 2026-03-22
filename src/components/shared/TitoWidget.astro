@@ -41,7 +41,8 @@ const { type, class: className } = Astro.props;
   tito-widget .tito-widget-form {
     background: transparent !important;
     color: var(--foreground) !important;
-    border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--border) !important;
+    border: var(--card-border-width, 1px) var(--card-border-style, solid)
+      var(--border) !important;
     border-radius: var(--card-radius) !important;
     padding: 1.25rem !important;
   }
@@ -94,14 +95,17 @@ const { type, class: className } = Astro.props;
     width: 3.5rem !important;
     text-align: center !important;
     border-radius: var(--radius-sm, 0.375rem) !important;
-    border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--border) !important;
+    border: var(--card-border-width, 1px) var(--card-border-style, solid)
+      var(--border) !important;
     background: var(--card) !important;
     color: var(--foreground) !important;
     font-family: var(--font-ui) !important;
     font-size: 0.875rem !important;
     padding: 0.35rem 0.25rem !important;
     box-shadow: none !important;
-    transition: border-color 0.15s, box-shadow 0.15s !important;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s !important;
   }
 
   /* ── Quantity +/- links ── */
@@ -168,12 +172,15 @@ const { type, class: className } = Astro.props;
     color: var(--foreground) !important;
     font-family: var(--font-ui) !important;
     box-shadow: none !important;
-    transition: border-color 0.15s, box-shadow 0.15s !important;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s !important;
   }
 
   tito-widget .tito-submit--discount-code {
     border-radius: var(--radius-sm, 0.375rem) !important;
-    border: var(--card-border-width, 1px) var(--card-border-style, solid) var(--border) !important;
+    border: var(--card-border-width, 1px) var(--card-border-style, solid)
+      var(--border) !important;
     background: var(--card) !important;
     color: var(--foreground) !important;
     font-size: 0.8rem !important;
@@ -223,7 +230,11 @@ const { type, class: className } = Astro.props;
   /* ── Blue-tinted internal dividers (not inputs/form border) ── */
   tito-widget .tito-release-description,
   tito-widget .tito-release--footer {
-    border-color: color-mix(in oklch, var(--primary), transparent 75%) !important;
+    border-color: color-mix(
+      in oklch,
+      var(--primary),
+      transparent 75%
+    ) !important;
   }
 
   /* ── Currency symbol and misc text ── */

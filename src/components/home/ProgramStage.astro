@@ -30,7 +30,11 @@ const { days, initialDate } = Astro.props;
         >
           <div class="program-paper-header">
             <div>
-              <SectionKicker text={day.dayLabel} href={`#${day.anchorId}`} class="program-paper-kicker" />
+              <SectionKicker
+                text={day.dayLabel}
+                href={`#${day.anchorId}`}
+                class="program-paper-kicker"
+              />
               <h3 class="program-paper-title">{day.dateLabel}</h3>
               <p class="program-paper-subtitle">{day.subheading}</p>
             </div>
@@ -152,8 +156,7 @@ const { days, initialDate } = Astro.props;
         var(--program-stack-step-x),
         calc(var(--program-stack-step-y) * 1.65)
       )
-      rotate(0.2deg)
-      scale(0.992);
+      rotate(0.2deg) scale(0.992);
     box-shadow: none;
     filter: saturate(0.94);
     pointer-events: none;

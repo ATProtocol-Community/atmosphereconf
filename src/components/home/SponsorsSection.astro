@@ -44,8 +44,7 @@ const communitySponsors = sponsors.filter((s) => s.data.level === "community");
           <p class="text-muted-foreground mt-2 mb-4 text-sm">
             <a href="https://stream.place" class="text-primary underline"
               >Streamplace</a
-            > is streaming up to 3 rooms and powering chat as part of our remote
-            track.
+            > is streaming up to 3 rooms and powering chat as part of our remote track.
           </p>
           <SponsorsCard sponsor={streamplaceSponsor} />
         </div>
@@ -62,7 +61,7 @@ const communitySponsors = sponsors.filter((s) => s.data.level === "community");
         >
           <div class="p-[1.2rem] sm:p-6">
             <PanelHeader kicker="Major sponsors" />
-            <div class="grid grid-cols-2 sm:grid-cols-3 items-stretch gap-3 mt-2">
+            <div class="mt-2 grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3">
               {majorSponsors.map((sponsor) => (
                 <SponsorsCard sponsor={sponsor} />
               ))}
@@ -77,7 +76,7 @@ const communitySponsors = sponsors.filter((s) => s.data.level === "community");
         tierSponsors.length > 0 && (
           <div>
             <PanelHeader kicker="Other sponsors" />
-            <div class="grid grid-cols-2 sm:grid-cols-3 items-stretch gap-3 mt-2">
+            <div class="mt-2 grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3">
               {tierSponsors.map((sponsor) => (
                 <SponsorsCard sponsor={sponsor} />
               ))}
@@ -90,7 +89,7 @@ const communitySponsors = sponsors.filter((s) => s.data.level === "community");
         communitySponsors.length > 0 && (
           <div>
             <PanelHeader kicker="Community" />
-            <div class="grid grid-cols-2 sm:grid-cols-3 items-stretch gap-3 mt-2">
+            <div class="mt-2 grid grid-cols-2 items-stretch gap-3 sm:grid-cols-3">
               {communitySponsors.map((sponsor) => (
                 <SponsorsCard sponsor={sponsor} />
               ))}

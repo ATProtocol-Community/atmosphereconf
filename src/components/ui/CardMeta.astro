@@ -28,7 +28,12 @@ const {
 
 {
   layout === "stacked" ? (
-    <div class:list={["card-meta card-meta--stacked text-muted-foreground", className]}>
+    <div
+      class:list={[
+        "card-meta card-meta--stacked text-muted-foreground",
+        className,
+      ]}
+    >
       <span class="card-meta-row card-meta-row--primary">
         <EventBadge typeName={typeName} />
         {timeLabel && <TimeBadge time={timeLabel} />}
@@ -53,7 +58,12 @@ const {
       )}
     </div>
   ) : layout === "compact" ? (
-    <div class:list={["card-meta card-meta--compact text-muted-foreground", className]}>
+    <div
+      class:list={[
+        "card-meta card-meta--compact text-muted-foreground",
+        className,
+      ]}
+    >
       <span class="card-meta-row card-meta-row--primary">
         {timeLabel && <TimeBadge time={timeLabel} />}
         <EventBadge typeName={typeName} />

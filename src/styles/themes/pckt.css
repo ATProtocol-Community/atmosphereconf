@@ -1,13 +1,13 @@
 [data-theme="pckt"] {
   /* Palette — pckt logo: red p, blue c, green k/t */
-  --pckt-red: #FF5D5B;
-  --pckt-blue: #58A7FF;
-  --pckt-yellow: #FFCA46;
-  --pckt-green: #21DC66;
+  --pckt-red: #ff5d5b;
+  --pckt-blue: #58a7ff;
+  --pckt-yellow: #ffca46;
+  --pckt-green: #21dc66;
 
   /* Light theme — white bg, warm beige cards, red borders */
   --theme-bg: oklch(0.96 0.015 60);
-  --theme-fg: oklch(0.20 0.02 85);
+  --theme-fg: oklch(0.2 0.02 85);
   --theme-muted: oklch(0.55 0.02 85);
   --theme-accent: var(--pckt-red);
   --theme-surface: oklch(0.99 0.002 85);
@@ -29,7 +29,7 @@
   --accent: oklch(0.93 0.02 60);
   --accent-foreground: var(--theme-fg);
   --border: var(--theme-border);
-  --input: oklch(0.20 0.02 85 / 0.08);
+  --input: oklch(0.2 0.02 85 / 0.08);
   --ring: var(--pckt-blue);
 
   /* Header — yellow bg, red text, blue AT */
@@ -43,14 +43,18 @@
   --atproto-profile-bg: var(--theme-bg);
   --atproto-profile-banner: linear-gradient(
     to right,
-    var(--pckt-blue) 0%, var(--pckt-blue) 25%,
-    var(--pckt-red) 25%, var(--pckt-red) 45%,
-    var(--pckt-green) 45%, var(--pckt-green) 65%,
-    var(--pckt-yellow) 65%, var(--pckt-yellow) 100%
+    var(--pckt-blue) 0%,
+    var(--pckt-blue) 25%,
+    var(--pckt-red) 25%,
+    var(--pckt-red) 45%,
+    var(--pckt-green) 45%,
+    var(--pckt-green) 65%,
+    var(--pckt-yellow) 65%,
+    var(--pckt-yellow) 100%
   );
   --atproto-profile-ring: var(--pckt-green);
   --atproto-profile-pill-bg: oklch(0.88 0.08 150);
-  --atproto-profile-pill-fg: oklch(0.35 0.10 150);
+  --atproto-profile-pill-fg: oklch(0.35 0.1 150);
   --atproto-profile-link: var(--pckt-blue);
 
   /* Ticket stub — all blue-toned */
@@ -75,8 +79,8 @@
   --event-workshop-fg: oklch(0.35 0.13 150);
   --event-workshop-sub: oklch(0.35 0.13 150);
   --event-info-bg: oklch(0.95 0.01 85);
-  --event-info-fg: oklch(0.40 0.02 85);
-  --event-info-sub: oklch(0.50 0.02 85);
+  --event-info-fg: oklch(0.4 0.02 85);
+  --event-info-sub: oklch(0.5 0.02 85);
   --event-activity-bg: oklch(0.93 0.06 85);
   --event-activity-fg: oklch(0.45 0.12 85);
   --event-activity-sub: oklch(0.45 0.12 85);

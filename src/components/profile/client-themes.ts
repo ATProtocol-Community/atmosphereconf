@@ -1,4 +1,15 @@
-export type ClientTheme = "bluesky" | "blacksky" | "reddwarf" | "pckt" | "germ" | "northsky" | "plyr.fm" | "semble" | "spark" | "ngerakines" | "kandake";
+export type ClientTheme =
+  | "bluesky"
+  | "blacksky"
+  | "reddwarf"
+  | "pckt"
+  | "germ"
+  | "northsky"
+  | "plyr.fm"
+  | "semble"
+  | "spark"
+  | "ngerakines"
+  | "kandake";
 
 const CLIENT_THEME_DOMAINS: Record<
   Exclude<ClientTheme, "bluesky" | "plyr.fm">,

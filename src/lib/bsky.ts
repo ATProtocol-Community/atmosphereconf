@@ -69,7 +69,9 @@ function extractBlobRefLink(ref: unknown): string | undefined {
   return undefined;
 }
 
-export function getBlobRefLink(blob: { ref: unknown } | null | undefined): string | undefined {
+export function getBlobRefLink(
+  blob: { ref: unknown } | null | undefined,
+): string | undefined {
   return blob ? extractBlobRefLink(blob.ref) : undefined;
 }
 

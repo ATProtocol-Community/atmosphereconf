@@ -8,7 +8,11 @@ interface Props {
 const { maxWidth = "76rem", class: className = "", id } = Astro.props;
 ---
 
-<section id={id} class:list={["breakout", className]} style={`--breakout-max-width: ${maxWidth};`}>
+<section
+  id={id}
+  class:list={["breakout", className]}
+  style={`--breakout-max-width: ${maxWidth};`}
+>
   <div class="breakout-inner">
     <slot />
   </div>

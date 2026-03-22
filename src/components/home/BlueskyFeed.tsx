@@ -21,8 +21,7 @@ export function BlueskyFeed({
 }: BlueskyFeedProps) {
   const { posts, loading, error, loadMore } = useFeedPagination(initialData);
   const parentRef = useRef<HTMLDivElement>(null);
-  const resolvedHeight =
-    typeof height === "number" ? `${height}px` : height;
+  const resolvedHeight = typeof height === "number" ? `${height}px` : height;
 
   const virtualizer = useVirtualizer({
     count: posts.length,
@@ -50,10 +49,7 @@ export function BlueskyFeed({
   }
 
   return (
-    <div
-      className="flex min-h-0 flex-col"
-      style={{ height: resolvedHeight }}
-    >
+    <div className="flex min-h-0 flex-col" style={{ height: resolvedHeight }}>
       <div
         ref={parentRef}
         onScroll={handleScroll}

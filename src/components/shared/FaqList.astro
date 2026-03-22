@@ -55,7 +55,10 @@ const { faqs, exclusive = false, compact = false } = Astro.props;
           {exclusive && (
             <p class="text-muted-foreground mt-2 text-xs">
               See all FAQs in{" "}
-              <a href={`/faqs#${faq.data.category}`} class="text-primary underline">
+              <a
+                href={`/faqs#${faq.data.category}`}
+                class="text-primary underline"
+              >
                 {faq.data.categoryName}
               </a>
             </p>

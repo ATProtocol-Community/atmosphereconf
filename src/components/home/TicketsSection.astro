@@ -27,9 +27,14 @@ const curatedFaqs = allFaqs.filter((faq) => faq.data.curated);
 
 <BreakoutSection maxWidth="74rem" class="tickets-faqs-section" id="tickets">
   <Card title="join us" class="!overflow-visible">
-    <div class:list={["flex flex-col gap-5 group", mode]}>
-      <div class="grid gap-5 items-start min-[960px]:flex min-[960px]:items-start min-[960px]:gap-[1.1rem]">
-        <section id="ticket-section" class="flex flex-col gap-4 min-[960px]:flex-[1.6_1_0%] min-[960px]:min-w-0">
+    <div class:list={["group flex flex-col gap-5", mode]}>
+      <div
+        class="grid items-start gap-5 min-[960px]:flex min-[960px]:items-start min-[960px]:gap-[1.1rem]"
+      >
+        <section
+          id="ticket-section"
+          class="flex flex-col gap-4 min-[960px]:min-w-0 min-[960px]:flex-[1.6_1_0%]"
+        >
           <PanelHeader kicker="Get your tickets" />
 
           <p class="text-foreground max-w-[65ch]">
@@ -78,7 +83,10 @@ const curatedFaqs = allFaqs.filter((faq) => faq.data.curated);
           </p>
         </section>
 
-        <div class="grid gap-4 min-[960px]:flex-[0.7_1_16rem] min-[960px]:min-w-64 min-[960px]:h-0 min-[960px]:min-h-0 min-[960px]:overflow-visible" id="faqs">
+        <div
+          class="grid gap-4 min-[960px]:h-0 min-[960px]:min-h-0 min-[960px]:min-w-64 min-[960px]:flex-[0.7_1_16rem] min-[960px]:overflow-visible"
+          id="faqs"
+        >
           <PaperCard
             variant="outline"
             tapePosition="left"
@@ -86,11 +94,7 @@ const curatedFaqs = allFaqs.filter((faq) => faq.data.curated);
             class="rounded-[var(--paper-radius-sm)] shadow-[var(--paper-shadow)]"
           >
             <div class="p-4 md:p-6">
-              <PanelHeader
-                kicker="FAQs"
-                linkHref="/faqs"
-                linkText="see all"
-              />
+              <PanelHeader kicker="FAQs" linkHref="/faqs" linkText="see all" />
               <p class="text-muted-foreground mb-4 text-sm">
                 Quick answers before you grab a ticket
               </p>

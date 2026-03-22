@@ -13,7 +13,8 @@ const badgeClass: Record<string, string> = {
   Workshop: "event-badge event-badge-workshop",
 };
 
-const resolvedClass = badgeClass[typeName] || "event-badge event-badge-activity";
+const resolvedClass =
+  badgeClass[typeName] || "event-badge event-badge-activity";
 ---
 
 <span
