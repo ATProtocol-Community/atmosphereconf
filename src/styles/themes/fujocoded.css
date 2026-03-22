@@ -136,11 +136,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgb(255 255 255 / 0.64),
-    rgb(255 255 255 / 0.48)
-  );
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04)),
+    linear-gradient(180deg, rgb(197 187 247 / 0.84), rgb(182 170 236 / 0.72));
   z-index: -1;
 }
 
@@ -158,11 +156,18 @@
 
 [data-theme="fujocoded"] #site-header .nav-link {
   color: #ff38eb !important;
-  transition: opacity 0.2s ease;
+  font-weight: 700;
+  text-shadow:
+    0 0 2px rgb(255 255 255 / 0.45),
+    0 0 6px rgb(255 255 255 / 0.18);
+  transition:
+    color 0.2s ease,
+    text-shadow 0.2s ease;
 }
 
 [data-theme="fujocoded"] #site-header .nav-link:hover {
-  opacity: 0.7;
+  color: #4d2e91 !important;
+  text-shadow: 0 0 2px rgb(255 255 255 / 0.2);
 }
 
 [data-theme="fujocoded"] #site-logo {
@@ -227,6 +232,89 @@
 [data-theme="fujocoded"] button[type="submit"]:active {
   transform: translateY(1px);
   box-shadow: 0 1px 3px rgba(206, 0, 255, 0.2);
+}
+
+[data-theme="fujocoded"] .ticket-stub {
+  --ticket-tab-bg: #260f56;
+  --ticket-tab-fg: #ffffff;
+  --ticket-body-bg: transparent;
+  --ticket-border: transparent;
+  --ticket-label: #ff38eb;
+  --ticket-main: #a7ff90;
+  position: relative;
+  filter: drop-shadow(0 0 12px rgba(255, 56, 235, 0.25));
+}
+
+[data-theme="fujocoded"] .ticket-body {
+  border: 3px solid transparent !important;
+  border-left: none !important;
+  background:
+    linear-gradient(to bottom, #260f56, #4d2e91) padding-box,
+    radial-gradient(circle at center, #ff21e9, #4360f7) border-box !important;
+  background-size:
+    auto,
+    500% 500% !important;
+  animation: fujocoded-nav-gradient 12s ease infinite;
+}
+
+[data-theme="fujocoded"] .ticket-main {
+  text-shadow:
+    1px 1px 2px rgba(167, 255, 144, 0.1),
+    -1px 1px 2px rgba(167, 255, 144, 0.1),
+    -1px -1px 2px rgba(167, 255, 144, 0.1),
+    1px -1px 2px rgba(167, 255, 144, 0.1);
+}
+
+[data-theme="fujocoded"] .ticket-label::before {
+  content: "# ";
+}
+
+[data-theme="fujocoded"] .ticket-label {
+  text-shadow:
+    1px 1px 3px rgba(255, 56, 235, 0.1),
+    -1px 1px 3px rgba(255, 56, 235, 0.1),
+    -1px -1px 3px rgba(255, 56, 235, 0.1),
+    1px -1px 3px rgba(255, 56, 235, 0.1);
+}
+
+[data-theme="fujocoded"] .nav-ticket-peel {
+  --ticket-tab-bg: #260f56;
+  --ticket-tab-fg: #ffffff;
+  --ticket-border: transparent;
+  --ticket-label: #ff38eb;
+  --ticket-main: #a7ff90;
+  filter: drop-shadow(0 0 12px rgba(255, 56, 235, 0.25));
+}
+
+[data-theme="fujocoded"] .ntp-body {
+  border: 3px solid transparent !important;
+  border-left: none !important;
+  border-top: none !important;
+  background:
+    linear-gradient(to bottom, #260f56, #4d2e91) padding-box,
+    radial-gradient(circle at center, #ff21e9, #4360f7) border-box !important;
+  background-size: auto, 500% 500% !important;
+  animation: fujocoded-nav-gradient 12s ease infinite;
+}
+
+[data-theme="fujocoded"] .ntp-main {
+  text-shadow:
+    1px 1px 2px rgba(167, 255, 144, 0.1),
+    -1px 1px 2px rgba(167, 255, 144, 0.1),
+    -1px -1px 2px rgba(167, 255, 144, 0.1),
+    1px -1px 2px rgba(167, 255, 144, 0.1);
+}
+
+[data-theme="fujocoded"] .ntp-small::before {
+  content: "# ";
+}
+
+[data-theme="fujocoded"] .ntp-small {
+  text-shadow:
+    1px 1px 3px rgba(255, 56, 235, 0.1),
+    -1px 1px 3px rgba(255, 56, 235, 0.1),
+    -1px -1px 3px rgba(255, 56, 235, 0.1),
+    1px -1px 3px rgba(255, 56, 235, 0.1);
 }
 
 [data-theme="fujocoded"] .themed-card {
