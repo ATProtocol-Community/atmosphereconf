@@ -10,7 +10,11 @@
     "astro": "astro",
     "format": "prettier --write .",
     "sync-schedule": "tsx scripts/sync-schedule.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:visual": "playwright test",
+    "test:visual:ui": "playwright test --ui",
+    "test:visual:update": "playwright test --update-snapshots",
+    "test:visual:report": "playwright show-report"
   },
   "dependencies": {
     "@ascorbic/bluesky-loader": "^0.1.0",
@@ -43,6 +47,7 @@
   },
   "devDependencies": {
     "@clack/prompts": "^1.1.0",
+    "@playwright/test": "^1.58.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "prettier": "^3.8.1",
