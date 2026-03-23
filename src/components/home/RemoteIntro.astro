@@ -1,5 +1,6 @@
 ---
 import Card from "@/components/ui/card.astro";
+
 ---
 
 <section>
@@ -33,29 +34,37 @@ import Card from "@/components/ui/card.astro";
       >.
     </p>
   </Card>
-  <Card title="Stream 1">
-    <!-- swap with Stream 1 https://stream.place/embed/stream1.atmosphereconf.org -->
-    <iframe
-      src="https://stream.place/embed/iame.li"
-      width="640"
-      height="360"
-      frameborder="0"
-      allowfullscreen></iframe>
-  </Card>
-  <Card title="Stream 2">
-    <iframe
-      src="https://stream.place/embed/stream2.atmosphereconf.org"
-      width="640"
-      height="360"
-      frameborder="0"
-      allowfullscreen></iframe>
-  </Card>
-  <Card title="Stream 3">
-    <iframe
-      src="https://stream.place/embed/stream2.atmosphereconf.org"
-      width="640"
-      height="360"
-      frameborder="0"
-      allowfullscreen></iframe>
-  </Card>
+  {Astro.locals.loggedInUser ? (
+    <Card title="Stream 1">
+      <!-- swap with Stream 1 https://stream.place/embed/stream1.atmosphereconf.org -->
+      <iframe
+        src="https://stream.place/embed/iame.li"
+        width="640"
+        height="360"
+        frameborder="0"
+        allowfullscreen></iframe>
+    </Card>
+    <Card title="Stream 2">
+      <iframe
+        src="https://stream.place/embed/stream2.atmosphereconf.org"
+        width="640"
+        height="360"
+        frameborder="0"
+        allowfullscreen></iframe>
+    </Card>
+    <Card title="Stream 3">
+      <iframe
+        src="https://stream.place/embed/stream2.atmosphereconf.org"
+        width="640"
+        height="360"
+        frameborder="0"
+        allowfullscreen></iframe>
+    </Card>
+  ) : (
+    <Card title="Streams">
+      <p class="text-muted-foreground">
+        <a href="/login" class="text-primary hover:underline">Sign in</a> to access the live streams.
+      </p>
+    </Card>
+  )}
 </section>
