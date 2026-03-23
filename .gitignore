@@ -24,3 +24,4 @@ pnpm-debug.log*
 .idea/
 schedule-pull.csv
 thumbnail-preview/
+.gstack/

@@ -9,7 +9,8 @@ export type ClientTheme =
   | "semble"
   | "spark"
   | "ngerakines"
-  | "kandake";
+  | "kandake"
+  | "fujocoded";
 
 const CLIENT_THEME_DOMAINS: Record<
   Exclude<ClientTheme, "bluesky" | "plyr.fm">,
@@ -24,6 +25,7 @@ const CLIENT_THEME_DOMAINS: Record<
   spark: [".sprk.so"],
   ngerakines: [".ngerakines."],
   kandake: [".kandake."],
+  fujocoded: [".fujocoded."],
   // your-server: [".yourdomain."]
   // To add a new theme:
   // 1. Copy src/styles/themes/_template.css → src/styles/themes/<name>.css

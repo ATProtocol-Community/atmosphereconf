@@ -1,17 +1,19 @@
 <!-- Desktop: corner peel ticket -->
-<a
-  id="nav-ticket-peel"
-  class="nav-ticket-peel"
-  href="/#ticket-details"
-  aria-hidden="true"
->
-  <span class="ntp-tab">NOW SELLING</span>
-  <span class="ntp-perf"></span>
-  <span class="ntp-body">
-    <span class="ntp-small">live + remote</span>
-    <span class="ntp-main">🪿 Buy your tickets now</span>
-  </span>
-</a>
+<div class="nav-ticket-peel-slot" aria-hidden="true">
+  <a
+    id="nav-ticket-peel"
+    class="nav-ticket-peel"
+    href="/#ticket-details"
+    aria-hidden="true"
+  >
+    <span class="ntp-tab">NOW SELLING</span>
+    <span class="ntp-perf"></span>
+    <span class="ntp-body">
+      <span class="ntp-small">live + remote</span>
+      <span class="ntp-main">🪿 Buy your tickets now</span>
+    </span>
+  </a>
+</div>
 
 <!-- Mobile: static ticket bar -->
 <a
@@ -42,12 +44,19 @@
 
 <style>
   /* ===== DESKTOP: CORNER PEEL (hidden on mobile) ===== */
-  .nav-ticket-peel {
+  .nav-ticket-peel-slot {
     display: none;
     position: absolute;
     right: 1.5rem;
     top: 100%;
-    z-index: -1;
+    width: max-content;
+    height: 3.25rem;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .nav-ticket-peel {
+    display: flex;
+    position: relative;
     align-items: stretch;
     text-decoration: none;
     transform: rotate(2deg) translateY(-100%);
@@ -59,9 +68,12 @@
     pointer-events: none;
   }
   @media (min-width: 640px) {
-    .nav-ticket-peel {
-      display: flex;
+    .nav-ticket-peel-slot {
+      display: block;
     }
+  }
+  .nav-ticket-peel-slot.visible {
+    overflow: visible;
   }
   .nav-ticket-peel.visible {
     transform: rotate(2deg) translateY(0);
@@ -86,7 +98,7 @@
     writing-mode: vertical-lr;
     text-orientation: mixed;
     transform: rotate(180deg);
-    border-radius: 0 0 0 6px;
+    border-radius: 0 6px 6px 0;
   }
   .ntp-perf {
     width: 0;
@@ -238,11 +250,13 @@
 
 <script>
   const ticketPeel = document.getElementById("nav-ticket-peel");
+  const ticketPeelSlot = document.querySelector(".nav-ticket-peel-slot");
   const ticketTape = document.getElementById("nav-ticket-tape");
   const heroStub = document.querySelector(".ticket-stub");
   const header = document.getElementById("site-header");
 
   function showBanners(show: boolean) {
+    ticketPeelSlot?.classList.toggle("visible", show);
     ticketPeel?.classList.toggle("visible", show);
     ticketTape?.classList.toggle("visible", show);
     ticketPeel?.setAttribute("aria-hidden", String(!show));

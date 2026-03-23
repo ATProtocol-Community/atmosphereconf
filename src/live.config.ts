@@ -5,7 +5,8 @@ import { calendarRecordToEventData } from "./lib/calendar-event";
 import { liveBlueskyLoader } from "@ascorbic/bluesky-loader";
 import { leafletLiveLoader } from "@/lib/leaflet-loader";
 
-import { EVENTS_OWNER_DID_OR_HANDLE } from "astro:env/server";
+import { EVENTS_OWNER_DID_OR_HANDLE, TITO_API_TOKEN } from "astro:env/server";
+import { titoAnswerLoader } from "./lib/tito-live-loader";
 
 const speakerSchema = z.object({
   name: z.string(),
@@ -72,4 +73,20 @@ const leafletPosts = defineLiveCollection({
   }),
 });
 
-export const collections = { events, blueskyPosts, leafletPosts };
+const titoHandles = defineLiveCollection({
+  loader: titoAnswerLoader({
+    accountSlug: "atmosphereconf",
+    eventSlug: "atmosphereconf2026",
+    questionId: 1211204,
+    apiToken: TITO_API_TOKEN,
+  }),
+  schema: z.object({
+    ticketReference: z.string(),
+    ticketSlug: z.string(),
+    ticketEmail: z.string(),
+    ticketName: z.string(),
+    handle: z.string(),
+  }),
+});
+
+export const collections = { events, blueskyPosts, leafletPosts, titoHandles };
