@@ -234,7 +234,8 @@ const { rail } = Astro.props;
   }
 
   :global(.rail-other-day-card) {
-    padding: 0.95rem 1rem 1rem;
+    /* !important overrides PaperCard's mobile padding-reset (scoped CSS) */
+    padding: 0.95rem 1rem 1rem !important;
     border-radius: var(--paper-radius-sm);
   }
 
@@ -382,7 +383,7 @@ const { rail } = Astro.props;
     padding: 0.65rem 1rem;
     border: 1px dashed color-mix(in oklch, var(--primary), transparent 55%);
     border-radius: var(--pill-radius);
-    background: color-mix(in oklch, var(--card), var(--primary) 8%);
+    background: color-mix(in srgb, var(--card), var(--primary) 8%);
     color: color-mix(in oklch, var(--foreground), var(--primary) 18%);
     font-family: var(--font-mono);
     font-size: 0.62rem;
@@ -405,7 +406,7 @@ const { rail } = Astro.props;
   .rail-lucky-btn:hover:not(:disabled) {
     transform: translateY(-1px);
     border-color: color-mix(in oklch, var(--primary), transparent 28%);
-    background: color-mix(in oklch, var(--card), var(--primary) 14%);
+    background: color-mix(in srgb, var(--card), var(--primary) 14%);
   }
 
   .rail-lucky-btn:hover:not(:disabled) .rail-lucky-goose {

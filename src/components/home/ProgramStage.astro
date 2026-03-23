@@ -13,6 +13,16 @@ const { days, initialDate } = Astro.props;
 
 <section class="program-main-panel">
   <div class="program-stage" data-program-stage>
+    <div
+      class="program-stack-sheet program-stack-sheet--back"
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="program-stack-sheet program-stack-sheet--mid"
+      aria-hidden="true"
+    >
+    </div>
     {
       days.map((day) => (
         <article
@@ -58,67 +68,74 @@ const { days, initialDate } = Astro.props;
   }
 
   .program-stage {
-    --program-paper-tilt: -0.35deg;
-    --program-stack-after-tilt: -0.6deg;
-    --program-stack-before-tilt: -0.9deg;
-    --program-stack-step-x: 0.32rem;
-    --program-stack-step-y: 0.24rem;
+    --program-stage-extra: 18px;
+    --program-paper-tilt: -0.6deg;
+    --program-stack-after-tilt: 0.15deg;
+    --program-stack-before-tilt: 1deg;
     position: relative;
     isolation: isolate;
     margin-top: 0.75rem;
-    padding: 0.45rem 0.8rem 1.15rem 0.15rem;
-    transition: height 220ms ease;
-  }
-
-  .program-stage::before,
-  .program-stage::after {
-    content: "";
-    position: absolute;
-    inset: 0.05rem 0.55rem 0.45rem 0.16rem;
-    border-radius: var(--paper-radius-lg);
-    border: 1px solid color-mix(in oklch, var(--primary), transparent 76%);
-    background: color-mix(in oklch, var(--card), var(--background) 5%);
-    pointer-events: none;
+    padding: 0 0.78rem;
+    transition: height 150ms ease;
   }
 
   .program-stage::before {
-    z-index: 0;
-    opacity: 0.46;
-    transform: translate(
-        calc(var(--program-stack-step-x) * 2),
-        calc(var(--program-stack-step-y) * 2)
-      )
-      rotate(var(--program-stack-before-tilt));
-    box-shadow: var(--paper-shadow-lg);
+    content: "";
+    position: absolute;
+    inset: 0.25rem 0.9rem;
+    border-radius: calc(var(--paper-radius-lg) + 0.45rem);
+    filter: blur(24px);
+    opacity: 0.85;
+    pointer-events: none;
   }
 
-  .program-stage::after {
+  .program-stack-sheet {
+    position: absolute;
+    top: calc(var(--program-stage-extra) / 2);
+    right: 0;
+    bottom: calc(var(--program-stage-extra) / 2);
+    left: 0;
+    box-sizing: border-box;
+    border-radius: var(--paper-radius);
+    border: 1px solid color-mix(in oklch, var(--border), transparent 38%);
+    background: color-mix(in srgb, var(--card), var(--muted) 14%);
+    box-shadow:
+      0 10px 22px rgb(15 23 42 / 0.035),
+      inset 0 1px 0 rgb(255 255 255 / 0.45);
+    transform-origin: center center;
+    pointer-events: none;
+  }
+
+  .program-stack-sheet--back {
+    z-index: 0;
+    opacity: 0.36;
+    transform: rotate(var(--program-stack-before-tilt));
+  }
+
+  .program-stack-sheet--mid {
     z-index: 1;
-    opacity: 0.72;
-    transform: translate(
-        var(--program-stack-step-x),
-        var(--program-stack-step-y)
-      )
-      rotate(var(--program-stack-after-tilt));
-    box-shadow: var(--paper-shadow-lg);
+    opacity: 0.62;
+    transform: rotate(var(--program-stack-after-tilt));
   }
 
   .program-paper {
     position: absolute;
-    top: 0;
+    top: calc(var(--program-stage-extra) / 2);
     left: 0;
     right: 0;
     z-index: 2;
+    box-sizing: border-box;
+    transform-origin: center center;
     padding: 1.3rem;
     border-radius: var(--paper-radius);
     border: 1px solid color-mix(in oklch, var(--border), transparent 20%);
-    background: var(--card);
+    background: color-mix(in srgb, var(--card), var(--background) 1.5%);
     box-shadow: var(--paper-shadow-lg);
     transition:
-      transform 240ms ease,
-      opacity 220ms ease,
-      box-shadow 220ms ease,
-      filter 220ms ease;
+      transform 150ms ease,
+      opacity 150ms ease,
+      box-shadow 150ms ease,
+      filter 150ms ease;
   }
 
   .program-paper::before {
@@ -152,13 +169,9 @@ const { days, initialDate } = Astro.props;
 
   .program-paper.is-under {
     opacity: 0;
-    transform: translate(
-        var(--program-stack-step-x),
-        calc(var(--program-stack-step-y) * 1.65)
-      )
-      rotate(0.2deg) scale(0.992);
+    transform: rotate(-0.26deg) scale(0.992);
     box-shadow: none;
-    filter: saturate(0.94);
+    filter: saturate(0.94) brightness(0.995);
     pointer-events: none;
   }
 
@@ -196,7 +209,7 @@ const { days, initialDate } = Astro.props;
     padding: 0.65rem 0.85rem;
     border: 1px dashed color-mix(in oklch, var(--primary), transparent 35%);
     border-radius: var(--paper-radius-sm);
-    background: color-mix(in oklch, var(--primary), transparent 94%);
+    background: color-mix(in srgb, var(--primary), transparent 94%);
     color: var(--primary);
     font-family: var(--font-mono);
     font-size: 0.68rem;
@@ -208,12 +221,12 @@ const { days, initialDate } = Astro.props;
   }
 
   .program-paper-summary:hover {
-    background: color-mix(in oklch, var(--primary), transparent 88%);
+    background: color-mix(in srgb, var(--primary), transparent 88%);
   }
 
   .program-paper :global(.day-schedule) {
     border-color: color-mix(in oklch, var(--primary), transparent 72%);
-    background: color-mix(in oklch, var(--card), var(--background) 6%);
+    background: color-mix(in srgb, var(--card), var(--background) 1.5%);
     overflow: hidden;
   }
 
@@ -239,15 +252,25 @@ const { days, initialDate } = Astro.props;
 
   @media (max-width: 767px) {
     .program-paper {
-      padding-left: 1rem;
-      padding-right: 1rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .program-paper :global(.day-schedule) {
+      margin-left: -0.25rem;
+      margin-right: -0.25rem;
     }
 
     .program-stage {
-      --program-stack-step-x: 0.22rem;
-      --program-stack-step-y: 0.16rem;
-      padding-right: 0.2rem;
-      padding-bottom: 0.82rem;
+      --program-stage-extra: 22px;
+      --program-paper-tilt: 0deg;
+      --program-stack-after-tilt: 0.3deg;
+      --program-stack-before-tilt: 0.6deg;
+      padding: 0 0.22rem;
+    }
+
+    .program-stack-sheet {
+      display: none;
     }
 
     .program-paper-header {

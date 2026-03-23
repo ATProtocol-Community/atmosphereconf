@@ -47,7 +47,7 @@ const { days, initialDate } = Astro.props;
     padding: 0;
     border: 1px solid color-mix(in oklch, var(--border), transparent 28%);
     border-radius: var(--paper-radius-sm);
-    background: color-mix(in oklch, var(--card), var(--background) 4%);
+    background: color-mix(in srgb, var(--card), var(--background) 1.5%);
     overflow: hidden;
     box-shadow: none;
   }
@@ -75,7 +75,7 @@ const { days, initialDate } = Astro.props;
 
   .program-day-chip:hover {
     color: var(--foreground);
-    background: color-mix(in oklch, var(--card), var(--primary) 2%);
+    background: color-mix(in srgb, var(--card), var(--primary) 1.5%);
   }
 
   .program-day-chip:focus-visible {

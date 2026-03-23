@@ -52,9 +52,15 @@ const { type, class: className } = Astro.props;
     border: none !important;
     border-radius: var(--radius-lg, 0.75rem) !important;
     background: var(--card) !important;
-    padding: 1.25rem 1.5rem !important;
+    padding: 0 !important;
     margin-bottom: 0.75rem !important;
     box-shadow: none !important;
+  }
+
+  @media (max-width: 767px) {
+    tito-widget .tito-widget-form {
+      padding: 0.75rem !important;
+    }
   }
 
   /* ── Ticket name ── */

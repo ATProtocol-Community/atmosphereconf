@@ -59,7 +59,7 @@ const rotateStyle = rotation !== 0 ? `transform: rotate(${rotation}deg);` : "";
 
   .paper-card--outline {
     border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
-    background: color-mix(in oklch, var(--card), var(--background) 2%);
+    background: color-mix(in srgb, var(--card), var(--background) 1.5%);
     box-shadow: var(--paper-shadow);
   }
 
@@ -123,8 +123,8 @@ const rotateStyle = rotation !== 0 ? `transform: rotate(${rotation}deg);` : "";
 
   @media (max-width: 767px) {
     .paper-card {
-      padding-left: 1rem;
-      padding-right: 1rem;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 </style>

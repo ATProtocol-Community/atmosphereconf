@@ -4,36 +4,46 @@
   style="border-style: var(--card-border-style); border-radius: var(--card-radius);"
 >
   <div class="border-border border-r p-4">
-    <h3
-      class="text-primary mb-1 text-xs font-semibold tracking-widest uppercase"
-      style="font-family: var(--font-ui);"
-    >
-      // preshow
-    </h3>
-    <p class="text-muted-foreground text-xs leading-relaxed">
+    <h3 class="details-heading">// preshow</h3>
+    <p class="details-body">
       Workshops, deep dives, local activities. March 26–27, 2026.
     </p>
   </div>
   <div class="border-border border-r p-4">
-    <h3
-      class="text-primary mb-1 text-xs font-semibold tracking-widest uppercase"
-      style="font-family: var(--font-ui);"
-    >
-      // conference
-    </h3>
-    <p class="text-muted-foreground text-xs leading-relaxed">
+    <h3 class="details-heading">// conference</h3>
+    <p class="details-body">
       Talks, panels, community. March 28–29, 2026.
     </p>
   </div>
   <div class="p-4">
-    <h3
-      class="text-primary mb-1 text-xs font-semibold tracking-widest uppercase"
-      style="font-family: var(--font-ui);"
-    >
-      // remote
-    </h3>
-    <p class="text-muted-foreground text-xs leading-relaxed">
+    <h3 class="details-heading">// remote</h3>
+    <p class="details-body">
       3 full coverage video streams powered by Streamplace.
     </p>
   </div>
 </div>
+
+<style>
+  .details-heading {
+    margin-bottom: 0.25rem;
+    font-family: var(--font-ui);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+
+  .details-body {
+    font-size: 0.65rem;
+    line-height: 1.625;
+    color: var(--muted-foreground);
+  }
+
+  @media (min-width: 640px) {
+    .details-heading,
+    .details-body {
+      font-size: 0.75rem;
+    }
+  }
+</style>

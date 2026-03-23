@@ -130,7 +130,7 @@ const newsItems = newsPosts.map((post) => ({
             <PanelHeader
               kicker="Latest from atprotocol.dev"
               linkHref="https://bsky.app/profile/atprotocol.dev"
-              linkText="profile"
+              linkText="go to profile"
               linkExternal
             />
 
@@ -241,6 +241,7 @@ const newsItems = newsPosts.map((post) => ({
   }
 
   .updates-signal-embed {
+    max-width: 50px; /* keep embedded Bluesky signal compact */
     margin-top: 1rem;
     --bluesky-color-background: var(--card);
     --bluesky-color-background-hover: var(--muted);
@@ -256,7 +257,7 @@ const newsItems = newsPosts.map((post) => ({
     .updates-grid {
       display: flex;
       align-items: flex-start;
-      gap: 1.1rem;
+      gap: 1.75rem;
     }
 
     .updates-feed-card {

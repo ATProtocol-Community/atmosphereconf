@@ -126,7 +126,7 @@
   --card: #ffffcc; /* yellow */
 }
 [data-theme="ngerakines"] #feed .themed-card {
-  --card: #ccffcc; /* green */
+  --card: #ffffcc; /* yellow */
 }
 [data-theme="ngerakines"] #faqs .themed-card {
   --card: #ccccff; /* lavender */

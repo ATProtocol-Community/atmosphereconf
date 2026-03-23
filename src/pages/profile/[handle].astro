@@ -35,6 +35,7 @@ const editData = isOwnProfile
 <Layout
   title={`${profile.displayName} - Atmosphere Conference`}
   flush
+  page="profile"
   defaultTheme={detectClientTheme(profile.handle)}
 >
   <ProfilePage {profile} {editData} {viewerDid} />
