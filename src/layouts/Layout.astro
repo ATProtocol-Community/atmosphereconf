@@ -1,7 +1,11 @@
 ---
 import "../styles/global.css";
 import Header from "../components/shared/Header.astro";
-import { detectClientTheme } from "@/components/profile/client-themes";
+import {
+  CLIENT_THEMES,
+  THEME_STORAGE_KEY,
+  detectClientTheme,
+} from "@/components/profile/client-themes";
 
 interface Props {
   title?: string;
@@ -38,27 +42,31 @@ const defaultTheme =
       content="ATmosphereConf is the global atproto community conference. Join us in Vancouver, Canada, March 26th - 29th, 2026."
     />
     <meta name="generator" content={Astro.generator} />
-    <script is:inline define:vars={{ defaultTheme }}>
+    <script
+      is:inline
+      define:vars={{
+        defaultTheme,
+        themes: CLIENT_THEMES,
+        themeStorageKey: THEME_STORAGE_KEY,
+      }}
+    >
       (function () {
-        var VALID = [
-          "bluesky",
-          "blacksky",
-          "reddwarf",
-          "pckt",
-          "germ",
-          "northsky",
-          "plyr.fm",
-          "semble",
-          "spark",
-          "ngerakines",
-          "kandake",
-          "fujocoded",
-        ];
-        var t = localStorage.getItem("atmosphereconf:theme");
-        if (t && VALID.indexOf(t) !== -1) {
-          document.documentElement.setAttribute("data-theme", t);
-        } else if (defaultTheme && VALID.indexOf(defaultTheme) !== -1) {
-          document.documentElement.setAttribute("data-theme", defaultTheme);
+        const validThemes = new Set(themes);
+        const getInitialTheme = () => {
+          const urlTheme = new URLSearchParams(window.location.search).get(
+            "theme",
+          );
+          if (validThemes.has(urlTheme)) return urlTheme;
+
+          const storedTheme = localStorage.getItem(themeStorageKey);
+          if (validThemes.has(storedTheme)) return storedTheme;
+
+          return validThemes.has(defaultTheme) ? defaultTheme : null;
+        };
+
+        const initialTheme = getInitialTheme();
+        if (initialTheme) {
+          document.documentElement.dataset.theme = initialTheme;
         }
       })();
     </script>

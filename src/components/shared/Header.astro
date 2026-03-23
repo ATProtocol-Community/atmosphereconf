@@ -1,6 +1,11 @@
 ---
 import Button from "@/components/ui/button.astro";
 import { Avatar } from "@/components/profile/Avatar";
+import {
+  CLIENT_THEMES,
+  DEFAULT_CLIENT_THEME,
+  THEME_STORAGE_KEY,
+} from "@/components/profile/client-themes";
 import { loadProfile } from "@/lib/profile";
 import GoodStuff from "@/assets/goodstuff-goose.png";
 import { Image } from "astro:assets";
@@ -248,7 +253,9 @@ const navLinks = [
           </svg>
           <span
             id="theme-next-label"
-            class="hidden w-[7ch] truncate min-[850px]:inline"></span>
+            class="hidden w-[7ch] truncate min-[850px]:block"
+            >{DEFAULT_CLIENT_THEME}</span
+          >
         </button>
         {
           profile ? (
@@ -277,7 +284,13 @@ const navLinks = [
   <HeaderTicket />
 </header>
 
-<script>
+<script
+  define:vars={{
+    themes: CLIENT_THEMES,
+    defaultThemeName: DEFAULT_CLIENT_THEME,
+    themeStorageKey: THEME_STORAGE_KEY,
+  }}
+>
   // Mobile nav dropdown
   const navMenuBtn = document.getElementById("nav-menu-btn");
   const navMenu = document.getElementById("nav-menu");
@@ -287,10 +300,7 @@ const navLinks = [
       navMenuBtn.setAttribute("aria-expanded", String(!open));
     });
     document.addEventListener("click", (e) => {
-      if (
-        !navMenuBtn.contains(e.target as Node) &&
-        !navMenu.contains(e.target as Node)
-      ) {
+      if (!navMenuBtn.contains(e.target) && !navMenu.contains(e.target)) {
         navMenu.classList.add("hidden");
         navMenuBtn.setAttribute("aria-expanded", "false");
       }
@@ -332,11 +342,10 @@ const navLinks = [
   }
 
   // Highlight nav link for the section currently in view
-  const navLinks =
-    document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]");
-  const sections = new Map<string, Element>();
+  const navLinks = document.querySelectorAll("[data-nav-section]");
+  const sections = new Map();
   navLinks.forEach((link) => {
-    const id = link.dataset.navSection!;
+    const id = link.dataset.navSection;
     const el = document.getElementById(id);
     if (el) sections.set(id, el);
   });
@@ -344,7 +353,7 @@ const navLinks = [
   const active = "nav-active underline decoration-dashed underline-offset-4";
   const inactive = "";
 
-  function setActive(id: string | null) {
+  function setActive(id) {
     navLinks.forEach((link) => {
       const isActive = link.dataset.navSection === id;
       active
@@ -358,7 +367,7 @@ const navLinks = [
     });
   }
 
-  let currentActive: string | null = null;
+  let currentActive = null;
   const sectionObserver = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -380,52 +389,40 @@ const navLinks = [
   sections.forEach((el) => sectionObserver.observe(el));
 
   // Activate "tickets" nav when the header ticket banner appears
-  window.addEventListener("ticket-banner", ((e: CustomEvent) => {
-    if (e.detail.visible && !currentActive) {
+  window.addEventListener("ticket-banner", (e) => {
+    if (e.detail?.visible && !currentActive) {
       setActive("tickets");
-    } else if (!e.detail.visible && currentActive === null) {
+    } else if (!e.detail?.visible && currentActive === null) {
       setActive(null);
     }
-  }) as EventListener);
+  });
 
   // Set initial active from URL hash
   const hash = window.location.hash.replace("#", "");
   if (hash && sections.has(hash)) setActive(hash);
 
   // Theme toggle
-  const THEMES = [
-    "bluesky",
-    "blacksky",
-    "reddwarf",
-    "pckt",
-    "germ",
-    "northsky",
-    "plyr.fm",
-    "semble",
-    "spark",
-    "ngerakines",
-    "kandake",
-    "fujocoded",
-  ];
   const themeLabel = document.getElementById("theme-next-label");
   const themeLabelMobile = document.getElementById("theme-next-label-mobile");
+  const getCurrentTheme = () =>
+    document.documentElement.dataset.theme || defaultThemeName;
 
-  function syncThemeLabel() {
-    const current =
-      document.documentElement.getAttribute("data-theme") || "bluesky";
+  const syncThemeLabel = () => {
+    const current = getCurrentTheme();
     if (themeLabel) themeLabel.textContent = current;
     if (themeLabelMobile) themeLabelMobile.textContent = current;
-  }
+  };
   syncThemeLabel();
 
-  function cycleTheme() {
-    const current =
-      document.documentElement.getAttribute("data-theme") || "bluesky";
-    const next = THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("atmosphereconf:theme", next);
+  const cycleTheme = () => {
+    const current = getCurrentTheme();
+    const currentIndex = themes.indexOf(current);
+    const next = themes[(currentIndex + 1) % themes.length];
+
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem(themeStorageKey, next);
     syncThemeLabel();
-  }
+  };
 
   document
     .getElementById("theme-toggle")

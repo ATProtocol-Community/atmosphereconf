@@ -1,16 +1,30 @@
-export type ClientTheme =
-  | "bluesky"
-  | "blacksky"
-  | "reddwarf"
-  | "pckt"
-  | "germ"
-  | "northsky"
-  | "plyr.fm"
-  | "semble"
-  | "spark"
-  | "ngerakines"
-  | "kandake"
-  | "fujocoded";
+export const CLIENT_THEMES = [
+  "bluesky",
+  "blacksky",
+  "reddwarf",
+  "pckt",
+  "germ",
+  "northsky",
+  "plyr.fm",
+  "semble",
+  "spark",
+  "ngerakines",
+  "kandake",
+  "fujocoded",
+] as const;
+
+export type ClientTheme = (typeof CLIENT_THEMES)[number];
+
+export const DEFAULT_CLIENT_THEME: ClientTheme = "bluesky";
+export const THEME_STORAGE_KEY = "atmosphereconf:theme";
+
+export function isClientTheme(
+  value: string | null | undefined,
+): value is ClientTheme {
+  return (
+    typeof value === "string" && CLIENT_THEMES.includes(value as ClientTheme)
+  );
+}
 
 const CLIENT_THEME_DOMAINS: Record<
   Exclude<ClientTheme, "bluesky" | "plyr.fm">,
@@ -31,8 +45,7 @@ const CLIENT_THEME_DOMAINS: Record<
   // 1. Copy src/styles/themes/_template.css → src/styles/themes/<name>.css
   // 2. Import it in src/styles/global.css
   // 3. Add handle domains here
-  // 4. Add to THEMES array in Header.astro and VALID in Layout.astro
-  // 5. Add to the ClientTheme type above
+  // 4. Add it to CLIENT_THEMES in this file
 };
 
 export function detectClientTheme(handle: string): ClientTheme {
@@ -40,5 +53,5 @@ export function detectClientTheme(handle: string): ClientTheme {
   for (const [theme, domains] of Object.entries(CLIENT_THEME_DOMAINS)) {
     if (domains.some((d) => h.includes(d))) return theme as ClientTheme;
   }
-  return "bluesky";
+  return DEFAULT_CLIENT_THEME;
 }
