@@ -298,6 +298,17 @@
     box-shadow: var(--card-shadow);
   }
 
+  .prose-links a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.15s ease;
+  }
+
+  .prose-links a:hover {
+    opacity: 0.8;
+  }
+
   /* Schedule layout switching: grid (default) or table (retro themes) */
   .schedule-table-view {
     display: none;
