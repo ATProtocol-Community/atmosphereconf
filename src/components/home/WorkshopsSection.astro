@@ -71,6 +71,8 @@ const initialDayDate = days[0]?.date ?? "";
 </BreakoutSection>
 
 <script>
+  import { applyStarredState } from "@/scripts/starred";
+
   function syncProgramStageHeight(board) {
     const stage = board.querySelector("[data-program-stage]");
     const activePaper = stage?.querySelector(".program-paper.is-active");
@@ -94,6 +96,22 @@ const initialDayDate = days[0]?.date ?? "";
 
     // --- Lazy schedule loading ---
     const contentCache = new Map<string, Promise<string | null>>();
+
+    const SESSION_PREFIX = "atm:sched:v2:";
+
+    function getSessionCache(date: string): string | null {
+      try {
+        return sessionStorage.getItem(SESSION_PREFIX + date);
+      } catch {
+        return null;
+      }
+    }
+
+    function setSessionCache(date: string, html: string) {
+      try {
+        sessionStorage.setItem(SESSION_PREFIX + date, html);
+      } catch {}
+    }
 
     function initRoomTabs(container: Element) {
       const tabs = container.querySelectorAll<HTMLElement>("[data-room-tab]");
@@ -122,10 +140,21 @@ const initialDayDate = days[0]?.date ?? "";
 
     function prefetchDayContent(date: string) {
       if (contentCache.has(date)) return;
+      const cached = getSessionCache(date);
+      if (cached) {
+        contentCache.set(date, Promise.resolve(cached));
+        return;
+      }
       const url = `/partials/program-day-content?date=${encodeURIComponent(date)}${isRemote ? "&mode=remote" : ""}`;
       contentCache.set(
         date,
-        fetch(url).then((r) => (r.ok ? r.text() : null)),
+        fetch(url).then((r) => {
+          if (!r.ok) return null;
+          return r.text().then((html) => {
+            setSessionCache(date, html);
+            return html;
+          });
+        }),
       );
     }
 
@@ -141,6 +170,8 @@ const initialDayDate = days[0]?.date ?? "";
       // Re-init mobile room tabs for the newly injected schedule
       const schedule = slot.querySelector(".day-schedule");
       if (schedule) initRoomTabs(schedule);
+      // Apply starred state to any star buttons in the newly loaded content
+      applyStarredState(slot);
     }
 
     // Prefetch on hover
