@@ -48,7 +48,6 @@ const { days, initialDate } = Astro.props;
     border: 1px solid color-mix(in oklch, var(--border), transparent 28%);
     border-radius: var(--paper-radius-sm);
     background: color-mix(in srgb, var(--card), var(--background) 1.5%);
-    overflow: hidden;
     box-shadow: none;
   }
 
@@ -86,8 +85,7 @@ const { days, initialDate } = Astro.props;
   .program-day-chip.is-active {
     background: color-mix(in oklch, var(--primary), transparent 94%);
     color: var(--foreground);
-    outline: 1px solid color-mix(in oklch, var(--primary), transparent 78%);
-    outline-offset: -1px;
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary), transparent 78%);
   }
 
   .program-day-chip-kicker {
@@ -117,6 +115,14 @@ const { days, initialDate } = Astro.props;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       align-items: stretch;
     }
+
+    .program-day-chip:first-child {
+      border-radius: var(--paper-radius-sm) 0 0 var(--paper-radius-sm);
+    }
+
+    .program-day-chip:last-child {
+      border-radius: 0 var(--paper-radius-sm) var(--paper-radius-sm) 0;
+    }
   }
 
   @media (max-width: 1023px) {
@@ -124,8 +130,25 @@ const { days, initialDate } = Astro.props;
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .program-day-chip:nth-child(1) {
+      border-radius: var(--paper-radius-sm) 0 0 0;
+    }
+
+    .program-day-chip:nth-child(2) {
+      border-radius: 0 var(--paper-radius-sm) 0 0;
+    }
+
+    .program-day-chip:nth-child(3) {
+      border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+      border-radius: 0 0 0 var(--paper-radius-sm);
+    }
+
     .program-day-chip:nth-child(n + 3) {
       border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+
+    .program-day-chip:nth-child(4) {
+      border-radius: 0 0 var(--paper-radius-sm) 0;
     }
   }
 
@@ -141,6 +164,14 @@ const { days, initialDate } = Astro.props;
 
     .program-day-chip:nth-child(n + 3) {
       border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+
+    .program-day-chip:first-child {
+      border-radius: var(--paper-radius-sm) var(--paper-radius-sm) 0 0;
+    }
+
+    .program-day-chip:last-child {
+      border-radius: 0 0 var(--paper-radius-sm) var(--paper-radius-sm);
     }
   }
 
