@@ -1,6 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { CLIENT_THEMES } from "../../src/components/profile/client-themes";
-import { getFirstEventPath, gotoTheme, slugTheme } from "./utils";
+import {
+  getFirstEventPath,
+  gotoPage,
+  applyTheme,
+  slugTheme,
+} from "./utils";
 
 const publicPages = [
   { name: "home", path: "/" },
@@ -11,29 +16,34 @@ const publicPages = [
 ] as const;
 
 test.describe.configure({ mode: "parallel" });
+test.setTimeout(120_000);
 
-for (const theme of CLIENT_THEMES) {
-  const themeSlug = slugTheme(theme);
+for (const route of publicPages) {
+  test(`${route.name} page – all themes`, async ({ page }) => {
+    await gotoPage(page, route.path);
 
-  test.describe(`${theme} theme`, () => {
-    for (const route of publicPages) {
-      test(`${route.name} page`, async ({ page }) => {
-        await gotoTheme(page, route.path, theme);
+    for (const theme of CLIENT_THEMES) {
+      await applyTheme(page, route.path, theme);
 
-        await expect(page).toHaveScreenshot(`${route.name}-${themeSlug}.png`, {
-          fullPage: true,
-        });
-      });
+      await expect(page).toHaveScreenshot(
+        `${route.name}-${slugTheme(theme)}.png`,
+        { fullPage: true },
+      );
     }
-
-    test("event detail page", async ({ page }) => {
-      const eventPath = await getFirstEventPath(page, theme);
-
-      await gotoTheme(page, eventPath, theme);
-
-      await expect(page).toHaveScreenshot(`event-detail-${themeSlug}.png`, {
-        fullPage: true,
-      });
-    });
   });
 }
+
+test("event detail page – all themes", async ({ page }) => {
+  const eventPath = await getFirstEventPath(page);
+
+  await gotoPage(page, eventPath);
+
+  for (const theme of CLIENT_THEMES) {
+    await applyTheme(page, eventPath, theme);
+
+    await expect(page).toHaveScreenshot(
+      `event-detail-${slugTheme(theme)}.png`,
+      { fullPage: true },
+    );
+  }
+});
