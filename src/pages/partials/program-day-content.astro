@@ -1,0 +1,12 @@
+---
+export const partial = true;
+
+import DaySchedule from "@/components/ui/DaySchedule.astro";
+import { getProgramDays } from "@/lib/program";
+
+const requestedDate = Astro.url.searchParams.get("date") ?? "";
+const days = await getProgramDays();
+const day = days.find((d) => d.date === requestedDate);
+---
+
+{day && <DaySchedule events={day.events} rooms={day.rooms} />}

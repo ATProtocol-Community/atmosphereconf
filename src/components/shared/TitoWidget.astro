@@ -19,17 +19,6 @@ const { type, class: className } = Astro.props;
   event="atmosphereconf/atmosphereconf2026"
   releases={RELEASE_IDS[type]}></tito-widget>
 
-{
-  import.meta.env.DEV ? (
-    <script
-      is:inline
-      src="https://js.tito.io/v2/with/inline,development_mode"
-      async
-    />
-  ) : (
-    <script is:inline src="https://js.tito.io/v2/with/inline" async />
-  )
-}
 
 <style is:global>
   /* ── Reset Tito defaults ── */
