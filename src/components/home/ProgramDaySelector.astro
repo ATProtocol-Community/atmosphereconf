@@ -85,7 +85,7 @@ const { days, initialDate } = Astro.props;
   .program-day-chip.is-active {
     background: color-mix(in oklch, var(--primary), transparent 94%);
     color: var(--foreground);
-    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary), transparent 78%);
+    box-shadow: inset 0 0 0 2px color-mix(in oklch, var(--primary), transparent 55%);
   }
 
   .program-day-chip-kicker {
@@ -157,12 +157,12 @@ const { days, initialDate } = Astro.props;
       grid-template-columns: 1fr;
     }
 
-    .program-day-chip + .program-day-chip {
-      border-left: 0;
-      border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    .program-day-chip:nth-child(n) {
+      border-radius: 0;
     }
 
-    .program-day-chip:nth-child(n + 3) {
+    .program-day-chip + .program-day-chip {
+      border-left: 0;
       border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
     }
 
