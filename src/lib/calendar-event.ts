@@ -75,7 +75,7 @@ export function eventDataToCalendarRecord(
   }
 
   if (event.link_url) {
-    record.uris = [{ uri: event.link_url, name: event.link_text }];
+    record.uris = [{ uri: event.link_url, name: event.link_text ?? "" }];
   }
 
   return record;

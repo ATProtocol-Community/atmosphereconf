@@ -22,10 +22,7 @@ function readEnvFile(): Record<string, string> {
   return vars;
 }
 
-export async function promptPushCredentials(): Promise<{
-  identifier: string;
-  password: string;
-}> {
+export async function promptPushIdentifier(): Promise<string> {
   const env = readEnvFile();
 
   const identifier = await p.text({
@@ -34,15 +31,6 @@ export async function promptPushCredentials(): Promise<{
     validate: (v) => (v?.trim() ? undefined : "Identifier is required"),
   });
   if (p.isCancel(identifier)) {
-    p.cancel("Cancelled.");
-    process.exit(0);
-  }
-
-  const password = await p.password({
-    message: "App password",
-    validate: (v) => (v?.trim() ? undefined : "Password is required"),
-  });
-  if (p.isCancel(password)) {
     p.cancel("Cancelled.");
     process.exit(0);
   }
@@ -60,7 +48,29 @@ export async function promptPushCredentials(): Promise<{
     }
   }
 
-  return { identifier: identifier.trim(), password: password.trim() };
+  return identifier.trim();
+}
+
+export async function promptPassword(): Promise<string> {
+  const password = await p.password({
+    message: "App password",
+    validate: (v) => (v?.trim() ? undefined : "Password is required"),
+  });
+  if (p.isCancel(password)) {
+    p.cancel("Cancelled.");
+    process.exit(0);
+  }
+
+  return password.trim();
+}
+
+export async function promptPushCredentials(): Promise<{
+  identifier: string;
+  password: string;
+}> {
+  const identifier = await promptPushIdentifier();
+  const password = await promptPassword();
+  return { identifier, password };
 }
 
 export async function promptPullDid(): Promise<string> {

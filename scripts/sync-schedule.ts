@@ -9,7 +9,11 @@ import {
   type EventData,
   type Speaker,
 } from "../src/lib/calendar-event";
-import { promptPullDid, promptPushCredentials } from "./lib/auth";
+import {
+  promptPullDid,
+  promptPushIdentifier,
+  promptPassword,
+} from "./lib/auth";
 import {
   parseScheduleDate,
   formatScheduleDate,
@@ -83,7 +87,7 @@ function parseCsvEvent(row: CsvRow): ScheduleEntry | null {
     start,
     end: parseScheduleDate(row.End),
     room: row.Location?.trim() || undefined,
-    description: row.Description?.trim() || undefined,
+    description: row.Description?.trim().replace(/\r\n/g, "\n") || undefined,
     category: row.Track?.trim() || undefined,
     link_url: row["Link URL"]?.trim() || undefined,
     link_text: row["Link Text"]?.trim() || undefined,
@@ -114,22 +118,40 @@ function loadScheduleFromCsv(path: string): ScheduleEntry[] {
   return entries;
 }
 
-function buildRecord(entry: ScheduleEntry, createdAt: string) {
+function buildRecord(
+  entry: ScheduleEntry,
+  createdAt: string,
+  existingUris?: Array<{ uri: string; name?: string }>,
+) {
   const record = eventDataToCalendarRecord(entry, createdAt);
   record.additionalData!.sourceId = entry.sourceId;
+
+  // Preserve extra URIs from the existing PDS record that aren't the CSV link
+  if (existingUris && existingUris.length > 0) {
+    const csvUri = record.uris?.[0]?.uri;
+    const extras = existingUris.filter((u) => u.uri !== csvUri);
+    if (extras.length > 0) {
+      record.uris = [...(record.uris ?? []), ...extras];
+    }
+  }
+
   return record;
 }
 
 function sortedStringify(value: unknown): string {
-  return JSON.stringify(value, (_, v) =>
-    v && typeof v === "object" && !Array.isArray(v)
-      ? Object.fromEntries(
-          Object.entries(v as Record<string, unknown>).sort(([a], [b]) =>
-            a.localeCompare(b),
-          ),
-        )
-      : v,
-  );
+  return JSON.stringify(value, (_, v) => {
+    if (typeof v === "string") {
+      return v.replace(/\r\n/g, "\n");
+    }
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      return Object.fromEntries(
+        Object.entries(v as Record<string, unknown>).sort(([a], [b]) =>
+          a.localeCompare(b),
+        ),
+      );
+    }
+    return v;
+  });
 }
 
 // --- PDS operations ---
@@ -199,7 +221,10 @@ function diffEntries(
     }
     const createdAt =
       (previous.createdAt as string | undefined) ?? new Date().toISOString();
-    const record = buildRecord(entry, createdAt);
+    const existingUris = previous.uris as
+      | Array<{ uri: string; name?: string }>
+      | undefined;
+    const record = buildRecord(entry, createdAt, existingUris);
     // Compare only the keys present in the built record to ignore extra upstream fields
     const previousSubset = Object.fromEntries(
       Object.keys(record).map((k) => [
@@ -237,7 +262,10 @@ async function upsertSchedule(
     const previous = existing.get(entry.sourceId);
     const createdAt =
       (previous?.createdAt as string | undefined) ?? new Date().toISOString();
-    const record = buildRecord(entry, createdAt);
+    const existingUris = previous?.uris as
+      | Array<{ uri: string; name?: string }>
+      | undefined;
+    const record = buildRecord(entry, createdAt, existingUris);
 
     const previousSubset = previous
       ? Object.fromEntries(
@@ -427,7 +455,7 @@ async function handlePush(csvPath?: string) {
   const entries = loadScheduleFromCsv(path);
   s.stop(`Loaded ${entries.length} records from ${path}`);
 
-  const { identifier, password } = await promptPushCredentials();
+  const identifier = await promptPushIdentifier();
 
   const s2 = p.spinner();
   s2.start("Fetching existing records from PDS");
@@ -525,6 +553,7 @@ async function handlePush(csvPath?: string) {
     return;
   }
 
+  const password = await promptPassword();
   const agent = new AtpAgent({ service: pds });
   await agent.login({ identifier, password });
 

@@ -52,7 +52,7 @@ const parsed = events
     return { ...e, startMin: start, endMin: end };
   });
 
-const SLOT = 10;
+const SLOT = 5;
 const minTime =
   Math.floor(Math.min(...parsed.map((e) => e.startMin)) / SLOT) * SLOT;
 const maxTime =
@@ -87,7 +87,7 @@ const gridEvents = parsed
   });
 
 // Shared time grid template
-const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 2rem)`;
+const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
 ---
 
 <div class="day-schedule border-border isolate rounded-lg border">

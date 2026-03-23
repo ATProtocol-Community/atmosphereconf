@@ -25,3 +25,8 @@ pnpm-debug.log*
 schedule-pull.csv
 thumbnail-preview/
 .gstack/
+
+# Playwright runtime artifacts
+playwright-report/
+test-results/
+tests/visual/*.spec.ts-snapshots/
