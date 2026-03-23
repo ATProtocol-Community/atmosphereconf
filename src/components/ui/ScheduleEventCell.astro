@@ -81,19 +81,157 @@ function getSubColors(type: string) {
 }
 
 const speakerNames = event.speakers?.map((s) => s.name).join(", ");
+
+function getSizeClass(min: number) {
+  switch (true) {
+    case min <= 15:
+      return "schedule-event-card-tiny";
+    case min <= 30:
+      return "schedule-event-card-short";
+    case min <= 60:
+      return "schedule-event-card-medium";
+    default:
+      return "schedule-event-card-tall";
+  }
+}
+
+const sizeClass = getSizeClass(durationMin);
+const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
 ---
 
 <Fragment>
   {href && <a href={href} class="absolute inset-0 z-10" />}
   <div
     class:list={[
-      "flex-1 overflow-hidden rounded-md px-2 py-1.5 text-xs leading-tight transition-[filter]",
+      "schedule-event-card relative z-0 flex h-full min-h-0 flex-1 flex-col overflow-hidden border leading-tight transition-[transform,filter,box-shadow,border-color]",
       getColors(event.type),
+      sizeClass,
       isInfo && "flex flex-col items-center justify-center text-center",
-      href && "group-hover/evt:brightness-95",
+      href &&
+        "group-hover/evt:-translate-y-px group-hover/evt:brightness-[0.98]",
     ]}
   >
-    <p class="truncate font-semibold" set:html={event.title} />
-    {time && <p class:list={["truncate", getSubColors(event.type)]}>{time}</p>}
+    <p class="schedule-event-title" set:html={event.title} />
+    {
+      showSpeakers && (
+        <p class="schedule-event-speakers" title={speakerNames}>
+          {speakerNames}
+        </p>
+      )
+    }
+    {
+      time && (
+        <p class:list={["schedule-event-time", getSubColors(event.type)]}>
+          {time}
+        </p>
+      )
+    }
   </div>
 </Fragment>
+
+<style>
+  .schedule-event-card {
+    min-height: 100%;
+    justify-content: flex-start;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.85rem;
+    font-size: 0.78rem;
+    isolation: isolate;
+  }
+
+  .schedule-event-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .schedule-event-title,
+  .schedule-event-speakers,
+  .schedule-event-time {
+    position: relative;
+    z-index: 1;
+  }
+
+  .schedule-event-title {
+    display: -webkit-box;
+    overflow: hidden;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.16;
+    text-wrap: balance;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .schedule-event-time {
+    padding-top: 0.38rem;
+    font-size: 0.69rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .schedule-event-speakers {
+    display: -webkit-box;
+    margin-top: 0.42rem;
+    overflow: hidden;
+    color: color-mix(in oklch, currentColor, white 30%);
+    font-size: 0.67rem;
+    line-height: 1.28;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .schedule-event-card-tiny,
+  .schedule-event-card-short {
+    border-radius: 0.72rem;
+  }
+
+  .schedule-event-card-tiny {
+    padding: 0.2rem 0.4rem;
+    justify-content: center;
+  }
+
+  .schedule-event-card-tiny .schedule-event-title {
+    -webkit-line-clamp: 1;
+    font-size: 0.66rem;
+  }
+
+  .schedule-event-card-tiny .schedule-event-time,
+  .schedule-event-card-short .schedule-event-time {
+    padding-top: 0.2rem;
+    font-size: 0.64rem;
+  }
+
+  .schedule-event-card-short .schedule-event-title {
+    font-size: 0.76rem;
+  }
+
+  /* card-medium inherits the default 2-line clamp from .schedule-event-title */
+
+  .schedule-event-card-tall .schedule-event-title {
+    -webkit-line-clamp: 3;
+    font-size: 0.84rem;
+  }
+
+  .schedule-event-card-tall .schedule-event-time {
+    font-size: 0.72rem;
+  }
+
+  .schedule-event-card.event-badge-info {
+    justify-content: center;
+    padding-inline: 1rem;
+  }
+
+  .schedule-event-card.event-badge-info .schedule-event-title {
+    font-size: 0.82rem;
+    font-weight: 620;
+  }
+
+  .schedule-event-card.event-badge-info .schedule-event-time {
+    margin-top: 0.18rem;
+    padding-top: 0;
+  }
+</style>

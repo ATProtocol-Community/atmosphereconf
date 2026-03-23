@@ -125,8 +125,8 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
           ]}
         >
           <div class="flex">
-            <div class="border-border w-14 flex-none border-r" />
-            <div class="grid flex-auto grid-cols-1 grid-rows-1">
+            <div class="border-border hidden w-14 flex-none border-r md:block" />
+            <div class="grid min-w-0 flex-1 grid-cols-1 grid-rows-1">
               <div
                 class="divide-border/40 col-start-1 col-end-2 row-start-1 grid divide-y"
                 style={timeGridRows}
@@ -136,7 +136,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
                 {Array.from({ length: totalSlots }).map((_, i) => (
                   <div>
                     {(minTime + i * SLOT) % 60 === 0 && (
-                      <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
+                      <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 hidden w-14 pr-2 text-right text-[0.65rem] leading-none md:block">
                         {formatHour(minTime + i * SLOT)}
                       </div>
                     )}
@@ -145,12 +145,12 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
               </div>
               <ol
                 class="col-start-1 col-end-2 row-start-1 grid"
-                style={`grid-template-columns: 1fr; ${timeGridRows}`}
+                style={`grid-template-columns: minmax(0, 1fr); ${timeGridRows}`}
               >
                 {roomEvents.map((event) => (
                   <li
                     class:list={[
-                      "relative flex min-h-5 p-0.5",
+                      "relative flex min-h-5 p-[0.22rem]",
                       isLinkable(event) && "group/evt cursor-pointer",
                     ]}
                     style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: 1; z-index: ${event.zIndex}`}
@@ -222,7 +222,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
               gridEvents.map((event) => (
                 <li
                   class:list={[
-                    "relative flex min-h-5 p-0.5",
+                    "relative flex min-h-5 p-[0.22rem]",
                     isLinkable(event) && "group/evt cursor-pointer",
                   ]}
                   style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}; z-index: ${event.zIndex}`}

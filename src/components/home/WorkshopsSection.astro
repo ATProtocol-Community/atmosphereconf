@@ -14,7 +14,7 @@ const initialRails = Object.fromEntries(
 const initialDayDate = days[0]?.date ?? "";
 ---
 
-<BreakoutSection maxWidth="76rem">
+<BreakoutSection maxWidth="74rem">
   <Card title="schedule" class="program-shell">
     <p class="program-panel-copy program-intro-copy">
       We have two days of pre-conference events and activities, happening
@@ -57,7 +57,10 @@ const initialDayDate = days[0]?.date ?? "";
     const activePaper = stage?.querySelector(".program-paper.is-active");
     if (!stage || !activePaper) return;
 
-    const extra = window.matchMedia("(min-width: 1024px)").matches ? 46 : 28;
+    const extra =
+      Number.parseFloat(
+        getComputedStyle(stage).getPropertyValue("--program-stage-extra"),
+      ) || (window.matchMedia("(min-width: 1024px)").matches ? 18 : 22);
     stage.style.height = `${Math.ceil(activePaper.getBoundingClientRect().height + extra)}px`;
   }
 
@@ -263,7 +266,7 @@ const initialDayDate = days[0]?.date ?? "";
   @media (min-width: 1024px) {
     .program-grid {
       grid-template-columns: minmax(0, 1.62fr) minmax(19rem, 0.86fr);
-      gap: 1.75rem;
+      gap: 2rem;
       grid-template-areas:
         "selector selector"
         "main spotlight";

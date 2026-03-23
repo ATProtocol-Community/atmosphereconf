@@ -23,7 +23,7 @@ const { maxWidth = "76rem", class: className = "", id } = Astro.props;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     width: 100vw;
-    padding: clamp(1.5rem, 3vw, 3rem) 0;
+    padding: clamp(0.75rem, 1.5vw, 1.5rem) 0;
   }
 
   .breakout-inner {
@@ -33,11 +33,11 @@ const { maxWidth = "76rem", class: className = "", id } = Astro.props;
 
   @media (max-width: 959px) {
     .breakout {
-      padding: 1.25rem 0;
+      padding: 0.75rem 0;
     }
 
     .breakout-inner {
-      width: min(var(--breakout-max-width), calc(100vw - 0.75rem));
+      width: min(var(--breakout-max-width), calc(100vw - 1.25rem));
     }
   }
 </style>

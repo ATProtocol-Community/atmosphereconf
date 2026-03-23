@@ -93,9 +93,15 @@ const { href = "#tickets" } = Astro.props;
   }
 
   .ticket-main {
-    font-size: 1.3rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--ticket-main, var(--foreground));
+  }
+
+  @media (min-width: 640px) {
+    .ticket-main {
+      font-size: 1.3rem;
+    }
   }
 
   .ticket-arrow {

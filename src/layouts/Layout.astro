@@ -12,6 +12,7 @@ interface Props {
   flush?: boolean;
   defaultTheme?: string;
   ogImage?: string;
+  page?: string;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   flush = false,
   defaultTheme: defaultThemeProp,
   ogImage = "https://atmosphereconf.org/blue-goose-og.png",
+  page,
 } = Astro.props;
 
 // Priority: page-level default (e.g. profile handle) > logged-in user's handle > bluesky
@@ -125,6 +127,7 @@ const defaultTheme =
       <Header transition:animate="none" />
       <main
         class={`mx-auto flex w-full max-w-4xl flex-1 flex-col px-2 sm:px-10 ${flush ? "" : "mb-10"}`}
+        {...page ? { "data-page": page } : {}}
       >
         <slot />
       </main>
