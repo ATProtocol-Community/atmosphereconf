@@ -228,7 +228,10 @@ export async function getProgramDays() {
       }));
       const rooms = sortRooms([
         ...new Set(
-          events.map((event) => event.room).filter(Boolean) as string[],
+          events
+            .filter((event) => event.type !== "info")
+            .map((event) => event.room)
+            .filter(Boolean) as string[],
         ),
       ]);
 
