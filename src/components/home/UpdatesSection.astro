@@ -187,6 +187,34 @@ const newsItems = newsPosts.map((post) => ({
   window.addEventListener("resize", syncUpdatesHeight);
   document.addEventListener("astro:page-load", syncUpdatesHeight);
   syncUpdatesHeight();
+
+  // Toggle top fade on feed scroll
+  function initFeedFade() {
+    document.querySelectorAll(".updates-feed-frame").forEach((frame) => {
+      const scroller = frame.querySelector(".feed-scroll-area");
+      if (!scroller) return;
+
+      const update = () => {
+        const scrolled = scroller.scrollTop > 8;
+        (frame as HTMLElement).style.setProperty(
+          "--feed-fade-top",
+          scrolled ? "16px" : "0px",
+        );
+      };
+
+      scroller.addEventListener("scroll", update, { passive: true });
+      update();
+    });
+  }
+
+  const feedObserver = new MutationObserver(() => {
+    if (document.querySelector(".feed-scroll-area")) {
+      feedObserver.disconnect();
+      initFeedFade();
+    }
+  });
+  feedObserver.observe(document.body, { childList: true, subtree: true });
+  initFeedFade();
 </script>
 
 <style>
@@ -214,10 +242,35 @@ const newsItems = newsPosts.map((post) => ({
   }
 
   .updates-feed-frame {
+    --feed-fade-top: 0px;
+    --feed-fade-bottom: 56px;
     position: relative;
     z-index: 1;
     flex: 1;
     min-height: 0;
+    padding-bottom: 0.5rem;
+  }
+
+  .updates-feed-frame::before,
+  .updates-feed-frame::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 12px; /* avoid covering scrollbar */
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .updates-feed-frame::before {
+    top: 0;
+    height: var(--feed-fade-top);
+    background: linear-gradient(to bottom, var(--card), transparent);
+  }
+
+  .updates-feed-frame::after {
+    bottom: 0;
+    height: var(--feed-fade-bottom);
+    background: linear-gradient(to top, var(--card), transparent);
   }
 
   .updates-side-rail {

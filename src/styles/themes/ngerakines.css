@@ -135,6 +135,11 @@
   --card: #ffffcc; /* yellow */
 }
 
+[data-theme="ngerakines"] .updates-feed-frame::before,
+[data-theme="ngerakines"] .updates-feed-frame::after {
+  display: none;
+}
+
 /* Schedule tables — different colors per day */
 /* Thursday table — navy frame, blue alternating rows */
 [data-theme="ngerakines"] [data-table-index="0"] {

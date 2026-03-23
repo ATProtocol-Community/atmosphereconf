@@ -652,6 +652,32 @@
   background: transparent !important;
 }
 
+[data-theme="fujocoded"] .updates-feed-frame {
+  padding-bottom: 0;
+}
+
+[data-theme="fujocoded"] .updates-feed-frame::before,
+[data-theme="fujocoded"] .updates-feed-frame::after {
+  background: none;
+  height: 0 !important;
+  transition: opacity 0.2s ease;
+}
+
+[data-theme="fujocoded"] .updates-feed-frame::before {
+  top: 0;
+  border-bottom: 3px dashed #ff38eb;
+  opacity: 0;
+}
+
+[data-theme="fujocoded"] .updates-feed-frame[style*="--feed-fade-top: 16px"]::before {
+  opacity: 1;
+}
+
+[data-theme="fujocoded"] .updates-feed-frame::after {
+  bottom: 0;
+  border-top: 3px dashed #ff38eb;
+}
+
 [data-theme="fujocoded"] .day-schedule {
   background: #ffffff;
   border-style: solid !important;
