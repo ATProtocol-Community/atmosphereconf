@@ -1,6 +1,7 @@
 ---
 import CardMeta from "@/components/ui/CardMeta.astro";
 import remoteBadgeSvg from "@/components/ui/icons/RemoteBadge.svg?raw";
+import BookmarkIcon from "@/components/ui/BookmarkIcon.astro";
 import { formatConferenceDate } from "@/lib/datetime";
 import { isRemoteAccessible, type EventMode } from "@/lib/calendar-event";
 
@@ -21,6 +22,7 @@ interface Props {
   class?: string;
   variant?: "default" | "featured" | "compact";
   metaLayout?: "default" | "stacked";
+  showBookmark?: boolean;
 }
 
 const {
@@ -35,6 +37,7 @@ const {
   class: className = "",
   variant = "default",
   metaLayout = "default",
+  showBookmark = true,
 } = Astro.props;
 
 const variantClasses: Record<string, string> = {
@@ -88,7 +91,25 @@ const timeLabel = formatCardTime(start);
   data-starring-card
   data-starring-card-variant={variant}
 >
-  <div class="flex items-center gap-3">
+  {
+    showBookmark && (
+      <button
+        class="star-btn"
+        data-star-btn={talkId}
+        aria-label="Bookmark this session"
+        aria-pressed="false"
+        title="Bookmark this session"
+      >
+        <BookmarkIcon class="star-icon star-icon-empty" strokeWidth={1.5} />
+        <BookmarkIcon
+          class="star-icon star-icon-filled"
+          filled
+          strokeWidth={1.5}
+        />
+      </button>
+    )
+  }
+  <div class:list={["flex items-start gap-3", showBookmark && "pr-8"]}>
     <span
       class:list={[
         "starring-card-arrow shrink-0 transition-colors",
@@ -135,6 +156,82 @@ const timeLabel = formatCardTime(start);
 </div>
 
 <style>
+  .star-btn {
+    position: absolute;
+    top: -0.2rem;
+    right: 1rem;
+    z-index: 20;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: color-mix(in oklch, var(--foreground), transparent 65%);
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 150ms ease;
+  }
+
+  .star-btn:hover {
+    color: color-mix(in oklch, var(--foreground), transparent 30%);
+  }
+
+  .star-btn.is-starred {
+    color: var(--primary);
+  }
+
+  [data-starring-card-variant="featured"] .star-btn {
+    top: 0;
+    right: 0;
+    font-size: 1.75rem;
+    width: 1.75rem;
+  }
+
+  [data-starring-card-variant="compact"] .star-btn {
+    top: 0;
+    right: 0;
+    font-size: 1.5rem;
+    width: 1.5rem;
+  }
+
+  .star-btn :global(.star-icon) {
+    width: 1em;
+    height: 1em;
+    transform-origin: top center;
+    transition: transform 150ms ease;
+  }
+
+  .star-btn:not(.is-starred):hover :global(.star-icon-empty) {
+    transform: scaleY(0.06);
+  }
+
+  .star-btn :global(.star-icon-filled) {
+    display: none;
+  }
+
+  .star-btn.is-starred :global(.star-icon-empty) {
+    display: none;
+  }
+
+  .star-btn.is-starred :global(.star-icon-filled) {
+    display: block;
+  }
+
+  .star-btn:focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star-btn {
+      transition: none;
+    }
+  }
+
   .starring-card-description {
     margin-top: 0.7rem;
     max-width: 32ch;
@@ -177,3 +274,9 @@ const timeLabel = formatCardTime(start);
     }
   }
 </style>
+
+<script>
+  import { applyStarredState, initStarredHandlers } from "@/scripts/starred";
+  applyStarredState();
+  initStarredHandlers();
+</script>

@@ -1,5 +1,6 @@
 ---
 import { formatConferenceTime } from "@/lib/datetime";
+import BookmarkIcon from "@/components/ui/BookmarkIcon.astro";
 
 interface Speaker {
   name: string;
@@ -129,6 +130,23 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
       )
     }
   </div>
+  {
+    event.id && href && (
+      <button
+        class="evt-star-btn absolute z-20"
+        data-star-btn={event.id}
+        aria-label="Bookmark this session"
+        aria-pressed="false"
+      >
+        <BookmarkIcon class="star-icon star-icon-empty" strokeWidth={1.5} />
+        <BookmarkIcon
+          class="star-icon star-icon-filled"
+          strokeWidth={1.5}
+          filled
+        />
+      </button>
+    )
+  }
 </Fragment>
 
 <style>
@@ -241,4 +259,88 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
     transform: scale(1.025);
     filter: brightness(1.04) saturate(1.1);
   }
+
+  .evt-star-btn {
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    position: absolute;
+    top: 0.35rem;
+    right: 0.65rem;
+    width: 1.35rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: color-mix(in oklch, var(--foreground), transparent 55%);
+    opacity: 0.85;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 150ms ease;
+  }
+
+  :global(.group\/evt:hover) .evt-star-btn,
+  .evt-star-btn.is-starred {
+    display: flex;
+  }
+
+  @media (hover: none) {
+    .evt-star-btn {
+      display: flex;
+    }
+  }
+
+  .evt-star-btn :global(.star-icon) {
+    width: 1em;
+    height: 1em;
+    transform-origin: top center;
+    transition: transform 150ms ease;
+  }
+
+  :global(.group\/evt:hover)
+    .evt-star-btn:not(.is-starred)
+    :global(.star-icon-empty) {
+    transform: scaleY(1.06);
+  }
+
+  .evt-star-btn :global(.star-icon-filled) {
+    display: none;
+  }
+
+  .evt-star-btn.is-starred :global(.star-icon-empty) {
+    display: none;
+  }
+
+  .evt-star-btn.is-starred :global(.star-icon-filled) {
+    display: block;
+  }
+
+  .evt-star-btn.is-starred {
+    color: var(--primary);
+  }
+
+  .schedule-event-card-tiny ~ .evt-star-btn {
+    font-size: 0.7rem;
+    width: 0.9rem;
+    top: 0.3rem;
+    right: 0.65rem;
+  }
+
+  .schedule-event-card-short ~ .evt-star-btn {
+    font-size: 0.75rem;
+    width: 1.05rem;
+    top: 0.3rem;
+    right: 0.5rem;
+  }
+
+  .evt-star-btn:focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: 1px;
+  }
 </style>
+
+<script>
+  import { applyStarredState, initStarredHandlers } from "@/scripts/starred";
+  applyStarredState();
+  initStarredHandlers();
+</script>

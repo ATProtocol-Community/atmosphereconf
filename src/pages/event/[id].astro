@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
+import BookmarkIcon from "@/components/ui/BookmarkIcon.astro";
 import { getLiveEntry } from "astro:content";
 import { formatConferenceDay, formatConferenceTime } from "@/lib/datetime";
 import calendarIconSvg from "@/components/ui/icons/CalendarIcon.svg?raw";
@@ -69,104 +70,186 @@ const dateDisplay = start ? formatConferenceDay(start) : null;
 
 <Layout title={`${plainTitle} — ATmosphereConf 2026`} ogImage={headerUrl} page="event">
   <div class="mt-20 space-y-10">
-    <Card>
-      <a
-        href="/talks"
-        class="text-muted-foreground hover:text-foreground text-sm transition-colors"
+    <div class="event-card-wrap">
+      <button
+        class="bookmark-ribbon"
+        data-star-btn={id}
+        aria-label="Bookmark this session"
+        aria-pressed="false"
+        title="Bookmark this session"
       >
-        &larr; All Talks
-      </a>
-
-      <div class="mt-4">
-        <span
-          class:list={[
-            "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium",
-            badgeColors[type] || "event-badge event-badge-activity",
-          ]}
+        <BookmarkIcon class="bookmark-icon bookmark-icon-empty" strokeWidth={1.5} />
+        <BookmarkIcon class="bookmark-icon bookmark-icon-filled" filled strokeWidth={1.5} />
+      </button>
+      <Card>
+        <a
+          href="/talks"
+          class="text-muted-foreground hover:text-foreground text-sm transition-colors"
         >
-          {typeNames[type]}
-        </span>
+          &larr; All Talks
+        </a>
+
+        <div class="mt-4">
+          <span
+            class:list={[
+              "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium",
+              badgeColors[type] || "event-badge event-badge-activity",
+            ]}
+          >
+            {typeNames[type]}
+          </span>
+
+          {
+            category && (
+              <span class="text-muted-foreground ml-2 text-xs">{category}</span>
+            )
+          }
+        </div>
+
+        <h1
+          class="text-foreground mt-3 pr-16 text-xl leading-tight font-bold"
+          set:html={title}
+        />
 
         {
-          category && (
-            <span class="text-muted-foreground ml-2 text-xs">{category}</span>
+          speakers?.length && (
+            <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+              {speakers.map((s) => (
+                <span class="text-muted-foreground text-sm">
+                  {s.name}
+                  {s.id && (
+                    <>
+                      {" · "}
+                      <a
+                        href={`/profile/${s.id}`}
+                        class="text-primary hover:underline"
+                      >
+                        @{s.id}
+                      </a>
+                    </>
+                  )}
+                </span>
+              ))}
+            </div>
           )
         }
-      </div>
 
-      <h1
-        class="text-foreground mt-3 text-xl leading-tight font-bold"
-        set:html={title}
-      />
-
-      {
-        speakers?.length && (
-          <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1">
-            {speakers.map((s) => (
-              <span class="text-muted-foreground text-sm">
-                {s.name}
-                {s.id && (
-                  <>
-                    {" · "}
-                    <a
-                      href={`/profile/${s.id}`}
-                      class="text-primary hover:underline"
-                    >
-                      @{s.id}
-                    </a>
-                  </>
-                )}
-              </span>
-            ))}
-          </div>
-        )
-      }
-
-      {
-        (dateDisplay || timeDisplay || room) && (
-          <div class="text-muted-foreground mt-5 flex flex-col gap-2 text-sm">
-            {dateDisplay && (
+        {
+          (dateDisplay || timeDisplay || room) && (
+            <div class="text-muted-foreground mt-5 flex flex-col gap-2 text-sm">
+              {dateDisplay && (
+                <div class="flex items-center gap-2">
+                  <span class="text-muted-foreground h-4 w-4 flex-none" set:html={calendarIconSvg} />
+                  <span>{dateDisplay}</span>
+                </div>
+              )}
+              {timeDisplay && (
+                <div class="flex items-center gap-2">
+                  <span class="text-muted-foreground h-4 w-4 flex-none" set:html={clockIconSvg} />
+                  <span>{timeDisplay}</span>
+                </div>
+              )}
+              {room && (
+                <div class="flex items-center gap-2">
+                  <span class="text-muted-foreground h-4 w-4 flex-none" set:html={mapPinIconSvg} />
+                  <span>{room}</span>
+                </div>
+              )}
               <div class="flex items-center gap-2">
-                <span class="text-muted-foreground h-4 w-4 flex-none" set:html={calendarIconSvg} />
-                <span>{dateDisplay}</span>
+                <span
+                  class="text-muted-foreground h-4 w-4 flex-none"
+                  set:html={isRemoteAccessible(mode) ? remoteBadgeSvg : inPersonIconSvg}
+                />
+                <span>
+                  {mode === "hybrid"
+                    ? "Available in-person & via livestream"
+                    : mode === "remote"
+                      ? "Remote only — via livestream"
+                      : "In-person only"}
+                </span>
               </div>
-            )}
-            {timeDisplay && (
-              <div class="flex items-center gap-2">
-                <span class="text-muted-foreground h-4 w-4 flex-none" set:html={clockIconSvg} />
-                <span>{timeDisplay}</span>
-              </div>
-            )}
-            {room && (
-              <div class="flex items-center gap-2">
-                <span class="text-muted-foreground h-4 w-4 flex-none" set:html={mapPinIconSvg} />
-                <span>{room}</span>
-              </div>
-            )}
-            <div class="flex items-center gap-2">
-              <span
-                class="text-muted-foreground h-4 w-4 flex-none"
-                set:html={isRemoteAccessible(mode) ? remoteBadgeSvg : inPersonIconSvg}
-              />
-              <span>
-                {mode === "hybrid"
-                  ? "Available in-person & via livestream"
-                  : mode === "remote"
-                    ? "Remote only — via livestream"
-                    : "In-person only"}
-              </span>
             </div>
-          </div>
-        )
-      }
+          )
+        }
 
-      {
-        description && (
-          <p class="text-muted-foreground mt-5 text-sm leading-relaxed whitespace-pre-line">
-            {description}
-          </p>
-        )
-      }
-    </Card>
+        {
+          description && (
+            <p class="text-muted-foreground mt-5 text-sm leading-relaxed whitespace-pre-line">
+              {description}
+            </p>
+          )
+        }
+      </Card>
+    </div>
   </div>
 </Layout>
+
+<style>
+  .event-card-wrap {
+    position: relative;
+  }
+
+  .bookmark-ribbon {
+    position: absolute;
+    top: -0.25rem;
+    right: 2.5rem;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 2.6rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: color-mix(in oklch, var(--foreground), transparent 65%);
+    font-size: 2.6rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 150ms ease;
+  }
+
+  .bookmark-ribbon:hover {
+    color: color-mix(in oklch, var(--foreground), transparent 30%);
+  }
+
+  .bookmark-ribbon.is-starred {
+    color: var(--primary);
+  }
+
+
+  .bookmark-ribbon :global(.bookmark-icon) {
+    width: 1em;
+    height: 1em;
+    filter: drop-shadow(0 2px 4px color-mix(in oklch, var(--foreground), transparent 80%));
+    transform-origin: top center;
+    transition: transform 150ms ease;
+  }
+
+  .bookmark-ribbon:not(.is-starred):hover :global(.bookmark-icon-empty) {
+    transform: scaleY(1.06);
+  }
+
+  .bookmark-ribbon :global(.bookmark-icon-filled) {
+    display: none;
+  }
+
+  .bookmark-ribbon.is-starred :global(.bookmark-icon-empty) {
+    display: none;
+  }
+
+  .bookmark-ribbon.is-starred :global(.bookmark-icon-filled) {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bookmark-ribbon {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { applyStarredState, initStarredHandlers } from "@/scripts/starred";
+  applyStarredState();
+  initStarredHandlers();
+</script>
