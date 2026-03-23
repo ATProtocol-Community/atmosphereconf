@@ -268,13 +268,16 @@
 
   if (heroStub && header) {
     // Pages with the hero ticket stub: show only after it fully scrolls behind header
-    const headerH = header.offsetHeight;
-    const stubH = (heroStub as HTMLElement).offsetHeight;
-    const ticketObserver = new IntersectionObserver(
-      ([entry]) => showBanners(!entry.isIntersecting),
-      { rootMargin: `-${headerH + stubH}px 0px 0px 0px`, threshold: 0 },
-    );
-    ticketObserver.observe(heroStub);
+    // Defer layout reads to avoid forced reflow during initial parse
+    requestAnimationFrame(() => {
+      const headerH = header.offsetHeight;
+      const stubH = (heroStub as HTMLElement).offsetHeight;
+      const ticketObserver = new IntersectionObserver(
+        ([entry]) => showBanners(!entry.isIntersecting),
+        { rootMargin: `-${headerH + stubH}px 0px 0px 0px`, threshold: 0 },
+      );
+      ticketObserver.observe(heroStub);
+    });
   } else {
     // Other pages: always show
     showBanners(true);

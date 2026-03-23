@@ -1,11 +1,17 @@
 ---
 import TitoWidget from "@/components/shared/TitoWidget.astro";
+
+const titoSrc = import.meta.env.DEV
+  ? "https://js.tito.io/v2/with/inline,development_mode"
+  : "https://js.tito.io/v2/with/inline";
 ---
 
 <div class="tito-widgets">
   <TitoWidget type="live" class:list="group-[.remote]:hidden" />
   <TitoWidget type="remote" class:list="group-[.live]:hidden" />
 </div>
+
+<script is:inline src={titoSrc} async />
 <a
   href="https://ti.to/atmosphereconf/2026"
   class="ngerakines-buy-btn"

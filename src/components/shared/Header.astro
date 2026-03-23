@@ -35,13 +35,13 @@ const navLinks = [
     style="background: var(--header-bg, var(--primary)); border-bottom: 1px solid var(--header-border, white);"
   >
     <div
-      class="mx-auto flex h-full w-full max-w-5xl items-center justify-between px-3 text-base min-[765px]:justify-center min-[765px]:gap-3 min-[765px]:px-4 min-[850px]:gap-6"
+      class="mx-auto flex h-full w-full max-w-5xl items-center justify-between px-3 text-base min-[795px]:justify-center min-[795px]:gap-3 min-[795px]:px-4 min-[880px]:gap-6"
     >
       <a
         id="site-logo"
         href="/"
         data-astro-reload
-        class="flex items-center gap-1.5 text-lg font-semibold opacity-80 min-[765px]:min-w-0 min-[765px]:flex-1"
+        class="flex items-center gap-1.5 text-lg font-semibold opacity-80 min-[795px]:min-w-0 min-[795px]:flex-1"
         style="color: var(--header-fg, oklch(0.985 0 0));"
       >
         <Image
@@ -61,12 +61,12 @@ const navLinks = [
       </a>
       <nav class="flex items-center gap-4">
         <span
-          class="hidden select-none min-[385px]:inline"
+          class="hidden select-none min-[415px]:inline"
           style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
           aria-hidden="true">//</span
         >
         <!-- desktop links -->
-        <div class="hidden items-center gap-4 min-[765px]:flex">
+        <div class="hidden items-center gap-4 min-[795px]:flex">
           {
             navLinks.map(({ href, label }) => (
               <a
@@ -99,7 +99,7 @@ const navLinks = [
           }
         </div>
         <!-- mobile dropdown -->
-        <div class="relative min-[765px]:hidden">
+        <div class="relative min-[795px]:hidden">
           <button
             id="nav-menu-btn"
             class="flex items-center gap-1 transition-colors"
@@ -157,7 +157,7 @@ const navLinks = [
               ))
             }
             <div
-              class="mt-2 flex items-center gap-3 border-t px-4 pt-2 min-[450px]:hidden"
+              class="mt-2 flex items-center gap-3 border-t px-4 pt-2 min-[480px]:hidden"
               style="border-color: var(--header-border, rgba(255,255,255,0.2));"
             >
               <a
@@ -207,18 +207,18 @@ const navLinks = [
         </div>
       </nav>
       <span
-        class="hidden select-none min-[765px]:inline"
+        class="hidden select-none min-[880px]:inline"
         style="color: var(--header-fg-muted, rgba(255,255,255,0.3));"
         aria-hidden="true">//</span
       >
       <div
-        class="flex h-8 items-center gap-2 min-[765px]:min-w-0 min-[765px]:flex-1 min-[765px]:justify-end min-[765px]:gap-4"
+        class="flex h-8 items-center gap-2 min-[795px]:min-w-0 min-[795px]:flex-1 min-[795px]:justify-end min-[795px]:gap-4"
       >
         <a
           href="https://github.com/ATProtocol-Community/atmosphereconf"
           target="_blank"
           rel="noopener noreferrer"
-          class="hidden items-center transition-colors min-[450px]:flex"
+          class="hidden items-center transition-colors min-[480px]:flex"
           style="color: var(--header-fg-muted, rgba(255,255,255,0.6));"
           aria-label="GitHub repository"
         >
@@ -230,7 +230,7 @@ const navLinks = [
         </a>
         <button
           id="theme-toggle"
-          class="hidden h-7 items-center gap-0 rounded-full px-1.5 text-xs transition-colors min-[450px]:flex min-[850px]:gap-1.5 min-[850px]:border min-[850px]:px-2.5"
+          class="hidden h-7 items-center gap-0 rounded-full px-1.5 text-xs transition-colors min-[480px]:flex min-[880px]:gap-1.5 min-[880px]:border min-[880px]:px-2.5"
           style="color: var(--header-fg-muted, rgba(255,255,255,0.6)); border-color: var(--header-fg-muted, rgba(255,255,255,0.3));"
           aria-label="Toggle theme"
         >
@@ -253,7 +253,7 @@ const navLinks = [
           </svg>
           <span
             id="theme-next-label"
-            class="hidden w-[7ch] truncate min-[850px]:block"
+            class="hidden w-[7ch] truncate min-[880px]:block"
             >{DEFAULT_CLIENT_THEME}</span
           >
         </button>
@@ -323,23 +323,27 @@ const navLinks = [
     });
   }
 
-  const goose = document.getElementById("header-goose");
-  const hero = document.querySelector("[data-hero-goose]");
-  if (goose && hero) {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          goose.classList.add("opacity-0", "-ml-7");
-          goose.classList.remove("opacity-100", "ml-0");
-        } else {
-          goose.classList.remove("opacity-0", "-ml-7");
-          goose.classList.add("opacity-100", "ml-0");
-        }
-      },
-      { threshold: 0 },
-    );
-    observer.observe(hero);
-  }
+  // Wrapped in DOMContentLoaded because define:vars implies is:inline,
+  // so this script runs before [data-hero-goose] is parsed.
+  document.addEventListener("DOMContentLoaded", () => {
+    const goose = document.getElementById("header-goose");
+    const hero = document.querySelector("[data-hero-goose]");
+    if (goose && hero) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            goose.classList.add("opacity-0", "-ml-7");
+            goose.classList.remove("opacity-100", "ml-0");
+          } else {
+            goose.classList.remove("opacity-0", "-ml-7");
+            goose.classList.add("opacity-100", "ml-0");
+          }
+        },
+        { threshold: 0 },
+      );
+      observer.observe(hero);
+    }
+  });
 
   // Highlight nav link for the section currently in view
   const navLinks = document.querySelectorAll("[data-nav-section]");

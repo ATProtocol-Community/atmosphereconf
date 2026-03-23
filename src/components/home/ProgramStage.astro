@@ -53,7 +53,11 @@ const { days, initialDate } = Astro.props;
             </a>
           </div>
 
-          <DaySchedule events={day.events} rooms={day.rooms} />
+          <div data-schedule-content>
+            {day.date === initialDate ? (
+              <DaySchedule events={day.events} rooms={day.rooms} />
+            ) : null}
+          </div>
         </article>
       ))
     }

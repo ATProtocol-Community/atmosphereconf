@@ -73,6 +73,63 @@ const initialDayDate = days[0]?.date ?? "";
       "(prefers-reduced-motion: reduce)",
     );
 
+    // --- Lazy schedule loading ---
+    const contentCache = new Map<string, Promise<string | null>>();
+
+    function initRoomTabs(container: Element) {
+      const tabs =
+        container.querySelectorAll<HTMLElement>("[data-room-tab]");
+      const panels =
+        container.querySelectorAll<HTMLElement>("[data-room-panel]");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const idx = tab.dataset.roomTab;
+          tabs.forEach((t) => {
+            const isActive = t === tab;
+            t.classList.toggle("border-l-2", isActive);
+            t.classList.toggle("border-l-primary", isActive);
+            t.classList.toggle("text-primary", isActive);
+            t.classList.toggle("bg-accent/50", isActive);
+            t.classList.toggle("text-muted-foreground", !isActive);
+          });
+          panels.forEach((p) => {
+            p.classList.toggle("hidden", p.dataset.roomPanel !== idx);
+          });
+        });
+      });
+    }
+
+    function prefetchDayContent(date: string) {
+      if (contentCache.has(date)) return;
+      const url = `/partials/program-day-content?date=${encodeURIComponent(date)}`;
+      contentCache.set(
+        date,
+        fetch(url).then((r) => (r.ok ? r.text() : null)),
+      );
+    }
+
+    async function loadDayContent(paper: Element, date: string) {
+      const slot = paper.querySelector("[data-schedule-content]");
+      if (!slot || slot.children.length > 0) return; // already loaded
+
+      prefetchDayContent(date);
+      const html = await contentCache.get(date);
+      if (!html) return;
+
+      slot.innerHTML = html;
+      // Re-init mobile room tabs for the newly injected schedule
+      const schedule = slot.querySelector(".day-schedule");
+      if (schedule) initRoomTabs(schedule);
+    }
+
+    // Prefetch on hover
+    dayButtons.forEach((button) => {
+      button.addEventListener("mouseenter", () => {
+        const date = button.dataset.daySelect;
+        if (date) prefetchDayContent(date);
+      });
+    });
+
     const refreshSidePanel = async (panel, date) => {
       try {
         const res = await fetch(
@@ -86,6 +143,12 @@ const initialDayDate = days[0]?.date ?? "";
     };
 
     const setSelectedDay = async (date, { refreshRail = false } = {}) => {
+      // Lazy-load schedule content before switching
+      const targetPaper = dayPapers.find(
+        (p) => p.dataset.programDay === date,
+      );
+      if (targetPaper) await loadDayContent(targetPaper, date);
+
       dayButtons.forEach((button) => {
         const isActive = button.dataset.daySelect === date;
         button.classList.toggle("is-active", isActive);
