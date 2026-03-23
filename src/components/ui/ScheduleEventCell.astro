@@ -107,8 +107,7 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
       getColors(event.type),
       sizeClass,
       isInfo && "flex flex-col items-center justify-center text-center",
-      href &&
-        "group-hover/evt:-translate-y-px group-hover/evt:brightness-[0.98]",
+      href && "evt-linkable",
     ]}
   >
     <p class="schedule-event-title" set:html={event.title} />
@@ -233,5 +232,10 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
   .schedule-event-card.event-badge-info .schedule-event-time {
     margin-top: 0.18rem;
     padding-top: 0;
+  }
+
+  :global(.group\/evt:hover) .evt-linkable {
+    transform: scale(1.025);
+    filter: brightness(1.04) saturate(1.1);
   }
 </style>

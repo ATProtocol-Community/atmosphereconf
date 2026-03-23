@@ -73,7 +73,7 @@ const { days, initialDate } = Astro.props;
 
   .program-stage {
     --program-stage-extra: 18px;
-    --program-paper-tilt: -0.6deg;
+    --program-paper-tilt: -0.25deg;
     --program-stack-after-tilt: 0.15deg;
     --program-stack-before-tilt: 1deg;
     position: relative;
@@ -231,7 +231,7 @@ const { days, initialDate } = Astro.props;
   .program-paper :global(.day-schedule) {
     border-color: color-mix(in oklch, var(--primary), transparent 72%);
     background: color-mix(in srgb, var(--card), var(--background) 1.5%);
-    overflow: hidden;
+    overflow: visible;
   }
 
   .program-paper :global(.day-schedule .border-border),
