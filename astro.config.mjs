@@ -23,6 +23,21 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      BADGE_SIGNING_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      BADGE_DEFINITION_URI: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      BADGE_DEFINITION_CID: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
     },
   },
   output: "server",
@@ -46,6 +61,9 @@ export default defineConfig({
           "repo:org.atmosphereconf.profile?action=create",
           "repo:org.atmosphereconf.profile?action=update",
           "blob:image/*",
+          "repo:community.lexicon.badge.award?action=create",
+          "repo:community.lexicon.badge.award?action=update",
+          "repo:community.lexicon.badge.award?action=delete",
         ],
       },
       redirects: {
