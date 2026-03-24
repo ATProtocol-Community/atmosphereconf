@@ -2,6 +2,21 @@ import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro:schema";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { fetchFeedPage, fetchAuthorFeedPage } from "@/lib/bsky";
+import {
+  createBadgeAwardRecord,
+  loadSigningKey,
+  getBadgeRkey,
+  verifyBadgeAward,
+  BADGE_COLLECTION,
+} from "@fujocoded/atproto-badge";
+import type { BadgeAward } from "@fujocoded/atproto-badge";
+import {
+  isTicketHolder,
+  getExistingBadgeAward,
+  getBadgeDefinitionRef,
+  getOrganizerDid,
+} from "@/lib/badge";
+import { BADGE_SIGNING_KEY } from "astro:env/server";
 
 const MAX_AVATAR_SIZE = 1_000_000; // 1MB
 const ALLOWED_MIME_TYPES = ["image/png", "image/jpeg", "image/webp"];
@@ -137,6 +152,219 @@ export const server = {
         record,
       });
       return { uri: data.uri };
+    },
+  }),
+
+  claimBadge: defineAction({
+    handler: async (_input, context) => {
+      const { loggedInUser } = context.locals;
+      if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
+
+      const badgeRef = getBadgeDefinitionRef();
+      if (!badgeRef || !BADGE_SIGNING_KEY) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Badge system not configured",
+        });
+      }
+
+      // Verify ticket holder
+      let ticketHolder: boolean;
+      try {
+        ticketHolder = await isTicketHolder(loggedInUser.handle);
+      } catch {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not verify ticket status. Please try again.",
+        });
+      }
+      if (!ticketHolder) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message: "Badge is only available to ticket holders",
+        });
+      }
+
+      // Check for existing award
+      let existing: { uri: string } | null;
+      try {
+        existing = await getExistingBadgeAward(loggedInUser.did);
+      } catch {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not check existing badges. Please try again.",
+        });
+      }
+      if (existing) {
+        return { uri: existing.uri, alreadyClaimed: true };
+      }
+
+      // Load signing key
+      const signingKey = await loadSigningKey({
+        privateKeyBase64url: BADGE_SIGNING_KEY,
+      });
+
+      // Create badge award record
+      const organizerDid = await getOrganizerDid();
+      const record = await createBadgeAwardRecord({
+        recipientDid: loggedInUser.did,
+        badgeRef,
+        organizerDid,
+        signingKey,
+      });
+
+      // Write to attendee's repo
+      const pdsAgent = await getPdsAgent({ loggedInUser });
+      if (!pdsAgent) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to connect to PDS",
+        });
+      }
+
+      const rkey = getBadgeRkey({ badgeDefinitionUri: badgeRef.uri });
+      try {
+        const { data } = await pdsAgent.com.atproto.repo.putRecord({
+          repo: loggedInUser.did,
+          collection: BADGE_COLLECTION,
+          rkey,
+          record,
+        });
+        return { uri: data.uri, alreadyClaimed: false };
+      } catch (err: unknown) {
+        // If the record already exists at this rkey, treat as success
+        if (
+          err instanceof Error &&
+          err.message.includes("conflict")
+        ) {
+          return { uri: `at://${loggedInUser.did}/${BADGE_COLLECTION}/${rkey}`, alreadyClaimed: true };
+        }
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to write badge. Please try again.",
+        });
+      }
+    },
+  }),
+
+  verifyBadge: defineAction({
+    input: z.object({
+      did: z.string(),
+    }),
+    handler: async ({ did }) => {
+      const badgeRef = getBadgeDefinitionRef();
+      if (!badgeRef) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Badge system not configured",
+        });
+      }
+
+      const pdsAgent = await getPdsAgent({ didOrHandle: did });
+      if (!pdsAgent) {
+        throw new ActionError({
+          code: "NOT_FOUND",
+          message: "Could not connect to user's PDS",
+        });
+      }
+
+      // Find the badge award record
+      const { data } = await pdsAgent.com.atproto.repo.listRecords({
+        repo: did,
+        collection: BADGE_COLLECTION,
+        limit: 100,
+      });
+
+      const awardRecord = data.records.find((rec) => {
+        const value = rec.value as Record<string, unknown>;
+        const badge = value.badge as { uri?: string } | undefined;
+        return badge?.uri === badgeRef.uri;
+      });
+
+      if (!awardRecord) {
+        return { verified: false, error: "Badge award not found" };
+      }
+
+      try {
+        const result = await verifyBadgeAward({
+          award: awardRecord.value as BadgeAward,
+        });
+
+        // Resolve issuer handle + display name
+        let issuerHandle: string | undefined;
+        let issuerDisplayName: string | undefined;
+        if (result.issuerDid) {
+          try {
+            const { IdResolver } = await import("@atproto/identity");
+            const idResolver = new IdResolver();
+            const doc = await idResolver.did.resolve(result.issuerDid);
+            if (doc?.alsoKnownAs) {
+              const handleUri = doc.alsoKnownAs.find((u: string) =>
+                u.startsWith("at://"),
+              );
+              if (handleUri) issuerHandle = handleUri.replace("at://", "");
+            }
+          } catch {
+            // non-critical
+          }
+          try {
+            const issuerAgent = await getPdsAgent({
+              didOrHandle: result.issuerDid,
+            });
+            if (issuerAgent) {
+              const { data: profile } =
+                await issuerAgent.com.atproto.repo.getRecord({
+                  repo: result.issuerDid,
+                  collection: "app.bsky.actor.profile",
+                  rkey: "self",
+                });
+              const val = profile.value as Record<string, unknown>;
+              issuerDisplayName = val.displayName as string | undefined;
+            }
+          } catch {
+            // non-critical — fall back to handle/DID
+          }
+        }
+
+        return { ...result, issuerHandle, issuerDisplayName };
+      } catch {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Verification failed",
+        });
+      }
+    },
+  }),
+
+  unclaimBadge: defineAction({
+    handler: async (_input, context) => {
+      const { loggedInUser } = context.locals;
+      if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
+
+      const badgeRef = getBadgeDefinitionRef();
+      if (!badgeRef) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Badge system not configured",
+        });
+      }
+
+      const pdsAgent = await getPdsAgent({ loggedInUser });
+      if (!pdsAgent) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to connect to PDS",
+        });
+      }
+
+      const rkey = getBadgeRkey({ badgeDefinitionUri: badgeRef.uri });
+      await pdsAgent.com.atproto.repo.deleteRecord({
+        repo: loggedInUser.did,
+        collection: BADGE_COLLECTION,
+        rkey,
+      });
+
+      return { success: true };
     },
   }),
 };

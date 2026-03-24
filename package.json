@@ -23,6 +23,8 @@
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",
     "@atproto/api": "^0.19.3",
+    "@atproto/identity": "^0.4.8",
+    "@fujocoded/atproto-badge": "file:../mdx-plugins/atproto-badge",
     "@fujocoded/authproto": "^0.2.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-popover": "^1.1.15",
