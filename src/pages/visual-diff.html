@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Diff — Baseline vs Live</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: #0e0e10; color: #e0e0e0; height: 100vh; display: flex; flex-direction: column; }
+
+  .controls { display: flex; gap: 12px; align-items: center; padding: 10px 16px; background: #1a1a1e; border-bottom: 1px solid #333; flex-wrap: wrap; flex-shrink: 0; }
+  .controls label { font-size: 13px; color: #999; }
+  .controls select, .controls button { font-size: 13px; padding: 4px 8px; background: #2a2a2e; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; cursor: pointer; }
+  .controls select:hover, .controls button:hover { border-color: #888; }
+  .controls button.active { background: #4a6cf7; border-color: #4a6cf7; color: #fff; }
+  .nav-group { display: flex; gap: 4px; }
+  .nav-group button { min-width: 28px; }
+  .badge { font-size: 11px; background: #333; padding: 2px 8px; border-radius: 10px; color: #aaa; }
+  .viewport-label { font-size: 12px; color: #777; font-family: monospace; }
+
+  .main { flex: 1; display: flex; overflow: hidden; position: relative; }
+
+  .side-by-side { display: flex; width: 100%; height: 100%; }
+  .side-by-side .panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .side-by-side .panel + .panel { border-left: 2px solid #4a6cf7; }
+  .panel-header { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 6px 12px; background: #1a1a1e; color: #888; flex-shrink: 0; display: flex; justify-content: space-between; }
+  .panel-content { flex: 1; overflow: auto; position: relative; background: #222; }
+
+  .scaled-wrap { transform-origin: top left; }
+  .scaled-wrap img { display: block; }
+  .scaled-wrap iframe { display: block; border: none; }
+
+  .no-baseline { display: flex; align-items: center; justify-content: center; height: 100%; color: #666; font-size: 14px; }
+  .sync-indicator { font-size: 10px; color: #4a6cf7; }
+
+  .theme-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .theme-pills button { font-size: 12px; padding: 2px 10px; border-radius: 12px; background: #2a2a2e; border: 1px solid #444; color: #ccc; cursor: pointer; transition: all 0.15s; }
+  .theme-pills button:hover { border-color: #888; }
+  .theme-pills button.active { background: #4a6cf7; border-color: #4a6cf7; color: #fff; }
+
+  .vp-pills { display: flex; gap: 4px; }
+  .vp-pills button { font-size: 12px; padding: 2px 10px; border-radius: 12px; background: #2a2a2e; border: 1px solid #444; color: #ccc; cursor: pointer; transition: all 0.15s; }
+  .vp-pills button:hover { border-color: #888; }
+  .vp-pills button.active { background: #4a6cf7; border-color: #4a6cf7; color: #fff; }
+
+  .separator { width: 1px; height: 24px; background: #333; flex-shrink: 0; }
+
+  /* Overlay mode */
+  .overlay-wrap { position: relative; width: 100%; height: 100%; overflow: auto; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label>Page:</label>
+  <select id="page-select"></select>
+
+  <div class="separator"></div>
+
+  <label>Theme:</label>
+  <div class="theme-pills" id="theme-pills"></div>
+
+  <div class="separator"></div>
+
+  <label>Viewport:</label>
+  <div class="vp-pills" id="vp-pills"></div>
+
+  <div class="separator"></div>
+
+  <label>View:</label>
+  <div class="nav-group">
+    <button id="btn-sidebyside" class="active" onclick="setMode('sidebyside')">Side by Side</button>
+    <button id="btn-overlay" onclick="setMode('overlay')">Overlay</button>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="nav-group">
+    <button onclick="prevCombo()" title="Previous">&#9664;</button>
+    <button onclick="nextCombo()" title="Next">&#9654;</button>
+  </div>
+  <span class="badge" id="combo-counter"></span>
+</div>
+
+<div class="main" id="main"></div>
+
+<script>
+const THEMES = ["bluesky","blacksky","reddwarf","pckt","germ","northsky","plyr.fm","semble","spark","ngerakines","kandake","fujocoded"];
+const PAGES = [
+  { name: "home", path: "/" },
+  { name: "talks", path: "/talks" },
+  { name: "faqs", path: "/faqs" },
+  { name: "remote", path: "/remote" },
+  { name: "login", path: "/login" },
+  { name: "event-detail", path: null },
+];
+const VIEWPORTS = [
+  { name: "ultrawide", w: 2280, h: 720 },
+  { name: "desktop", w: 1280, h: 720 },
+  { name: "tablet", w: 768, h: 1024 },
+  { name: "mobile", w: 375, h: 667 },
+  { name: "tall", w: 1080, h: 13920 },
+];
+// Large enough to fit any full page — the iframe won't scroll internally
+const IFRAME_TALL = 15000;
+
+const SNAPSHOT_DIR = "/snapshots";
+const BASE_URL = "";
+
+function slugTheme(t) { return t.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase(); }
+
+const state = {
+  page: "home",
+  theme: "bluesky",
+  viewport: "desktop",
+  mode: "sidebyside",
+  eventPath: null,
+};
+
+// Build controls
+const pageSelect = document.getElementById("page-select");
+PAGES.forEach(p => {
+  const o = document.createElement("option");
+  o.value = p.name; o.textContent = p.name;
+  pageSelect.appendChild(o);
+});
+pageSelect.onchange = () => { state.page = pageSelect.value; render(); };
+
+const themePills = document.getElementById("theme-pills");
+THEMES.forEach(t => {
+  const b = document.createElement("button");
+  b.textContent = t; b.dataset.theme = t;
+  b.onclick = () => { state.theme = t; updateThemePills(); render(); };
+  themePills.appendChild(b);
+});
+
+const vpPills = document.getElementById("vp-pills");
+VIEWPORTS.forEach(v => {
+  const b = document.createElement("button");
+  b.textContent = `${v.name} (${v.w}x${v.h})`; b.dataset.vp = v.name;
+  b.onclick = () => { state.viewport = v.name; updateVpPills(); render(); };
+  vpPills.appendChild(b);
+});
+
+function updateThemePills() {
+  themePills.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.theme === state.theme));
+}
+function updateVpPills() {
+  vpPills.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.vp === state.viewport));
+}
+
+function setMode(m) {
+  state.mode = m;
+  document.getElementById("btn-sidebyside").classList.toggle("active", m === "sidebyside");
+  document.getElementById("btn-overlay").classList.toggle("active", m === "overlay");
+  render();
+}
+
+function getSnapshotPath() {
+  return `${SNAPSHOT_DIR}/${state.page}-${slugTheme(state.theme)}-${state.viewport}-darwin.png`;
+}
+
+function getLiveUrl() {
+  const p = PAGES.find(p => p.name === state.page);
+  if (!p || !p.path) return null;
+  return `${BASE_URL}${p.path}?theme=${state.theme}`;
+}
+
+function getViewport() {
+  return VIEWPORTS.find(v => v.name === state.viewport) || VIEWPORTS[1];
+}
+
+function allCombos() {
+  const combos = [];
+  for (const t of THEMES) {
+    for (const p of PAGES) {
+      combos.push({ page: p.name, theme: t });
+    }
+  }
+  return combos;
+}
+
+function currentComboIndex() {
+  const combos = allCombos();
+  return combos.findIndex(c => c.page === state.page && c.theme === state.theme);
+}
+
+function setCombo(idx) {
+  const combos = allCombos();
+  const i = ((idx % combos.length) + combos.length) % combos.length;
+  state.page = combos[i].page;
+  state.theme = combos[i].theme;
+  pageSelect.value = state.page;
+  updateThemePills();
+  render();
+}
+
+function prevCombo() { setCombo(currentComboIndex() - 1); }
+function nextCombo() { setCombo(currentComboIndex() + 1); }
+
+function updateCounter() {
+  const combos = allCombos();
+  document.getElementById("combo-counter").textContent = `${currentComboIndex() + 1} / ${combos.length}`;
+}
+
+function render() {
+  updateCounter();
+  const main = document.getElementById("main");
+  const vp = getViewport();
+  const snapshotPath = getSnapshotPath();
+  const liveUrl = getLiveUrl();
+
+  if (state.mode === "sidebyside") {
+    main.innerHTML = `
+      <div class="side-by-side">
+        <div class="panel">
+          <div class="panel-header">
+            <span>Baseline Snapshot</span>
+            <span class="viewport-label">${vp.name} ${vp.w}x${vp.h}</span>
+          </div>
+          <div class="panel-content" id="baseline-scroll">
+            <div class="scaled-wrap" id="baseline-wrap">
+              <img id="baseline-img" src="${snapshotPath}" alt="baseline"
+                   onerror="this.outerHTML='<div class=no-baseline>No baseline found</div>'" />
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <span>Live</span>
+            <span class="sync-indicator">scroll synced</span>
+          </div>
+          <div class="panel-content" id="live-scroll">
+            <div class="scaled-wrap" id="live-wrap">
+              ${liveUrl ? '' : '<div class="no-baseline">Event path not discovered yet.</div>'}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    if (liveUrl) {
+      buildScaledPanel("live-wrap", "live-scroll", vp, liveUrl);
+    }
+    buildScaledBaseline("baseline-wrap", "baseline-scroll", vp);
+    setupScrollSync();
+  } else {
+    // Overlay mode
+    main.innerHTML = `
+      <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:8px;background:#1a1a1ecc;padding:6px 14px;border-radius:8px;border:1px solid #444;">
+        <label style="font-size:12px;color:#aaa;">Baseline opacity:</label>
+        <input type="range" min="0" max="100" value="50" id="opacity-slider" style="width:200px;" oninput="updateOverlayOpacity(this.value)">
+        <span id="opacity-val" style="font-size:12px;color:#aaa;min-width:30px;">50%</span>
+      </div>
+      <div class="overlay-wrap" id="overlay-wrap" style="overflow:auto;">
+        <div id="overlay-container" style="position:relative;margin:0 auto;width:${vp.w}px;">
+          <img id="overlay-baseline" src="${snapshotPath}" style="display:block;width:${vp.w}px;opacity:0.5;position:relative;z-index:2;pointer-events:none;" onerror="this.style.display='none'" />
+          <div id="overlay-iframe-wrap" style="position:absolute;top:0;left:0;z-index:1;"></div>
+        </div>
+      </div>
+    `;
+    if (liveUrl) {
+      const iframe = document.createElement("iframe");
+      iframe.src = liveUrl;
+      iframe.style.width = vp.w + "px";
+      iframe.style.height = IFRAME_TALL + "px";
+      iframe.style.border = "none";
+      document.getElementById("overlay-iframe-wrap").appendChild(iframe);
+    }
+    const img = document.getElementById("overlay-baseline");
+    if (img) {
+      img.onload = () => {
+        document.getElementById("overlay-container").style.minHeight = img.naturalHeight + "px";
+      };
+    }
+  }
+}
+
+/**
+ * Scale the baseline image to match the panel width, using CSS transform.
+ * A spacer div provides the correct scrollable height.
+ */
+function buildScaledBaseline(wrapId, scrollId, vp) {
+  const wrap = document.getElementById(wrapId);
+  const img = document.getElementById("baseline-img");
+  const panel = document.getElementById(scrollId);
+  if (!wrap || !img || !panel) return;
+
+  const availW = panel.clientWidth;
+  const scale = Math.min(1, availW / vp.w);
+
+  img.style.width = vp.w + "px";
+  img.style.height = "auto";
+  wrap.style.transform = `scale(${scale})`;
+  wrap.style.transformOrigin = "top left";
+  wrap.style.width = vp.w + "px";
+
+  const finalize = () => {
+    const naturalH = img.naturalHeight || img.height;
+    if (!naturalH) return;
+    // CSS transform doesn't affect layout, so add a spacer for scroll height
+    const spacer = document.createElement("div");
+    spacer.style.height = (naturalH * scale) + "px";
+    spacer.style.pointerEvents = "none";
+    panel.appendChild(spacer);
+    // Pull the wrap out of flow so spacer controls height
+    wrap.style.position = "absolute";
+    wrap.style.top = "0";
+    wrap.style.left = "0";
+  };
+
+  if (img.complete && img.naturalHeight) finalize();
+  else img.addEventListener("load", finalize);
+}
+
+/**
+ * Create a scaled iframe that renders the full page (tall iframe, no internal scroll).
+ * A spacer div provides the correct scrollable height in the panel.
+ */
+function buildScaledPanel(wrapId, scrollId, vp, url) {
+  const wrap = document.getElementById(wrapId);
+  const panel = document.getElementById(scrollId);
+  if (!wrap || !panel) return;
+
+  const availW = panel.clientWidth;
+  const scale = Math.min(1, availW / vp.w);
+
+  const iframe = document.createElement("iframe");
+  iframe.src = url;
+  iframe.style.width = vp.w + "px";
+  iframe.style.height = IFRAME_TALL + "px";
+  iframe.style.border = "none";
+
+  wrap.style.transform = `scale(${scale})`;
+  wrap.style.transformOrigin = "top left";
+  wrap.style.width = vp.w + "px";
+  wrap.style.height = IFRAME_TALL + "px";
+  wrap.style.position = "absolute";
+  wrap.style.top = "0";
+  wrap.style.left = "0";
+  wrap.appendChild(iframe);
+
+  // Spacer — start with IFRAME_TALL, shrink to real content height once loaded
+  const spacer = document.createElement("div");
+  spacer.style.height = (IFRAME_TALL * scale) + "px";
+  spacer.style.pointerEvents = "none";
+  panel.appendChild(spacer);
+
+  // Same-origin: read actual content height and resize
+  iframe.onload = () => {
+    try {
+      const doc = iframe.contentDocument;
+      const fullH = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+      iframe.style.height = fullH + "px";
+      wrap.style.height = fullH + "px";
+      spacer.style.height = (fullH * scale) + "px";
+    } catch(e) {}
+  };
+}
+
+/**
+ * Proportional scroll sync between the two panels.
+ */
+function setupScrollSync() {
+  const a = document.getElementById("baseline-scroll");
+  const b = document.getElementById("live-scroll");
+  if (!a || !b) return;
+
+  let syncing = false;
+
+  function sync(src, dst) {
+    if (syncing) return;
+    syncing = true;
+    const srcMax = src.scrollHeight - src.clientHeight;
+    const dstMax = dst.scrollHeight - dst.clientHeight;
+    if (srcMax > 0 && dstMax > 0) {
+      dst.scrollTop = (src.scrollTop / srcMax) * dstMax;
+    }
+    syncing = false;
+  }
+
+  a.addEventListener("scroll", () => sync(a, b));
+  b.addEventListener("scroll", () => sync(b, a));
+}
+
+function updateOverlayOpacity(val) {
+  const img = document.getElementById("overlay-baseline");
+  if (img) img.style.opacity = val / 100;
+  document.getElementById("opacity-val").textContent = val + "%";
+}
+
+// Keyboard navigation
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") prevCombo();
+  if (e.key === "ArrowRight") nextCombo();
+});
+
+// Discover event-detail path from /talks, then init
+async function discoverEventPath() {
+  try {
+    const res = await fetch("/talks");
+    const html = await res.text();
+    const match = html.match(/href="(\/event\/[^"]+)"/);
+    if (match) {
+      const entry = PAGES.find(p => p.name === "event-detail");
+      if (entry) entry.path = match[1];
+    }
+  } catch(e) {}
+}
+
+discoverEventPath().then(() => {
+  updateThemePills();
+  updateVpPills();
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 import type { BlobRef } from "@/actions/index";
 import type { LocationData } from "./edit/LocationInput";
+import type { BadgeAwardInfo } from "@/lib/profile";
 
 export type ActiveIcon = {
   label: string;
@@ -40,6 +41,7 @@ export interface ProfileViewProps {
   isOwnProfile?: boolean;
   activeIcons: ActiveIcon[];
   editData?: ProfileEditData;
+  badgeAward?: BadgeAwardInfo | null;
   isTicketHolder?: boolean;
   ticketEditUrl?: string;
 }

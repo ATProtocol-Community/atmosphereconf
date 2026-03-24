@@ -30,6 +30,7 @@ export function ProfileView({
   isOwnProfile = false,
   activeIcons,
   editData,
+  badgeAward,
   isTicketHolder,
   ticketEditUrl,
 }: ProfileViewProps) {
@@ -143,6 +144,7 @@ export function ProfileView({
       isTicketHolder={isTicketHolder}
       ticketEditUrl={ticketEditUrl}
       onEdit={() => setIsEditing(true)}
+      badgeAward={badgeAward}
     />
   );
 }
