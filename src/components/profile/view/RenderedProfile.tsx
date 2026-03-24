@@ -3,6 +3,7 @@ import { Avatar } from "../Avatar";
 import { RichText } from "./RichText";
 import { GermButton } from "./GermButton";
 import type { ActiveIcon, ProfileViewProps } from "../profile-types";
+import { BadgeSection } from "../badge/BadgeSection";
 
 export function RenderedProfile({
   did,
@@ -22,6 +23,7 @@ export function RenderedProfile({
   isTicketHolder,
   ticketEditUrl,
   onEdit,
+  badgeAward,
 }: Omit<ProfileViewProps, "editData"> & { onEdit: () => void }) {
   const germDmUrl = germMessageMeUrl
     ? viewerDid
@@ -96,6 +98,15 @@ export function RenderedProfile({
           and update your atproto handle.
         </p>
       )}
+
+      {/* Badge */}
+      <BadgeSection
+        did={did}
+        handle={handle}
+        badgeAward={badgeAward ?? null}
+        isOwnProfile={!!isOwnProfile}
+        isTicketHolder={!!isTicketHolder}
+      />
 
       {/* Pronouns + website + germ */}
       {showLinksRow && (

@@ -1,0 +1,273 @@
+/* ── Badge pill (ticket-inspired) ── */
+.badge-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #fde68a 0%,
+    #fbbf24 40%,
+    #f59e0b 70%,
+    #fbbf24 100%
+  );
+  box-shadow:
+    0 1px 3px rgba(180, 140, 20, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+.badge-btn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.5s ease-out;
+  pointer-events: none;
+}
+.badge-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 3px 8px rgba(180, 140, 20, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.badge-btn:hover::after {
+  left: 150%;
+}
+.badge-btn:active {
+  transform: translateY(0);
+  transition-duration: 0.05s;
+}
+.badge-btn:focus-visible {
+  outline: 2px solid #d97706;
+  outline-offset: 2px;
+}
+
+/* ── Claim celebration ── */
+@keyframes celebrate-glow {
+  0% {
+    box-shadow:
+      0 1px 3px rgba(180, 140, 20, 0.15),
+      0 0 0 0 rgba(245, 158, 11, 0.5);
+  }
+  40% {
+    box-shadow:
+      0 1px 3px rgba(180, 140, 20, 0.15),
+      0 0 20px 6px rgba(245, 158, 11, 0.25);
+  }
+  100% {
+    box-shadow:
+      0 1px 3px rgba(180, 140, 20, 0.15),
+      0 0 0 0 rgba(245, 158, 11, 0);
+  }
+}
+@keyframes celebrate-shine {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(350%) skewX(-20deg);
+  }
+}
+.badge-btn-celebrate {
+  animation: celebrate-glow 1.2s ease-out;
+}
+.badge-claim-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: celebrate-shine 0.6s ease-out 0.2s both;
+  pointer-events: none;
+}
+.badge-welcome {
+  animation: welcome-fade 0.3s ease-out 0.5s both;
+}
+@keyframes welcome-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ── Popup ── */
+@keyframes popup-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.badge-popup {
+  animation: popup-in 0.15s ease-out both;
+}
+
+/* ── Certificate ── */
+.badge-certificate {
+  position: relative;
+  background: linear-gradient(180deg, #fefcf3 0%, #f5f0e1 100%);
+  border: 2px solid #c9b88a;
+  padding: 0.3rem;
+}
+.badge-cert-inner {
+  border: 1px solid rgba(180, 160, 110, 0.5);
+  padding: 1.25rem 1rem;
+  position: relative;
+  text-align: center;
+}
+.badge-cert-inner::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(180, 160, 110, 0.25);
+  pointer-events: none;
+}
+
+/* ── Certificate tape ── */
+.badge-tape {
+  position: absolute;
+  width: 3rem;
+  height: 0.85rem;
+  background: rgba(254, 243, 199, 0.85);
+  border: 1px dashed rgba(217, 119, 6, 0.3);
+  border-radius: 2px;
+  z-index: 3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.badge-tape-left {
+  top: -0.4rem;
+  left: 1.5rem;
+  transform: rotate(-3deg);
+}
+.badge-tape-right {
+  top: -0.4rem;
+  right: 1.5rem;
+  transform: rotate(4deg);
+}
+
+/* ── Seal ── */
+.badge-seal {
+  color: rgba(180, 160, 110, 0.3);
+  transition: color 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.badge-seal svg polygon:last-child {
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.badge-seal-verified {
+  color: #10b981;
+}
+@keyframes seal-stamp {
+  0% {
+    transform: scale(0.4) rotate(-30deg);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1.2) rotate(8deg);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(0.92) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+.badge-seal-verified svg {
+  animation: seal-stamp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Dark mode (class-based, matches Tailwind .dark) ── */
+:is(.dark *).badge-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.15) 0%,
+    rgba(245, 158, 11, 0.2) 40%,
+    rgba(217, 119, 6, 0.15) 70%,
+    rgba(245, 158, 11, 0.2) 100%
+  );
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 200, 50, 0.08);
+}
+:is(.dark *).badge-btn::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 200, 50, 0.12),
+    transparent
+  );
+}
+:is(.dark *).badge-btn:hover {
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 200, 50, 0.1);
+}
+:is(.dark *).badge-claim-shine {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 200, 50, 0.3),
+    transparent
+  );
+}
+:is(.dark *).badge-certificate {
+  background: linear-gradient(180deg, #2a2318 0%, #1f1a12 100%);
+  border-color: rgba(180, 160, 110, 0.3);
+}
+:is(.dark *).badge-cert-inner {
+  border-color: rgba(180, 160, 110, 0.2);
+}
+:is(.dark *).badge-cert-inner::before {
+  border-color: rgba(180, 160, 110, 0.1);
+}
+:is(.dark *).badge-tape {
+  background: rgba(120, 60, 0, 0.5);
+  border-color: rgba(217, 119, 6, 0.2);
+}
+:is(.dark *).badge-seal {
+  color: rgba(180, 160, 110, 0.2);
+}
+:is(.dark *).badge-seal-verified {
+  color: #10b981;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .badge-popup,
+  .badge-btn-celebrate,
+  .badge-welcome {
+    animation: none;
+  }
+  .badge-claim-shine {
+    display: none;
+  }
+  .badge-btn::after {
+    transition: none;
+  }
+  .badge-welcome {
+    opacity: 1;
+  }
+  .badge-seal-verified svg {
+    animation: none;
+  }
+}

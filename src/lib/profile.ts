@@ -3,12 +3,23 @@ import { lexToJson } from "@atproto/lexicon";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl, parseRichText } from "./bsky";
 import type { RichTextSegment } from "./bsky";
+import { BADGE_COLLECTION } from "@fujocoded/atproto-badge";
+import { getBadgeDefinitionRef } from "./badge";
 
 type AvatarBlob = {
   $type: "blob";
   ref: { $link: string };
   mimeType: string;
   size: number;
+};
+
+export type BadgeAwardInfo = {
+  uri: string;
+  badgeDefinitionUri: string | undefined;
+  issuedAt: string | undefined;
+  pdsUrl: string | undefined;
+  badgeName: string | undefined;
+  badgeDescription: string | undefined;
 };
 
 export type LoadedProfile = {
@@ -30,6 +41,7 @@ export type LoadedProfile = {
   bskyDescriptionSegments?: RichTextSegment[];
   collections: string[];
   confAvatarBlob: AvatarBlob | null;
+  badgeAward: BadgeAwardInfo | null;
 };
 
 const publicAgent = new AtpAgent({ service: "https://public.api.bsky.app" });
@@ -52,6 +64,7 @@ export async function loadProfile(
 ): Promise<LoadedProfile | null> {
   let agent: AtpBaseClient;
   let did: string, handle: string;
+  let pdsUrl: string | undefined;
 
   // Try Microcosm first for fast identity resolution, fall back to getPdsAgent
   try {
@@ -64,6 +77,7 @@ export async function loadProfile(
       throw new Error("Incomplete identity data");
     did = data.did;
     handle = data.handle;
+    pdsUrl = data.pds;
     agent = new AtpBaseClient(data.pds);
   } catch {
     const fallback = await getPdsAgent({ didOrHandle: identifier });
@@ -74,12 +88,13 @@ export async function loadProfile(
       });
       did = data.did;
       handle = data.handle;
+      pdsUrl = fallback.serviceUrl?.toString();
     } catch {
       return null;
     }
     agent = fallback;
   }
-  const [describeResult, bskyResult, confResult, germResult] =
+  const [describeResult, bskyResult, confResult, germResult, badgeResult] =
     await Promise.allSettled([
       agent.com.atproto.repo.describeRepo({ repo: did }),
       agent.com.atproto.repo.getRecord({
@@ -96,6 +111,11 @@ export async function loadProfile(
         repo: did,
         collection: "com.germnetwork.declaration",
         rkey: "self",
+      }),
+      agent.com.atproto.repo.listRecords({
+        repo: did,
+        collection: BADGE_COLLECTION,
+        limit: 100,
       }),
     ]);
   const collections =
@@ -124,6 +144,67 @@ export async function loadProfile(
     ? getBlobCDNUrl(did, conf.avatar)
     : bskyAvatarUrl;
 
+  // Extract badge award if one matches our badge definition
+  let badgeAward: BadgeAwardInfo | null = null;
+  const badgeRef = getBadgeDefinitionRef();
+  if (badgeResult.status === "fulfilled" && badgeRef) {
+    for (const rec of badgeResult.value.data.records) {
+      const value = rec.value as Record<string, unknown>;
+      const badge = value.badge as { uri?: string } | undefined;
+      if (badge?.uri === badgeRef.uri) {
+        // Build direct PDS link: parse at:// URI into xrpc getRecord URL
+        let directPdsUrl: string | undefined;
+        if (pdsUrl) {
+          const atMatch = rec.uri.match(/^at:\/\/([^/]+)\/([^/]+)\/(.+)$/);
+          if (atMatch) {
+            const base = pdsUrl.replace(/\/$/, "");
+            directPdsUrl = `${base}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(atMatch[1])}&collection=${encodeURIComponent(atMatch[2])}&rkey=${encodeURIComponent(atMatch[3])}`;
+          }
+        }
+        // Fetch badge definition for name + description
+        let badgeName: string | undefined;
+        let badgeDescription: string | undefined;
+        const defMatch = badgeRef.uri.match(
+          /^at:\/\/([^/]+)\/([^/]+)\/(.+)$/,
+        );
+        if (defMatch) {
+          try {
+            const defAgent = await getPdsAgent({
+              didOrHandle: defMatch[1],
+            });
+            if (defAgent) {
+              const { data: defData } =
+                await defAgent.com.atproto.repo.getRecord({
+                  repo: defMatch[1],
+                  collection: defMatch[2],
+                  rkey: defMatch[3],
+                });
+              const defVal = defData.value as Record<string, unknown>;
+              badgeName =
+                typeof defVal.name === "string" ? defVal.name : undefined;
+              badgeDescription =
+                typeof defVal.description === "string"
+                  ? defVal.description
+                  : undefined;
+            }
+          } catch {
+            // non-critical — fall back to generic text
+          }
+        }
+
+        badgeAward = {
+          uri: rec.uri,
+          badgeDefinitionUri: badgeRef.uri,
+          issuedAt: typeof value.issued === "string" ? value.issued : undefined,
+          pdsUrl: directPdsUrl,
+          badgeName,
+          badgeDescription,
+        };
+        break;
+      }
+    }
+  }
+
   return {
     did,
     handle,
@@ -143,5 +224,6 @@ export async function loadProfile(
     bskyDescriptionSegments: await detectDescriptionFacets(bsky?.description),
     collections,
     confAvatarBlob: conf?.avatar ?? null,
+    badgeAward,
   };
 }
