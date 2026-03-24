@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { actions } from "astro:actions";
+import { CircleCheck, ExternalLink, Loader2, Trash2 } from "lucide-react";
 import type { BadgeAwardInfo } from "@/lib/profile";
 
 interface BadgeCertificateProps {
@@ -63,7 +64,7 @@ export function BadgeCertificate({
   };
 
   return (
-    <div className="badge-popup absolute left-0 top-full z-50 mt-3 w-80 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+    <div className="w-80 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
       {/* Certificate */}
       <div className="badge-certificate relative rounded-sm">
         <div className="badge-tape badge-tape-left" />
@@ -143,37 +144,12 @@ export function BadgeCertificate({
                   >
                     {verifying ? (
                       <>
-                        <svg
-                          className="size-2.5 animate-spin"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            strokeOpacity="0.3"
-                          />
-                          <path d="M12 2a10 10 0 0 1 10 10" />
-                        </svg>
+                        <Loader2 className="size-2.5 animate-spin" />
                         Checking...
                       </>
                     ) : (
                       <>
-                        <svg
-                          className="size-2.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M9 12l2 2 4-4" />
-                          <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" />
-                        </svg>
+                        <CircleCheck className="size-2.5" />
                         Verify signature
                       </>
                     )}
@@ -221,20 +197,7 @@ export function BadgeCertificate({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-[10px] text-gray-400 hover:text-gray-600 hover:underline dark:text-gray-500 dark:hover:text-gray-300"
           >
-            <svg
-              aria-hidden="true"
-              className="size-2.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-              <path d="M15 3h6v6" />
-              <path d="M10 14L21 3" />
-            </svg>
+            <ExternalLink aria-hidden="true" className="size-2.5" />
             View on PDS
           </a>
         )}
@@ -245,28 +208,10 @@ export function BadgeCertificate({
             className="ml-auto inline-flex items-center gap-1 text-[10px] text-red-300 transition-colors hover:text-red-500 disabled:opacity-50 dark:text-red-500/40 dark:hover:text-red-300"
           >
             {unclaiming ? (
-              <svg
-                className="size-3 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83" />
-              </svg>
+              <Loader2 className="size-3 animate-spin" />
             ) : (
               <>
-                <svg
-                  className="size-2.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-                </svg>
+                <Trash2 className="size-2.5" />
                 Remove
               </>
             )}
