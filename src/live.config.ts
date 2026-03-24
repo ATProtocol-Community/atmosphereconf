@@ -4,6 +4,7 @@ import { atprotoLiveLoader } from "./lib/atproto-live-loader";
 import { calendarRecordToEventData } from "./lib/calendar-event";
 import { liveBlueskyLoader } from "@ascorbic/bluesky-loader";
 import { leafletLiveLoader } from "@/lib/leaflet-loader";
+import { parseInline } from "marked";
 
 import { EVENTS_OWNER_DID_OR_HANDLE, TITO_API_TOKEN } from "astro:env/server";
 import { titoAnswerLoader } from "./lib/tito-live-loader";
@@ -36,6 +37,10 @@ const events = defineLiveCollection({
       if (header?.content?.ref?.$link) {
         (data as Record<string, unknown>).headerUrl =
           `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${header.content.ref.$link}@jpeg`;
+      }
+
+      if (data.title) {
+        data.title = parseInline(data.title) as string;
       }
 
       return {

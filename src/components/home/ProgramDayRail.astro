@@ -110,22 +110,34 @@ const { rail } = Astro.props;
             </div>
 
             <ol class="rail-other-day-agenda">
-              {otherDay.picks.map((event) => (
-                <li class="rail-other-day-item">
-                  <span class="rail-other-day-time">
-                    {formatMiniTime(event.start)}
-                  </span>
-                  <div class="min-w-0">
-                    <p
-                      class="rail-other-day-item-title"
-                      set:html={event.title}
-                    />
-                    {event.room && (
-                      <p class="rail-other-day-room">{event.room}</p>
-                    )}
-                  </div>
-                </li>
-              ))}
+              {otherDay.picks.map((event) => {
+                const linkable = event.id && ["workshop", "presentation", "lightning-talk", "panel"].includes(event.type);
+                const inner = (
+                  <>
+                    <span class="rail-other-day-time">
+                      {formatMiniTime(event.start)}
+                    </span>
+                    <div class="min-w-0">
+                      <p
+                        class="rail-other-day-item-title"
+                        set:html={event.title}
+                      />
+                      {event.room && (
+                        <p class="rail-other-day-room">{event.room}</p>
+                      )}
+                    </div>
+                  </>
+                );
+                return (
+                  <li class:list={["rail-other-day-item", linkable && "rail-other-day-item-linkable"]}>
+                    {linkable ? (
+                      <a href={`/event/${event.id}`} class="rail-other-day-item-link">
+                        {inner}
+                      </a>
+                    ) : inner}
+                  </li>
+                );
+              })}
             </ol>
           </PaperCard>
         ))}
@@ -325,6 +337,12 @@ const { rail } = Astro.props;
     grid-template-columns: auto minmax(0, 1fr);
     gap: 0.65rem;
     align-items: start;
+    border-radius: 0.4rem;
+    transition: background 150ms ease;
+  }
+
+  .rail-other-day-item-linkable:hover {
+    background: color-mix(in oklch, var(--primary), transparent 92%);
   }
 
   .rail-other-day-time {
@@ -344,6 +362,23 @@ const { rail } = Astro.props;
     line-height: 1.3;
     text-wrap: pretty;
     color: var(--foreground);
+  }
+
+  .rail-other-day-item-link {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-column: 1 / -1;
+    gap: 0.65rem;
+    align-items: start;
+    padding: 0.35rem 0.45rem;
+    margin: -0.35rem -0.45rem;
+    border-radius: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .rail-other-day-item-link:hover .rail-other-day-item-title {
+    color: var(--primary);
   }
 
   .rail-other-day-room {
