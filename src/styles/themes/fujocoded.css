@@ -644,6 +644,10 @@
   background: #ffffff;
 }
 
+[data-theme="fujocoded"] .paper-card--outline {
+  border-color: color-mix(in oklch, var(--theme-border), transparent 72%);
+}
+
 [data-theme="fujocoded"] tito-widget .tito-widget-form {
   background: #ffffff !important;
 }
@@ -681,6 +685,7 @@
 [data-theme="fujocoded"] .day-schedule {
   background: #ffffff;
   border-style: solid !important;
+  border-color: color-mix(in oklch, var(--theme-border), transparent 72%);
 }
 
 [data-theme="fujocoded"] .day-schedule .divide-y > * + * {

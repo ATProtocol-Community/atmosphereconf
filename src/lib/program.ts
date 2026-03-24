@@ -1,5 +1,6 @@
 import { getLiveCollection } from "astro:content";
 import { formatConferenceDate, getConferenceDateKey } from "@/lib/datetime";
+import { shuffleVisualStable } from "@/lib/visual-regression";
 
 const visibleTypes = new Set([
   "presentation",
@@ -190,10 +191,6 @@ function localDate(iso: string) {
   return getConferenceDateKey(iso);
 }
 
-function shuffleItems<T>(items: T[]) {
-  return [...items].sort(() => Math.random() - 0.5);
-}
-
 export async function getProgramDays() {
   const { entries: schedule = [], error } = await getLiveCollection("events");
   if (error) {
@@ -220,7 +217,7 @@ export async function getProgramDays() {
         ...entry.data,
       }));
       const spotlightPool = events.filter((event) => event.type !== "info");
-      const spotlightItems = shuffleItems(
+      const spotlightItems = shuffleVisualStable(
         spotlightPool.length ? spotlightPool : events,
       ).map((event) => ({
         ...event,
@@ -259,7 +256,7 @@ export function getRandomProgramRail(
   const selectedDay = days.find((day) => day.date === selectedDate);
   if (!selectedDay) return null;
 
-  const spotlightPool = shuffleItems(selectedDay.spotlightPool);
+  const spotlightPool = shuffleVisualStable(selectedDay.spotlightPool);
   const spotlight = spotlightPool[0];
   const suggestions = spotlightPool.slice(1, 4);
   const otherDays = days
@@ -271,7 +268,7 @@ export function getRandomProgramRail(
       seriesLabel: day.seriesLabel,
       anchorId: day.anchorId,
       heading: day.heading,
-      picks: shuffleItems(day.spotlightPool).slice(0, 2),
+      picks: shuffleVisualStable(day.spotlightPool).slice(0, 2),
     }));
 
   return {

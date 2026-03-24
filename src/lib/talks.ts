@@ -1,4 +1,5 @@
 import { getLiveCollection } from "astro:content";
+import { shuffleVisualStable } from "@/lib/visual-regression";
 
 const MAX_CARDS = 8;
 
@@ -44,6 +45,6 @@ export async function getRandomTalks() {
       typeName: typeNames[t.data.type],
     }));
 
-  const shuffled = talks.sort(() => Math.random() - 0.5);
+  const shuffled = shuffleVisualStable(talks);
   return shuffled.slice(0, MAX_CARDS);
 }
