@@ -1,0 +1,71 @@
+/*
+ * Theme: teal.fm
+ * Source: https://teal.fm
+ *
+ * Based on teal.fm's production palette: teal-500/400/300 on deep teal and
+ * slate surfaces from the live site CSS bundle.
+ */
+
+[data-theme="teal.fm"] {
+  /* Palette */
+  --theme-bg: #042f2e;
+  --theme-fg: #ecfdf5;
+  --theme-muted: rgba(204, 251, 241, 0.7);
+  --theme-accent: #14b8a6;
+  --theme-surface: #111827;
+  --theme-border: rgba(45, 212, 191, 0.22);
+
+  /* Semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: rgba(17, 24, 39, 0.88);
+  --card-foreground: var(--theme-fg);
+  --popover: #0f172a;
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: #042f2e;
+  --secondary: rgba(255, 255, 255, 0.06);
+  --secondary-foreground: var(--theme-fg);
+  --muted: rgba(17, 24, 39, 0.72);
+  --muted-foreground: var(--theme-muted);
+  --accent: rgba(20, 184, 166, 0.12);
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: rgba(45, 212, 191, 0.14);
+  --ring: #2dd4bf;
+
+  /* Header */
+  --header-bg: #042f2e;
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: rgba(204, 251, 241, 0.72);
+  --header-border: rgba(45, 212, 191, 0.28);
+  --header-logo-accent: #2dd4bf;
+
+  /* ATProto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(135deg, #111827, #042f2e, #14b8a6);
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: rgba(4, 47, 46, 0.88);
+  --atproto-profile-pill-fg: #5eead4;
+  --atproto-profile-link: #5eead4;
+
+  /* Event-type badge/cell colors */
+  --event-presentation-bg: rgba(45, 212, 191, 0.18);
+  --event-presentation-fg: #99f6e4;
+  --event-presentation-sub: #5eead4;
+  --event-lightning-bg: rgba(96, 165, 250, 0.18);
+  --event-lightning-fg: #bfdbfe;
+  --event-lightning-sub: #93c5fd;
+  --event-panel-bg: rgba(192, 132, 252, 0.18);
+  --event-panel-fg: #e9d5ff;
+  --event-panel-sub: #d8b4fe;
+  --event-workshop-bg: rgba(16, 185, 129, 0.18);
+  --event-workshop-fg: #a7f3d0;
+  --event-workshop-sub: #6ee7b7;
+  --event-info-bg: rgba(255, 255, 255, 0.08);
+  --event-info-fg: #d1fae5;
+  --event-info-sub: #99f6e4;
+  --event-activity-bg: rgba(255, 255, 255, 0.06);
+  --event-activity-fg: #ecfdf5;
+  --event-activity-sub: rgba(204, 251, 241, 0.8);
+}
