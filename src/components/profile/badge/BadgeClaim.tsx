@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { actions } from "astro:actions";
+import { Loader2, Star } from "lucide-react";
 
 interface BadgeClaimProps {
   onSuccess: () => void;
@@ -35,29 +36,12 @@ export function BadgeClaim({ onSuccess }: BadgeClaimProps) {
       >
         {claiming ? (
           <>
-            <svg
-              className="size-3.5 animate-spin"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            >
-              <circle cx="12" cy="12" r="10" strokeOpacity="0.3" />
-              <path d="M12 2a10 10 0 0 1 10 10" />
-            </svg>
+            <Loader2 className="size-3.5 animate-spin" />
             Claiming your spot...
           </>
         ) : (
           <>
-            <svg
-              className="size-3.5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              stroke="none"
-            >
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
+            <Star className="size-3.5" fill="currentColor" stroke="none" />
             Join the flock
           </>
         )}
