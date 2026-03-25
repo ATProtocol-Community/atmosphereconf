@@ -235,11 +235,13 @@ const { days, initialDate } = Astro.props;
   }
 
   .program-paper :global(.day-schedule .border-border),
-  .program-paper :global(.day-schedule .divide-border) {
+  .program-paper :global(.day-schedule .divide-border),
+  .program-paper :global(.day-schedule .divide-border > *) {
     border-color: color-mix(in oklch, var(--primary), transparent 78%);
   }
 
-  .program-paper :global(.day-schedule .divide-border\/40) {
+  .program-paper :global(.day-schedule .divide-border\/40),
+  .program-paper :global(.day-schedule .divide-border\/40 > *) {
     border-color: color-mix(in oklch, var(--primary), transparent 84%);
   }
 
