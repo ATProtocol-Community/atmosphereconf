@@ -86,6 +86,7 @@ const initialDayDate = days[0]?.date ?? "";
           const idx = tab.dataset.roomTab;
           tabs.forEach((t) => {
             const isActive = t === tab;
+            t.classList.toggle("is-active", isActive);
             t.classList.toggle("border-l-2", isActive);
             t.classList.toggle("border-l-primary", isActive);
             t.classList.toggle("text-primary", isActive);

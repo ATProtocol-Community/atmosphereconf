@@ -229,7 +229,7 @@ const { days, initialDate } = Astro.props;
   }
 
   .program-paper :global(.day-schedule) {
-    border: none;
+    border-color: color-mix(in oklch, var(--primary), transparent 55%);
     background: color-mix(in srgb, var(--card), var(--background) 1.5%);
     overflow: visible;
   }
@@ -237,12 +237,31 @@ const { days, initialDate } = Astro.props;
   .program-paper :global(.day-schedule .border-border),
   .program-paper :global(.day-schedule .divide-border),
   .program-paper :global(.day-schedule .divide-border > *) {
-    border-color: color-mix(in oklch, var(--primary), transparent 78%);
+    border-color: color-mix(in oklch, var(--primary), transparent 65%);
   }
 
   .program-paper :global(.day-schedule .divide-border\/40),
   .program-paper :global(.day-schedule .divide-border\/40 > *) {
-    border-color: color-mix(in oklch, var(--primary), transparent 84%);
+    border-color: color-mix(in oklch, var(--primary), transparent 78%);
+  }
+
+  .program-paper :global(.day-schedule .room-tab) {
+    border-style: solid;
+  }
+
+  .program-paper :global(.day-schedule .room-tab.is-active) {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary), transparent 35%);
+  }
+
+  .program-paper :global(.day-schedule .room-tab.is-active),
+  .program-paper :global(.day-schedule .room-tab.is-active + .room-tab) {
+    border-top-color: transparent !important;
+  }
+
+  .program-paper :global(.day-schedule .room-tab:first-child) {
+    border-radius: var(--schedule-radius) var(--schedule-radius) 0 0;
   }
 
   @media (min-width: 1024px) {
@@ -265,6 +284,7 @@ const { days, initialDate } = Astro.props;
     .program-paper :global(.day-schedule) {
       margin-left: -0.25rem;
       margin-right: -0.25rem;
+      border-radius: var(--schedule-radius);
     }
 
     .program-stage {
@@ -273,6 +293,19 @@ const { days, initialDate } = Astro.props;
       --program-stack-after-tilt: 0.3deg;
       --program-stack-before-tilt: 0.6deg;
       padding: 0 0.22rem;
+    }
+
+    .program-paper :global(.day-schedule) {
+      border-color: color-mix(in oklch, var(--primary), transparent 45%);
+    }
+
+    .program-paper :global(.day-schedule .divide-border .room-tab) {
+      border-left: 2px solid transparent;
+    }
+
+    .program-paper :global(.day-schedule .divide-border .room-tab.is-active) {
+      border-color: color-mix(in oklch, var(--primary), transparent 35%);
+      border-bottom-color: transparent;
     }
 
     .program-stack-sheet {
