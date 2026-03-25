@@ -111,6 +111,7 @@
   --ticket-border: #cc0000;
   --ticket-label: #ffff00;
   --ticket-main: #ffffff;
+  --schedule-radius: 0;
 }
 
 /* --- ngerakines layout overrides (need full selectors for specificity) --- */
@@ -561,4 +562,8 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+}
+
+[data-theme="ngerakines"] .schedule-event-card {
+  border-radius: 0px !important;
 }
