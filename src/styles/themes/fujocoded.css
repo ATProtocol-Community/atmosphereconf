@@ -685,7 +685,8 @@
 [data-theme="fujocoded"] .day-schedule {
   background: #ffffff;
   border-style: solid !important;
-  border-color: color-mix(in oklch, var(--theme-border), transparent 72%);
+  border-width: 1px !important;
+  border-color: color-mix(in oklch, var(--theme-border), transparent 82%) !important;
 }
 
 [data-theme="fujocoded"] .day-schedule .divide-y > * + * {
