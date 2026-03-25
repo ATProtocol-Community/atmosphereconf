@@ -159,6 +159,9 @@ const { days, initialDate } = Astro.props;
     .program-day-chip:nth-child(4) {
       border-radius: 0 0 var(--paper-radius-sm) 0;
     }
+    .program-day-chip.is-active + .program-day-chip {
+      border-color: inherit;
+    }
   }
 
   @media (max-width: 767px) {
@@ -173,6 +176,10 @@ const { days, initialDate } = Astro.props;
     .program-day-chip + .program-day-chip {
       border-left: 0;
       border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+
+    .program-day-selector .program-day-chip.is-active {
+      border-top: transparent;
     }
 
     .program-day-chip:first-child {

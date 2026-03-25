@@ -90,7 +90,9 @@ const gridEvents = parsed
 const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
 ---
 
-<div class="day-schedule border-border isolate rounded-lg border">
+<div
+  class="day-schedule border-border isolate overflow-hidden rounded-lg border"
+>
   <!-- ========== MOBILE: Vertical room tabs + single-room panels ========== -->
 
   <div class="divide-border flex flex-col divide-y md:hidden">
@@ -101,7 +103,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
           class:list={[
             "room-tab px-3 py-2.5 text-left text-xs font-semibold tracking-wide uppercase transition-colors",
             i === 0
-              ? "border-l-primary bg-accent/50 text-primary border-l-2"
+              ? "is-active border-l-primary bg-accent/50 text-primary border-l-2"
               : "text-muted-foreground",
           ]}
         >
@@ -192,7 +194,6 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
             class="divide-border/40 col-start-1 col-end-2 row-start-1 grid divide-y"
             style={timeGridRows}
           >
-            <div class="row-end-1 h-0"></div>
             <div></div>
             {
               Array.from({ length: totalSlots }).map((_, i) => (
@@ -249,6 +250,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
 
         tabs.forEach((t) => {
           const isActive = t === tab;
+          t.classList.toggle("is-active", isActive);
           t.classList.toggle("border-l-2", isActive);
           t.classList.toggle("border-l-primary", isActive);
           t.classList.toggle("text-primary", isActive);

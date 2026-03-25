@@ -111,7 +111,14 @@ const { rail } = Astro.props;
 
             <ol class="rail-other-day-agenda">
               {otherDay.picks.map((event) => {
-                const linkable = event.id && ["workshop", "presentation", "lightning-talk", "panel"].includes(event.type);
+                const linkable =
+                  event.id &&
+                  [
+                    "workshop",
+                    "presentation",
+                    "lightning-talk",
+                    "panel",
+                  ].includes(event.type);
                 const inner = (
                   <>
                     <span class="rail-other-day-time">
@@ -129,12 +136,22 @@ const { rail } = Astro.props;
                   </>
                 );
                 return (
-                  <li class:list={["rail-other-day-item", linkable && "rail-other-day-item-linkable"]}>
+                  <li
+                    class:list={[
+                      "rail-other-day-item",
+                      linkable && "rail-other-day-item-linkable",
+                    ]}
+                  >
                     {linkable ? (
-                      <a href={`/event/${event.id}`} class="rail-other-day-item-link">
+                      <a
+                        href={`/event/${event.id}`}
+                        class="rail-other-day-item-link"
+                      >
                         {inner}
                       </a>
-                    ) : inner}
+                    ) : (
+                      inner
+                    )}
                   </li>
                 );
               })}
@@ -191,6 +208,11 @@ const { rail } = Astro.props;
     font-size: 1.15rem;
     color: var(--primary);
     opacity: 0.6;
+    margin-left: 0.25rem;
+  }
+
+  :global(.rail-entry-compact .starring-card-arrow) {
+    margin-left: 0.25rem;
   }
 
   :global(.rail-entry-featured .starring-card-title) {
@@ -294,7 +316,7 @@ const { rail } = Astro.props;
     border: 2px var(--pill-border-style, dashed)
       color-mix(in oklch, var(--event-workshop-sub), transparent 54%);
     border-radius: var(--pill-radius);
-    background: transparent;
+    background: color-mix(in oklch, var(--event-workshop-sub), transparent 88%);
     color: var(--foreground);
     font-family: var(--font-mono);
     font-size: 0.62rem;
@@ -337,11 +359,11 @@ const { rail } = Astro.props;
     grid-template-columns: auto minmax(0, 1fr);
     gap: 0.65rem;
     align-items: start;
-    border-radius: 0.4rem;
+    border-radius: var(--paper-radius-sm);
     transition: background 150ms ease;
   }
 
-  .rail-other-day-item-linkable:hover {
+  .rail-other-day-item-link:hover {
     background: color-mix(in oklch, var(--primary), transparent 92%);
   }
 
@@ -372,7 +394,7 @@ const { rail } = Astro.props;
     align-items: start;
     padding: 0.35rem 0.45rem;
     margin: -0.35rem -0.45rem;
-    border-radius: 0.4rem;
+    border-radius: var(--paper-radius-sm);
     text-decoration: none;
     color: inherit;
   }
