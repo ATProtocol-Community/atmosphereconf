@@ -30,6 +30,8 @@ export function ProfileView({
   isOwnProfile = false,
   activeIcons,
   editData,
+  isTicketHolder,
+  ticketEditUrl,
 }: ProfileViewProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -138,6 +140,8 @@ export function ProfileView({
       viewerDid={viewerDid}
       isOwnProfile={isOwnProfile}
       activeIcons={activeIcons}
+      isTicketHolder={isTicketHolder}
+      ticketEditUrl={ticketEditUrl}
       onEdit={() => setIsEditing(true)}
     />
   );

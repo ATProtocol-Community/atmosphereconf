@@ -19,6 +19,8 @@ export function RenderedProfile({
   viewerDid,
   isOwnProfile,
   activeIcons,
+  isTicketHolder,
+  ticketEditUrl,
   onEdit,
 }: Omit<ProfileViewProps, "editData"> & { onEdit: () => void }) {
   const germDmUrl = germMessageMeUrl
@@ -66,6 +68,34 @@ export function RenderedProfile({
           </div>
         )}
       </div>
+
+      {/* Ticket info (own profile only) */}
+      {isOwnProfile && isTicketHolder && ticketEditUrl && (
+        <p className="text-muted-foreground/60 text-xs italic">
+          <a
+            href={ticketEditUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:opacity-80"
+          >
+            Manage your ticket ↗
+          </a>
+        </p>
+      )}
+      {isOwnProfile && !isTicketHolder && (
+        <p className="text-muted-foreground/60 text-xs italic">
+          Missing your ticket?{" "}
+          <a
+            href="https://lookup.tito.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:opacity-80"
+          >
+            Find it again here ↗
+          </a>{" "}
+          and update your atproto handle.
+        </p>
+      )}
 
       {/* Pronouns + website + germ */}
       {showLinksRow && (
