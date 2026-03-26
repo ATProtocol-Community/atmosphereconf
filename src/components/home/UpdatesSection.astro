@@ -228,6 +228,10 @@ const newsItems = newsPosts.map((post) => ({
     align-items: start;
   }
 
+  :global(.bluesky-post-container) {
+    --bluesky-content-min-width: 200px;
+  }
+
   .updates-feed-card {
     position: relative;
     display: flex;
@@ -294,7 +298,6 @@ const newsItems = newsPosts.map((post) => ({
   }
 
   .updates-signal-embed {
-    max-width: 50px; /* keep embedded Bluesky signal compact */
     margin-top: 1rem;
     --bluesky-color-background: var(--card);
     --bluesky-color-background-hover: var(--muted);
