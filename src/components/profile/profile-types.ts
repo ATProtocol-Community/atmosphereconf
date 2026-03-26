@@ -40,6 +40,8 @@ export interface ProfileViewProps {
   isOwnProfile?: boolean;
   activeIcons: ActiveIcon[];
   editData?: ProfileEditData;
+  isTicketHolder?: boolean;
+  ticketEditUrl?: string;
 }
 
 export interface EditSaveData {

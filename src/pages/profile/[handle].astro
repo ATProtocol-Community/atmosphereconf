@@ -4,6 +4,7 @@ import ProfilePage from "@/components/profile/ProfilePage.astro";
 import { loadProfile } from "@/lib/profile";
 import { getTalksByHandle } from "@/lib/talks";
 import { detectClientTheme } from "@/components/profile/client-themes";
+import { getTicketInfo } from "@/lib/ticket";
 
 const { handle } = Astro.params;
 const profile = await loadProfile(handle!);
@@ -15,6 +16,17 @@ const isSpeaker = (await getTalksByHandle(profile.handle)).length > 0;
 if (!viewerDid && !isSpeaker) return Astro.redirect("/login");
 
 const isOwnProfile = viewerDid === profile.did;
+
+let ticketEditUrl: string | undefined;
+if (isOwnProfile) {
+  try {
+    const ticketInfo = await getTicketInfo(profile.handle);
+    ticketEditUrl = ticketInfo?.ticketEditUrl;
+  } catch {
+    // Non-critical
+  }
+}
+
 const editData = isOwnProfile
   ? {
       initialDisplayName: profile.displayName,
@@ -38,5 +50,11 @@ const editData = isOwnProfile
   page="profile"
   defaultTheme={detectClientTheme(profile.handle)}
 >
-  <ProfilePage {profile} {editData} {viewerDid} />
+  <ProfilePage
+    {profile}
+    {editData}
+    {viewerDid}
+    isTicketHolder={!!ticketEditUrl}
+    ticketEditUrl={ticketEditUrl}
+  />
 </Layout>

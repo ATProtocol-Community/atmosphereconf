@@ -10,9 +10,11 @@ interface Props {
   profile: LoadedProfile;
   editData?: ProfileEditData;
   viewerDid?: string;
+  isTicketHolder?: boolean;
+  ticketEditUrl?: string;
 }
 
-const { profile, editData, viewerDid } = Astro.props;
+const { profile, editData, viewerDid, isTicketHolder = false, ticketEditUrl } = Astro.props;
 
 const svgFiles = import.meta.glob<string>(
   "/src/components/profile/icons/*.svg",
@@ -62,5 +64,7 @@ try {
     editData={editData}
     talks={talks}
     authorFeedInitialData={authorFeedInitialData}
+    isTicketHolder={isTicketHolder}
+    ticketEditUrl={ticketEditUrl}
   />
 </div>
