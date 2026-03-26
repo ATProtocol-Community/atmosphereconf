@@ -2,50 +2,54 @@ import type { LiveLoader } from "astro/loaders";
 import { getDid, getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl } from "./bsky";
 
-interface LeafletLoaderOptions {
+interface StandardSiteLoaderOptions {
   /** DID or handle of the repo owner */
   repo: string;
   /** AT URI of the publication to filter by */
   publication?: string;
 }
 
-interface LeafletDocumentView {
+interface StandardSiteDocumentView {
   rkey: string;
   title: string;
   description: string;
-  author: string;
   publishedAt: string;
   publication: string;
   basePath: string;
   imageUrl: string | null;
 }
 
-interface LeafletBlock {
-  block?: {
-    $type?: string;
-    image?: { ref: unknown };
-  };
-}
-
-interface LeafletPage {
-  blocks?: LeafletBlock[];
-}
-
-interface LeafletDocumentValue {
+interface StandardSiteDocumentValue {
   title: string;
   description: string;
-  author: string;
   publishedAt: string;
-  publication?: string;
-  pages?: LeafletPage[] | Record<string, LeafletPage>;
+  site?: string;
+  path?: string;
+  content?: {
+    pages?:
+      | Array<{
+          blocks?: Array<{
+            block?: { $type?: string; image?: { ref: unknown } };
+          }>;
+        }>
+      | Record<
+          string,
+          {
+            blocks?: Array<{
+              block?: { $type?: string; image?: { ref: unknown } };
+            }>;
+          }
+        >;
+  };
+  coverImage?: { ref: unknown };
 }
 
-interface LeafletPublicationValue {
+interface PublicationValue {
   base_path?: string;
+  url?: string;
 }
 
 interface CollectionFilter {
-  limit?: number;
   reverse?: boolean;
 }
 
@@ -53,21 +57,24 @@ interface EntryFilter {
   id?: string;
 }
 
-class LeafletLoaderError extends Error {
+class StandardSiteLoaderError extends Error {
   constructor(
     message: string,
     public code?: string,
   ) {
     super(message);
-    this.name = "LeafletLoaderError";
+    this.name = "StandardSiteLoaderError";
   }
 }
 
 function extractFirstImageUrl(
-  value: LeafletDocumentValue,
+  value: StandardSiteDocumentValue,
   did: string,
 ): string | null {
-  const pages = value.pages;
+  if (value.coverImage?.ref) {
+    return getBlobCDNUrl(did, value.coverImage, "jpeg") || null;
+  }
+  const pages = value.content?.pages;
   const firstPage = Array.isArray(pages)
     ? pages[0]
     : pages?.[Object.keys(pages)[0]];
@@ -90,27 +97,36 @@ async function resolveBasePath(
   try {
     const { data } = await agent.com.atproto.repo.getRecord({
       repo: did,
-      collection: "pub.leaflet.publication",
+      collection: "site.standard.publication",
       rkey: pubRkey,
     });
-    return (data.value as LeafletPublicationValue).base_path ?? "";
+    const pub = data.value as PublicationValue;
+    if (pub.base_path) return pub.base_path;
+    if (pub.url) {
+      try {
+        return new URL(pub.url).hostname;
+      } catch {
+        return "";
+      }
+    }
+    return "";
   } catch {
     return "";
   }
 }
 
-export function leafletLiveLoader(
-  options: LeafletLoaderOptions,
+export function standardSiteLiveLoader(
+  options: StandardSiteLoaderOptions,
 ): LiveLoader<
-  LeafletDocumentView,
+  StandardSiteDocumentView,
   EntryFilter,
   CollectionFilter,
-  LeafletLoaderError
+  StandardSiteLoaderError
 > {
   const { repo, publication } = options;
 
   return {
-    name: "leaflet-live-loader",
+    name: "standard-site-live-loader",
 
     loadCollection: async ({ filter }) => {
       try {
@@ -118,27 +134,37 @@ export function leafletLiveLoader(
         const did = await getDid({ didOrHandle: repo });
         if (!agent || !did) {
           return {
-            error: new LeafletLoaderError(
+            error: new StandardSiteLoaderError(
               "Could not resolve repo",
               "RESOLVE_ERROR",
             ),
           };
         }
 
-        const { data } = await agent.com.atproto.repo.listRecords({
-          repo: did,
-          collection: "pub.leaflet.document",
-          limit: filter?.limit ?? 50,
-          reverse: filter?.reverse ?? true,
-        });
+        const reverse = filter?.reverse ?? false;
 
-        let records = data.records ?? [];
+        let records: Awaited<
+          ReturnType<typeof agent.com.atproto.repo.listRecords>
+        >["data"]["records"] = [];
+        let cursor: string | undefined;
+        do {
+          const { data } = await agent.com.atproto.repo.listRecords({
+            repo: did,
+            collection: "site.standard.document",
+            limit: 100,
+            reverse,
+            cursor,
+          });
+          records.push(...(data.records ?? []));
+          cursor = data.cursor;
+        } while (cursor);
 
         if (publication) {
-          records = records.filter(
-            (r) =>
-              (r.value as LeafletDocumentValue).publication === publication,
-          );
+          const pubRkey = publication.split("/").pop();
+          records = records.filter((r) => {
+            const value = r.value as StandardSiteDocumentValue;
+            return value.site?.split("/").pop() === pubRkey;
+          });
         }
 
         const basePath = publication
@@ -148,16 +174,15 @@ export function leafletLiveLoader(
         return {
           entries: records.map((record) => {
             const rkey = record.uri.split("/").pop()!;
-            const value = record.value as LeafletDocumentValue;
+            const value = record.value as StandardSiteDocumentValue;
             return {
               id: rkey,
               data: {
                 rkey,
                 title: value.title,
                 description: value.description,
-                author: value.author,
                 publishedAt: value.publishedAt,
-                publication: value.publication,
+                publication: value.site ?? "",
                 basePath,
                 imageUrl: extractFirstImageUrl(value, did),
               },
@@ -166,8 +191,8 @@ export function leafletLiveLoader(
         };
       } catch {
         return {
-          error: new LeafletLoaderError(
-            "Could not load leaflet documents",
+          error: new StandardSiteLoaderError(
+            "Could not load documents",
             "UNRECOVERABLE_ERROR",
           ),
         };
@@ -177,7 +202,7 @@ export function leafletLiveLoader(
     loadEntry: async ({ filter }) => {
       if (!filter.id) {
         return {
-          error: new LeafletLoaderError(
+          error: new StandardSiteLoaderError(
             "Must provide an id",
             "MISSING_DOCUMENT_ID",
           ),
@@ -189,7 +214,7 @@ export function leafletLiveLoader(
         const did = await getDid({ didOrHandle: repo });
         if (!agent || !did) {
           return {
-            error: new LeafletLoaderError(
+            error: new StandardSiteLoaderError(
               "Could not resolve repo",
               "RESOLVE_ERROR",
             ),
@@ -198,13 +223,13 @@ export function leafletLiveLoader(
 
         const { data } = await agent.com.atproto.repo.getRecord({
           repo: did,
-          collection: "pub.leaflet.document",
+          collection: "site.standard.document",
           rkey: filter.id,
         });
 
-        const value = data.value as LeafletDocumentValue;
-        const basePath = value.publication
-          ? await resolveBasePath(agent, did, value.publication)
+        const value = data.value as StandardSiteDocumentValue;
+        const basePath = value.site
+          ? await resolveBasePath(agent, did, value.site)
           : "";
 
         return {
@@ -213,17 +238,16 @@ export function leafletLiveLoader(
             rkey: filter.id,
             title: value.title,
             description: value.description,
-            author: value.author,
             publishedAt: value.publishedAt,
-            publication: value.publication ?? "",
+            publication: value.site ?? "",
             basePath,
             imageUrl: extractFirstImageUrl(value, did),
           },
         };
       } catch {
         return {
-          error: new LeafletLoaderError(
-            "Could not load leaflet document",
+          error: new StandardSiteLoaderError(
+            "Could not load document",
             "UNRECOVERABLE_ERROR",
           ),
         };

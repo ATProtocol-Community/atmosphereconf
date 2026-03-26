@@ -3,7 +3,7 @@ import { z } from "astro/zod";
 import { atprotoLiveLoader } from "./lib/atproto-live-loader";
 import { calendarRecordToEventData } from "./lib/calendar-event";
 import { liveBlueskyLoader } from "@ascorbic/bluesky-loader";
-import { leafletLiveLoader } from "@/lib/leaflet-loader";
+import { standardSiteLiveLoader } from "@/lib/leaflet-loader";
 import { parseInline } from "marked";
 
 import { EVENTS_OWNER_DID_OR_HANDLE, TITO_API_TOKEN } from "astro:env/server";
@@ -72,10 +72,10 @@ const blueskyPosts = defineLiveCollection({
 });
 
 const leafletPosts = defineLiveCollection({
-  loader: leafletLiveLoader({
+  loader: standardSiteLiveLoader({
     repo: "did:plc:lehcqqkwzcwvjvw66uthu5oq",
     publication:
-      "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/pub.leaflet.publication/3m367bemk3c2i",
+      "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i",
   }),
 });
 
