@@ -84,4 +84,7 @@
   --event-activity-bg: oklch(0.93 0.06 85);
   --event-activity-fg: oklch(0.45 0.12 85);
   --event-activity-sub: oklch(0.45 0.12 85);
+  --event-unconference-bg: oklch(0.88 0.08 27);
+  --event-unconference-fg: oklch(0.35 0.15 27);
+  --event-unconference-sub: oklch(0.35 0.15 27);
 }

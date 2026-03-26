@@ -54,6 +54,7 @@ type EventEntry = {
     start?: string;
     end?: string;
     room?: string;
+    category?: string;
     description?: string;
     link_url?: string;
     link_text?: string;
@@ -74,6 +75,7 @@ export interface ProgramEvent {
   start?: string;
   end?: string;
   room?: string;
+  category?: string;
   description?: string;
   link_url?: string;
   link_text?: string;

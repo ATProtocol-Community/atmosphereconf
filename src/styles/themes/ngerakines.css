@@ -100,6 +100,9 @@
   --event-activity-bg: #ccffff;
   --event-activity-fg: #006666;
   --event-activity-sub: #006666;
+  --event-unconference-bg: #ffddcc;
+  --event-unconference-fg: #884400;
+  --event-unconference-sub: #884400;
 
   /* Marquee: show on all screen sizes */
   --marquee-desktop-display: flex;

@@ -55,6 +55,9 @@
   --event-activity-bg: rgba(255, 255, 255, 0.08);
   --event-activity-fg: #ececec;
   --event-activity-sub: #cfcfcf;
+  --event-unconference-bg: rgba(255, 140, 50, 0.18);
+  --event-unconference-fg: #ffaa66;
+  --event-unconference-sub: #ffd4aa;
 
   --font-heading: "Fraunces", serif;
   --font-body:
