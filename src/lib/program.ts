@@ -1,6 +1,7 @@
 import { getLiveCollection } from "astro:content";
 import { formatConferenceDate, getConferenceDateKey } from "@/lib/datetime";
 import { shuffleVisualStable } from "@/lib/visual-regression";
+import { isRemoteAccessible, type EventMode } from "@/lib/calendar-event";
 
 const visibleTypes = new Set([
   "presentation",
@@ -24,6 +25,12 @@ const roomPriority = [
 
 const workshopTypes = new Set(["workshop", "activity"]);
 const talkTypes = new Set(["presentation", "lightning-talk", "panel"]);
+export const linkableTypes = new Set([
+  "workshop",
+  "presentation",
+  "lightning-talk",
+  "panel",
+]);
 export const workshopDates = ["2026-03-26", "2026-03-27"];
 export const talkDates = ["2026-03-28", "2026-03-29"];
 const allDates = [...workshopDates, ...talkDates];
@@ -42,6 +49,7 @@ type EventEntry = {
   data: {
     title: string;
     type: string;
+    mode?: EventMode;
     speakers?: ProgramSpeaker[];
     start?: string;
     end?: string;
@@ -61,6 +69,7 @@ export interface ProgramEvent {
   id: string;
   title: string;
   type: string;
+  mode?: EventMode;
   speakers?: ProgramSpeaker[];
   start?: string;
   end?: string;
@@ -249,27 +258,40 @@ export async function getProgramDays() {
     .filter((day) => day.events.length > 0);
 }
 
+function filterRemote(pool: ProgramEvent[]): ProgramEvent[] {
+  return pool.filter((e) => isRemoteAccessible(e.mode));
+}
+
 export function getRandomProgramRail(
   selectedDate: string,
   days: ProgramDay[],
+  { remote = false }: { remote?: boolean } = {},
 ): ProgramRail | null {
   const selectedDay = days.find((day) => day.date === selectedDate);
   if (!selectedDay) return null;
 
-  const spotlightPool = shuffleVisualStable(selectedDay.spotlightPool);
+  const pool = remote
+    ? filterRemote(selectedDay.spotlightPool)
+    : selectedDay.spotlightPool;
+  const spotlightPool = shuffleVisualStable(pool);
   const spotlight = spotlightPool[0];
   const suggestions = spotlightPool.slice(1, 4);
   const otherDays = days
     .filter((day) => day.date !== selectedDate)
-    .map((day) => ({
-      date: day.date,
-      dayLabel: day.dayLabel,
-      dateLabel: day.dateLabel,
-      seriesLabel: day.seriesLabel,
-      anchorId: day.anchorId,
-      heading: day.heading,
-      picks: shuffleVisualStable(day.spotlightPool).slice(0, 2),
-    }));
+    .map((day) => {
+      const dayPool = remote
+        ? filterRemote(day.spotlightPool)
+        : day.spotlightPool;
+      return {
+        date: day.date,
+        dayLabel: day.dayLabel,
+        dateLabel: day.dateLabel,
+        seriesLabel: day.seriesLabel,
+        anchorId: day.anchorId,
+        heading: day.heading,
+        picks: shuffleVisualStable(dayPool).slice(0, 2),
+      };
+    });
 
   return {
     dayLabel: selectedDay.dayLabel,

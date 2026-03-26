@@ -3,6 +3,12 @@ import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
 import { getLiveEntry } from "astro:content";
 import { formatConferenceDay, formatConferenceTime } from "@/lib/datetime";
+import calendarIconSvg from "@/components/ui/icons/CalendarIcon.svg?raw";
+import clockIconSvg from "@/components/ui/icons/ClockIcon.svg?raw";
+import mapPinIconSvg from "@/components/ui/icons/MapPinIcon.svg?raw";
+import remoteBadgeSvg from "@/components/ui/icons/RemoteBadge.svg?raw";
+import inPersonIconSvg from "@/components/ui/icons/InPersonIcon.svg?raw";
+import { isRemoteAccessible } from "@/lib/calendar-event";
 
 const { id } = Astro.params;
 
@@ -25,6 +31,7 @@ if (!entry || !showTypes.has(entry.data.type)) {
 const {
   title,
   type,
+  mode,
   speakers,
   description,
   category,
@@ -120,66 +127,35 @@ const dateDisplay = start ? formatConferenceDay(start) : null;
           <div class="text-muted-foreground mt-5 flex flex-col gap-2 text-sm">
             {dateDisplay && (
               <div class="flex items-center gap-2">
-                <svg
-                  class="text-muted-foreground h-4 w-4 flex-none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                  />
-                </svg>
+                <span class="text-muted-foreground h-4 w-4 flex-none" set:html={calendarIconSvg} />
                 <span>{dateDisplay}</span>
               </div>
             )}
             {timeDisplay && (
               <div class="flex items-center gap-2">
-                <svg
-                  class="text-muted-foreground h-4 w-4 flex-none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
+                <span class="text-muted-foreground h-4 w-4 flex-none" set:html={clockIconSvg} />
                 <span>{timeDisplay}</span>
               </div>
             )}
             {room && (
               <div class="flex items-center gap-2">
-                <svg
-                  class="text-muted-foreground h-4 w-4 flex-none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                  />
-                </svg>
+                <span class="text-muted-foreground h-4 w-4 flex-none" set:html={mapPinIconSvg} />
                 <span>{room}</span>
               </div>
             )}
+            <div class="flex items-center gap-2">
+              <span
+                class="text-muted-foreground h-4 w-4 flex-none"
+                set:html={isRemoteAccessible(mode) ? remoteBadgeSvg : inPersonIconSvg}
+              />
+              <span>
+                {mode === "hybrid"
+                  ? "Available in-person & via livestream"
+                  : mode === "remote"
+                    ? "Remote only — via livestream"
+                    : "In-person only"}
+              </span>
+            </div>
           </div>
         )
       }

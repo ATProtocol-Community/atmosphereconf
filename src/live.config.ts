@@ -52,6 +52,7 @@ const events = defineLiveCollection({
   schema: z.object({
     title: z.string(),
     type: z.string(),
+    mode: z.enum(["inperson", "remote", "hybrid"]).optional(),
     speakers: z.array(speakerSchema).optional(),
     start: z.coerce.string().optional(),
     end: z.coerce.string().optional(),

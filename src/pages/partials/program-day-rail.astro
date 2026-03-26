@@ -5,11 +5,12 @@ import ProgramDayRail from "@/components/home/ProgramDayRail.astro";
 import { getProgramDays, getRandomProgramRail } from "@/lib/program";
 
 const requestedDate = Astro.url.searchParams.get("date") ?? "";
+const remote = Astro.url.searchParams.get("mode") === "remote";
 const days = await getProgramDays();
 const fallbackDate = days[0]?.date ?? "";
 const rail =
-  getRandomProgramRail(requestedDate, days) ??
-  getRandomProgramRail(fallbackDate, days);
+  getRandomProgramRail(requestedDate, days, { remote }) ??
+  getRandomProgramRail(fallbackDate, days, { remote });
 ---
 
 {rail && <ProgramDayRail rail={rail} />}

@@ -1,6 +1,8 @@
 ---
 import ScheduleEventCell from "./ScheduleEventCell.astro";
 import { getConferenceDateTimeParts } from "@/lib/datetime";
+import { isRemoteAccessible } from "@/lib/calendar-event";
+import { linkableTypes } from "@/lib/program";
 
 interface Speaker {
   name: string;
@@ -11,6 +13,7 @@ interface ScheduleEvent {
   id?: string;
   title: string;
   type: string;
+  mode?: string;
   speakers?: Speaker[];
   start?: string;
   end?: string;
@@ -23,9 +26,14 @@ interface ScheduleEvent {
 interface Props {
   events: ScheduleEvent[];
   rooms: string[];
+  remote?: boolean;
 }
 
-const { events, rooms } = Astro.props;
+const { events, rooms, remote = false } = Astro.props;
+
+function isLiveOnly(event: ScheduleEvent) {
+  return !isRemoteAccessible(event.mode);
+}
 
 // --- Time helpers ---
 
@@ -61,12 +69,6 @@ const totalSlots = (maxTime - minTime) / SLOT;
 
 const isInfo = (type: string) => type === "info";
 
-const linkableTypes = new Set([
-  "workshop",
-  "presentation",
-  "lightning-talk",
-  "panel",
-]);
 function isLinkable(event: { id?: string; type: string }) {
   return !!(event.id && linkableTypes.has(event.type));
 }
@@ -225,7 +227,9 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
                   class:list={[
                     "relative flex min-h-5 p-[0.22rem]",
                     isLinkable(event) && "group/evt cursor-pointer",
+                    remote && isLiveOnly(event) && "live-only",
                   ]}
+                  data-mode={event.mode}
                   style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}; z-index: ${event.zIndex}`}
                 >
                   <ScheduleEventCell event={event} />

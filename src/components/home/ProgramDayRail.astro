@@ -1,6 +1,6 @@
 ---
 import type { ProgramRail } from "@/lib/program";
-import { formatMiniTime } from "@/lib/program";
+import { formatMiniTime, linkableTypes } from "@/lib/program";
 import PaperCard from "@/components/ui/PaperCard.astro";
 import PanelHeader from "@/components/ui/PanelHeader.astro";
 import SectionKicker from "@/components/ui/SectionKicker.astro";
@@ -20,61 +20,63 @@ const { rail } = Astro.props;
     linkText="see all"
   />
 
-  <button class="rail-lucky-btn" data-rail-shuffle>
-    <span class="rail-lucky-goose" aria-hidden="true">🪿</span>
-    <span class="rail-lucky-label">I'm feeling curious</span>
-  </button>
+  {rail.spotlight && (
+    <button class="rail-lucky-btn" data-rail-shuffle>
+      <span class="rail-lucky-goose" aria-hidden="true">🪿</span>
+      <span class="rail-lucky-label">I'm feeling curious</span>
+    </button>
+  )}
 
-  <div class="rail-sampled-board">
-    {
-      rail.spotlight && (
-        <PaperCard
-          variant="outline"
-          tapePosition="left"
-          tapeWidth="md"
-          class="rail-sampled-featured"
-        >
-          <StarringCard
-            talkId={rail.spotlight.id}
-            title={rail.spotlight.title}
-            speakers={rail.spotlight.speakers}
-            typeName={rail.spotlight.typeName}
-            start={rail.spotlight.start}
-            description={rail.spotlight.description}
-            variant="featured"
-            metaLayout="stacked"
-            class="rail-entry-featured"
-          />
-        </PaperCard>
-      )
-    }
+  {rail.spotlight ? (
+    <div class="rail-sampled-board">
+      <PaperCard
+        variant="outline"
+        tapePosition="left"
+        tapeWidth="md"
+        class="rail-sampled-featured"
+      >
+        <StarringCard
+          talkId={rail.spotlight.id}
+          title={rail.spotlight.title}
+          speakers={rail.spotlight.speakers}
+          typeName={rail.spotlight.typeName}
+          start={rail.spotlight.start}
+          description={rail.spotlight.description}
+          variant="featured"
+          metaLayout="stacked"
+          class="rail-entry-featured"
+        />
+      </PaperCard>
 
-    <aside class="rail-sampled-side">
-      <div class="rail-slip-list">
-        {
-          rail.suggestions.map((event) => (
-            <PaperCard
-              variant="outline"
-              tapePosition="left"
-              tapeWidth="md"
-              class="rail-sampled-slip"
-            >
-              <StarringCard
-                talkId={event.id}
-                title={event.title}
-                speakers={event.speakers}
-                typeName={event.typeName}
-                start={event.start}
-                variant="compact"
-                metaLayout="stacked"
-                class="rail-entry-compact"
-              />
-            </PaperCard>
-          ))
-        }
-      </div>
-    </aside>
-  </div>
+      <aside class="rail-sampled-side">
+        <div class="rail-slip-list">
+          {
+            rail.suggestions.map((event) => (
+              <PaperCard
+                variant="outline"
+                tapePosition="left"
+                tapeWidth="md"
+                class="rail-sampled-slip"
+              >
+                <StarringCard
+                  talkId={event.id}
+                  title={event.title}
+                  speakers={event.speakers}
+                  typeName={event.typeName}
+                  start={event.start}
+                  variant="compact"
+                  metaLayout="stacked"
+                  class="rail-entry-compact"
+                />
+              </PaperCard>
+            ))
+          }
+        </div>
+      </aside>
+    </div>
+  ) : (
+    <p class="rail-empty-message">No remote events available for this day.</p>
+  )}
 </section>
 
 {
@@ -109,53 +111,51 @@ const { rail } = Astro.props;
               </a>
             </div>
 
-            <ol class="rail-other-day-agenda">
-              {otherDay.picks.map((event) => {
-                const linkable =
-                  event.id &&
-                  [
-                    "workshop",
-                    "presentation",
-                    "lightning-talk",
-                    "panel",
-                  ].includes(event.type);
-                const inner = (
-                  <>
-                    <span class="rail-other-day-time">
-                      {formatMiniTime(event.start)}
-                    </span>
-                    <div class="min-w-0">
-                      <p
-                        class="rail-other-day-item-title"
-                        set:html={event.title}
-                      />
-                      {event.room && (
-                        <p class="rail-other-day-room">{event.room}</p>
+            {otherDay.picks.length > 0 ? (
+              <ol class="rail-other-day-agenda">
+                {otherDay.picks.map((event) => {
+                  const linkable =
+                    event.id && linkableTypes.has(event.type);
+                  const inner = (
+                    <>
+                      <span class="rail-other-day-time">
+                        {formatMiniTime(event.start)}
+                      </span>
+                      <div class="min-w-0">
+                        <p
+                          class="rail-other-day-item-title"
+                          set:html={event.title}
+                        />
+                        {event.room && (
+                          <p class="rail-other-day-room">{event.room}</p>
+                        )}
+                      </div>
+                    </>
+                  );
+                  return (
+                    <li
+                      class:list={[
+                        "rail-other-day-item",
+                        linkable && "rail-other-day-item-linkable",
+                      ]}
+                    >
+                      {linkable ? (
+                        <a
+                          href={`/event/${event.id}`}
+                          class="rail-other-day-item-link"
+                        >
+                          {inner}
+                        </a>
+                      ) : (
+                        inner
                       )}
-                    </div>
-                  </>
-                );
-                return (
-                  <li
-                    class:list={[
-                      "rail-other-day-item",
-                      linkable && "rail-other-day-item-linkable",
-                    ]}
-                  >
-                    {linkable ? (
-                      <a
-                        href={`/event/${event.id}`}
-                        class="rail-other-day-item-link"
-                      >
-                        {inner}
-                      </a>
-                    ) : (
-                      inner
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
+                    </li>
+                  );
+                })}
+              </ol>
+            ) : (
+              <p class="rail-empty-message">No remote events this day.</p>
+            )}
           </PaperCard>
         ))}
       </div>
@@ -168,6 +168,13 @@ const { rail } = Astro.props;
   .rail-preview-panel {
     display: grid;
     gap: 0.9rem;
+  }
+
+  .rail-empty-message {
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    line-height: 1.45;
+    padding: 1rem 0;
   }
 
   .rail-sampled-board {
@@ -549,7 +556,7 @@ const { rail } = Astro.props;
 
     try {
       const [res] = await Promise.all([
-        fetch(`/partials/program-day-rail?date=${encodeURIComponent(date)}`),
+        fetch(`/partials/program-day-rail?date=${encodeURIComponent(date)}${btn.closest("[data-remote]") ? "&mode=remote" : ""}`),
         new Promise((r) => setTimeout(r, 600)),
       ]);
       if (!(res as Response).ok) throw new Error("fetch failed");

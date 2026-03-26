@@ -11,6 +11,7 @@ interface Props {
     id?: string;
     title: string;
     type: string;
+    mode?: string;
     speakers?: Speaker[];
     start?: string;
     end?: string;
@@ -109,6 +110,8 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
       isInfo && "flex flex-col items-center justify-center text-center",
       href && "evt-linkable",
     ]}
+    data-type={event.type}
+    data-mode={event.mode}
   >
     <p class="schedule-event-title" set:html={event.title} />
     {
