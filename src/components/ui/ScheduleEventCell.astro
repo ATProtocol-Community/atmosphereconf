@@ -16,6 +16,7 @@ interface Props {
     speakers?: Speaker[];
     start?: string;
     end?: string;
+    category?: string;
     description?: string;
   };
 }
@@ -48,7 +49,8 @@ const time = (() => {
   return e ? `${s} – ${e}` : s;
 })();
 
-function getColors(type: string) {
+function getColors(type: string, category?: string) {
+  if (category === "Unconference") return "event-badge event-badge-unconference";
   switch (type) {
     case "info":
       return "event-badge event-badge-info";
@@ -65,7 +67,8 @@ function getColors(type: string) {
   }
 }
 
-function getSubColors(type: string) {
+function getSubColors(type: string, category?: string) {
+  if (category === "Unconference") return "event-sub-unconference";
   switch (type) {
     case "info":
       return "event-sub-info";
@@ -106,7 +109,7 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
   <div
     class:list={[
       "schedule-event-card relative z-0 flex h-full min-h-0 flex-1 flex-col overflow-hidden border leading-tight transition-[transform,filter,box-shadow,border-color]",
-      getColors(event.type),
+      getColors(event.type, event.category),
       sizeClass,
       isInfo && "flex flex-col items-center justify-center text-center",
       href && "evt-linkable",
@@ -124,7 +127,7 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
     }
     {
       time && (
-        <p class:list={["schedule-event-time", getSubColors(event.type)]}>
+        <p class:list={["schedule-event-time", getSubColors(event.type, event.category)]}>
           {time}
         </p>
       )

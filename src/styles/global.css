@@ -98,6 +98,9 @@
   --event-activity-bg: oklch(0.932 0 0);
   --event-activity-fg: oklch(0.35 0 0);
   --event-activity-sub: oklch(0.45 0 0);
+  --event-unconference-bg: oklch(0.932 0.042 25);
+  --event-unconference-fg: oklch(0.457 0.12 25);
+  --event-unconference-sub: oklch(0.541 0.12 25);
 
   /* Typography */
   --font-body: "IBM Plex Mono", ui-monospace, monospace;
@@ -268,6 +271,10 @@
     background: var(--event-activity-bg);
     color: var(--event-activity-fg);
   }
+  .event-badge-unconference {
+    background: var(--event-unconference-bg);
+    color: var(--event-unconference-fg);
+  }
 
   .event-sub-presentation {
     color: var(--event-presentation-sub);
@@ -286,6 +293,9 @@
   }
   .event-sub-activity {
     color: var(--event-activity-sub);
+  }
+  .event-sub-unconference {
+    color: var(--event-unconference-sub);
   }
 
   .pill-badge {

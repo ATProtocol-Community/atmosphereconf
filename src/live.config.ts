@@ -1,7 +1,10 @@
 import { defineLiveCollection } from "astro:content";
 import { z } from "astro/zod";
 import { atprotoLiveLoader } from "./lib/atproto-live-loader";
-import { calendarRecordToEventData } from "./lib/calendar-event";
+import {
+  calendarRecordToEventData,
+  EVENT_CATEGORIES,
+} from "./lib/calendar-event";
 import { liveBlueskyLoader } from "@ascorbic/bluesky-loader";
 import { standardSiteLiveLoader } from "@/lib/leaflet-loader";
 import { parseInline } from "marked";
@@ -27,13 +30,13 @@ const events = defineLiveCollection({
       const data = calendarRecordToEventData(value);
 
       // Extract header image CDN URL from media array
-      const media = value.media as
-        | Array<{
+      const media = Array.isArray(value.media)
+        ? (value.media as Array<{
             role: string;
             content: { ref: { $link: string } };
-          }>
-        | undefined;
-      const header = media?.find((m) => m.role === "header");
+          }>)
+        : undefined;
+      const header = media?.find((m) => m?.role === "header");
       if (header?.content?.ref?.$link) {
         (data as Record<string, unknown>).headerUrl =
           `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${header.content.ref.$link}@jpeg`;
@@ -57,9 +60,7 @@ const events = defineLiveCollection({
     start: z.coerce.string().optional(),
     end: z.coerce.string().optional(),
     room: z.string().optional(),
-    category: z
-      .enum(["Community", "Development and Protocol", "Media and Civics"])
-      .optional(),
+    category: z.enum(EVENT_CATEGORIES).optional().catch(undefined),
     description: z.string().optional(),
     link_url: z.string().optional(),
     link_text: z.string().optional(),

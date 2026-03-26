@@ -2,6 +2,15 @@ export type Speaker = { name: string; id?: string };
 
 export type EventMode = "inperson" | "remote" | "hybrid";
 
+export const EVENT_CATEGORIES = [
+  "Community",
+  "Development and Protocol",
+  "Media and Civics",
+  "Unconference",
+] as const;
+
+export type EventCategory = (typeof EVENT_CATEGORIES)[number];
+
 export function isRemoteAccessible(mode?: EventMode | string): boolean {
   return mode === "hybrid" || mode === "remote";
 }
@@ -105,13 +114,15 @@ export function calendarRecordToEventData(
   const ad = (value.additionalData as Record<string, unknown>) ?? {};
 
   const event: EventData = {
-    title: value.name as string,
+    title: typeof value.name === "string" ? value.name : "(untitled)",
     type: (ad.type as string) ?? "presentation",
     mode: parseLexiconMode(value.mode as string | undefined),
   };
 
-  if (ad.speakers) {
-    event.speakers = ad.speakers as Speaker[];
+  if (Array.isArray(ad.speakers)) {
+    event.speakers = (ad.speakers as Record<string, unknown>[]).filter(
+      (s) => typeof s?.name === "string",
+    ) as Speaker[];
   }
   if (value.startsAt) {
     event.start = value.startsAt as string;
@@ -122,16 +133,23 @@ export function calendarRecordToEventData(
   if (value.description) {
     event.description = value.description as string;
   }
-  if (ad.category) {
+  if (
+    ad.category &&
+    EVENT_CATEGORIES.includes(ad.category as EventCategory)
+  ) {
     event.category = ad.category as string;
   }
   if (ad.room) {
     event.room = ad.room as string;
   }
 
-  const uris = value.uris as { uri: string; name?: string }[] | undefined;
+  const uris = Array.isArray(value.uris)
+    ? (value.uris as { uri?: string; name?: string }[])
+    : undefined;
   const externalUri = uris?.find(
-    (u) => !u.uri.startsWith("https://atmosphereconf.org/event/"),
+    (u) =>
+      typeof u?.uri === "string" &&
+      !u.uri.startsWith("https://atmosphereconf.org/event/"),
   );
   if (externalUri) {
     event.link_url = externalUri.uri;

@@ -60,4 +60,7 @@
   --event-activity-bg: #f0f0e8;
   --event-activity-fg: #333333;
   --event-activity-sub: #555555;
+  --event-unconference-bg: #ffd8b0;
+  --event-unconference-fg: #8a3a00;
+  --event-unconference-sub: #b05000;
 }

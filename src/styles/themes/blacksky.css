@@ -60,4 +60,7 @@
   --event-activity-bg: rgba(255, 255, 255, 0.06);
   --event-activity-fg: #c0c4d0;
   --event-activity-sub: #8b8fa3;
+  --event-unconference-bg: rgba(245, 140, 80, 0.18);
+  --event-unconference-fg: #f5a060;
+  --event-unconference-sub: #d08850;
 }

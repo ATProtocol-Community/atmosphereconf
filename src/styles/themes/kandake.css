@@ -72,6 +72,9 @@
   --event-activity-bg: rgba(0, 255, 0, 0.1);
   --event-activity-fg: #66ff66;
   --event-activity-sub: #00cc00;
+  --event-unconference-bg: rgba(255, 140, 0, 0.16);
+  --event-unconference-fg: #ffaa44;
+  --event-unconference-sub: #ff8800;
 
   --font-body:
     "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive, sans-serif;
