@@ -25,6 +25,7 @@
     "@atproto/api": "^0.19.3",
     "@atproto/identity": "^0.4.8",
     "@fujocoded/atproto-badge": "file:../mdx-plugins/atproto-badge",
+    "@fujocoded/atproto-badger": "^0.0.1",
     "@fujocoded/authproto": "^0.2.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-popover": "^1.1.15",
