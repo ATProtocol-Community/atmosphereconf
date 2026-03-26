@@ -4,6 +4,7 @@ import Header from "../components/shared/Header.astro";
 import {
   CLIENT_THEMES,
   THEME_STORAGE_KEY,
+  THEME_SESSION_KEY,
   detectClientTheme,
 } from "@/components/profile/client-themes";
 
@@ -50,15 +51,23 @@ const defaultTheme =
         defaultTheme,
         themes: CLIENT_THEMES,
         themeStorageKey: THEME_STORAGE_KEY,
+        sessionThemeKey: THEME_SESSION_KEY,
       }}
     >
       (function () {
         const validThemes = new Set(themes);
+
         const getInitialTheme = () => {
           const urlTheme = new URLSearchParams(window.location.search).get(
             "theme",
           );
-          if (validThemes.has(urlTheme)) return urlTheme;
+          if (validThemes.has(urlTheme)) {
+            sessionStorage.setItem(sessionThemeKey, urlTheme);
+            return urlTheme;
+          }
+
+          const sessionTheme = sessionStorage.getItem(sessionThemeKey);
+          if (validThemes.has(sessionTheme)) return sessionTheme;
 
           const storedTheme = localStorage.getItem(themeStorageKey);
           if (validThemes.has(storedTheme)) return storedTheme;

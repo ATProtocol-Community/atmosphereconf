@@ -5,6 +5,7 @@ import {
   CLIENT_THEMES,
   DEFAULT_CLIENT_THEME,
   THEME_STORAGE_KEY,
+  THEME_SESSION_KEY,
 } from "@/components/profile/client-themes";
 import { loadProfile } from "@/lib/profile";
 import GoodStuff from "@/assets/goodstuff-goose.png";
@@ -288,6 +289,7 @@ const navLinks = [
     themes: CLIENT_THEMES,
     defaultThemeName: DEFAULT_CLIENT_THEME,
     themeStorageKey: THEME_STORAGE_KEY,
+    sessionThemeKey: THEME_SESSION_KEY,
   }}
 >
   // Mobile nav dropdown
@@ -424,6 +426,7 @@ const navLinks = [
 
     document.documentElement.dataset.theme = next;
     localStorage.setItem(themeStorageKey, next);
+    sessionStorage.removeItem(sessionThemeKey);
     syncThemeLabel();
   };
 

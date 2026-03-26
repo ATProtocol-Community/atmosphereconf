@@ -18,6 +18,7 @@ export type ClientTheme = (typeof CLIENT_THEMES)[number];
 
 export const DEFAULT_CLIENT_THEME: ClientTheme = "bluesky";
 export const THEME_STORAGE_KEY = "atmosphereconf:theme";
+export const THEME_SESSION_KEY = "atmosphereconf:theme-override";
 
 export function isClientTheme(
   value: string | null | undefined,
