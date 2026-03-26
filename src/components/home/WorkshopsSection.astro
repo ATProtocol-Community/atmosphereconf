@@ -7,27 +7,46 @@ import ProgramStage from "./ProgramStage.astro";
 import ProgramDayRail from "./ProgramDayRail.astro";
 import { getProgramDays, getRandomProgramRail } from "@/lib/program";
 
+interface Props {
+  mode?: "default" | "remote";
+}
+
+const { mode = "default" } = Astro.props;
+const remote = mode === "remote";
+
 const days = await getProgramDays();
 const initialRails = Object.fromEntries(
-  days.map((day) => [day.date, getRandomProgramRail(day.date, days)]),
+  days.map((day) => [
+    day.date,
+    getRandomProgramRail(day.date, days, { remote }),
+  ]),
 );
 const initialDayDate = days[0]?.date ?? "";
 ---
 
 <BreakoutSection maxWidth="74rem">
-  <Card title="schedule" class="program-shell">
+  <Card title={remote ? "remote schedule" : "schedule"} class="program-shell">
     <p class="program-panel-copy program-intro-copy">
-      We have two days of pre-conference events and activities, happening
-      Thursday, March 26th and Friday, March 27th. These are included in your
-      tickets. There is a maximum capacity, so please do select activities in
-      your ticket registration form.
+      {
+        remote
+          ? "The conference schedule, remote edition! While our Wednesday workshops are in-person, the rest of the conference is accessible from anywhere!"
+          : "We have two days of pre-conference events and activities, happening Thursday, March 26th and Friday, March 27th. These are included in your tickets. There is a maximum capacity, so please do select activities in your ticket registration form."
+      }
     </p>
-    <div class="program-board" data-program-board>
+    <div
+      class="program-board"
+      data-program-board
+      data-remote={remote ? "true" : undefined}
+    >
       <div class="program-grid">
         <ProgramDaySelector days={days} initialDate={initialDayDate} />
 
         <div class="program-primary-column">
-          <ProgramStage days={days} initialDate={initialDayDate} />
+          <ProgramStage
+            days={days}
+            initialDate={initialDayDate}
+            remote={remote}
+          />
         </div>
 
         <aside class="program-secondary-column">
@@ -77,8 +96,7 @@ const initialDayDate = days[0]?.date ?? "";
     const contentCache = new Map<string, Promise<string | null>>();
 
     function initRoomTabs(container: Element) {
-      const tabs =
-        container.querySelectorAll<HTMLElement>("[data-room-tab]");
+      const tabs = container.querySelectorAll<HTMLElement>("[data-room-tab]");
       const panels =
         container.querySelectorAll<HTMLElement>("[data-room-panel]");
       tabs.forEach((tab) => {
@@ -100,9 +118,11 @@ const initialDayDate = days[0]?.date ?? "";
       });
     }
 
+    const isRemote = board.dataset.remote === "true";
+
     function prefetchDayContent(date: string) {
       if (contentCache.has(date)) return;
-      const url = `/partials/program-day-content?date=${encodeURIComponent(date)}`;
+      const url = `/partials/program-day-content?date=${encodeURIComponent(date)}${isRemote ? "&mode=remote" : ""}`;
       contentCache.set(
         date,
         fetch(url).then((r) => (r.ok ? r.text() : null)),
@@ -134,7 +154,7 @@ const initialDayDate = days[0]?.date ?? "";
     const refreshSidePanel = async (panel, date) => {
       try {
         const res = await fetch(
-          `/partials/program-day-rail?date=${encodeURIComponent(date)}`,
+          `/partials/program-day-rail?date=${encodeURIComponent(date)}${isRemote ? "&mode=remote" : ""}`,
         );
         if (!res.ok) throw new Error("Failed to load day rail");
         panel.innerHTML = await res.text();
@@ -145,9 +165,7 @@ const initialDayDate = days[0]?.date ?? "";
 
     const setSelectedDay = async (date, { refreshRail = false } = {}) => {
       // Lazy-load schedule content before switching
-      const targetPaper = dayPapers.find(
-        (p) => p.dataset.programDay === date,
-      );
+      const targetPaper = dayPapers.find((p) => p.dataset.programDay === date);
       if (targetPaper) await loadDayContent(targetPaper, date);
 
       dayButtons.forEach((button) => {

@@ -1,8 +1,15 @@
 export type Speaker = { name: string; id?: string };
 
+export type EventMode = "inperson" | "remote" | "hybrid";
+
+export function isRemoteAccessible(mode?: EventMode | string): boolean {
+  return mode === "hybrid" || mode === "remote";
+}
+
 export type EventData = {
   title: string;
   type: string;
+  mode?: EventMode;
   speakers?: Speaker[];
   start?: string;
   end?: string;
@@ -81,6 +88,17 @@ export function eventDataToCalendarRecord(
   return record;
 }
 
+const lexiconModeMap: Record<string, EventMode> = {
+  "community.lexicon.calendar.event#inperson": "inperson",
+  "community.lexicon.calendar.event#hybrid": "hybrid",
+  "community.lexicon.calendar.event#remote": "remote",
+};
+
+function parseLexiconMode(raw: string | undefined): EventMode | undefined {
+  if (!raw) return undefined;
+  return lexiconModeMap[raw];
+}
+
 export function calendarRecordToEventData(
   value: Record<string, unknown>,
 ): EventData {
@@ -89,6 +107,7 @@ export function calendarRecordToEventData(
   const event: EventData = {
     title: value.name as string,
     type: (ad.type as string) ?? "presentation",
+    mode: parseLexiconMode(value.mode as string | undefined),
   };
 
   if (ad.speakers) {

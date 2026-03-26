@@ -4,9 +4,8 @@ import Hero from "@/components/home/Hero.astro";
 import TicketsSection from "@/components/home/TicketsSection.astro";
 
 import RemoteIntro from "@/components/home/RemoteIntro.astro";
-import ScheduleSection from "@/components/home/ScheduleSection.astro";
+import WorkshopsSection from "@/components/home/WorkshopsSection.astro";
 import SponsorsSection from "@/components/home/SponsorsSection.astro";
-import StarringSection from "@/components/home/StarringSection.astro";
 ---
 
 <Layout title="ATmosphereConf 2026 – Remote" page="remote">
@@ -14,8 +13,7 @@ import StarringSection from "@/components/home/StarringSection.astro";
     <Hero />
     <div id="remote-intro"><RemoteIntro /></div>
     <TicketsSection mode="remote" />
-    <StarringSection />
-    <!-- <ScheduleSection /> -->
+    <WorkshopsSection mode="remote" />
     <SponsorsSection />
   </div>
 </Layout>

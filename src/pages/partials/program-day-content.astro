@@ -5,8 +5,9 @@ import DaySchedule from "@/components/ui/DaySchedule.astro";
 import { getProgramDays } from "@/lib/program";
 
 const requestedDate = Astro.url.searchParams.get("date") ?? "";
+const remote = Astro.url.searchParams.get("mode") === "remote";
 const days = await getProgramDays();
 const day = days.find((d) => d.date === requestedDate);
 ---
 
-{day && <DaySchedule events={day.events} rooms={day.rooms} />}
+{day && <DaySchedule events={day.events} rooms={day.rooms} remote={remote} />}

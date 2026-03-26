@@ -6,13 +6,14 @@ import type { ProgramDay } from "@/lib/program";
 interface Props {
   days: ProgramDay[];
   initialDate: string;
+  remote?: boolean;
 }
 
-const { days, initialDate } = Astro.props;
+const { days, initialDate, remote = false } = Astro.props;
 ---
 
 <section class="program-main-panel">
-  <div class="program-stage" data-program-stage>
+  <div class="program-stage" data-program-stage data-remote={remote}>
     <div
       class="program-stack-sheet program-stack-sheet--back"
       aria-hidden="true"
@@ -45,7 +46,7 @@ const { days, initialDate } = Astro.props;
                 href={`#${day.anchorId}`}
                 class="program-paper-kicker"
               />
-              <h3 class="program-paper-title">{day.dateLabel}</h3>
+              <h3 class="program-paper-title">{day.dateLabel}{remote && " (Remote)"}</h3>
               <p class="program-paper-subtitle">{day.subheading}</p>
             </div>
             <a href={`#${day.anchorId}`} class="program-paper-summary">
@@ -55,7 +56,11 @@ const { days, initialDate } = Astro.props;
 
           <div data-schedule-content>
             {day.date === initialDate ? (
-              <DaySchedule events={day.events} rooms={day.rooms} />
+              <DaySchedule
+                events={day.events}
+                rooms={day.rooms}
+                remote={remote}
+              />
             ) : null}
           </div>
         </article>
@@ -262,6 +267,12 @@ const { days, initialDate } = Astro.props;
 
   .program-paper :global(.day-schedule .room-tab:first-child) {
     border-radius: var(--schedule-radius) var(--schedule-radius) 0 0;
+  }
+
+  .program-stage[data-remote="true"] :global([data-mode="inperson"]) {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+    pointer-events: none;
   }
 
   @media (min-width: 1024px) {
