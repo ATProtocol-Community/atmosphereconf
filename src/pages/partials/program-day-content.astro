@@ -10,4 +10,4 @@ const days = await getProgramDays();
 const day = days.find((d) => d.date === requestedDate);
 ---
 
-{day && <DaySchedule events={day.events} rooms={day.rooms} remote={remote} />}
+{day && <DaySchedule events={day.events} rooms={day.rooms} remote={remote} date={day.date} />}

@@ -454,6 +454,15 @@
   color: #ffffff;
 }
 
+/* Schedule sticky: account for always-visible marquee bar */
+[data-theme="ngerakines"] .mobile-room-nav,
+[data-theme="ngerakines"] .desktop-room-header {
+  top: 6rem !important;
+}
+[data-theme="ngerakines"] .stream-sticky {
+  top: 7rem !important;
+}
+
 /* Schedule: remove overflow clipping so table isn't cut off */
 [data-theme="ngerakines"] [data-schedule-panel] .mt-6.overflow-hidden {
   overflow: visible;
@@ -569,4 +578,7 @@
 
 [data-theme="ngerakines"] .schedule-event-card {
   border-radius: 0px !important;
+}
+[data-theme="ngerakines"] .now-line .rounded-full {
+  border-radius: 0 !important;
 }

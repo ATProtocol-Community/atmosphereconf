@@ -1,7 +1,6 @@
 ---
 import Card from "@/components/ui/card.astro";
 import BreakoutSection from "@/components/ui/BreakoutSection.astro";
-import SectionKicker from "@/components/ui/SectionKicker.astro";
 import ProgramDaySelector from "./ProgramDaySelector.astro";
 import ProgramStage from "./ProgramStage.astro";
 import ProgramDayRail from "./ProgramDayRail.astro";
@@ -167,11 +166,15 @@ const initialDayDate = days[0]?.date ?? "";
       if (!html) return;
 
       slot.innerHTML = html;
-      // Re-init mobile room tabs for the newly injected schedule
-      const schedule = slot.querySelector(".day-schedule");
-      if (schedule) initRoomTabs(schedule);
-      // Apply starred state to any star buttons in the newly loaded content
       applyStarredState(slot);
+
+      requestAnimationFrame(() => {
+        const schedule = slot.querySelector(".day-schedule");
+        if (!schedule) return;
+        initRoomTabs(schedule);
+        schedule.getBoundingClientRect();
+        document.dispatchEvent(new CustomEvent("schedule:loaded"));
+      });
     }
 
     // Prefetch on hover
@@ -194,6 +197,7 @@ const initialDayDate = days[0]?.date ?? "";
       }
     };
 
+    const dayChangeCallbacks: Array<() => void> = [];
     const setSelectedDay = async (date, { refreshRail = false } = {}) => {
       // Lazy-load schedule content before switching
       const targetPaper = dayPapers.find((p) => p.dataset.programDay === date);
@@ -240,6 +244,7 @@ const initialDayDate = days[0]?.date ?? "";
       }
 
       requestAnimationFrame(() => syncProgramStageHeight(board));
+      dayChangeCallbacks.forEach((cb) => cb());
     };
 
     dayButtons.forEach((button) => {
@@ -294,7 +299,12 @@ const initialDayDate = days[0]?.date ?? "";
       }
     };
 
-    applyHash();
+    // On back/forward navigation, don't scroll to hash — let scroll restoration handle it
+    const navEntry = performance.getEntriesByType("navigation")[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+    const isBackForward = navEntry?.type === "back_forward";
+    applyHash(!isBackForward);
     window.addEventListener("hashchange", () => applyHash());
 
     const resizeObserver =
@@ -319,12 +329,222 @@ const initialDayDate = days[0]?.date ?? "";
     } else {
       syncProgramStageHeight(board);
     }
+
+    // --- Floating prev/next day nav (appended to body to avoid transform ancestors) ---
+    const selectorPanel = board.querySelector(".program-selector-panel");
+    if (selectorPanel && dayButtons.length > 1) {
+      const dayNav = document.createElement("nav");
+      dayNav.className = "program-day-nav";
+      dayNav.setAttribute("aria-label", "Previous / next day");
+      dayNav.innerHTML = `
+        <button type="button" class="program-day-nav-btn program-day-nav-btn--prev" data-day-nav-prev aria-label="Previous day">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="program-day-nav-btn program-day-nav-btn--next" data-day-nav-next aria-label="Next day">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      `;
+      document.body.appendChild(dayNav);
+
+      const prevBtn = dayNav.querySelector<HTMLButtonElement>(
+        "[data-day-nav-prev]",
+      )!;
+      const nextBtn = dayNav.querySelector<HTMLButtonElement>(
+        "[data-day-nav-next]",
+      )!;
+
+      let selectorVisible = true;
+      let boardVisible = true;
+
+      const stage = board.querySelector("[data-program-stage]") || board;
+      const headerHeight = 60; // ~3.75rem
+
+      function positionNav() {
+        const stageRect = stage.getBoundingClientRect();
+        const visibleTop = Math.max(stageRect.top, headerHeight);
+        const visibleBottom = Math.min(stageRect.bottom, window.innerHeight);
+        const centerY = (visibleTop + visibleBottom) / 2;
+
+        // Match the paper's tilt so buttons track the rotated edges (desktop only)
+        const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+        const tiltDeg = isDesktop
+          ? parseFloat(
+              getComputedStyle(stage).getPropertyValue("--program-paper-tilt"),
+            ) || 0
+          : 0;
+
+        dayNav.style.top = `${centerY}px`;
+        dayNav.style.left = `${stageRect.left}px`;
+        dayNav.style.width = `${stageRect.width}px`;
+        dayNav.style.transform = `translateY(-50%) rotate(${tiltDeg}deg)`;
+      }
+
+      function updateNavVisibility() {
+        const shouldShow = !selectorVisible && boardVisible;
+        dayNav.classList.toggle("is-visible", shouldShow);
+        if (shouldShow) requestAnimationFrame(positionNav);
+      }
+
+      const selectorObserver = new IntersectionObserver(
+        ([entry]) => {
+          selectorVisible = entry.isIntersecting;
+          updateNavVisibility();
+        },
+        { threshold: 0, rootMargin: "-40% 0px 0px 0px" },
+      );
+      selectorObserver.observe(selectorPanel);
+
+      const boardObserver = new IntersectionObserver(
+        ([entry]) => {
+          boardVisible = entry.isIntersecting;
+          updateNavVisibility();
+        },
+        { threshold: 0 },
+      );
+      boardObserver.observe(stage);
+
+      let rafId = 0;
+      function schedulePosition() {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(positionNav);
+      }
+      window.addEventListener("scroll", schedulePosition, { passive: true });
+      window.addEventListener("resize", schedulePosition, { passive: true });
+
+      function getActiveIndex(): number {
+        return dayButtons.findIndex((b) => b.classList.contains("is-active"));
+      }
+
+      function updateNavLabels() {
+        const idx = getActiveIndex();
+        prevBtn.hidden = !dayButtons[idx - 1];
+        nextBtn.hidden = !dayButtons[idx + 1];
+      }
+
+      dayChangeCallbacks.push(updateNavLabels);
+
+      prevBtn.addEventListener("click", async () => {
+        const idx = getActiveIndex();
+        const prev = dayButtons[idx - 1];
+        if (!prev) return;
+        history.replaceState(null, "", `#${prev.id}`);
+        await setSelectedDay(prev.dataset.daySelect!, { refreshRail: true });
+      });
+
+      nextBtn.addEventListener("click", async () => {
+        const idx = getActiveIndex();
+        const next = dayButtons[idx + 1];
+        if (!next) return;
+        history.replaceState(null, "", `#${next.id}`);
+        await setSelectedDay(next.dataset.daySelect!, { refreshRail: true });
+      });
+
+      updateNavLabels();
+    }
   });
 </script>
 
 <style>
-  :global(.program-shell) {
-    overflow: visible;
+  :global(.themed-card.program-shell) {
+    overflow: visible !important;
+  }
+
+  /* Floating prev/next day nav — global because element is appended to body */
+  :global(.program-day-nav) {
+    position: fixed !important;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 250ms ease;
+    /* JS sets top/left/width/transform to match the schedule stage */
+  }
+
+  :global(.program-day-nav.is-visible) {
+    opacity: 1;
+  }
+
+  :global(.program-day-nav.is-visible .program-day-nav-btn) {
+    pointer-events: auto;
+  }
+
+  :global(.program-day-nav-btn) {
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 2px solid var(--primary);
+    border-radius: var(--pill-radius);
+    background: var(--card);
+    color: var(--primary);
+    opacity: 0.7;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.08);
+    transition:
+      opacity 150ms ease,
+      background 150ms ease,
+      color 150ms ease;
+  }
+
+  :global(.program-day-nav-btn:hover) {
+    opacity: 1;
+    background: color-mix(in srgb, var(--card), var(--primary) 8%);
+    color: var(--primary);
+  }
+
+  :global(.program-day-nav-btn:focus-visible) {
+    opacity: 1;
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: 2px;
+  }
+
+  :global(.program-day-nav-btn[hidden]) {
+    display: none;
+  }
+
+  :global(.program-day-nav-btn svg) {
+    flex: none;
+  }
+
+  :global(.program-day-nav-btn--prev) {
+    margin-right: auto;
+    margin-left: -1rem;
+  }
+
+  :global(.program-day-nav-btn--next) {
+    margin-left: auto;
+    margin-right: -1rem;
+  }
+
+  @media (max-width: 767px) {
+    :global(.program-day-nav-btn) {
+      width: 2rem;
+      height: 2rem;
+      box-shadow:
+        0 0 0 3px var(--card),
+        0 0 10px 4px color-mix(in srgb, var(--card), transparent 30%);
+    }
+
+    :global(.program-day-nav-btn--prev) {
+      margin-left: -1.5rem;
+    }
+
+    :global(.program-day-nav-btn--next) {
+      margin-right: -1.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.program-day-nav-btn) {
+      transition: none;
+    }
   }
 
   .program-grid {

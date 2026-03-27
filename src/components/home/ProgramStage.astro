@@ -46,20 +46,54 @@ const { days, initialDate, remote = false } = Astro.props;
                 href={`#${day.anchorId}`}
                 class="program-paper-kicker"
               />
-              <h3 class="program-paper-title">{day.dateLabel}{remote && " (Remote)"}</h3>
+              <h3 class="program-paper-title">
+                {day.dateLabel}
+                {remote && " (Remote)"}
+              </h3>
               <p class="program-paper-subtitle">{day.subheading}</p>
+              {!remote && (
+                <details class="program-venue-details group mt-1">
+                  <summary class="text-muted-foreground hover:text-foreground flex cursor-pointer list-none items-center gap-1.5 text-xs transition-colors [&::-webkit-details-marker]:hidden">
+                    <span class="text-primary/60 inline-flex items-center justify-center text-[0.6rem] leading-none transition-transform group-open:rotate-90">
+                      &#9654;
+                    </span>
+                    <span>
+                      where is <em>it</em> at://?
+                    </span>
+                  </summary>
+                  <p class="text-muted-foreground [&_a]:text-primary mt-1 text-xs leading-relaxed [&_a]:underline">
+                    AMS Student Nest, UBC campus, 6133 University Blvd
+                    <a href="https://maps.app.goo.gl/S5z3Ninc3hgsp5qW7">
+                      GMap
+                    </a>{" "}
+                    &middot;
+                    <a href="https://comaps.at/0pGgTRymIh/AMS_Nest_%28Student_Union_Building%29">
+                      CoMaps
+                    </a>
+                    Vancouver, BC V6T 1Z1
+                  </p>
+                </details>
+              )}
             </div>
-            <a href={`#${day.anchorId}`} class="program-paper-summary">
-              <span>{day.seriesLabel} </span>
-            </a>
+            <div class="program-paper-header-right">
+              <a href={`#${day.anchorId}`} class="program-paper-summary">
+                <span>{day.seriesLabel} </span>
+              </a>
+              <a
+                href={remote ? `/#${day.anchorId}` : `/remote#${day.anchorId}`}
+                class="program-mode-toggle"
+              >
+                {remote ? "go on campus \u2190" : "go remote \u2192"}
+              </a>
+            </div>
           </div>
-
           <div data-schedule-content>
             {day.date === initialDate ? (
               <DaySchedule
                 events={day.events}
                 rooms={day.rooms}
                 remote={remote}
+                date={day.date}
               />
             ) : null}
           </div>
@@ -85,7 +119,7 @@ const { days, initialDate, remote = false } = Astro.props;
     isolation: isolate;
     margin-top: 0.75rem;
     padding: 0 0.78rem;
-    transition: height 150ms ease;
+    height: auto !important;
   }
 
   .program-stage::before {
@@ -128,20 +162,15 @@ const { days, initialDate, remote = false } = Astro.props;
   }
 
   .program-paper {
-    position: absolute;
-    top: calc(var(--program-stage-extra) / 2);
-    left: 0;
-    right: 0;
+    position: relative;
     z-index: 2;
     box-sizing: border-box;
-    transform-origin: center center;
     padding: 1.3rem;
     border-radius: var(--paper-radius);
     border: 1px solid color-mix(in oklch, var(--border), transparent 20%);
     background: color-mix(in srgb, var(--card), var(--background) 1.5%);
     box-shadow: var(--paper-shadow-lg);
     transition:
-      transform 150ms ease,
       opacity 150ms ease,
       box-shadow 150ms ease,
       filter 150ms ease;
@@ -170,18 +199,13 @@ const { days, initialDate, remote = false } = Astro.props;
 
   .program-paper.is-active {
     opacity: 1;
-    transform: translate(0, 0) rotate(var(--program-paper-tilt));
     box-shadow: var(--paper-shadow-lg);
     filter: none;
     pointer-events: auto;
   }
 
   .program-paper.is-under {
-    opacity: 0;
-    transform: rotate(-0.26deg) scale(0.992);
-    box-shadow: none;
-    filter: saturate(0.94) brightness(0.995);
-    pointer-events: none;
+    display: none;
   }
 
   .program-paper-header {
@@ -233,10 +257,34 @@ const { days, initialDate, remote = false } = Astro.props;
     background: color-mix(in srgb, var(--primary), transparent 88%);
   }
 
+  .program-paper-header-right {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+  }
+
+  .program-mode-toggle {
+    color: var(--muted-foreground);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 150ms ease;
+  }
+
+  .program-mode-toggle:hover {
+    color: var(--primary);
+  }
+
   .program-paper :global(.day-schedule) {
     border-color: color-mix(in oklch, var(--primary), transparent 55%);
     background: color-mix(in srgb, var(--card), var(--background) 1.5%);
-    overflow: visible;
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .program-paper :global(.day-schedule .border-border),

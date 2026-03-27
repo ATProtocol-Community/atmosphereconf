@@ -48,6 +48,9 @@ export default defineConfig({
           "blob:image/*",
         ],
       },
+      redirects: {
+        afterLogin: "/profile/{loggedInUser.handle}",
+      },
     }),
   ],
   server: {

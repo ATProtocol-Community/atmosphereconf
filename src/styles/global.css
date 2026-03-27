@@ -179,8 +179,12 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     scroll-padding-top: 4.5rem; /* h-14 header + breathing room */
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html:focus-within {
+      scroll-behavior: smooth;
+    }
   }
   * {
     @apply border-border outline-ring/50;

@@ -28,9 +28,10 @@ interface Props {
   events: ScheduleEvent[];
   rooms: string[];
   remote?: boolean;
+  date?: string;
 }
 
-const { events, rooms, remote = false } = Astro.props;
+const { events, rooms, remote = false, date } = Astro.props;
 
 function isLiveOnly(event: ScheduleEvent) {
   return !isRemoteAccessible(event.mode);
@@ -89,16 +90,31 @@ const gridEvents = parsed
     };
   });
 
+// Check if an info event overlaps with any other event
+function hasInfoOverlap(event: (typeof gridEvents)[0]) {
+  if (!isInfo(event.type)) return false;
+  return gridEvents.some(
+    (other) =>
+      other !== event &&
+      event.startMin < other.endMin &&
+      other.startMin < event.endMin,
+  );
+}
+
 // Shared time grid template
 const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
 ---
 
 <div
-  class="day-schedule border-border isolate overflow-hidden rounded-lg border"
+  class="day-schedule border-border isolate rounded-lg border"
+  data-schedule-date={date}
+  data-min-time={minTime}
+  data-max-time={maxTime}
+  data-slot={SLOT}
 >
   <!-- ========== MOBILE: Vertical room tabs + single-room panels ========== -->
 
-  <div class="divide-border flex flex-col divide-y md:hidden">
+  <div class="mobile-room-nav divide-border flex flex-col divide-y md:hidden">
     {
       rooms.map((room, i) => (
         <button
@@ -157,6 +173,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
                     class:list={[
                       "relative flex min-h-5 p-[0.22rem]",
                       isLinkable(event) && "group/evt cursor-pointer",
+                      hasInfoOverlap(event) && "info-overlap",
                     ]}
                     style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: 1; z-index: ${event.zIndex}`}
                   >
@@ -164,6 +181,12 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
                   </li>
                 ))}
               </ol>
+              <div class="now-indicator pointer-events-none col-start-1 col-end-2 row-start-1 relative" aria-hidden="true">
+                <div class="now-line absolute inset-x-0 flex items-center hidden" style="z-index: 2000">
+                  <div class="size-2.5 rounded-full bg-primary shrink-0"></div>
+                  <div class="h-0.5 flex-1 bg-primary"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -174,7 +197,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
   <!-- ========== DESKTOP: Full multi-column layout ========== -->
   <div class="hidden md:block">
     <div>
-      <div class="border-border bg-card flex rounded-t-lg border-b">
+      <div class="desktop-room-header border-border flex rounded-t-lg border-b">
         <div class="border-border w-14 flex-none border-r"></div>
         <div
           class="divide-border grid flex-auto divide-x"
@@ -229,6 +252,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
                     "relative flex min-h-5 p-[0.22rem]",
                     isLinkable(event) && "group/evt cursor-pointer",
                     remote && isLiveOnly(event) && "live-only",
+                    hasInfoOverlap(event) && "info-overlap",
                   ]}
                   data-mode={event.mode}
                   style={`grid-row: ${event.startRow} / span ${event.spanRows}; grid-column: ${event.colStart} / span ${event.colSpan}; z-index: ${event.zIndex}`}
@@ -238,11 +262,47 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
               ))
             }
           </ol>
+          <div class="now-indicator pointer-events-none col-start-1 col-end-2 row-start-1 relative" aria-hidden="true">
+            <div class="now-line absolute inset-x-0 flex items-center hidden" style="z-index: 2000">
+              <div class="size-2.5 rounded-full bg-primary shrink-0"></div>
+              <div class="h-0.5 flex-1 bg-primary"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .day-schedule {
+    overflow-x: clip;
+    overflow-y: visible;
+    --schedule-sticky-top: 3.5rem;
+    --schedule-sticky-top-mobile: 6rem;
+  }
+
+  .mobile-room-nav,
+  .desktop-room-header {
+    position: sticky;
+    z-index: 1500;
+    background: var(--card);
+  }
+
+  .mobile-room-nav {
+    top: var(--schedule-sticky-top-mobile);
+  }
+
+  .desktop-room-header {
+    top: var(--schedule-sticky-top);
+  }
+
+  @media (min-width: 640px) {
+    .mobile-room-nav {
+      top: var(--schedule-sticky-top);
+    }
+  }
+</style>
 
 <script>
   document.querySelectorAll(".day-schedule").forEach((schedule) => {
@@ -269,4 +329,53 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
       });
     });
   });
+
+  // --- Now indicator ---
+  const CONF_TZ = "America/Vancouver";
+
+  function getConfNow() {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: CONF_TZ,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).formatToParts(new Date());
+    const g = (t: string) =>
+      parseInt(parts.find((p) => p.type === t)?.value ?? "0");
+    return {
+      date: `${g("year")}-${String(g("month")).padStart(2, "0")}-${String(g("day")).padStart(2, "0")}`,
+      mins: g("hour") * 60 + g("minute"),
+    };
+  }
+
+  function updateNowLines() {
+    const { date, mins } = getConfNow();
+    document
+      .querySelectorAll<HTMLElement>(".day-schedule[data-schedule-date]")
+      .forEach((el) => {
+        const d = el.dataset.scheduleDate!;
+        const min = Number(el.dataset.minTime);
+        const max = Number(el.dataset.maxTime);
+        const slot = Number(el.dataset.slot);
+        const lines = el.querySelectorAll<HTMLElement>(".now-line");
+
+        if (d !== date || mins < min || mins > max) {
+          lines.forEach((l) => l.classList.add("hidden"));
+          return;
+        }
+
+        const top = `calc(0.5rem + ${(mins - min) / slot}rem)`;
+        lines.forEach((l) => {
+          l.style.top = top;
+          l.classList.remove("hidden");
+        });
+      });
+  }
+
+  updateNowLines();
+  setInterval(updateNowLines, 60_000);
+  document.addEventListener("schedule:loaded", updateNowLines);
 </script>
