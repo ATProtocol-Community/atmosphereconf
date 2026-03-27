@@ -59,7 +59,12 @@ async function fetchAllFromPds<TData extends Record<string, unknown>>(
     cursor = data.cursor;
   } while (cursor);
 
-  return entries;
+  // Deduplicate by id, keeping the last entry (newest record wins)
+  const byId = new Map<string, LiveDataEntry<TData>>();
+  for (const entry of entries) {
+    byId.set(entry.id, entry);
+  }
+  return [...byId.values()];
 }
 
 async function fetchSingleFromPds<TData extends Record<string, unknown>>(
