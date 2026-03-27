@@ -59,7 +59,7 @@ export function eventDataToCalendarRecord(
     $type: "community.lexicon.calendar.event",
     name: event.title,
     createdAt,
-    mode: ["workshop", "info", "activity"].includes(event.type)
+    mode: ["workshop", "info", "activity", "unconference"].includes(event.type)
       ? "community.lexicon.calendar.event#inperson"
       : "community.lexicon.calendar.event#hybrid",
     status: "community.lexicon.calendar.event#scheduled",
