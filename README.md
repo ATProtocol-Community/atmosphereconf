@@ -10,6 +10,14 @@ Suggestions, code, and design contributions welcome! Join the [ATProto Touchers 
 > [!NOTE]
 > There is a tangled repo at <https://tangled.org/@atprotocol.dev/ATmosphereConf.org> that was another start to this. We are using Railway for hosting, and it has Github integration for deploys, so we're going to use this for now and then figure out how to sync both, and primarily use tangled for issues and development.
 
+## License
+
+This codebase is licensed under the permissive [MIT license](LICENSE) and is made available for you to learn from, and re-use parts of. It was built with a mix of volunteer and paid work funded by the AT Community Fund for AtmosphereConf 2026, including original artwork like Goodstuff Goosetopher and the overall design. Please don't re-use our designs or artwork as-is without asking.
+
+If you do re-use the code, there is a social expectation to give back to the AT Community Fund.
+
+[Get in touch](https://forms.atprotocol.community/r/nPadKP) or open an issue if you have questions about re-use, or [fund our open collective](https://opencollective.com/atprotocoldev/).
+
 ## Adding a new theme
 
 The site supports multiple themes (blacksky, germ, reddwarf, pckt, bluesky, and more.). To add a new one:
