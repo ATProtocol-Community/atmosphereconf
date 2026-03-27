@@ -12,6 +12,13 @@ import inPersonIconSvg from "@/components/ui/icons/InPersonIcon.svg?raw";
 import { isRemoteAccessible } from "@/lib/calendar-event";
 
 const { id } = Astro.params;
+const user = Astro.locals.loggedInUser;
+
+const streamTracks = [
+  { id: "stream1", name: "Stream 1", room: "Great Hall South" },
+  { id: "stream2", name: "Stream 2", room: "Performance Theatre" },
+  { id: "stream3", name: "Stream 3", room: "Room 2301" },
+];
 
 const { entry, error } = await getLiveEntry("events", id!);
 if (error) {
@@ -66,6 +73,10 @@ const timeDisplay =
       : null;
 
 const dateDisplay = start ? formatConferenceDay(start) : null;
+
+const streamTrack = isRemoteAccessible(mode)
+  ? streamTracks.find((t) => t.room === room)
+  : null;
 ---
 
 <Layout title={`${plainTitle} — ATmosphereConf 2026`} ogImage={headerUrl} page="event">
@@ -166,6 +177,21 @@ const dateDisplay = start ? formatConferenceDay(start) : null;
                     : mode === "remote"
                       ? "Remote only — via livestream"
                       : "In-person only"}
+                  {streamTrack && (
+                    <>
+                      {" — "}
+                      {user ? (
+                        <a
+                          href={`/remote#remote-info`}
+                          class="text-primary hover:underline"
+                        >
+                          Watch on {streamTrack.name} →
+                        </a>
+                      ) : (
+                        <span>{streamTrack.name} ({streamTrack.room})</span>
+                      )}
+                    </>
+                  )}
                 </span>
               </div>
             </div>
