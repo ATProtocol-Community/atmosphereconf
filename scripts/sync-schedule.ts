@@ -33,6 +33,7 @@ const TYPE_MAP: Record<string, string> = {
   Workshop: "workshop",
   Activity: "activity",
   Info: "info",
+  Unconference: "unconference",
 };
 
 const TYPE_LABELS = Object.fromEntries(
@@ -196,6 +197,10 @@ async function loadExisting(
       if (!ad?.isAtmosphereconf) {
         continue;
       }
+      // Normalize type to lowercase to match TYPE_MAP convention
+      if (typeof ad.type === "string") {
+        ad.type = ad.type.toLowerCase();
+      }
       existing.set(rec.uri.split("/").pop()!, value);
     }
 
@@ -205,12 +210,26 @@ async function loadExisting(
   return existing;
 }
 
+function changedFields(
+  record: Record<string, unknown>,
+  previous: Record<string, unknown>,
+): string[] {
+  const keys = Object.keys(record).filter((k) => k !== "createdAt");
+  const changed: string[] = [];
+  for (const k of keys) {
+    if (sortedStringify(record[k]) !== sortedStringify(previous[k])) {
+      changed.push(k);
+    }
+  }
+  return changed;
+}
+
 function diffEntries(
   entries: ScheduleEntry[],
   existing: Map<string, Record<string, unknown>>,
 ) {
   const toCreate: ScheduleEntry[] = [];
-  const toUpdate: ScheduleEntry[] = [];
+  const toUpdate: { entry: ScheduleEntry; fields: string[] }[] = [];
   const unchanged: ScheduleEntry[] = [];
 
   for (const entry of entries) {
@@ -225,17 +244,14 @@ function diffEntries(
       | Array<{ uri: string; name?: string }>
       | undefined;
     const record = buildRecord(entry, createdAt, existingUris);
-    // Compare only the keys present in the built record to ignore extra upstream fields
-    const previousSubset = Object.fromEntries(
-      Object.keys(record).map((k) => [
-        k,
-        (previous as Record<string, unknown>)[k],
-      ]),
+    const fields = changedFields(
+      record as unknown as Record<string, unknown>,
+      previous,
     );
-    if (sortedStringify(previousSubset) === sortedStringify(record)) {
+    if (fields.length === 0) {
       unchanged.push(entry);
     } else {
-      toUpdate.push(entry);
+      toUpdate.push({ entry, fields });
     }
   }
 
@@ -267,17 +283,18 @@ async function upsertSchedule(
       | undefined;
     const record = buildRecord(entry, createdAt, existingUris);
 
+    const contentKeys = Object.keys(record).filter((k) => k !== "createdAt");
     const previousSubset = previous
       ? Object.fromEntries(
-          Object.keys(record).map((k) => [
-            k,
-            (previous as Record<string, unknown>)[k],
-          ]),
+          contentKeys.map((k) => [k, (previous as Record<string, unknown>)[k]]),
         )
       : null;
+    const recordSubset = Object.fromEntries(
+      contentKeys.map((k) => [k, (record as Record<string, unknown>)[k]]),
+    );
     if (
       previousSubset &&
-      sortedStringify(previousSubset) === sortedStringify(record)
+      sortedStringify(previousSubset) === sortedStringify(recordSubset)
     ) {
       skipped++;
       continue;
@@ -375,7 +392,7 @@ async function loadRecordsForPull(did: string) {
         sourceId:
           (ad?.sourceId as string | undefined) ?? rec.uri.split("/").pop()!,
         title: String(value.name ?? ""),
-        type: String(ad?.type ?? "presentation"),
+        type: String(ad?.type ?? "presentation").toLowerCase(),
         speakers: Array.isArray(ad?.speakers)
           ? (ad.speakers as Speaker[])
           : undefined,
@@ -485,7 +502,8 @@ async function handlePush(csvPath?: string) {
   }
   if (toUpdate.length) {
     diffLines.push("", "Changed:");
-    for (const e of toUpdate) diffLines.push(`  ~ ${e.sourceId} — ${e.title}`);
+    for (const { entry: e, fields } of toUpdate)
+      diffLines.push(`  ~ ${e.sourceId} — ${e.title} [${fields.join(", ")}]`);
   }
   if (orphanedKeys.length) {
     diffLines.push("", "Orphaned (exist upstream but not in CSV):");
