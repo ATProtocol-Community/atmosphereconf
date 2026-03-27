@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { actions } from "astro:actions";
-import { CircleCheck, ExternalLink, Loader2, Trash2 } from "lucide-react";
+import { ExternalLink, Loader2, Trash2 } from "lucide-react";
 import type { BadgeAwardInfo } from "@/lib/profile";
 
 interface BadgeCertificateProps {
@@ -8,6 +8,7 @@ interface BadgeCertificateProps {
   handle: string;
   badgeAward: BadgeAwardInfo | null;
   canUnclaim: boolean;
+  onVerified?: () => void;
 }
 
 interface VerifyResult {
@@ -18,14 +19,26 @@ interface VerifyResult {
   issuerDisplayName?: string;
 }
 
+const labelClass =
+  "uppercase tracking-wider text-muted-foreground text-[11px]";
+
+const VERIFY_KEY_PREFIX = "badge-verified:";
+
 export function BadgeCertificate({
   did,
   handle,
   badgeAward,
   canUnclaim,
+  onVerified,
 }: BadgeCertificateProps) {
   const [verifying, setVerifying] = useState(false);
-  const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(null);
+  const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(() => {
+    try {
+      const cached = sessionStorage.getItem(VERIFY_KEY_PREFIX + did);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    return null;
+  });
   const [unclaiming, setUnclaiming] = useState(false);
   const [unclaimError, setUnclaimError] = useState<string | null>(null);
 
@@ -39,6 +52,15 @@ export function BadgeCertificate({
         return;
       }
       setVerifyResult(result.data);
+      if (result.data.verified) {
+        try {
+          sessionStorage.setItem(
+            VERIFY_KEY_PREFIX + did,
+            JSON.stringify(result.data),
+          );
+        } catch {}
+        onVerified?.();
+      }
     } catch {
       setVerifyResult({ verified: false, error: "Verification failed" });
     } finally {
@@ -55,6 +77,7 @@ export function BadgeCertificate({
         setUnclaimError(`Failed to remove badge: ${result.error.message}`);
         return;
       }
+      try { sessionStorage.removeItem(VERIFY_KEY_PREFIX + did); } catch {}
       window.location.reload();
     } catch {
       setUnclaimError("Failed to remove badge");
@@ -64,138 +87,119 @@ export function BadgeCertificate({
   };
 
   return (
-    <div className="w-80 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-700 dark:bg-gray-900">
-      {/* Certificate */}
-      <div className="badge-certificate relative rounded-sm">
-        <div className="badge-tape badge-tape-left" />
-        <div className="badge-tape badge-tape-right" />
+    <div className={`badge-certificate w-96 rounded font-mono${verifyResult?.verified ? " badge-certificate-verified" : ""}`}>
+      {verifyResult?.verified && <div className="badge-cert-shine" />}
+      {/* Certificate stamp */}
+      <div className="badge-cert-seal">
+        <svg
+          viewBox="0 0 512 512"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M211 7.3C205 1 196-1.4 187.6.8s-14.9 8.9-17.1 17.3l-15.8 62.5l-62-17.5c-8.4-2.4-17.4 0-23.5 6.1s-8.5 15.1-6.1 23.5l17.5 62l-62.5 15.9c-8.4 2.1-15 8.7-17.3 17.1S1 205 7.3 211l46.2 45l-46.2 45c-6.3 6-8.7 15-6.5 23.4s8.9 14.9 17.3 17.1l62.5 15.8l-17.5 62c-2.4 8.4 0 17.4 6.1 23.5s15.1 8.5 23.5 6.1l62-17.5l15.8 62.5c2.1 8.4 8.7 15 17.1 17.3s17.3-.2 23.4-6.4l45-46.2l45 46.2c6.1 6.2 15 8.7 23.4 6.4s14.9-8.9 17.1-17.3l15.8-62.5l62 17.5c8.4 2.4 17.4 0 23.5-6.1s8.5-15.1 6.1-23.5l-17.5-62l62.5-15.8c8.4-2.1 15-8.7 17.3-17.1s-.2-17.4-6.4-23.4l-46.2-45l46.2-45c6.2-6.1 8.7-15 6.4-23.4s-8.9-14.9-17.3-17.1l-62.5-15.8l17.5-62c2.4-8.4 0-17.4-6.1-23.5s-15.1-8.5-23.5-6.1l-62 17.5l-15.9-62.5c-2.1-8.4-8.7-15-17.1-17.3S307 1 301 7.3l-45 46.2z" />
+        </svg>
+        {verifyResult?.verified && (
+          <>
+            <span className="badge-cert-seal-sparkle" style={{ "--sparkle-x": "90%", "--sparkle-y": "-10%", "--sparkle-delay": "0.5s", "--sparkle-dur": "2.2s", "--sparkle-size": "6px", "--drift-dur": "6.3s", "--drift-delay": "0s" } as React.CSSProperties} />
+            <span className="badge-cert-seal-sparkle" style={{ "--sparkle-x": "-15%", "--sparkle-y": "50%", "--sparkle-delay": "1.8s", "--sparkle-dur": "2.8s", "--sparkle-size": "4px", "--drift-dur": "8.1s", "--drift-delay": "2.7s" } as React.CSSProperties} />
+            <span className="badge-cert-seal-sparkle" style={{ "--sparkle-x": "50%", "--sparkle-y": "105%", "--sparkle-delay": "3.1s", "--sparkle-dur": "2s", "--sparkle-size": "5px", "--drift-dur": "7s", "--drift-delay": "4.5s" } as React.CSSProperties} />
+            <span className="badge-cert-seal-sparkle" style={{ "--sparkle-x": "105%", "--sparkle-y": "60%", "--sparkle-delay": "4.8s", "--sparkle-dur": "3.2s", "--sparkle-size": "3px", "--drift-dur": "5.8s", "--drift-delay": "1.2s" } as React.CSSProperties} />
+          </>
+        )}
+      </div>
+      <div className="badge-cert-inner">
+        {/* Header */}
+        <div className="text-muted-foreground py-0.5 text-[13px] font-bold uppercase tracking-widest">
+          // Certificate
+        </div>
+        <div className="border-border my-2 border-t" />
 
-        <div className="badge-cert-inner">
-          {/* Header */}
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-800/60 dark:text-amber-300/50">
-            ATmosphereConf
-          </div>
-          <div className="my-2 border-t border-amber-800/15 dark:border-amber-300/15" />
-          <div className="text-sm font-bold text-amber-900 dark:text-amber-200">
+        {/* Single grid for all rows */}
+        <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[11px]">
+          <span className={labelClass}>Subject</span>
+          <span className="font-bold text-amber-700 dark:text-amber-300">
             {badgeAward?.badgeName || "Attendee Badge"}
-          </div>
+          </span>
 
-          {/* Awarded to */}
-          <div className="mt-3 text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500">
-            Awarded to
-          </div>
-          <div className="mt-0.5 text-xs font-semibold text-gray-700 dark:text-gray-300">
-            @{handle}
-          </div>
+          <span className={labelClass}>Issued&nbsp;to</span>
+          <span className="text-card-foreground truncate">@{handle}</span>
+
+          <span className={labelClass}>Issuer</span>
+          <span className="text-foreground/80">ATmosphereConf</span>
 
           {badgeAward?.badgeDescription && (
-            <p className="mt-2 text-[10px] leading-relaxed text-gray-500 dark:text-gray-400">
-              {badgeAward.badgeDescription}
-            </p>
+            <>
+              <span className={labelClass}>Note</span>
+              <span className="text-muted-foreground">
+                {badgeAward.badgeDescription}
+              </span>
+            </>
           )}
 
-          <div className="my-3 border-t border-dashed border-amber-800/10 dark:border-amber-300/10" />
+          {/* Divider spanning both columns */}
+          <div className="border-border/60 col-span-2 my-0.5 border-t border-dashed" />
 
-          {/* Seal + Verification */}
-          <div className="flex items-start gap-3 text-left">
-            {/* Seal */}
-            <div
-              className={`badge-seal shrink-0${verifyResult?.verified ? " badge-seal-verified" : ""}`}
-            >
-              <svg
-                aria-hidden="true"
-                width="52"
-                height="52"
-                viewBox="0 0 100 100"
-                fill="currentColor"
-              >
-                <polygon points="50,4 59.3,15.2 73,10.2 75.5,24.5 89.8,27 84.8,40.7 96,50 84.8,59.3 89.8,73 75.5,75.5 73,89.8 59.3,84.8 50,96 40.7,84.8 27,89.8 24.5,75.5 10.2,73 15.2,59.3 4,50 15.2,40.7 10.2,27 24.5,24.5 27,10.2 40.7,15.2" />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="26"
-                  fill={verifyResult?.verified ? "#f0fdf4" : "#fefcf3"}
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  className="dark:!fill-transparent"
-                />
-                <polygon
-                  points="50,35 54.1,44.3 64.3,45.4 56.7,52.2 58.8,62.1 50,57 41.2,62.1 43.3,52.2 35.7,45.4 45.9,44.3"
-                  fill="currentColor"
-                  opacity={verifyResult?.verified ? "1" : "0.5"}
-                />
-              </svg>
-            </div>
-
-            {/* Verification content */}
-            <div className="min-w-0 flex-1 pt-1">
-              {!verifyResult?.verified ? (
-                <>
-                  <div className="text-[10px] text-gray-400 dark:text-gray-500">
-                    Signed by:{" "}
-                    <span className="font-medium text-gray-600 dark:text-gray-300">
-                      ATmosphereConf
-                    </span>
-                  </div>
-                  <button
-                    onClick={handleVerify}
-                    disabled={verifying}
-                    className="mt-1.5 inline-flex items-center gap-1 rounded border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300 dark:hover:bg-emerald-900/40"
-                  >
-                    {verifying ? (
-                      <>
-                        <Loader2 className="size-2.5 animate-spin" />
-                        Checking...
-                      </>
-                    ) : (
-                      <>
-                        <CircleCheck className="size-2.5" />
-                        Verify signature
-                      </>
-                    )}
-                  </button>
-                </>
-              ) : (
-                <div className="rounded bg-emerald-50/80 px-2 py-1.5 dark:bg-emerald-900/20">
-                  <span className="inline-flex rounded-full bg-emerald-500 px-1.5 py-px text-[9px] font-bold tracking-wide text-white dark:bg-emerald-600">
-                    VERIFIED
-                  </span>
-                  <div className="mt-1 truncate text-[10px] font-medium text-gray-600 dark:text-gray-300">
-                    {verifyResult.issuerHandle
-                      ? `@${verifyResult.issuerHandle}`
-                      : verifyResult.issuerDisplayName ||
-                        verifyResult.issuerDid}
-                  </div>
-                  {verifyResult.issuerDid &&
-                    (verifyResult.issuerHandle ||
-                      verifyResult.issuerDisplayName) && (
-                      <div className="mt-0.5 truncate font-mono text-[9px] text-gray-400 dark:text-gray-500">
-                        {verifyResult.issuerDid}
-                      </div>
-                    )}
-                  <p className="mt-1 text-[9px] text-gray-400 dark:text-gray-500">
-                    Verified on the open web
+          {/* Verification rows */}
+          {!verifyResult?.verified ? (
+            <>
+              <span className={labelClass}>Verify</span>
+              <div>
+                <button
+                  onClick={handleVerify}
+                  disabled={verifying}
+                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1 border rounded px-1.5 py-px text-[10px] font-bold uppercase tracking-wide transition-colors hover:opacity-80 disabled:opacity-50"
+                >
+                  {verifying ? (
+                    <>
+                      <Loader2 className="size-2.5 animate-spin" />
+                      checking...
+                    </>
+                  ) : (
+                    "[verify]"
+                  )}
+                </button>
+                {verifyResult && !verifyResult.verified && (
+                  <p className="mt-1 text-[10px] font-medium text-red-600 dark:text-red-400">
+                    {verifyResult.error}
                   </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <span className={labelClass}>Status</span>
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                VERIFIED
+              </span>
+
+              <span className={labelClass}>Signed&nbsp;by</span>
+              <div>
+                <div className="text-card-foreground truncate">
+                  {verifyResult.issuerHandle
+                    ? `@${verifyResult.issuerHandle}`
+                    : verifyResult.issuerDisplayName || verifyResult.issuerDid}
                 </div>
-              )}
-              {verifyResult && !verifyResult.verified && (
-                <p className="mt-1 text-[10px] font-medium text-red-600 dark:text-red-400">
-                  {verifyResult.error}
-                </p>
-              )}
-            </div>
-          </div>
+                {verifyResult.issuerDid &&
+                  (verifyResult.issuerHandle ||
+                    verifyResult.issuerDisplayName) && (
+                    <div className="text-muted-foreground truncate text-[9px]">
+                      {verifyResult.issuerDid}
+                    </div>
+                  )}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Footer actions */}
-      <div className="mt-2 flex items-center gap-2">
+      {/* Footer */}
+      <div className="border-border/60 flex items-center gap-3 border-t px-3 py-1.5 text-[10px]">
         {badgeAward?.pdsUrl && (
           <a
             href={badgeAward.pdsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[10px] text-gray-400 hover:text-gray-600 hover:underline dark:text-gray-500 dark:hover:text-gray-300"
+            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 hover:underline"
           >
             <ExternalLink aria-hidden="true" className="size-2.5" />
             View on PDS
@@ -205,7 +209,7 @@ export function BadgeCertificate({
           <button
             onClick={handleUnclaim}
             disabled={unclaiming}
-            className="ml-auto inline-flex items-center gap-1 text-[10px] text-red-300 transition-colors hover:text-red-500 disabled:opacity-50 dark:text-red-500/40 dark:hover:text-red-300"
+            className="ml-auto inline-flex items-center gap-1 text-red-300 transition-colors hover:text-red-500 disabled:opacity-50 dark:text-red-500/40 dark:hover:text-red-300"
           >
             {unclaiming ? (
               <Loader2 className="size-3 animate-spin" />
@@ -219,7 +223,7 @@ export function BadgeCertificate({
         )}
       </div>
       {unclaimError && (
-        <p className="mt-1 text-[10px] font-medium text-red-600 dark:text-red-400">
+        <p className="px-3 pb-1.5 text-[10px] font-medium text-red-600 dark:text-red-400">
           {unclaimError}
         </p>
       )}

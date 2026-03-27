@@ -51,39 +51,38 @@ export function RenderedProfile({
           </a>
         </div>
         {isOwnProfile && (
-          <div className="flex shrink-0 gap-2 self-start">
-            <button
-              onClick={onEdit}
-              className="hover:bg-accent hover:text-accent-foreground inline-flex size-9 items-center justify-center rounded-md text-sm font-semibold transition-all"
-              aria-label="Edit profile"
-            >
-              <Pencil className="h-4 w-4" />
-            </button>
-            <form method="POST" action="/oauth/logout">
+          <div className="flex shrink-0 flex-col items-end gap-2.5 self-start">
+            <div className="flex items-center gap-2">
               <button
-                type="submit"
-                className="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold whitespace-nowrap transition-all"
+                onClick={onEdit}
+                className="hover:bg-accent hover:text-accent-foreground inline-flex size-9 items-center justify-center rounded-md text-sm font-semibold transition-all"
+                aria-label="Edit profile"
               >
-                Logout
+                <Pencil className="h-4 w-4" />
               </button>
-            </form>
+              <form method="POST" action="/oauth/logout">
+                <button
+                  type="submit"
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold whitespace-nowrap transition-all"
+                >
+                  Logout
+                </button>
+              </form>
+            </div>
+            {isTicketHolder && ticketEditUrl && (
+              <a
+                href={ticketEditUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground/60 text-xs italic underline hover:opacity-80"
+              >
+                Manage ticket ↗
+              </a>
+            )}
           </div>
         )}
       </div>
 
-      {/* Ticket info (own profile only) */}
-      {isOwnProfile && isTicketHolder && ticketEditUrl && (
-        <p className="text-muted-foreground/60 text-xs italic">
-          <a
-            href={ticketEditUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:opacity-80"
-          >
-            Manage your ticket ↗
-          </a>
-        </p>
-      )}
       {isOwnProfile && !isTicketHolder && (
         <p className="text-muted-foreground/60 text-xs italic">
           Missing your ticket?{" "}

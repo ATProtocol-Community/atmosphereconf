@@ -1,72 +1,67 @@
-/* ── Badge pill (ticket-inspired) ── */
+/* ── Badge button (88×31 style) ── */
 .badge-btn {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    #fde68a 0%,
-    #fbbf24 40%,
-    #f59e0b 70%,
-    #fbbf24 100%
-  );
+  background:
+    repeating-conic-gradient(rgba(0, 0, 0, 0.06) 0% 25%, transparent 0% 50%)
+      0 0 / 2px 2px,
+    #fbbf24;
+  border: 2px solid;
+  border-color: #fef3c7 #78350f #78350f #fef3c7;
   box-shadow:
-    0 1px 3px rgba(180, 140, 20, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transition:
-    transform 0.15s ease-out,
-    box-shadow 0.15s ease-out;
+    inset 1px 1px 0 rgba(255, 255, 255, 0.35),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+  filter: saturate(0.6);
 }
 .badge-btn::after {
   content: "";
   position: absolute;
   top: -50%;
-  left: -100%;
-  width: 40%;
+  left: 0;
+  width: 50%;
   height: 200%;
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0.45),
     transparent
   );
-  transform: skewX(-20deg);
-  transition: left 0.5s ease-out;
+  transform: translateX(-350%) skewX(-25deg);
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   pointer-events: none;
 }
 .badge-btn:hover {
-  transform: translateY(-1px);
   box-shadow:
-    0 3px 8px rgba(180, 140, 20, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 8px rgba(251, 191, 36, 0.4);
 }
 .badge-btn:hover::after {
-  left: 150%;
+  transform: translateX(350%) skewX(-25deg);
 }
 .badge-btn:active {
-  transform: translateY(0);
-  transition-duration: 0.05s;
+  border-color: #78350f #fef3c7 #fef3c7 #78350f;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 .badge-btn:focus-visible {
   outline: 2px solid #d97706;
   outline-offset: 2px;
 }
+.badge-btn-verified {
+  filter: none;
+}
 
 /* ── Claim celebration ── */
 @keyframes celebrate-glow {
   0% {
-    box-shadow:
-      0 1px 3px rgba(180, 140, 20, 0.15),
-      0 0 0 0 rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
   }
   40% {
-    box-shadow:
-      0 1px 3px rgba(180, 140, 20, 0.15),
-      0 0 20px 6px rgba(245, 158, 11, 0.25);
+    box-shadow: 0 0 20px 6px rgba(251, 191, 36, 0.4);
   }
   100% {
-    box-shadow:
-      0 1px 3px rgba(180, 140, 20, 0.15),
-      0 0 0 0 rgba(245, 158, 11, 0);
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
   }
 }
 @keyframes celebrate-shine {
@@ -79,6 +74,7 @@
 }
 .badge-btn-celebrate {
   animation: celebrate-glow 1.2s ease-out;
+  filter: none;
 }
 .badge-claim-shine {
   position: absolute;
@@ -95,16 +91,88 @@
   animation: celebrate-shine 0.6s ease-out 0.2s both;
   pointer-events: none;
 }
-.badge-welcome {
-  animation: welcome-fade 0.3s ease-out 0.5s both;
-}
-@keyframes welcome-fade {
+
+/* ── Verified persistent shine + sparkles ── */
+@keyframes verified-shine-loop {
   0% {
-    opacity: 0;
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  12% {
+    transform: translateX(500%) skewX(-20deg);
   }
   100% {
-    opacity: 1;
+    transform: translateX(500%) skewX(-20deg);
   }
+}
+.badge-verified-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: verified-shine-loop 6s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+  pointer-events: none;
+}
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+@keyframes sparkle-drift {
+  0% {
+    translate: 0 0;
+  }
+  25% {
+    translate: 2px -1px;
+  }
+  50% {
+    translate: -1px 2px;
+  }
+  75% {
+    translate: 1px 1px;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+.badge-sparkle {
+  position: absolute;
+  width: var(--sparkle-size, 8px);
+  height: var(--sparkle-size, 8px);
+  background: #fbbf24;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 8px 3px rgba(251, 191, 36, 0.7);
+  clip-path: polygon(50% 0%, 56% 38%, 100% 50%, 56% 62%, 50% 100%, 44% 62%, 0% 50%, 44% 38%);
+  animation: sparkle var(--sparkle-dur, 2.5s) ease-out var(--sparkle-delay, 0s)
+      infinite,
+    sparkle-drift var(--drift-dur, 6s) ease-in-out var(--drift-delay, 0s)
+      infinite;
+  top: var(--sparkle-y, 0);
+  left: var(--sparkle-x, 0);
 }
 
 /* ── Popup ── */
@@ -122,105 +190,123 @@
   animation: popup-in 0.15s ease-out both;
 }
 
-/* ── Certificate ── */
+/* ── Certificate (retro dialog) ── */
 .badge-certificate {
   position: relative;
-  background: linear-gradient(180deg, #fefcf3 0%, #f5f0e1 100%);
-  border: 2px solid #c9b88a;
-  padding: 0.3rem;
+  overflow: hidden;
+  background:
+    repeating-conic-gradient(rgba(0, 0, 0, 0.03) 0% 25%, transparent 0% 50%)
+      0 0 / 2px 2px,
+    color-mix(in oklch, var(--popover, #ffffff), var(--muted-foreground) 4%);
+  border: 2px solid var(--border);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.35),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.08);
 }
 .badge-cert-inner {
-  border: 1px solid rgba(180, 160, 110, 0.5);
-  padding: 1.25rem 1rem;
+  padding: 0.75rem 1rem;
   position: relative;
-  text-align: center;
 }
-.badge-cert-inner::before {
-  content: "";
+.badge-cert-seal {
   position: absolute;
-  inset: 3px;
-  border: 1px solid rgba(180, 160, 110, 0.25);
+  top: 0.80rem;
+  right: 0.80rem;
+  width: 1.45rem;
+  aspect-ratio: 1;
+  z-index: 2;
+}
+.badge-cert-seal svg {
+  width: 100%;
+  height: 100%;
+  color: #d97706;
+  transition: color 0.2s ease;
+}
+.badge-certificate-verified .badge-cert-seal svg {
+  color: #fbbf24;
+  animation: seal-glow 3s ease-in-out infinite;
+}
+@keyframes seal-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
+  }
+}
+.badge-cert-seal-sparkle {
+  position: absolute;
+  width: var(--sparkle-size, 5px);
+  height: var(--sparkle-size, 5px);
+  background: #fbbf24;
   pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 6px 2px rgba(251, 191, 36, 0.7);
+  clip-path: polygon(50% 0%, 56% 38%, 100% 50%, 56% 62%, 50% 100%, 44% 62%, 0% 50%, 44% 38%);
+  animation: sparkle var(--sparkle-dur, 2.5s) ease-out var(--sparkle-delay, 0s)
+      infinite,
+    sparkle-drift var(--drift-dur, 6s) ease-in-out var(--drift-delay, 0s)
+      infinite;
+  top: var(--sparkle-y, 0);
+  left: var(--sparkle-x, 0);
 }
-
-/* ── Certificate tape ── */
-.badge-tape {
-  position: absolute;
-  width: 3rem;
-  height: 0.85rem;
-  background: rgba(254, 243, 199, 0.85);
-  border: 1px dashed rgba(217, 119, 6, 0.3);
-  border-radius: 2px;
-  z-index: 3;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-.badge-tape-left {
-  top: -0.4rem;
-  left: 1.5rem;
-  transform: rotate(-3deg);
-}
-.badge-tape-right {
-  top: -0.4rem;
-  right: 1.5rem;
-  transform: rotate(4deg);
-}
-
-/* ── Seal ── */
-.badge-seal {
-  color: rgba(180, 160, 110, 0.3);
-  transition: color 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.badge-seal svg polygon:last-child {
-  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.badge-seal-verified {
-  color: #10b981;
-}
-@keyframes seal-stamp {
+@keyframes cert-shine-loop {
   0% {
-    transform: scale(0.4) rotate(-30deg);
-    opacity: 0;
+    transform: translateX(-700%) skewX(-20deg);
   }
-  40% {
-    transform: scale(1.2) rotate(8deg);
-    opacity: 1;
-  }
-  65% {
-    transform: scale(0.92) rotate(-3deg);
+  14% {
+    transform: translateX(770%) skewX(-20deg);
   }
   100% {
-    transform: scale(1) rotate(0deg);
+    transform: translateX(770%) skewX(-20deg);
   }
 }
-.badge-seal-verified svg {
-  animation: seal-stamp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+.badge-cert-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  animation: cert-shine-loop 7s linear 1s infinite backwards;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ── Dark mode (class-based, matches Tailwind .dark) ── */
 :is(.dark *).badge-btn {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.15) 0%,
-    rgba(245, 158, 11, 0.2) 40%,
-    rgba(217, 119, 6, 0.15) 70%,
-    rgba(245, 158, 11, 0.2) 100%
-  );
+  background:
+    repeating-conic-gradient(
+        rgba(255, 255, 255, 0.04) 0% 25%,
+        transparent 0% 50%
+      )
+      0 0 / 2px 2px,
+    rgba(251, 191, 36, 0.25);
+  border-color: rgba(255, 200, 50, 0.25) rgba(120, 53, 15, 0.4) rgba(120, 53, 15, 0.4) rgba(255, 200, 50, 0.25);
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 200, 50, 0.08);
+    inset 1px 1px 0 rgba(255, 200, 50, 0.15),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.15);
 }
 :is(.dark *).badge-btn::after {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 200, 50, 0.12),
+    rgba(255, 200, 50, 0.2),
     transparent
   );
 }
 :is(.dark *).badge-btn:hover {
   box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 200, 50, 0.1);
+    inset 1px 1px 0 rgba(255, 200, 50, 0.2),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 8px rgba(251, 191, 36, 0.15);
 }
 :is(.dark *).badge-claim-shine {
   background: linear-gradient(
@@ -230,44 +316,24 @@
     transparent
   );
 }
-:is(.dark *).badge-certificate {
-  background: linear-gradient(180deg, #2a2318 0%, #1f1a12 100%);
-  border-color: rgba(180, 160, 110, 0.3);
-}
-:is(.dark *).badge-cert-inner {
-  border-color: rgba(180, 160, 110, 0.2);
-}
-:is(.dark *).badge-cert-inner::before {
-  border-color: rgba(180, 160, 110, 0.1);
-}
-:is(.dark *).badge-tape {
-  background: rgba(120, 60, 0, 0.5);
-  border-color: rgba(217, 119, 6, 0.2);
-}
-:is(.dark *).badge-seal {
-  color: rgba(180, 160, 110, 0.2);
-}
-:is(.dark *).badge-seal-verified {
-  color: #10b981;
-}
-
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .badge-popup,
-  .badge-btn-celebrate,
-  .badge-welcome {
+  .badge-btn-celebrate {
     animation: none;
   }
-  .badge-claim-shine {
+  .badge-claim-shine,
+  .badge-verified-shine,
+  .badge-sparkle,
+  .badge-cert-shine,
+  .badge-cert-seal-sparkle {
     display: none;
   }
   .badge-btn::after {
     transition: none;
+    transform: none;
   }
-  .badge-welcome {
-    opacity: 1;
-  }
-  .badge-seal-verified svg {
+  .badge-certificate-verified .badge-cert-seal svg {
     animation: none;
   }
 }
