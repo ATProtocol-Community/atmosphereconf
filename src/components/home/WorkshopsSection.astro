@@ -96,11 +96,19 @@ const initialDayDate = days[0]?.date ?? "";
     // --- Lazy schedule loading ---
     const contentCache = new Map<string, Promise<string | null>>();
 
-    const SESSION_PREFIX = "atm:sched:v2:";
+    const SESSION_PREFIX = "atm:sched:v3:";
+    const SESSION_TTL = 2 * 60 * 1000; // 2 minutes
 
     function getSessionCache(date: string): string | null {
       try {
-        return sessionStorage.getItem(SESSION_PREFIX + date);
+        const raw = sessionStorage.getItem(SESSION_PREFIX + date);
+        if (!raw) return null;
+        const { html, ts } = JSON.parse(raw);
+        if (Date.now() - ts > SESSION_TTL) {
+          sessionStorage.removeItem(SESSION_PREFIX + date);
+          return null;
+        }
+        return html;
       } catch {
         return null;
       }
@@ -108,7 +116,10 @@ const initialDayDate = days[0]?.date ?? "";
 
     function setSessionCache(date: string, html: string) {
       try {
-        sessionStorage.setItem(SESSION_PREFIX + date, html);
+        sessionStorage.setItem(
+          SESSION_PREFIX + date,
+          JSON.stringify({ html, ts: Date.now() }),
+        );
       } catch {}
     }
 
