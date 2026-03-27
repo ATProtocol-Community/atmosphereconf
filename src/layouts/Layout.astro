@@ -83,6 +83,49 @@ const defaultTheme =
     </script>
     <script is:inline>
       (function () {
+        // Manual scroll restoration: the default "auto" fires before
+        // lazy-loaded schedule content has rendered, so the page is
+        // too short and the browser scrolls to the wrong spot.
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = "manual";
+        }
+        var SCROLL_KEY = "atm:scrollY:";
+        var key = SCROLL_KEY + location.pathname;
+
+        // Save scroll position before leaving
+        window.addEventListener("pagehide", function () {
+          try { sessionStorage.setItem(key, String(window.scrollY)); } catch {}
+        });
+
+        // Restore after content settles (lazy schedule loads)
+        var nav = performance.getEntriesByType("navigation")[0];
+        if (nav && nav.type === "back_forward") {
+          var saved = null;
+          try { saved = sessionStorage.getItem(key); } catch {}
+          if (saved != null) {
+            var y = Number(saved);
+            // Wait for lazy content to load before restoring
+            function tryRestore(attempts) {
+              if (document.documentElement.scrollHeight >= y + window.innerHeight * 0.5 || attempts <= 0) {
+                window.scrollTo(0, y);
+              } else {
+                requestAnimationFrame(function () { tryRestore(attempts - 1); });
+              }
+            }
+            // Start trying after DOM is ready
+            if (document.readyState === "loading") {
+              document.addEventListener("DOMContentLoaded", function () {
+                requestAnimationFrame(function () { tryRestore(30); });
+              });
+            } else {
+              requestAnimationFrame(function () { tryRestore(30); });
+            }
+          }
+        }
+      })();
+    </script>
+    <script is:inline>
+      (function () {
         function getLocalDateOptions(formatName) {
           if (formatName === "news") {
             return { month: "short", day: "numeric", year: "numeric" };

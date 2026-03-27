@@ -1,70 +1,718 @@
 ---
 import Card from "@/components/ui/card.astro";
+import BreakoutSection from "@/components/ui/BreakoutSection.astro";
+import PanelHeader from "@/components/ui/PanelHeader.astro";
+import PaperCard from "@/components/ui/PaperCard.astro";
+import { getLiveCollection } from "astro:content";
+import { getProgramDays, formatMiniTime } from "@/lib/program";
+import { isRemoteAccessible } from "@/lib/calendar-event";
 
+const streamTracks = [
+  { id: "stream1", name: "Stream 1", room: "Great Hall South", url: "https://stream.place/embed/stream1.atmosphereconf.org" },
+  { id: "stream2", name: "Stream 2", room: "Performance Theatre", url: "https://stream.place/embed/stream2.atmosphereconf.org" },
+  { id: "stream3", name: "Stream 3", room: "Room 2301", url: "https://stream.place/embed/stream3.atmosphereconf.org" },
+];
+
+const user = Astro.locals.loggedInUser;
+let hasTicket = false;
+
+if (user) {
+  const { entries: ticketHolders = [] } = await getLiveCollection("titoHandles");
+  hasTicket = ticketHolders.some(
+    (entry) => entry.data.handle.toLowerCase() === user.handle.toLowerCase(),
+  );
+}
+
+// Get remote events grouped by stream room
+const days = await getProgramDays();
+const now = new Date();
+
+const streamSchedule = streamTracks.map((track) => {
+  const allRoomEvents = days
+    .flatMap((day) => day.events)
+    .filter((e) => e.room === track.room && isRemoteAccessible(e.mode))
+    .sort((a, b) => (a.start ?? "").localeCompare(b.start ?? ""));
+
+  const live = allRoomEvents.find(
+    (e) => e.start && e.end && new Date(e.start) <= now && new Date(e.end) > now,
+  );
+
+  const upcoming = allRoomEvents
+    .filter((e) => e.start && new Date(e.start) > now)
+    .slice(0, 2);
+
+  return { ...track, live, upcoming };
+});
 ---
 
-<section>
-  <Card title="Remote Overview" class="prose-links">
-    <p class="pt-2">
-      Our two main conference days on Saturday, March 28th, and Sunday, March
-      29th, will be streaming live video and chat across three tracks. Powered
-      by <a href="https://stream.place">Streamplace</a>, you'll be able to pick
-      your favourite stream and watch and chat live.
-    </p>
-    <p class="pt-2">
-      <a href="https://atscience.leaflet.pub/3mfz526irfs2y">ATScience</a>, all
-      day Friday, March 27th, will also be streaming their talks.
-    </p>
-    <p class="pt-2">
-      Remote and in-person attendees are all invited to share more about
-      themselves and their projects in our <a
-        href="https://roomy.space/atmosphereconf.org"
-        >Roomy-powered discussion space</a
-      >. See the <a href="https://erlend.leaflet.pub/3mhgow4qrqk2m"
-        >Roomy mini tutorial</a
-      > for more info, otherwise dive in and introduce yourself!
-    </p>
-    <p class="pt-2">
-      Our suggested pricing on remote tickets is $10USD, with optional add on of
-      a "We Can Just Do Things" Goodstuff T-Shirt. No one will be turned away
-      for lack of funds - you can set the price to $0. We ask that you do
-      register and accept the Code of Conduct for our online spaces, as well as
-      being listed as a remote attendee.<br />
-      <br /><a href="/remote#get-your-tickets">Register remote tickets below</a
-      >.
-    </p>
+<BreakoutSection maxWidth="74rem" id="remote-info">
+  <Card title="watch it remote">
+    <div class="remote-grid">
+      <!-- Top row: Tickets + Come Hang Out -->
+      <section class="prose-links remote-main">
+        <PanelHeader kicker="Tickets" />
+        <div class="mt-3 space-y-3 text-sm leading-relaxed">
+          <p>
+            Remote tickets start at $10 (pay what you can, including $0).
+            Optional "We Can Just Do Things" tee add-on. Please register and
+            accept the <a href="/faqs#code-of-conduct">Code of Conduct</a>.
+          </p>
+          <p>
+            <a href="/remote#get-your-tickets">Get your tickets below →</a>
+          </p>
+        </div>
+      </section>
+
+      <PaperCard
+        variant="outline"
+        tapePosition="right"
+        tapeWidth="lg"
+        class="!rounded-[var(--paper-radius-sm)]"
+      >
+        <div class="px-2 py-6 md:p-6 prose-links">
+          <PanelHeader kicker="Come Hang Out" />
+          <div class="mt-3 space-y-2 text-sm leading-relaxed">
+            <p>
+              Everyone's welcome in our
+              <a href="https://roomy.space/atmosphereconf.org"
+                >Roomy discussion space</a
+              > — introduce yourself and share your projects.
+              <a href="https://erlend.leaflet.pub/3mhgow4qrqk2m"
+                >Mini tutorial here</a
+              >.
+            </p>
+            <p>
+              <a href="https://atscience.leaflet.pub/3mfz526irfs2y"
+                >ATScience</a
+              > streams all day Friday, March 27th.
+            </p>
+          </div>
+        </div>
+      </PaperCard>
+
+      <!-- Main column: Livestream -->
+      <div class="remote-main" data-stream-card>
+        <div class="stream-sticky">
+          <div class="stream-tabs" role="tablist" aria-label="Stream selector">
+            {streamTracks.map((track, i) => (
+              <button
+                type="button"
+                role="tab"
+                aria-controls={`stream-panel-${track.id}`}
+                aria-selected={i === 0 ? "true" : "false"}
+                tabindex={i === 0 ? "0" : "-1"}
+                class:list={["stream-tab", i === 0 && "is-active"]}
+                data-stream-tab={track.id}
+              >
+                <span class="stream-tab-kicker">{`// ${track.name}`}</span>
+                <span class="stream-tab-room">{track.room}</span>
+              </button>
+            ))}
+          </div>
+
+          {streamTracks.map((track, i) => {
+            const schedule = streamSchedule.find((s) => s.id === track.id);
+            return (
+              <div
+                class:list={["now-playing-wrapper", i === 0 && "is-active"]}
+                data-now-playing={track.id}
+              >
+                {schedule?.live ? (
+                  <div class="now-playing is-live">
+                    <span class="now-playing-badge">Currently Happening</span>
+                    <span class="now-playing-title">{schedule.live.title}</span>
+                    {schedule.live.start && schedule.live.end && (
+                      <span class="now-playing-time">
+                        {formatMiniTime(schedule.live.start)}–{formatMiniTime(schedule.live.end)}
+                      </span>
+                    )}
+                  </div>
+                ) : schedule?.upcoming?.[0] ? (
+                  <div class="now-playing">
+                    <span class="now-playing-badge is-next">Next Up</span>
+                    <span class="now-playing-title">{schedule.upcoming[0].title}</span>
+                    {schedule.upcoming[0].start && (
+                      <span class="now-playing-time">
+                        {formatMiniTime(schedule.upcoming[0].start)}
+                      </span>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+
+          {streamTracks.map((track, i) => {
+            return (
+              <div
+                id={`stream-panel-${track.id}`}
+                role="tabpanel"
+                aria-labelledby={track.id}
+                aria-hidden={i !== 0 ? "true" : "false"}
+                class:list={["stream-panel", i === 0 && "is-active"]}
+                data-stream-panel={track.id}
+              >
+                {hasTicket ? (
+                  <div class="stream-embed">
+                    <iframe
+                      src={track.url}
+                      title={`${track.name} – ${track.room} – ATmosphereConf`}
+                      allow="fullscreen"
+                      loading="lazy"></iframe>
+                  </div>
+                ) : (
+                  <div class="stream-placeholder">
+                    <div class="stream-placeholder-icon">
+                      <svg width="32" height="32" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M6 3.5L12 8L6 12.5V3.5Z" fill="currentColor" />
+                      </svg>
+                    </div>
+                    <p class="stream-placeholder-text">
+                      {user ? (
+                        <><a href="/remote#get-your-tickets" class="text-primary hover:underline">Get a ticket</a> to watch live</>
+                      ) : (
+                        <><a href="/login" class="text-primary hover:underline">Register and sign in</a> to watch live</>
+                      )}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Sidebar column -->
+      <aside class="remote-sidebar">
+        <PaperCard
+          variant="outline"
+          tapePosition="right"
+          tapeWidth="lg"
+          class="!rounded-[var(--paper-radius-sm)]"
+        >
+          <div class="px-2 py-6 md:p-6">
+            <PanelHeader kicker="Currently Happening" />
+            <div class="next-up-list mt-3">
+              {streamSchedule.some((t) => t.live) ? (
+                streamSchedule.filter((track) => track.live).map((track) => (
+                  <div class="next-up-track" data-next-up-track={track.id}>
+                    <button
+                      type="button"
+                      class="next-up-track-header"
+                      data-switch-stream={track.id}
+                    >
+                      <span class="next-up-track-name">{track.name}</span>
+                      <span class="next-up-track-room">{track.room}</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="next-up-event is-live"
+                      data-switch-stream={track.id}
+                    >
+                      <span class="next-up-live-dot" aria-label="Live now"></span>
+                      <span class="next-up-event-title">{track.live!.title}</span>
+                      <span class="next-up-event-time">NOW</span>
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p class="next-up-empty">Nothing live right now</p>
+              )}
+            </div>
+          </div>
+        </PaperCard>
+
+        <PaperCard
+          variant="outline"
+          tapePosition="left"
+          tapeWidth="lg"
+          class="!rounded-[var(--paper-radius-sm)]"
+        >
+          <div class="px-2 py-6 md:p-6">
+            <PanelHeader kicker="Next Up" />
+            <div class="next-up-list mt-3">
+              {streamSchedule.map((track) => (
+                <div class="next-up-track" data-next-up-track={track.id}>
+                  <button
+                    type="button"
+                    class="next-up-track-header"
+                    data-switch-stream={track.id}
+                  >
+                    <span class="next-up-track-name">{track.name}</span>
+                    <span class="next-up-track-room">{track.room}</span>
+                  </button>
+
+                  {track.upcoming.length > 0 ? (
+                    <ul class="next-up-events">
+                      {track.upcoming.map((event) => (
+                        <li>
+                          <button
+                            type="button"
+                            class="next-up-event"
+                            data-switch-stream={track.id}
+                          >
+                            <span class="next-up-event-time">
+                              {formatMiniTime(event.start)}
+                            </span>
+                            <span class="next-up-event-title">{event.title}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="next-up-empty">No upcoming events</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </PaperCard>
+      </aside>
+    </div>
   </Card>
-  {Astro.locals.loggedInUser ? (
-    <Card title="Stream 1">
-      <!-- swap with Stream 1 https://stream.place/embed/stream1.atmosphereconf.org -->
-      <iframe
-        src="https://stream.place/embed/iame.li"
-        width="640"
-        height="360"
-        frameborder="0"
-        allowfullscreen></iframe>
-    </Card>
-    <Card title="Stream 2">
-      <iframe
-        src="https://stream.place/embed/stream2.atmosphereconf.org"
-        width="640"
-        height="360"
-        frameborder="0"
-        allowfullscreen></iframe>
-    </Card>
-    <Card title="Stream 3">
-      <iframe
-        src="https://stream.place/embed/stream2.atmosphereconf.org"
-        width="640"
-        height="360"
-        frameborder="0"
-        allowfullscreen></iframe>
-    </Card>
-  ) : (
-    <Card title="Streams">
-      <p class="text-muted-foreground">
-        <a href="/login" class="text-primary hover:underline">Sign in</a> to access the live streams.
-      </p>
-    </Card>
-  )}
-</section>
+</BreakoutSection>
+
+<script>
+  function initStreamTabs() {
+    document.querySelectorAll<HTMLElement>("[data-stream-card]").forEach((card) => {
+      const tabs = card.querySelectorAll<HTMLButtonElement>("[data-stream-tab]");
+      const panels = card.querySelectorAll<HTMLElement>("[data-stream-panel]");
+      const nowPlayings = card.querySelectorAll<HTMLElement>("[data-now-playing]");
+      const grid = card.closest(".remote-grid");
+      const nextUpTracks = grid?.querySelectorAll<HTMLElement>("[data-next-up-track]");
+
+      function activate(id: string) {
+        tabs.forEach((tab) => {
+          const isActive = tab.dataset.streamTab === id;
+          tab.classList.toggle("is-active", isActive);
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          const isActive = panel.dataset.streamPanel === id;
+          panel.classList.toggle("is-active", isActive);
+          panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+        });
+        nowPlayings.forEach((np) => {
+          np.classList.toggle("is-active", np.dataset.nowPlaying === id);
+        });
+        // Highlight the active stream's track in Next Up
+        nextUpTracks?.forEach((track) => {
+          track.classList.toggle("is-watching", track.dataset.nextUpTrack === id);
+        });
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => activate(tab.dataset.streamTab!));
+      });
+
+      // Arrow key navigation
+      tabs.forEach((tab, i) => {
+        tab.addEventListener("keydown", (e) => {
+          let next = i;
+          if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (i + 1) % tabs.length;
+          else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (i - 1 + tabs.length) % tabs.length;
+          else return;
+          e.preventDefault();
+          const nextTab = tabs[next];
+          activate(nextTab.dataset.streamTab!);
+          nextTab.focus();
+        });
+      });
+
+      // All [data-switch-stream] buttons switch to that stream
+      grid?.querySelectorAll<HTMLButtonElement>("[data-switch-stream]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          activate(btn.dataset.switchStream!);
+          card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      });
+
+      // Set initial watching state
+      const firstId = tabs[0]?.dataset.streamTab;
+      if (firstId) {
+        nextUpTracks?.forEach((track) => {
+          track.classList.toggle("is-watching", track.dataset.nextUpTrack === firstId);
+        });
+      }
+    });
+  }
+
+  initStreamTabs();
+  document.addEventListener("astro:page-load", initStreamTabs);
+</script>
+
+<style>
+  /* ── Grid layout ── */
+  .remote-grid {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+    margin-top: 1.25rem;
+  }
+
+  .remote-main {
+    min-width: 0;
+  }
+
+  .remote-sidebar {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+    align-content: start;
+  }
+
+  @media (min-width: 1024px) {
+    .remote-grid {
+      grid-template-columns: minmax(0, 1.62fr) minmax(0, 0.86fr);
+      gap: 2rem;
+    }
+
+    .stream-sticky {
+      position: sticky;
+      top: 4.5rem;
+      z-index: 10;
+    }
+  }
+
+  /* ── Stream tabs ── */
+  .stream-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid color-mix(in oklch, var(--border), transparent 28%);
+    border-radius: var(--paper-radius-sm) var(--paper-radius-sm) 0 0;
+    background: color-mix(in srgb, var(--card), var(--background) 1.5%);
+    overflow: hidden;
+  }
+
+  .stream-tab {
+    position: relative;
+    display: grid;
+    gap: 0.15rem;
+    justify-items: start;
+    padding: 0.7rem 1rem 0.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--muted-foreground);
+    text-align: left;
+    cursor: pointer;
+    transition: color 180ms ease, background 180ms ease;
+  }
+
+  .stream-tab + .stream-tab {
+    border-left: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+  }
+
+  .stream-tab:hover {
+    color: var(--foreground);
+    background: color-mix(in srgb, var(--card), var(--primary) 1.5%);
+  }
+
+  .stream-tab:focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: -2px;
+  }
+
+  .stream-tab.is-active {
+    z-index: 1;
+    background: color-mix(in oklch, var(--primary), transparent 94%);
+    color: var(--foreground);
+    box-shadow:
+      inset 0 0 0 2px color-mix(in oklch, var(--primary), transparent 55%),
+      0 0 0 1px color-mix(in oklch, var(--primary), transparent 55%);
+  }
+
+  .stream-tab.is-active + .stream-tab,
+  .stream-tab + .stream-tab.is-active {
+    border-color: color-mix(in oklch, var(--primary), transparent 55%);
+  }
+
+  .stream-tab-kicker {
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .stream-tab-room {
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 639px) {
+    .stream-tabs {
+      grid-template-columns: 1fr;
+    }
+
+    .stream-tab + .stream-tab {
+      border-left: 0;
+      border-top: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    }
+
+    .stream-tab:first-child {
+      border-radius: var(--paper-radius-sm) var(--paper-radius-sm) 0 0;
+    }
+  }
+
+  /* ── Stream panels ── */
+  .stream-panel {
+    display: none;
+  }
+
+  .stream-panel.is-active {
+    display: block;
+  }
+
+  .stream-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    overflow: hidden;
+    border-radius: 0 0 var(--paper-radius-sm) var(--paper-radius-sm);
+  }
+
+  .stream-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Now-playing wrappers toggle with tabs */
+  .now-playing-wrapper {
+    display: none;
+  }
+
+  .now-playing-wrapper.is-active {
+    display: block;
+  }
+
+  .stream-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    aspect-ratio: 16 / 9;
+    border: 1px solid color-mix(in oklch, var(--border), transparent 28%);
+    border-top: 0;
+    border-radius: 0 0 var(--paper-radius-sm) var(--paper-radius-sm);
+    background: var(--muted);
+  }
+
+  .stream-placeholder-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: color-mix(in oklch, var(--primary), transparent 85%);
+    color: var(--primary);
+  }
+
+  .stream-placeholder-text {
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  /* ── Now Playing bar (between tabs and video) ── */
+  .now-playing {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid color-mix(in oklch, var(--border), transparent 28%);
+    border-top: 0;
+    background: color-mix(in oklch, var(--muted), transparent 40%);
+    font-size: 0.78rem;
+  }
+
+  .now-playing.is-live {
+    background: color-mix(in oklch, var(--primary), transparent 94%);
+  }
+
+  .now-playing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.25rem;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .now-playing-badge.is-next {
+    background: var(--muted);
+    color: var(--muted-foreground);
+  }
+
+  .now-playing-title {
+    color: var(--foreground);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .now-playing-time {
+    margin-left: auto;
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── Next Up ── */
+  .next-up-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .next-up-track-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: var(--muted);
+    cursor: pointer;
+    transition: background 180ms ease, box-shadow 180ms ease;
+  }
+
+  .next-up-track-header:hover {
+    background: color-mix(in oklch, var(--muted), var(--primary) 8%);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.06);
+  }
+
+  .next-up-track-name {
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .next-up-track-room {
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .next-up-events {
+    list-style: none;
+    padding: 0;
+    margin: 0.35rem 0 0;
+  }
+
+  .next-up-event {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.35rem 0.65rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+
+  .next-up-event:hover {
+    background: color-mix(in oklch, var(--muted), var(--primary) 6%);
+  }
+
+  /* Live event highlight */
+  .next-up-event.is-live {
+    margin-top: 0.35rem;
+    padding: 0.5rem 0.65rem;
+    background: color-mix(in oklch, var(--primary), transparent 92%);
+    border: 1px solid color-mix(in oklch, var(--primary), transparent 70%);
+    font-weight: 500;
+  }
+
+  .next-up-event.is-live:hover {
+    background: color-mix(in oklch, var(--primary), transparent 86%);
+  }
+
+  /* Extra highlight when this track is the one being watched */
+  .next-up-track.is-watching .next-up-event.is-live {
+    background: color-mix(in oklch, var(--primary), transparent 84%);
+    border-color: color-mix(in oklch, var(--primary), transparent 45%);
+    box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary), transparent 60%);
+  }
+
+  .next-up-track.is-watching .next-up-track-header {
+    background: color-mix(in oklch, var(--muted), var(--primary) 6%);
+  }
+
+  .next-up-live-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+    animation: live-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .next-up-event-time {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 3.5rem;
+  }
+
+  .next-up-event .next-up-event-time {
+    flex-shrink: 0;
+  }
+
+  .next-up-event-title {
+    color: var(--foreground);
+  }
+
+  .next-up-empty {
+    padding: 0.35rem 0.65rem;
+    color: var(--muted-foreground);
+    font-size: 0.78rem;
+    font-style: italic;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stream-tab,
+    .next-up-track-header,
+    .next-up-event {
+      transition: none;
+    }
+
+    .next-up-live-dot {
+      animation: none;
+    }
+  }
+</style>

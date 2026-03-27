@@ -545,6 +545,15 @@
   color: #ffff00 !important;
 }
 
+/* Schedule sticky: account for always-visible marquee bar */
+[data-theme="kandake"] .mobile-room-nav,
+[data-theme="kandake"] .desktop-room-header {
+  top: 6rem !important;
+}
+[data-theme="kandake"] .stream-sticky {
+  top: 7rem !important;
+}
+
 /* ── thanks Grisha ── */
 
 [data-theme="kandake"] .nav-ticket-tape {
