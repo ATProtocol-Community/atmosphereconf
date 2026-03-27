@@ -320,7 +320,22 @@ const initialDayDate = days[0]?.date ?? "";
     document.addEventListener("astro:page-load", () =>
       syncProgramStageHeight(board),
     );
-    const initialDate =
+    // Auto-select the day with the next upcoming event (conference timezone)
+    function getUpcomingDayDate(): string | undefined {
+      const today = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/Vancouver",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date());
+      const dates = dayButtons
+        .map((btn) => btn.dataset.daySelect)
+        .filter((d): d is string => !!d);
+      return dates.find((date) => date >= today);
+    }
+
+    const upcomingDay = !location.hash ? getUpcomingDayDate() : undefined;
+    const initialDate = upcomingDay ??
       dayButtons.find((button) => button.classList.contains("is-active"))
         ?.dataset.daySelect ?? dayButtons[0]?.dataset.daySelect;
 
