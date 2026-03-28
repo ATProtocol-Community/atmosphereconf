@@ -1,0 +1,134 @@
+/*
+ * Theme: <name>
+ * Source: <url>
+ *
+ * To add this theme, see the checklist in src/components/profile/client-themes.ts
+ *
+ * This uses a selector that never matches, so it's valid CSS you can copy.
+ * Replace TEMPLATE with your theme name.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+
+[data-theme="laelaps"] {
+  /* Palette */
+  --theme-bg: #1c0648;
+  --theme-fg: #ffffff;
+  --theme-muted: #ffffff;
+  --theme-accent: #7837f1;
+  --theme-surface: #1c0648;
+  --theme-border: rgba(92, 4, 207, 0.575);
+
+  /* Semantic overrides */
+  --background: var(--theme-bg);
+  --foreground: var(--theme-fg);
+  --card: var(--theme-surface);
+  --card-foreground: var(--theme-fg);
+  --popover: var(--theme-surface);
+  --popover-foreground: var(--theme-fg);
+  --primary: var(--theme-accent);
+  --primary-foreground: var(--theme-fg);
+  --secondary: #ffffff26;
+  --secondary-foreground: var(--theme-fg);
+  --muted: var(--theme-surface);
+  --muted-foreground: var(--theme-muted);
+  --accent: #7837f1;
+  --accent-foreground: var(--theme-fg);
+  --border: var(--theme-border);
+  --input: #ffffff26;
+  --ring: var(--theme-accent);
+
+  /* Typography */
+  --font-body: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-heading: "Source Sans 3", "Segoe UI", sans-serif;
+  --font-ui: "Source Sans 3", "Segoe UI", sans-serif;
+
+  /* Header */
+  --header-bg: #1c0648;
+  --header-fg: var(--theme-fg);
+  --header-fg-muted: #ffffff;
+  --header-border: #ffffff;
+  --header-logo-accent: var(--theme-accent);
+
+  /* ATProto profile tokens */
+  --atproto-profile-bg: var(--theme-bg);
+  --atproto-profile-banner: linear-gradient(to right #27125e, #5c2fc5);
+  --atproto-profile-ring: var(--theme-bg);
+  --atproto-profile-pill-bg: #070c0c;
+  --atproto-profile-pill-fg: var(--theme-accent);
+  --atproto-profile-link: var(--theme-accent);
+
+  /* Event-type badge/cell colors (calendar + talk pills) */
+  --event-presentation-bg: #6b3ec0;
+  --event-presentation-fg: #ffffff;
+  --event-presentation-sub: #ffffff;
+  --event-lightning-bg: #5220af;
+  --event-lightning-fg: #ffffff;
+  --event-lightning-sub: #ffffff;
+  --event-panel-bg: #4d1ba8;
+  --event-panel-fg: #ffffff;
+  --event-panel-sub: #ffffff;
+  --event-workshop-bg: #7526db;
+  --event-workshop-fg: #ffffff;
+  --event-workshop-sub: #ffffff;
+  --event-info-bg: #2a0b52;
+  --event-info-fg: #ffffff;
+  --event-info-sub: #ffffff;
+  --event-activity-bg: #3e1679;
+  --event-activity-fg: #ffffff;
+  --event-activity-sub: #ffffff;
+  --event-unconference-bg: #6022d4;
+  --event-unconference-fg: #ffffff;
+  --event-unconference-sub: #ffffff;
+}
+
+/* Site header, hero, and navigation buttons */
+[data-theme="laelaps"] #site-header {
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.23rem;
+}
+
+[data-theme="laelaps"] button#theme-toggle,
+[data-theme="laelaps"] a[href="/login"] {
+  font-weight: normal !important;
+  letter-spacing: normal;
+}
+
+[data-theme="laelaps"] h1 + p {
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+}
+
+[data-theme="laelaps"] time,
+[data-theme="laelaps"] .ticket-main {
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+[data-theme="laelaps"] h1,
+[data-theme="laelaps"] h2#schedule,
+[data-theme="laelaps"] h2#join-us {
+  text-transform: uppercase;
+  letter-spacing: 0.3rem;
+}
+
+/* would be more performant to have font-ui affect these attributes in the code itself, but quick workaround */
+[data-theme="laelaps"] .section-kicker-link,
+[data-theme="laelaps"] p.rail-other-day-meta,
+[data-theme="laelaps"] a.rail-other-day-button,
+[data-theme="laelaps"] span.program-day-chip-kicker,
+[data-theme="laelaps"] span.rail-lucky-label,
+[data-theme="laelaps"] span.rail-other-day-time,
+[data-theme="laelaps"] a.program-paper-summary,
+[data-theme="laelaps"] a.program-mode-toggle {
+  font-family: var(--font-ui);
+  letter-spacing: 0.15rem;
+}
+
+[data-theme="laelaps"] tito-widget .tito-release-description,
+[data-theme="laelaps"] tito-widget .tito-release-description--description,
+[data-theme="laelaps"] tito-widget .tito-release-description p,
+[data-theme="laelaps"] tito-widget .tito-release-description li {
+  opacity: 1 !important;
+}
