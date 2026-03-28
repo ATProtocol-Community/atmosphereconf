@@ -1,0 +1,1349 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Card from "@/components/ui/card.astro";
+import BookmarkIcon from "@/components/ui/BookmarkIcon.astro";
+import EventBadge from "@/components/ui/EventBadge.astro";
+import { getLiveCollection } from "astro:content";
+import {
+  formatConferenceDay,
+  formatConferenceTime,
+  getConferenceDateKey,
+  getConferenceDateTimeParts,
+} from "@/lib/datetime";
+import { isRemoteAccessible } from "@/lib/calendar-event";
+import { getProgramDays, workshopDates, talkDates } from "@/lib/program";
+import calendarIconSvg from "@/components/ui/icons/CalendarIcon.svg?raw";
+import clockIconSvg from "@/components/ui/icons/ClockIcon.svg?raw";
+import mapPinIconSvg from "@/components/ui/icons/MapPinIcon.svg?raw";
+import remoteBadgeSvg from "@/components/ui/icons/RemoteBadge.svg?raw";
+import inPersonIconSvg from "@/components/ui/icons/InPersonIcon.svg?raw";
+
+const { entries: events = [], error } = await getLiveCollection("events");
+if (error) {
+  throw error;
+}
+
+const typeNames: Record<string, string> = {
+  presentation: "Presentation",
+  "lightning-talk": "Lightning Talk",
+  panel: "Discussion / Panel",
+  workshop: "Workshop",
+};
+
+const bookmarkableTypes = new Set(Object.keys(typeNames));
+const infoTypes = new Set(["info", "activity"]);
+const includedTypes = new Set([...bookmarkableTypes, ...infoTypes]);
+
+function enrichEvent(t: (typeof events)[number]) {
+  const d = t.data;
+  const dateKey = d.start ? getConferenceDateKey(d.start) : "";
+  const timeLabel = d.start ? formatConferenceTime(d.start) : "";
+  const startKey = dateKey && timeLabel ? `${dateKey}-${timeLabel}` : "";
+  const timeRange =
+    d.start && d.end
+      ? `${formatConferenceTime(d.start)} – ${formatConferenceTime(d.end)}`
+      : timeLabel;
+  return {
+    id: t.id,
+    ...d,
+    typeName: typeNames[d.type] ?? d.type,
+    isInfo: infoTypes.has(d.type),
+    dateKey,
+    dayLabel: d.start ? formatConferenceDay(d.start) : "Unscheduled",
+    startKey,
+    timeLabel,
+    timeRange,
+  };
+}
+
+function getTimeAnchor(event: { start?: string; dateKey: string }): string | null {
+  if (!event.start || !event.dateKey) return null;
+  const parts = getConferenceDateTimeParts(event.start);
+  if (!parts) return null;
+  const h24 = parts.hour;
+  const p = h24 >= 12 ? "PM" : "AM";
+  const h12 = h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24;
+  return `time-${event.dateKey}-${h12}${p}`;
+}
+
+const allEvents = events
+  .filter((t) => includedTypes.has(t.data.type))
+  .map(enrichEvent)
+  .sort((a, b) => {
+    if (!a.start && !b.start) return 0;
+    if (!a.start) return 1;
+    if (!b.start) return -1;
+    return new Date(a.start).getTime() - new Date(b.start).getTime();
+  });
+
+// Group events by startKey into time slots
+const slotOrder: string[] = [];
+const slotMap = new Map<string, typeof allEvents>();
+for (const event of allEvents) {
+  const key = event.startKey || `unscheduled-${event.id}`;
+  if (!slotMap.has(key)) {
+    slotMap.set(key, []);
+    slotOrder.push(key);
+  }
+  slotMap.get(key)!.push(event);
+}
+
+const programDays = await getProgramDays();
+const dateAnchorMap = Object.fromEntries(
+  programDays.map((d) => [d.date, d.anchorId]),
+);
+
+const allConferenceDays = [...workshopDates, ...talkDates].map((date) => ({
+  date,
+  dayLabel: formatConferenceDay(date + "T20:00:00Z"),
+  anchorId: dateAnchorMap[date] ?? `schedule-${date}`,
+}));
+
+const slots = slotOrder.map((key) => {
+  const items = slotMap.get(key)!;
+  const first = items[0];
+  const maxEnd = items.reduce((max, e) => {
+    const end = e.end || e.start || "";
+    return end > max ? end : max;
+  }, "");
+  return { key, items, first, maxEnd };
+});
+---
+
+<Layout title="My Bookmarks — ATmosphereConf 2026" page="bookmarks">
+  <div class="mt-20 space-y-6">
+    <Card title="My Bookmarks">
+      <div id="tz-toggle" class="tz-toggle hidden">
+        <button id="tz-btn-conf" class="tz-seg is-active" type="button">
+          <span class="tz-seg-label" id="tz-conf-label"></span>
+        </button>
+        <button id="tz-btn-local" class="tz-seg" type="button">
+          <span class="tz-seg-label" id="tz-local-label"></span>
+        </button>
+      </div>
+
+      <p
+        id="bookmarks-empty"
+        class="text-muted-foreground hidden py-8 text-center text-sm"
+      >
+        You haven't bookmarked any sessions yet.<br />
+        Tap the bookmark icon on any session to save it here.
+      </p>
+
+      <div id="bookmarks-timeline" class="mt-1">
+        {
+          slots.map((slot) => (
+            <div
+              class="timeline-slot hidden"
+              data-slot-date={slot.first.dateKey}
+              data-slot-start={slot.first.start || ""}
+              data-slot-end={slot.maxEnd}
+              data-slot-day-label={slot.first.dayLabel}
+            >
+              {/* Day header — shown by JS for first visible slot of each day */}
+              <div class="day-header mt-8 mb-3 hidden first:mt-0">
+                <div
+                  class="flex items-center gap-2 border-b pb-2"
+                  style="border-color: var(--border);"
+                >
+                  <span
+                    class="text-muted-foreground h-4 w-4 flex-none"
+                    set:html={calendarIconSvg}
+                  />
+                  <h3
+                    class="text-foreground text-sm font-semibold tracking-wide uppercase"
+                    style="font-family: var(--font-ui);"
+                  >
+                    {slot.first.dayLabel}
+                  </h3>
+                </div>
+              </div>
+
+              {/* Timeline row: time | track | cards */}
+              <div class="timeline-row flex items-stretch">
+                {/* Time column — desktop only */}
+                <div class="time-col hidden w-20 shrink-0 sm:block">
+                  <a href={getTimeAnchor(slot.first) ? `/#${getTimeAnchor(slot.first)}` : undefined} class="time-label text-muted-foreground block pt-2 pr-3 text-right text-xs font-medium whitespace-nowrap hover:text-primary transition-colors" data-time-start={slot.first.start || ""}>
+                    {slot.first.timeLabel}
+                  </a>
+                </div>
+
+                {/* Track column — dot + vertical line */}
+                <div class="track-col relative flex w-5 shrink-0 flex-col items-center">
+                  <div class="track-dot z-10 mt-2 h-2.5 w-2.5 shrink-0 rounded-full border-2" />
+                  <div class="track-line w-px flex-1" />
+                </div>
+
+                {/* Card column — all events at this time */}
+                <div class="card-col min-w-0 flex-1 py-2 pl-3 sm:pl-4">
+                  {slot.items.map((talk) => (
+                    <div
+                      class:list={[
+                        "slot-item hidden",
+                        talk.isInfo ? "info-item" : "bookmark-item",
+                      ]}
+                      {...(talk.isInfo ? {} : { "data-bookmark-id": talk.id })}
+                      data-category={talk.category || undefined}
+                    >
+                      {talk.isInfo ? (
+                        /* --- Compact info card --- */
+                        <div class="info-card">
+                          <span class="info-card-title" set:html={talk.title} />
+                          {talk.timeRange && (
+                            <span class="info-card-time" data-time-start={talk.start || ""} data-time-end={talk.end || ""}>{talk.timeRange}</span>
+                          )}
+                        </div>
+                      ) : (
+                        /* --- Full event card --- */
+                        <div
+                          class="event-card group/card relative rounded-lg border px-5 py-4 transition-all hover:shadow-md"
+                          style="border-color: var(--border); background: var(--card);"
+                        >
+                          {/* Bookmark button */}
+                          <button
+                            class="bookmark-btn"
+                            data-star-btn={talk.id}
+                            aria-label="Bookmark this session"
+                            aria-pressed="false"
+                            title="Bookmark this session"
+                          >
+                            <BookmarkIcon
+                              class="star-icon star-icon-empty"
+                              strokeWidth={1.5}
+                            />
+                            <BookmarkIcon
+                              class="star-icon star-icon-filled"
+                              filled
+                              strokeWidth={1.5}
+                            />
+                          </button>
+
+                          {/* Type badge + category */}
+                          <div class="flex items-center gap-2">
+                            <EventBadge
+                              typeName={talk.typeName}
+                              class="text-xs"
+                            />
+                            {talk.category && (
+                              <span class="text-muted-foreground text-xs">
+                                {talk.category}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Title */}
+                          <h3 class="mt-2 pr-8">
+                            <a
+                              href={`/event/${talk.id}`}
+                              class="text-foreground text-base leading-snug font-semibold hover:underline"
+                              set:html={talk.title}
+                            />
+                          </h3>
+
+                          {/* Speakers */}
+                          {talk.speakers && talk.speakers.length > 0 && (
+                            <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                              {talk.speakers.map((s) => (
+                                <span class="text-muted-foreground text-sm">
+                                  {s.name}
+                                  {s.id && (
+                                    <>
+                                      {" · "}
+                                      <a
+                                        href={`/profile/${s.id}`}
+                                        class="text-primary hover:underline"
+                                      >
+                                        @{s.id}
+                                      </a>
+                                    </>
+                                  )}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Details: time, room, mode */}
+                          <div class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
+                            {talk.timeRange && (
+                              <a href={getTimeAnchor(talk) ? `/#${getTimeAnchor(talk)}` : undefined} class="flex items-center gap-1.5 hover:text-primary transition-colors">
+                                <span
+                                  class="h-3.5 w-3.5 flex-none"
+                                  set:html={clockIconSvg}
+                                />
+                                <span data-time-start={talk.start || ""} data-time-end={talk.end || ""}>{talk.timeRange}</span>
+                              </a>
+                            )}
+                            {talk.room && (
+                              <div class="flex items-center gap-1.5">
+                                <span
+                                  class="h-3.5 w-3.5 flex-none"
+                                  set:html={mapPinIconSvg}
+                                />
+                                <span>{talk.room}</span>
+                              </div>
+                            )}
+                            <div class="flex items-center gap-1.5">
+                              <span
+                                class="h-3.5 w-3.5 flex-none"
+                                set:html={
+                                  isRemoteAccessible(talk.mode)
+                                    ? remoteBadgeSvg
+                                    : inPersonIconSvg
+                                }
+                              />
+                              <span>
+                                {talk.mode === "hybrid"
+                                  ? "In-person & livestream"
+                                  : talk.mode === "remote"
+                                    ? "Remote"
+                                    : "In-person"}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Description */}
+                          {talk.description && (
+                            <p class="event-description text-muted-foreground mt-3 text-sm leading-relaxed whitespace-pre-line">
+                              {talk.description}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <script id="date-anchor-map" type="application/json" set:html={JSON.stringify(dateAnchorMap)} />
+
+      {/* Templates for dynamically-created elements */}
+      <template id="gap-tpl">
+        <div class="timeline-gap">
+          <div class="timeline-row flex items-stretch">
+            <div class="time-col hidden w-20 shrink-0 sm:block"></div>
+            <div
+              class="track-col relative flex w-5 shrink-0 flex-col items-center"
+            >
+              <div class="gap-dot z-10 mt-2 h-2 w-2 shrink-0 rounded-full"></div>
+              <div class="track-line w-px flex-1"></div>
+            </div>
+            <div class="card-col flex-1 py-2 pl-3 sm:pl-4">
+              <a href="" class="gap-card">
+                <span>🪿</span>
+                <span class="gap-title">Choose your own adventure →</span>
+                <span class="gap-time"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template id="now-tpl">
+        <div class="now-marker">
+          <div class="flex items-center py-1">
+            <div class="hidden w-20 shrink-0 sm:block">
+              <span class="now-text">now</span>
+            </div>
+            <div class="flex w-5 shrink-0 items-center justify-center">
+              <div class="now-dot"></div>
+            </div>
+            <div class="flex-1 pl-3 sm:pl-4">
+              <div class="now-line"></div>
+            </div>
+          </div>
+          <div class="-mt-1 mb-1 pl-7 sm:hidden">
+            <span class="now-text">now</span>
+          </div>
+        </div>
+      </template>
+
+      <template id="empty-day-tpl">
+        <div class="empty-day-section">
+          <div class="empty-day-header mt-6 mb-2">
+            <div
+              class="flex items-center gap-2 border-b pb-2"
+              style="border-color: var(--border);"
+            >
+              <span
+                class="text-muted-foreground h-4 w-4 flex-none"
+                set:html={calendarIconSvg}
+              />
+              <h3
+                class="text-foreground text-sm font-semibold tracking-wide uppercase"
+                style="font-family: var(--font-ui);"
+              ></h3>
+            </div>
+          </div>
+          <div class="empty-day-msg">
+            <span>No bookmarked sessions for this day.</span>
+            <a href="" class="empty-day-link">Browse schedule →</a>
+          </div>
+        </div>
+      </template>
+
+      <script id="all-conference-days" type="application/json" set:html={JSON.stringify(allConferenceDays)} />
+    </Card>
+
+    <button id="go-to-now" class="go-to-now hidden" aria-label="Scroll to now">
+      <svg class="go-to-now-clock" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>back to now</span>
+      <svg class="go-to-now-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+  </div>
+</Layout>
+
+<style>
+  /* --- Track --- */
+  .track-dot {
+    border-color: var(--primary);
+    background: var(--card);
+  }
+
+  .track-line {
+    background: var(--border);
+  }
+
+  /* Tighten top on the very first visible slot */
+  .timeline-slot.is-first .track-dot {
+    margin-top: 0.25rem;
+  }
+
+  .timeline-slot.is-first .time-label {
+    padding-top: 0.25rem;
+  }
+
+  /* --- Conflict: multiple bookmarked events at same time --- */
+  .bookmark-item .event-card {
+    mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+  }
+
+  .has-conflict:not(.conflict-expanded) .bookmark-item:not(.hidden) .event-card {
+    max-height: 5.5rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+
+  .has-conflict:not(.conflict-expanded) .bookmark-item:not(.hidden) + .bookmark-item:not(.hidden) {
+    margin-top: -2rem;
+  }
+
+  /* Gap between cards when expanded */
+  .has-conflict.conflict-expanded .bookmark-item:not(.hidden) + .bookmark-item:not(.hidden) {
+    margin-top: 0.75rem;
+  }
+
+  :global(.see-all-btn) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    padding: 0.5rem 1.25rem;
+    border: 2px solid color-mix(in oklab, var(--ring) 50%, transparent);
+    border-radius: 0.5rem;
+    background: var(--card);
+    cursor: pointer;
+    font-family: var(--font-ui);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+    transition: border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+  }
+
+  :global(.see-all-btn:hover) {
+    border-color: var(--primary);
+    background: color-mix(in oklch, var(--primary), transparent 94%);
+    box-shadow: 0 1px 4px color-mix(in oklch, var(--primary), transparent 80%);
+  }
+
+  :global(.see-all-label) {
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  :global(.see-all-btn:hover .see-all-label) {
+    color: var(--primary);
+  }
+
+  :global(.conflict-expanded .see-all-btn) {
+    display: none;
+  }
+
+  /* --- Gap after info/unconference items --- */
+  .info-item:not(.hidden) + .slot-item:not(.hidden),
+  .bookmark-item[data-category="Unconference"]:not(.hidden) + .bookmark-item:not(.hidden) {
+    margin-top: 0.375rem;
+  }
+
+  .timeline-slot.is-info-only .card-col {
+    padding-bottom: 0.75rem;
+  }
+
+  /* --- Info cards (Doors Open, Opening Remarks, etc.) --- */
+  .info-card {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    background: color-mix(in oklch, var(--muted-foreground), transparent 88%);
+    font-family: var(--font-ui);
+  }
+
+  .info-card-title {
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .info-card-time {
+    color: color-mix(in oklch, var(--muted-foreground), transparent 30%);
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+
+  .info-item .track-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-width: 0;
+    background: var(--border);
+  }
+
+  /* --- Past events --- */
+  .timeline-slot.is-past .event-card,
+  .timeline-slot.is-past .info-card {
+    opacity: 0.45;
+  }
+
+  .timeline-slot.is-past .track-dot {
+    border-color: var(--border);
+  }
+
+  .timeline-slot.is-past .time-label {
+    opacity: 0.45;
+  }
+
+  /* --- Bookmark button --- */
+  .bookmark-btn {
+    position: absolute;
+    top: -0.4rem;
+    right: 0.75rem;
+    z-index: 20;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 1.75rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--theme-muted, #6b7280);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 150ms ease;
+  }
+
+  .bookmark-btn:hover {
+    color: var(--theme-accent);
+  }
+
+  .bookmark-btn.is-starred {
+    color: var(--primary);
+    border-color: var(--header-logo-accent);
+  }
+
+  .bookmark-btn :global(.star-icon) {
+    width: 1em;
+    height: 1em;
+    filter: drop-shadow(
+      0 2px 4px color-mix(in oklch, var(--foreground), transparent 80%)
+    );
+    transform-origin: top center;
+    transition: transform 150ms ease;
+  }
+
+  .bookmark-btn:not(.is-starred):hover :global(.star-icon-empty) {
+    transform: scaleY(1.06);
+  }
+
+  .bookmark-btn :global(.star-icon-filled) {
+    display: none;
+  }
+
+  .bookmark-btn.is-starred :global(.star-icon-empty) {
+    display: none;
+  }
+
+  .bookmark-btn.is-starred :global(.star-icon-filled) {
+    display: block;
+  }
+
+  .bookmark-btn:focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* --- Gap dot --- */
+  .gap-dot {
+    border: 1.5px dashed var(--border);
+    background: var(--card);
+  }
+
+  /* --- Gap card --- */
+  .gap-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem 1rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 120ms ease, background 120ms ease;
+  }
+
+  .gap-card:hover {
+    border-color: var(--primary);
+    background: color-mix(in oklch, var(--primary), transparent 94%);
+  }
+
+  .gap-title {
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.03em;
+    transition: color 120ms ease;
+  }
+
+  .gap-card:hover .gap-title {
+    color: var(--primary);
+  }
+
+  .gap-time {
+    color: color-mix(in oklch, var(--muted-foreground), transparent 40%);
+    font-size: 0.65rem;
+  }
+
+  /* --- Now marker --- */
+  .now-text {
+    display: block;
+    text-align: right;
+    padding-right: 0.75rem;
+    color: var(--primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--font-ui);
+  }
+
+  @media (max-width: 639px) {
+    .now-text {
+      text-align: left;
+      padding-right: 0;
+      padding-left: 0.25rem;
+    }
+  }
+
+  /* Play triangle for active now */
+  .now-dot {
+    width: 0;
+    height: 0;
+    background: transparent;
+    border-radius: 0;
+    border-style: solid;
+    border-width: 0.3125rem 0 0.3125rem 0.5rem;
+    border-color: transparent transparent transparent var(--primary);
+    flex-shrink: 0;
+  }
+
+  .now-line {
+    height: 2px;
+    background: var(--primary);
+    border-radius: 1px;
+  }
+
+  /* --- Stand-by state (next day, >30 min away) --- */
+  .now-marker.is-standby .now-line {
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--primary) 0,
+      var(--primary) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    border-radius: 0;
+  }
+
+  /* Pause bars for standby */
+  .now-marker.is-standby .now-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    position: relative;
+  }
+
+  .now-marker.is-standby .now-dot::before,
+  .now-marker.is-standby .now-dot::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    width: 2.5px;
+    height: calc(100% - 2px);
+    background: var(--primary);
+    border-radius: 1px;
+  }
+
+  .now-marker.is-standby .now-dot::before {
+    left: 1px;
+  }
+
+  .now-marker.is-standby .now-dot::after {
+    right: 1px;
+  }
+
+  .now-marker.is-standby .now-text {
+    color: var(--primary);
+  }
+
+  /* --- Dismissed (un-bookmarked but still visible) --- */
+  .bookmark-item.is-dismissed .event-card {
+    opacity: 0.5;
+  }
+
+  .bookmark-item.is-dismissed .event-description {
+    display: none;
+  }
+
+  /* --- Go to now button --- */
+  .go-to-now {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--pill-radius);
+    background: var(--card);
+    color: var(--primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--font-ui);
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 0.12);
+    transition: opacity 200ms ease, transform 200ms ease;
+  }
+
+  .go-to-now:hover {
+    background: var(--primary);
+    color: var(--card);
+    border-color: var(--primary);
+  }
+
+  .go-to-now.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1rem);
+  }
+
+  .go-to-now-arrow {
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+  }
+
+  /* Arrow points down when now is below viewport */
+  .go-to-now.now-below .go-to-now-arrow {
+    transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bookmark-btn,
+    .go-to-now {
+      transition: none;
+    }
+  }
+
+  /* --- Timezone toggle --- */
+  .tz-toggle {
+    position: sticky;
+    top: 4rem;
+    z-index: 50;
+    display: inline-flex;
+    align-items: stretch;
+    align-self: flex-end;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--pill-radius);
+    overflow: hidden;
+    background: var(--card);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.08);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .tz-toggle.hidden {
+    display: none;
+  }
+
+  .tz-toggle.is-same-tz {
+    border: 1px solid var(--border);
+    box-shadow: none;
+  }
+
+  .tz-seg {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.75rem;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    transition: color 150ms ease, background 150ms ease;
+    white-space: nowrap;
+  }
+
+  .tz-seg + .tz-seg {
+    border-left: 1px solid var(--border);
+  }
+
+  .tz-seg:hover:not(.is-active) {
+    color: var(--foreground);
+    background: color-mix(in oklch, var(--muted-foreground), transparent 94%);
+  }
+
+  .tz-seg.is-active {
+    color: var(--primary);
+    background: color-mix(in oklch, var(--primary), transparent 92%);
+    cursor: default;
+  }
+
+  .tz-seg:focus-visible {
+    outline: 2px solid color-mix(in oklch, var(--primary), transparent 30%);
+    outline-offset: -2px;
+  }
+
+  .tz-toggle.is-same-tz .tz-seg {
+    cursor: default;
+    color: var(--muted-foreground);
+    background: none;
+  }
+
+  /* --- Empty day sections --- */
+  .empty-day-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    color: var(--muted-foreground);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .empty-day-link {
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .empty-day-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  import { applyStarredState, initStarredHandlers } from "@/scripts/starred";
+
+  const STORAGE_KEY = "atmosphere:starred";
+  const CONF_TZ = "America/Vancouver";
+
+  // --- Timezone toggle ---
+  function getTimezoneAbbr(tz?: string): string {
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        timeZoneName: "short",
+      }).formatToParts(new Date());
+      return parts.find((p) => p.type === "timeZoneName")?.value || "";
+    } catch {
+      return "";
+    }
+  }
+
+  const confAbbr = getTimezoneAbbr(CONF_TZ);
+  const localAbbr = getTimezoneAbbr();
+  const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const isSameTz = localTz === CONF_TZ || confAbbr === localAbbr;
+  let showLocalTz = false;
+
+  function formatTimeInTz(iso: string, tz?: string): string {
+    return new Date(iso).toLocaleTimeString("en-US", {
+      timeZone: tz,
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  function updateTimezoneLabel() {
+    const confBtn = document.getElementById("tz-btn-conf");
+    const localBtn = document.getElementById("tz-btn-local");
+    if (confBtn) confBtn.classList.toggle("is-active", !showLocalTz);
+    if (localBtn) localBtn.classList.toggle("is-active", showLocalTz);
+  }
+
+  function updateTimezoneDisplays() {
+    const tz = showLocalTz ? undefined : CONF_TZ;
+    document
+      .querySelectorAll<HTMLElement>("[data-time-start]")
+      .forEach((el) => {
+        const startIso = el.dataset.timeStart;
+        const endIso = el.dataset.timeEnd;
+        if (!startIso) return;
+        const startTime = formatTimeInTz(startIso, tz);
+        if (endIso) {
+          el.textContent = `${startTime} \u2013 ${formatTimeInTz(endIso, tz)}`;
+        } else {
+          el.textContent = startTime;
+        }
+      });
+  }
+
+  let dateAnchorMap: Record<string, string> = {};
+  try {
+    const mapEl = document.getElementById("date-anchor-map");
+    if (mapEl) dateAnchorMap = JSON.parse(mapEl.textContent || "{}");
+  } catch {}
+
+  function formatConfTime(ms: number): string {
+    return new Date(ms).toLocaleTimeString("en-US", {
+      timeZone: showLocalTz ? undefined : CONF_TZ,
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  function getTimeAnchorFromMs(dateKey: string, ms: number): string {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: CONF_TZ,
+      hour: "numeric",
+      hour12: false,
+    }).formatToParts(new Date(ms));
+    const h24 = parseInt(
+      parts.find((p) => p.type === "hour")?.value || "0",
+    );
+    const p = h24 >= 12 ? "PM" : "AM";
+    const h12 = h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24;
+    return `time-${dateKey}-${h12}${p}`;
+  }
+
+  function buildTimeline() {
+    const timeline = document.getElementById("bookmarks-timeline");
+    const emptyMsg = document.getElementById("bookmarks-empty");
+    if (!timeline || !emptyMsg) return;
+
+    // Clean up previously-created dynamic elements
+    timeline
+      .querySelectorAll(".timeline-gap, .now-marker, .see-all-btn, .empty-day-section")
+      .forEach((el) => el.remove());
+
+    // Read bookmarks
+    let starred: Set<string>;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      starred = new Set(raw ? JSON.parse(raw) : []);
+    } catch {
+      starred = new Set();
+    }
+
+    const slots = timeline.querySelectorAll<HTMLElement>(".timeline-slot");
+    const daysWithBookmarks = new Set<string>();
+
+    // Pass 1: show/hide individual items within each slot
+    slots.forEach((slot) => {
+      slot.querySelectorAll<HTMLElement>(".bookmark-item").forEach((item) => {
+        const id = item.dataset.bookmarkId;
+        const isDismissed = item.classList.contains("is-dismissed");
+        const visible = id ? starred.has(id) || isDismissed : false;
+        item.classList.toggle("hidden", !visible);
+        if (visible) {
+          const dateKey = slot.dataset.slotDate || "";
+          if (dateKey) daysWithBookmarks.add(dateKey);
+        }
+      });
+    });
+
+    // Pass 2: show/hide info items based on which days have bookmarks
+    slots.forEach((slot) => {
+      const dateKey = slot.dataset.slotDate || "";
+      const dayActive = dateKey ? daysWithBookmarks.has(dateKey) : false;
+      slot.querySelectorAll<HTMLElement>(".info-item").forEach((item) => {
+        item.classList.toggle("hidden", !dayActive);
+      });
+    });
+
+    // Pass 3: show/hide slots, detect conflicts, mark info-only slots
+    slots.forEach((slot) => {
+      const hasVisible = slot.querySelector(".slot-item:not(.hidden)") !== null;
+      slot.classList.toggle("hidden", !hasVisible);
+
+      const visibleBookmarks = slot.querySelectorAll(
+        ".bookmark-item:not(.hidden)",
+      );
+      slot.classList.toggle("has-conflict", visibleBookmarks.length > 1);
+
+      const hasVisibleInfo = slot.querySelector(".info-item:not(.hidden)") !== null;
+      slot.classList.toggle("is-info-only", hasVisible && hasVisibleInfo && visibleBookmarks.length === 0);
+    });
+
+    // Inject "see all" buttons into conflict slots
+    slots.forEach((slot) => {
+      if (
+        slot.classList.contains("has-conflict") &&
+        !slot.classList.contains("conflict-expanded")
+      ) {
+        const cardCol = slot.querySelector(".card-col");
+        const count = slot.querySelectorAll(
+          ".bookmark-item:not(.hidden)",
+        ).length;
+        if (cardCol && count > 1) {
+          const btn = document.createElement("button");
+          btn.className = "see-all-btn";
+
+          const label = document.createElement("span");
+          label.className = "see-all-label";
+          label.textContent = `${count} talks at this time · expand`;
+          btn.appendChild(label);
+
+          btn.addEventListener("click", () => {
+            slot.classList.add("conflict-expanded");
+            btn.remove();
+          });
+          cardCol.appendChild(btn);
+        }
+      }
+    });
+
+    // Collect visible slots
+    const visibleSlots = [
+      ...timeline.querySelectorAll<HTMLElement>(".timeline-slot:not(.hidden)"),
+    ];
+
+    // Mark first visible slot (for zero top margin)
+    slots.forEach((s) => s.classList.remove("is-first"));
+    if (visibleSlots.length > 0) {
+      visibleSlots[0].classList.add("is-first");
+    }
+
+    if (daysWithBookmarks.size === 0) {
+      emptyMsg.classList.remove("hidden");
+      return;
+    }
+    emptyMsg.classList.add("hidden");
+
+    // --- Insert empty-day sections for days without bookmarks ---
+    let allConfDays: Array<{
+      date: string;
+      dayLabel: string;
+      anchorId: string;
+    }> = [];
+    try {
+      const daysEl = document.getElementById("all-conference-days");
+      if (daysEl) allConfDays = JSON.parse(daysEl.textContent || "[]");
+    } catch {}
+    const emptyDayTpl = document.getElementById(
+      "empty-day-tpl",
+    ) as HTMLTemplateElement | null;
+
+    if (emptyDayTpl && allConfDays.length > 0) {
+      for (const day of allConfDays) {
+        if (daysWithBookmarks.has(day.date)) continue;
+
+        const frag = emptyDayTpl.content.cloneNode(true) as DocumentFragment;
+        const heading = frag.querySelector("h3");
+        if (heading) heading.textContent = day.dayLabel;
+        const link = frag.querySelector<HTMLAnchorElement>(".empty-day-link");
+        if (link) link.href = `/#${day.anchorId}`;
+        const section = frag.querySelector<HTMLElement>(".empty-day-section");
+        if (section) section.dataset.emptyDay = day.date;
+
+        const laterSlot = visibleSlots.find(
+          (s) => (s.dataset.slotDate || "") > day.date,
+        );
+        const laterEmpty = [
+          ...timeline.querySelectorAll<HTMLElement>(".empty-day-section"),
+        ].find((s) => (s.dataset.emptyDay || "") > day.date);
+        const ref = laterSlot || laterEmpty;
+
+        if (ref) {
+          timeline.insertBefore(frag, ref);
+        } else {
+          timeline.appendChild(frag);
+        }
+      }
+    }
+
+    const nowMs = Date.now();
+    const seenDays = new Set<string>();
+    let prevGroupEndMs = 0;
+    let prevDateKey = "";
+    let prevDayMaxEndMs = 0;
+    let nowInserted = false;
+
+    const gapTpl = document.getElementById("gap-tpl") as HTMLTemplateElement;
+    const nowTpl = document.getElementById("now-tpl") as HTMLTemplateElement;
+
+    for (let i = 0; i < visibleSlots.length; i++) {
+      const slot = visibleSlots[i];
+      const dateKey = slot.dataset.slotDate || "";
+      const startIso = slot.dataset.slotStart || "";
+      const endIso = slot.dataset.slotEnd || startIso;
+      const startMs = startIso ? new Date(startIso).getTime() : 0;
+      const endMs = endIso ? new Date(endIso).getTime() : startMs;
+
+      // --- Day header ---
+      const dayHeader = slot.querySelector<HTMLElement>(".day-header");
+      if (dayHeader) {
+        if (dateKey && !seenDays.has(dateKey)) {
+          seenDays.add(dateKey);
+          dayHeader.classList.remove("hidden");
+          prevDayMaxEndMs = prevGroupEndMs;
+          prevGroupEndMs = 0;
+        } else {
+          dayHeader.classList.add("hidden");
+        }
+      }
+
+      // --- Now marker: insert before first future slot ---
+      if (!nowInserted && startMs > nowMs && nowTpl) {
+        const marker = nowTpl.content.cloneNode(true) as DocumentFragment;
+        const crossingDays = !prevDateKey || prevDateKey !== dateKey;
+
+        // "stand by" mode: previous day's events are over, next event is 30+ min away
+        if (crossingDays && prevDateKey && prevDayMaxEndMs > 0 && prevDayMaxEndMs < nowMs) {
+          const thirtyMin = 30 * 60 * 1000;
+          if (startMs - nowMs > thirtyMin) {
+            const markerDiv = marker.querySelector(".now-marker");
+            if (markerDiv) {
+              markerDiv.classList.add("is-standby");
+              markerDiv.querySelectorAll(".now-text").forEach((el) => {
+                el.textContent = "stand by";
+              });
+            }
+          }
+        }
+
+        if (crossingDays) {
+          // Crossing day boundary — place inside the day's slot, after day header
+          const timelineRow = slot.querySelector(".timeline-row");
+          if (timelineRow) {
+            slot.insertBefore(marker, timelineRow);
+          } else {
+            timeline.insertBefore(marker, slot);
+          }
+        } else {
+          // Same day — place between slots
+          timeline.insertBefore(marker, slot);
+        }
+        nowInserted = true;
+      }
+
+      // --- Gap block ---
+      if (
+        prevGroupEndMs > 0 &&
+        startMs > prevGroupEndMs &&
+        prevDateKey === dateKey &&
+        gapTpl
+      ) {
+        const gap = gapTpl.content.cloneNode(true) as DocumentFragment;
+        const gapTime = gap.querySelector<HTMLElement>(".gap-time");
+        if (gapTime) {
+          gapTime.textContent = `Free until ${formatConfTime(startMs)}`;
+        }
+        const gapLink = gap.querySelector<HTMLAnchorElement>(".gap-card");
+        if (gapLink) {
+          gapLink.href =
+            prevGroupEndMs > 0
+              ? `/#${getTimeAnchorFromMs(dateKey, prevGroupEndMs)}`
+              : `/#${dateAnchorMap[dateKey] || `schedule-${dateKey}`}`;
+        }
+        timeline.insertBefore(gap, slot);
+      }
+
+      prevGroupEndMs = Math.max(prevGroupEndMs, endMs);
+      prevDateKey = dateKey;
+
+      // --- Dim past slots ---
+      slot.classList.toggle("is-past", endMs > 0 && endMs < nowMs);
+
+      // --- Track line: hide on last visible slot ---
+      const trackLine = slot.querySelector<HTMLElement>(".track-line");
+      if (trackLine) {
+        trackLine.style.display = i === visibleSlots.length - 1 ? "none" : "";
+      }
+    }
+
+    // If now wasn't inserted yet, put it after the last past slot
+    if (!nowInserted && nowTpl) {
+      const lastPast = [...visibleSlots].reverse().find((s) => {
+        const endIso = s.dataset.slotEnd || s.dataset.slotStart || "";
+        return endIso && new Date(endIso).getTime() < nowMs;
+      });
+      if (lastPast) {
+        const marker = nowTpl.content.cloneNode(true) as DocumentFragment;
+        if (lastPast.nextSibling) {
+          timeline.insertBefore(marker, lastPast.nextSibling);
+        } else {
+          timeline.appendChild(marker);
+        }
+      }
+    }
+
+  }
+
+  buildTimeline();
+  applyStarredState();
+  initStarredHandlers();
+
+  // --- Initialize timezone toggle ---
+  const tzToggle = document.getElementById("tz-toggle");
+  if (tzToggle) {
+    const confLabel = document.getElementById("tz-conf-label");
+    const localLabel = document.getElementById("tz-local-label");
+
+    if (isSameTz) {
+      // Same timezone — show a static note
+      if (confLabel) confLabel.textContent = `${confAbbr} (your time zone)`;
+      tzToggle.classList.remove("hidden");
+      tzToggle.classList.add("is-same-tz");
+      // Hide the local button since it's the same
+      const localBtn = document.getElementById("tz-btn-local");
+      if (localBtn) localBtn.style.display = "none";
+    } else {
+      if (confLabel) confLabel.textContent = `${confAbbr} · conference`;
+      if (localLabel) localLabel.textContent = `${localAbbr} · your time`;
+      tzToggle.classList.remove("hidden");
+      updateTimezoneLabel();
+
+      const confBtn = document.getElementById("tz-btn-conf");
+      const localBtn = document.getElementById("tz-btn-local");
+
+      function onTzToggle(toLocal: boolean) {
+        if (showLocalTz === toLocal) return;
+        showLocalTz = toLocal;
+        updateTimezoneLabel();
+        updateTimezoneDisplays();
+        buildTimeline();
+        applyStarredState();
+      }
+
+      confBtn?.addEventListener("click", () => onTzToggle(false));
+      localBtn?.addEventListener("click", () => onTzToggle(true));
+    }
+  }
+
+  window.addEventListener("starred-change", (e) => {
+    const { id, starred: isStarred } = (e as CustomEvent).detail;
+    const tl = document.getElementById("bookmarks-timeline");
+
+    if (!isStarred && tl) {
+      // Un-bookmarked: keep card visible but hide description
+      const item = tl.querySelector<HTMLElement>(
+        `[data-bookmark-id="${CSS.escape(id)}"]`,
+      );
+      if (item) {
+        item.classList.add("is-dismissed");
+      }
+      applyStarredState();
+    } else {
+      // Re-bookmarked or new bookmark: restore and rebuild
+      if (tl) {
+        const item = tl.querySelector<HTMLElement>(
+          `[data-bookmark-id="${CSS.escape(id)}"]`,
+        );
+        if (item) {
+          item.classList.remove("is-dismissed");
+        }
+      }
+      buildTimeline();
+      applyStarredState();
+    }
+  });
+
+  // Update now-indicator and past-dimming every minute
+  setInterval(buildTimeline, 60_000);
+
+  // --- "Go to now" floating button ---
+  const goBtn = document.getElementById("go-to-now");
+  if (goBtn) {
+    const nowObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          goBtn.classList.add("hidden");
+        } else {
+          goBtn.classList.remove("hidden");
+          // Arrow direction: up if now is above viewport, down if below
+          const isBelow = entry.boundingClientRect.top > 0;
+          goBtn.classList.toggle("now-below", isBelow);
+        }
+      },
+      { threshold: 0 },
+    );
+
+    function observeNow() {
+      nowObserver.disconnect();
+      const marker = document.querySelector(".now-marker");
+      if (marker) {
+        nowObserver.observe(marker);
+      } else {
+        goBtn.classList.add("hidden");
+      }
+    }
+
+    // Re-observe whenever the timeline DOM changes (rebuilds recreate .now-marker)
+    const timeline = document.getElementById("bookmarks-timeline");
+    if (timeline) {
+      new MutationObserver(observeNow).observe(timeline, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    observeNow();
+
+    goBtn.addEventListener("click", () => {
+      const marker = document.querySelector(".now-marker");
+      if (marker) {
+        marker.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  }
+</script>

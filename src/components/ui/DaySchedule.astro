@@ -29,13 +29,10 @@ interface Props {
   rooms: string[];
   remote?: boolean;
   date?: string;
+  fallbackEvents?: ScheduleEvent[];
 }
 
-const { events, rooms, remote = false, date } = Astro.props;
-
-function isLiveOnly(event: ScheduleEvent) {
-  return !isRemoteAccessible(event.mode);
-}
+const { events, rooms, remote = false, date, fallbackEvents } = Astro.props;
 
 // --- Time helpers ---
 
@@ -62,11 +59,33 @@ const parsed = events
     return { ...e, startMin: start, endMin: end };
   });
 
+// When remote, show only remote-accessible events and map rooms to stream names
+const streamRoomMap: Record<string, string> = {
+  "Great Hall South": "Stream 1",
+  "Great Hall North": "Stream 1",
+  "Performance Theatre": "Stream 2",
+  "Performance Theater": "Stream 2",
+  "Room 2301": "Stream 3",
+  "2301 Classroom": "Stream 3",
+};
+function toStreamRoom(room: string): string {
+  return streamRoomMap[room] ?? room;
+}
+
+const displayEvents = remote
+  ? parsed
+      .filter((e) => isRemoteAccessible(e.mode) || e.type === "info")
+      .map((e) => ({ ...e, room: e.room ? toStreamRoom(e.room) : e.room }))
+  : parsed;
+const displayRooms = remote
+  ? [...new Set(displayEvents.filter((e) => e.room).map((e) => e.room!))]
+  : rooms;
+
 const SLOT = 5;
 const minTime =
-  Math.floor(Math.min(...parsed.map((e) => e.startMin)) / SLOT) * SLOT;
+  Math.floor(Math.min(...displayEvents.map((e) => e.startMin)) / SLOT) * SLOT;
 const maxTime =
-  Math.ceil(Math.max(...parsed.map((e) => e.endMin)) / SLOT) * SLOT;
+  Math.ceil(Math.max(...displayEvents.map((e) => e.endMin)) / SLOT) * SLOT;
 const totalSlots = (maxTime - minTime) / SLOT;
 
 const isInfo = (type: string) => type === "info";
@@ -75,8 +94,8 @@ function isLinkable(event: { id?: string; type: string }) {
   return !!(event.id && linkableTypes.has(event.type));
 }
 
-const gridEvents = parsed
-  .filter((e) => isInfo(e.type) || rooms.includes(e.room || ""))
+const gridEvents = displayEvents
+  .filter((e) => isInfo(e.type) || displayRooms.includes(e.room || ""))
   .filter((e) => !/breakfast/i.test(e.title))
   .map((e, i, arr) => {
     const fullWidth = isInfo(e.type);
@@ -84,8 +103,8 @@ const gridEvents = parsed
       ...e,
       startRow: Math.round((e.startMin - minTime) / SLOT) + 2,
       spanRows: Math.max(1, Math.round((e.endMin - e.startMin) / SLOT)),
-      colStart: fullWidth ? 1 : rooms.indexOf(e.room!) + 1,
-      colSpan: fullWidth ? rooms.length : 1,
+      colStart: fullWidth ? 1 : displayRooms.indexOf(e.room!) + 1,
+      colSpan: fullWidth ? displayRooms.length : 1,
       zIndex: e.startMin,
     };
   });
@@ -101,10 +120,44 @@ function hasInfoOverlap(event: (typeof gridEvents)[0]) {
   );
 }
 
+const hasEvents = displayEvents.length > 0 && displayRooms.length > 0;
+
+// Fallback sizing from another day's stream events
+let fallbackTotalSlots = 0;
+if (remote && !hasEvents && fallbackEvents?.length) {
+  const fb = fallbackEvents
+    .filter((e) => e.start && (isRemoteAccessible(e.mode) || e.type === "info"))
+    .map((e) => {
+      const start = isoToMinutes(e.start!);
+      const end = e.end ? isoToMinutes(e.end) : start + 30;
+      return { startMin: start, endMin: end };
+    });
+  if (fb.length) {
+    const fbMin = Math.floor(Math.min(...fb.map((e) => e.startMin)) / SLOT) * SLOT;
+    const fbMax = Math.ceil(Math.max(...fb.map((e) => e.endMin)) / SLOT) * SLOT;
+    fallbackTotalSlots = (fbMax - fbMin) / SLOT;
+  }
+}
+
 // Shared time grid template
 const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
 ---
 
+{remote && !hasEvents ? (
+  <div class="no-stream-wrapper">
+    <div class="no-stream-notice">
+      <p class="no-stream-heading">No streams today</p>
+      <p class="no-stream-sub">This day's events are in-person only.</p>
+    </div>
+    {fallbackTotalSlots > 0 && (
+      <div class="no-stream-sizer" aria-hidden="true">
+        <div style={`display:grid; grid-template-rows: 2.5rem 0.5rem repeat(${fallbackTotalSlots}, 1rem)`}>
+          {Array.from({ length: fallbackTotalSlots + 2 }).map(() => <div />)}
+        </div>
+      </div>
+    )}
+  </div>
+) : (
 <div
   class="day-schedule border-border isolate rounded-lg border"
   data-schedule-date={date}
@@ -116,7 +169,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
 
   <div class="mobile-room-nav divide-border flex flex-col divide-y md:hidden">
     {
-      rooms.map((room, i) => (
+      displayRooms.map((room, i) => (
         <button
           data-room-tab={i}
           class:list={[
@@ -133,7 +186,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
   </div>
 
   {
-    rooms.map((room, roomIndex) => {
+    displayRooms.map((room, roomIndex) => {
       const roomEvents = gridEvents.filter(
         (e) => isInfo(e.type) || e.room === room,
       );
@@ -201,10 +254,10 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
         <div class="border-border w-14 flex-none border-r"></div>
         <div
           class="divide-border grid flex-auto divide-x"
-          style={`grid-template-columns: repeat(${rooms.length}, minmax(0, 1fr))`}
+          style={`grid-template-columns: repeat(${displayRooms.length}, minmax(0, 1fr))`}
         >
           {
-            rooms.map((room) => (
+            displayRooms.map((room) => (
               <div class="text-muted-foreground px-2 py-2.5 text-center text-xs font-semibold tracking-wide uppercase">
                 {room}
               </div>
@@ -222,28 +275,31 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
           >
             <div></div>
             {
-              Array.from({ length: totalSlots }).map((_, i) => (
-                <div>
-                  {(minTime + i * SLOT) % 60 === 0 && (
-                    <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
-                      {formatHour(minTime + i * SLOT)}
-                    </div>
-                  )}
-                </div>
-              ))
+              Array.from({ length: totalSlots }).map((_, i) => {
+                const isHour = (minTime + i * SLOT) % 60 === 0;
+                return (
+                  <div id={isHour && date ? `time-${date}-${formatHour(minTime + i * SLOT)}` : undefined}>
+                    {isHour && (
+                      <div class="text-muted-foreground sticky left-0 z-20 -mt-2 -ml-14 w-14 pr-2 text-right text-[0.65rem] leading-none">
+                        {formatHour(minTime + i * SLOT)}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
             }
           </div>
 
           <div
             class="divide-border/40 col-start-1 col-end-2 row-start-1 grid grid-rows-1 divide-x"
-            style={`grid-template-columns: repeat(${rooms.length}, minmax(0, 1fr))`}
+            style={`grid-template-columns: repeat(${displayRooms.length}, minmax(0, 1fr))`}
           >
-            {rooms.map(() => <div class="row-span-full" />)}
+            {displayRooms.map(() => <div class="row-span-full" />)}
           </div>
 
           <ol
             class="col-start-1 col-end-2 row-start-1 grid"
-            style={`grid-template-columns: repeat(${rooms.length}, minmax(0, 1fr)); ${timeGridRows}`}
+            style={`grid-template-columns: repeat(${displayRooms.length}, minmax(0, 1fr)); ${timeGridRows}`}
           >
             {
               gridEvents.map((event) => (
@@ -251,7 +307,6 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
                   class:list={[
                     "relative flex min-h-5 p-[0.22rem]",
                     isLinkable(event) && "group/evt cursor-pointer",
-                    remote && isLiveOnly(event) && "live-only",
                     hasInfoOverlap(event) && "info-overlap",
                   ]}
                   data-mode={event.mode}
@@ -273,6 +328,7 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
     </div>
   </div>
 </div>
+)}
 
 <style>
   .day-schedule {
@@ -302,6 +358,67 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
       top: var(--schedule-sticky-top);
     }
   }
+
+  .no-stream-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 20rem;
+  }
+
+  .no-stream-sizer {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .no-stream-notice {
+    position: sticky;
+    top: 8rem;
+    margin: 1.5rem auto 0;
+    transform: rotate(-0.6deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 2.5rem;
+    border: 1px solid color-mix(in oklch, var(--border), transparent 10%);
+    border-radius: 0.25rem;
+    background: var(--card);
+    box-shadow:
+      0 2px 8px rgb(0 0 0 / 0.06),
+      0 1px 2px rgb(0 0 0 / 0.04);
+    text-align: center;
+  }
+
+  .no-stream-notice::before {
+    content: "";
+    position: absolute;
+    top: -0.55rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 4.75rem;
+    height: 1rem;
+    border-radius: var(--paper-tape-radius, 2px);
+    border: 2px dashed color-mix(in oklch, var(--primary), transparent 45%);
+    background: color-mix(in oklch, var(--primary), white 82%);
+  }
+
+  .no-stream-heading {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+
+  .no-stream-sub {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    line-height: 1.4;
+  }
+
 </style>
 
 <script>
@@ -378,4 +495,5 @@ const timeGridRows = `grid-template-rows: 0.5rem repeat(${totalSlots}, 1rem)`;
   updateNowLines();
   setInterval(updateNowLines, 60_000);
   document.addEventListener("schedule:loaded", updateNowLines);
+
 </script>

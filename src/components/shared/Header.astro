@@ -393,14 +393,16 @@ const navLinks = [
 
   sections.forEach((el) => sectionObserver.observe(el));
 
-  // Activate "tickets" nav when the header ticket banner appears
-  window.addEventListener("ticket-banner", (e) => {
-    if (e.detail?.visible && !currentActive) {
-      setActive("tickets");
-    } else if (!e.detail?.visible && currentActive === null) {
-      setActive(null);
-    }
-  });
+  // Activate "tickets" nav when the header ticket banner appears (home page only)
+  if (window.location.pathname === "/") {
+    window.addEventListener("ticket-banner", (e) => {
+      if (e.detail?.visible && !currentActive) {
+        setActive("tickets");
+      } else if (!e.detail?.visible && currentActive === null) {
+        setActive(null);
+      }
+    });
+  }
 
   // Set initial active from URL hash
   const hash = window.location.hash.replace("#", "");

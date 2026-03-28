@@ -50,7 +50,8 @@ const time = (() => {
 })();
 
 function getColors(type: string, category?: string) {
-  if (category === "Unconference") return "event-badge event-badge-unconference";
+  if (category === "Unconference")
+    return "event-badge event-badge-unconference";
   switch (type) {
     case "info":
       return "event-badge event-badge-info";
@@ -127,7 +128,12 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
     }
     {
       time && (
-        <p class:list={["schedule-event-time", getSubColors(event.type, event.category)]}>
+        <p
+          class:list={[
+            "schedule-event-time",
+            getSubColors(event.type, event.category),
+          ]}
+        >
           {time}
         </p>
       )
@@ -268,13 +274,13 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
     align-items: flex-start;
     justify-content: center;
     position: absolute;
-    top: 0.35rem;
+    top: -0;
     right: 0.65rem;
     width: 1.35rem;
     padding: 0;
     border: none;
     background: transparent;
-    color: color-mix(in oklch, var(--foreground), transparent 55%);
+    color: var(--theme-muted, #6b7280);
     opacity: 0.85;
     font-size: 1rem;
     line-height: 1;
@@ -320,19 +326,18 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
 
   .evt-star-btn.is-starred {
     color: var(--primary);
+    border-color: var(--header-logo-accent);
   }
 
   .schedule-event-card-tiny ~ .evt-star-btn {
     font-size: 0.7rem;
     width: 0.9rem;
-    top: 0.3rem;
     right: 0.65rem;
   }
 
   .schedule-event-card-short ~ .evt-star-btn {
     font-size: 0.75rem;
     width: 1.05rem;
-    top: 0.3rem;
     right: 0.5rem;
   }
 
