@@ -8,8 +8,8 @@ import {
   getBadgeRkey,
   verifyBadgeAward,
   BADGE_COLLECTION,
-} from "@fujocoded/atproto-badge";
-import type { BadgeAward } from "@fujocoded/atproto-badge";
+} from "@fujocoded/atproto-badger";
+import type { BadgeAward } from "@fujocoded/atproto-badger";
 import {
   getTicketRelease,
   getBadgeForRelease,
@@ -205,7 +205,11 @@ export const server = {
         });
       }
       if (existing) {
-        return { uri: existing.uri, alreadyClaimed: true, badgeDefinitionUri: badgeRef.uri };
+        return {
+          uri: existing.uri,
+          alreadyClaimed: true,
+          badgeDefinitionUri: badgeRef.uri,
+        };
       }
 
       // Load signing key
@@ -239,14 +243,19 @@ export const server = {
           rkey,
           record,
         });
-        return { uri: data.uri, alreadyClaimed: false, badgeDefinitionUri: badgeRef.uri };
+        return {
+          uri: data.uri,
+          alreadyClaimed: false,
+          badgeDefinitionUri: badgeRef.uri,
+        };
       } catch (err: unknown) {
         // If the record already exists at this rkey, treat as success
-        if (
-          err instanceof Error &&
-          err.message.includes("conflict")
-        ) {
-          return { uri: `at://${loggedInUser.did}/${BADGE_COLLECTION}/${rkey}`, alreadyClaimed: true, badgeDefinitionUri: badgeRef.uri };
+        if (err instanceof Error && err.message.includes("conflict")) {
+          return {
+            uri: `at://${loggedInUser.did}/${BADGE_COLLECTION}/${rkey}`,
+            alreadyClaimed: true,
+            badgeDefinitionUri: badgeRef.uri,
+          };
         }
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
