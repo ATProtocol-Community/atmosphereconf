@@ -12,6 +12,7 @@ export const CLIENT_THEMES = [
   "ngerakines",
   "kandake",
   "fujocoded",
+  "laelaps",
 ] as const;
 
 export type ClientTheme = (typeof CLIENT_THEMES)[number];
@@ -43,6 +44,7 @@ const CLIENT_THEME_DOMAINS: Record<
   ngerakines: [".ngerakines."],
   kandake: [".kandake."],
   fujocoded: [".fujocoded."],
+  laelaps: [".laelaps.fyi", "heika.dog"],
   // your-server: [".yourdomain."]
   // To add a new theme:
   // 1. Copy src/styles/themes/_template.css → src/styles/themes/<name>.css

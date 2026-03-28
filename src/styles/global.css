@@ -176,6 +176,7 @@
 @import "./themes/kandake.css";
 @import "./themes/spark.css";
 @import "./themes/fujocoded.css";
+@import "./themes/laelaps.css";
 
 @layer base {
   html {
