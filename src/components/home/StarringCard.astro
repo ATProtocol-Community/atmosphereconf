@@ -145,12 +145,17 @@ const timeLabel = formatCardTime(start);
         size={variant === "featured" ? "sm" : "base"}
         class="starring-card-meta"
       />
-      {isRemoteAccessible(mode) && (
-        <span class="starring-card-remote-badge" title="Available via livestream">
-          <span class="starring-card-remote-icon" set:html={remoteBadgeSvg} />
-          <span>Livestreamed</span>
-        </span>
-      )}
+      {
+        isRemoteAccessible(mode) && (
+          <span
+            class="starring-card-remote-badge"
+            title="Available via livestream"
+          >
+            <span class="starring-card-remote-icon" set:html={remoteBadgeSvg} />
+            <span>Livestreamed</span>
+          </span>
+        )
+      }
     </div>
   </div>
 </div>
@@ -158,7 +163,7 @@ const timeLabel = formatCardTime(start);
 <style>
   .star-btn {
     position: absolute;
-    top: -0.2rem;
+    top: -0.5rem;
     right: 1rem;
     z-index: 20;
     display: flex;
@@ -168,7 +173,7 @@ const timeLabel = formatCardTime(start);
     padding: 0;
     border: none;
     background: transparent;
-    color: color-mix(in oklch, var(--foreground), transparent 65%);
+    color: var(--theme-muted, #6b7280);
     font-size: 2rem;
     line-height: 1;
     cursor: pointer;
@@ -176,11 +181,12 @@ const timeLabel = formatCardTime(start);
   }
 
   .star-btn:hover {
-    color: color-mix(in oklch, var(--foreground), transparent 30%);
+    color: var(--theme-accent);
   }
 
   .star-btn.is-starred {
     color: var(--primary);
+    border-color: var(--header-logo-accent);
   }
 
   [data-starring-card-variant="featured"] .star-btn {
@@ -200,8 +206,15 @@ const timeLabel = formatCardTime(start);
   .star-btn :global(.star-icon) {
     width: 1em;
     height: 1em;
+    filter: drop-shadow(
+      0 2px 4px color-mix(in oklch, var(--foreground), transparent 80%)
+    );
     transform-origin: top center;
     transition: transform 150ms ease;
+  }
+
+  .star-btn:not(.is-starred):hover :global(.star-icon-empty) {
+    transform: scaleY(1.06);
   }
 
   .star-btn :global(.star-icon-filled) {

@@ -2,6 +2,7 @@
 import DaySchedule from "@/components/ui/DaySchedule.astro";
 import SectionKicker from "@/components/ui/SectionKicker.astro";
 import type { ProgramDay } from "@/lib/program";
+import { isRemoteAccessible } from "@/lib/calendar-event";
 
 interface Props {
   days: ProgramDay[];
@@ -10,6 +11,11 @@ interface Props {
 }
 
 const { days, initialDate, remote = false } = Astro.props;
+
+// Find first day with remote events for fallback sizing
+const fallbackStreamDay = remote
+  ? days.find((d) => d.events.some((e) => isRemoteAccessible(e.mode)))
+  : undefined;
 ---
 
 <section class="program-main-panel">
@@ -52,7 +58,7 @@ const { days, initialDate, remote = false } = Astro.props;
               </h3>
               <p class="program-paper-subtitle">{day.subheading}</p>
               {!remote && (
-                <details class="program-venue-details group mt-1">
+                <details class="program-venue-details group mt-1 open:pb-2">
                   <summary class="text-muted-foreground hover:text-foreground flex cursor-pointer list-none items-center gap-1.5 text-xs transition-colors [&::-webkit-details-marker]:hidden">
                     <span class="text-primary/60 inline-flex items-center justify-center text-[0.6rem] leading-none transition-transform group-open:rotate-90">
                       &#9654;
@@ -61,7 +67,7 @@ const { days, initialDate, remote = false } = Astro.props;
                       where is <em>it</em> at://?
                     </span>
                   </summary>
-                  <p class="text-muted-foreground [&_a]:text-primary mt-1 text-xs leading-relaxed [&_a]:underline">
+                  <p class="text-muted-foreground [&_a]:text-primary mt-1 pl-3 text-xs leading-relaxed [&_a]:underline">
                     AMS Student Nest, UBC campus, 6133 University Blvd
                     <a href="https://maps.app.goo.gl/S5z3Ninc3hgsp5qW7">
                       GMap
@@ -74,6 +80,19 @@ const { days, initialDate, remote = false } = Astro.props;
                   </p>
                 </details>
               )}
+              <details class="program-venue-details group mt-1 open:pb-2">
+                <summary class="text-muted-foreground hover:text-foreground flex cursor-pointer list-none items-center gap-1.5 text-xs transition-colors [&::-webkit-details-marker]:hidden">
+                  <span class="text-primary/60 inline-flex items-center justify-center text-[0.6rem] leading-none transition-transform group-open:rotate-90">
+                    &#9654;
+                  </span>
+                  <span>
+                    What time zone is <em>it</em>://?
+                  </span>
+                </summary>
+                <p class="text-muted-foreground [&_a]:text-primary mt-1 pl-3 text-xs leading-relaxed [&_a]:underline">
+                  All times are in Vancouver/Pacific time (PDT, UTC−7). To see the schedule in your time zone, visit the <a href="/bookmarks">bookmarks page</a>.
+                </p>
+              </details>
             </div>
             <div class="program-paper-header-right">
               <a href={`#${day.anchorId}`} class="program-paper-summary">
@@ -85,6 +104,14 @@ const { days, initialDate, remote = false } = Astro.props;
               >
                 {remote ? "go on campus \u2190" : "go remote \u2192"}
               </a>
+              <a
+                href="/bookmarks"
+                data-bookmarks-link
+                class="program-bookmarks-link hidden"
+              >
+                <svg class="program-bookmarks-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M9.5 14.5L3 21"/><path fill="currentColor" d="m5 9.485l9.193 9.193l1.697-1.697l-.393-3.787l5.51-4.673l-5.85-5.85l-4.674 5.51l-3.786-.393z"/></g></svg>
+                <span>your bookmarks</span>
+              </a>
             </div>
           </div>
           <div data-schedule-content>
@@ -94,6 +121,7 @@ const { days, initialDate, remote = false } = Astro.props;
                 rooms={day.rooms}
                 remote={remote}
                 date={day.date}
+                fallbackEvents={fallbackStreamDay?.events}
               />
             ) : null}
           </div>
@@ -262,6 +290,7 @@ const { days, initialDate, remote = false } = Astro.props;
     flex: none;
     flex-direction: column;
     align-items: flex-end;
+    align-self: stretch;
     gap: 0.4rem;
   }
 
@@ -278,6 +307,33 @@ const { days, initialDate, remote = false } = Astro.props;
 
   .program-mode-toggle:hover {
     color: var(--primary);
+  }
+
+  .program-bookmarks-link {
+    display: inline-flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    margin-top: auto;
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 150ms ease;
+  }
+
+  .program-bookmarks-link:hover {
+    text-decoration: underline;
+  }
+
+  .program-bookmarks-icon {
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0;
   }
 
   .program-paper :global(.day-schedule) {
@@ -387,3 +443,28 @@ const { days, initialDate, remote = false } = Astro.props;
     }
   }
 </style>
+
+<script>
+  const STARRED_KEY = "atmosphere:starred";
+
+  function hasBookmarks(): boolean {
+    try {
+      const raw = localStorage.getItem(STARRED_KEY);
+      if (!raw) return false;
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) && arr.length > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  function syncBookmarksLinks() {
+    const show = hasBookmarks();
+    document.querySelectorAll<HTMLElement>("[data-bookmarks-link]").forEach((el) => {
+      el.classList.toggle("hidden", !show);
+    });
+  }
+
+  syncBookmarksLinks();
+  window.addEventListener("starred-change", syncBookmarksLinks);
+</script>

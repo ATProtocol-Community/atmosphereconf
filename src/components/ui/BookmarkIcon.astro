@@ -3,9 +3,15 @@ interface Props {
   filled?: boolean;
   strokeWidth?: number;
   class?: string;
+  strokeColor?: string;
 }
 
-const { filled = false, strokeWidth = 2, class: className } = Astro.props;
+const {
+  filled = false,
+  strokeWidth = 2,
+  class: className,
+  strokeColor,
+} = Astro.props;
 ---
 
 <svg
@@ -13,7 +19,7 @@ const { filled = false, strokeWidth = 2, class: className } = Astro.props;
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 24 24"
   fill={filled ? "currentColor" : "none"}
-  stroke="currentColor"
+  stroke={strokeColor || "currentColor"}
   stroke-width={strokeWidth}
   stroke-linecap="round"
   stroke-linejoin="round"

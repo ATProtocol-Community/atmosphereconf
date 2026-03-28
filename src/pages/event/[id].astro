@@ -67,9 +67,9 @@ const plainTitle = title.replace(/<[^>]*>/g, "");
 
 const timeDisplay =
   start && end
-    ? `${formatConferenceTime(start)} – ${formatConferenceTime(end)}`
+    ? `${formatConferenceTime(start)} – ${formatConferenceTime(end)} PT`
     : start
-      ? formatConferenceTime(start)
+      ? `${formatConferenceTime(start)} PT`
       : null;
 
 const dateDisplay = start ? formatConferenceDay(start) : null;
@@ -79,7 +79,11 @@ const streamTrack = isRemoteAccessible(mode)
   : null;
 ---
 
-<Layout title={`${plainTitle} — ATmosphereConf 2026`} ogImage={headerUrl} page="event">
+<Layout
+  title={`${plainTitle} — ATmosphereConf 2026`}
+  ogImage={headerUrl}
+  page="event"
+>
   <div class="mt-20 space-y-10">
     <div class="event-card-wrap">
       <button
@@ -89,8 +93,15 @@ const streamTrack = isRemoteAccessible(mode)
         aria-pressed="false"
         title="Bookmark this session"
       >
-        <BookmarkIcon class="bookmark-icon bookmark-icon-empty" strokeWidth={1.5} />
-        <BookmarkIcon class="bookmark-icon bookmark-icon-filled" filled strokeWidth={1.5} />
+        <BookmarkIcon
+          class="bookmark-icon bookmark-icon-empty"
+          strokeWidth={1.5}
+        />
+        <BookmarkIcon
+          class="bookmark-icon bookmark-icon-filled"
+          filled
+          strokeWidth={1.5}
+        />
       </button>
       <Card>
         <a
@@ -150,26 +161,43 @@ const streamTrack = isRemoteAccessible(mode)
             <div class="text-muted-foreground mt-5 flex flex-col gap-2 text-sm">
               {dateDisplay && (
                 <div class="flex items-center gap-2">
-                  <span class="text-muted-foreground h-4 w-4 flex-none" set:html={calendarIconSvg} />
+                  <span
+                    class="text-muted-foreground h-4 w-4 flex-none"
+                    set:html={calendarIconSvg}
+                  />
                   <span>{dateDisplay}</span>
                 </div>
               )}
               {timeDisplay && (
                 <div class="flex items-center gap-2">
-                  <span class="text-muted-foreground h-4 w-4 flex-none" set:html={clockIconSvg} />
-                  <span>{timeDisplay}</span>
+                  <span
+                    class="text-muted-foreground h-4 w-4 flex-none"
+                    set:html={clockIconSvg}
+                  />
+                  <span
+                    data-event-time
+                    data-start={start || ""}
+                    data-end={end || ""}
+                  >
+                    {timeDisplay}
+                  </span>
                 </div>
               )}
               {room && (
                 <div class="flex items-center gap-2">
-                  <span class="text-muted-foreground h-4 w-4 flex-none" set:html={mapPinIconSvg} />
+                  <span
+                    class="text-muted-foreground h-4 w-4 flex-none"
+                    set:html={mapPinIconSvg}
+                  />
                   <span>{room}</span>
                 </div>
               )}
               <div class="flex items-center gap-2">
                 <span
                   class="text-muted-foreground h-4 w-4 flex-none"
-                  set:html={isRemoteAccessible(mode) ? remoteBadgeSvg : inPersonIconSvg}
+                  set:html={
+                    isRemoteAccessible(mode) ? remoteBadgeSvg : inPersonIconSvg
+                  }
                 />
                 <span>
                   {mode === "hybrid"
@@ -188,7 +216,9 @@ const streamTrack = isRemoteAccessible(mode)
                           Watch on {streamTrack.name} →
                         </a>
                       ) : (
-                        <span>{streamTrack.name} ({streamTrack.room})</span>
+                        <span>
+                          {streamTrack.name} ({streamTrack.room})
+                        </span>
                       )}
                     </>
                   )}
@@ -217,7 +247,7 @@ const streamTrack = isRemoteAccessible(mode)
 
   .bookmark-ribbon {
     position: absolute;
-    top: -0.25rem;
+    top: -0.4rem;
     right: 2.5rem;
     z-index: 10;
     display: flex;
@@ -227,7 +257,7 @@ const streamTrack = isRemoteAccessible(mode)
     padding: 0;
     border: none;
     background: transparent;
-    color: color-mix(in oklch, var(--foreground), transparent 65%);
+    color: var(--theme-muted, #6b7280);
     font-size: 2.6rem;
     line-height: 1;
     cursor: pointer;
@@ -235,18 +265,20 @@ const streamTrack = isRemoteAccessible(mode)
   }
 
   .bookmark-ribbon:hover {
-    color: color-mix(in oklch, var(--foreground), transparent 30%);
+    color: var(--theme-accent);
   }
 
   .bookmark-ribbon.is-starred {
     color: var(--primary);
+    border-color: var(--header-logo-accent);
   }
-
 
   .bookmark-ribbon :global(.bookmark-icon) {
     width: 1em;
     height: 1em;
-    filter: drop-shadow(0 2px 4px color-mix(in oklch, var(--foreground), transparent 80%));
+    filter: drop-shadow(
+      0 2px 4px color-mix(in oklch, var(--foreground), transparent 80%)
+    );
     transform-origin: top center;
     transition: transform 150ms ease;
   }
@@ -278,4 +310,48 @@ const streamTrack = isRemoteAccessible(mode)
   import { applyStarredState, initStarredHandlers } from "@/scripts/starred";
   applyStarredState();
   initStarredHandlers();
+
+  // Show local time if user is in a different timezone than the conference
+  const CONF_TZ = "America/Vancouver";
+  const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  // Compare actual offsets — America/Los_Angeles and America/Vancouver are both PT
+  function getOffset(tz: string, date: Date): number {
+    const str = date.toLocaleString("en-US", { timeZone: tz });
+    return date.getTime() - new Date(str).getTime();
+  }
+  const now = new Date();
+  const sameOffset = getOffset(localTz, now) === getOffset(CONF_TZ, now);
+
+  if (!sameOffset) {
+    const fmt = (iso: string) =>
+      new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: localTz,
+      }).format(new Date(iso));
+
+    const shortTz = new Intl.DateTimeFormat("en-US", {
+      timeZone: localTz,
+      timeZoneName: "short",
+    })
+      .formatToParts(new Date())
+      .find((p) => p.type === "timeZoneName")?.value ?? localTz;
+
+    document.querySelectorAll<HTMLElement>("[data-event-time]").forEach((el) => {
+      const start = el.dataset.start;
+      const end = el.dataset.end;
+      if (!start) return;
+
+      const localDisplay = end
+        ? `${fmt(start)} – ${fmt(end)} ${shortTz}`
+        : `${fmt(start)} ${shortTz}`;
+
+      const localSpan = document.createElement("span");
+      localSpan.className = "text-foreground/70 block text-xs mt-0.5";
+      localSpan.textContent = localDisplay;
+      el.appendChild(localSpan);
+    });
+  }
 </script>

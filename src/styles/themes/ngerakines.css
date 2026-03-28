@@ -376,11 +376,22 @@
   color: #ffffff !important;
 }
 
-/* Layout: full-width, no max-width constraint */
+/* Layout: full-width on home/remote, constrained on detail pages */
 [data-theme="ngerakines"] main {
   max-width: none !important;
   padding-left: 0.5rem !important;
   padding-right: 0.5rem !important;
+}
+[data-theme="ngerakines"] main[data-page="event"] {
+  max-width: var(--container-4xl) !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+@media (min-width: 640px) {
+  [data-theme="ngerakines"] main[data-page="event"] {
+    padding-left: 2.5rem !important;
+    padding-right: 2.5rem !important;
+  }
 }
 
 /* Navbar: plain underlined links, hide decorative separators */

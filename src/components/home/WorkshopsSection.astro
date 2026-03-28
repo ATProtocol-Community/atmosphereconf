@@ -294,6 +294,36 @@ const initialDayDate = days[0]?.date ?? "";
       const hash = location.hash.replace("#", "");
       if (!hash) return;
 
+      // Handle time anchors: time-{date}-{hour}
+      const timeMatch = hash.match(/^time-(\d{4}-\d{2}-\d{2})-/);
+      if (timeMatch) {
+        const date = timeMatch[1];
+        const matchedButton = dayButtons.find(
+          (btn) => btn.dataset.daySelect === date,
+        );
+        if (!matchedButton) return;
+
+        await setSelectedDay(date, { refreshRail: true });
+
+        if (scroll) {
+          requestAnimationFrame(() => {
+            const timeEl = document.getElementById(hash);
+            if (timeEl) {
+              timeEl.scrollIntoView({
+                block: "start",
+                behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+              });
+            } else {
+              matchedButton.scrollIntoView({
+                block: "start",
+                behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+              });
+            }
+          });
+        }
+        return;
+      }
+
       const matchedButton = dayButtons.find((btn) => btn.id === hash);
       if (!matchedButton) return;
 

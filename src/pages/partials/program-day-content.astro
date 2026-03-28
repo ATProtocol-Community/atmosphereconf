@@ -3,11 +3,15 @@ export const partial = true;
 
 import DaySchedule from "@/components/ui/DaySchedule.astro";
 import { getProgramDays } from "@/lib/program";
+import { isRemoteAccessible } from "@/lib/calendar-event";
 
 const requestedDate = Astro.url.searchParams.get("date") ?? "";
 const remote = Astro.url.searchParams.get("mode") === "remote";
 const days = await getProgramDays();
 const day = days.find((d) => d.date === requestedDate);
+const fallbackStreamDay = remote
+  ? days.find((d) => d.events.some((e) => isRemoteAccessible(e.mode)))
+  : undefined;
 ---
 
-{day && <DaySchedule events={day.events} rooms={day.rooms} remote={remote} date={day.date} />}
+{day && <DaySchedule events={day.events} rooms={day.rooms} remote={remote} date={day.date} fallbackEvents={fallbackStreamDay?.events} />}
