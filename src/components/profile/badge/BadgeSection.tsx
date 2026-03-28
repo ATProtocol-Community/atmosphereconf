@@ -34,6 +34,7 @@ export function BadgeSection({
       badgeDescription: undefined,
     });
     setCelebrating(true);
+    setTimeout(() => setCelebrating(false), 1200);
   };
 
   const handleUnclaimed = () => {
