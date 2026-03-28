@@ -417,16 +417,11 @@ const slots = slotOrder.map((key) => {
   }
 
   /* --- Conflict: multiple bookmarked events at same time --- */
-  .bookmark-item .event-card {
-    mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
-  }
-
   .has-conflict:not(.conflict-expanded) .bookmark-item:not(.hidden) .event-card {
     max-height: 5.5rem;
     overflow: hidden;
-    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
   }
 
   .has-conflict:not(.conflict-expanded) .bookmark-item:not(.hidden) + .bookmark-item:not(.hidden) {
