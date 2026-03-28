@@ -3,7 +3,7 @@ import { lexToJson } from "@atproto/lexicon";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl, parseRichText } from "./bsky";
 import type { RichTextSegment } from "./bsky";
-import { BADGE_COLLECTION } from "@fujocoded/atproto-badge";
+import { BADGE_COLLECTION } from "@fujocoded/atproto-badger";
 import { badges } from "@/config/badges";
 import type { BadgeDefinition } from "@/config/badges";
 
@@ -166,9 +166,7 @@ export async function loadProfile(
         // Fetch badge definition for name + description
         let badgeName: string | undefined;
         let badgeDescription: string | undefined;
-        const defMatch = matchedUri.match(
-          /^at:\/\/([^/]+)\/([^/]+)\/(.+)$/,
-        );
+        const defMatch = matchedUri.match(/^at:\/\/([^/]+)\/([^/]+)\/(.+)$/);
         if (defMatch) {
           try {
             const defAgent = await getPdsAgent({

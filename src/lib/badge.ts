@@ -1,9 +1,7 @@
 import { getLiveCollection } from "astro:content";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { IdResolver } from "@atproto/identity";
-import {
-  getExistingBadgeAward as getExistingBadgeAwardFromPds,
-} from "@fujocoded/atproto-badge";
+import { getExistingBadgeAward as getExistingBadgeAwardFromPds } from "@fujocoded/atproto-badger";
 import { EVENTS_OWNER_DID_OR_HANDLE } from "astro:env/server";
 import { getPrimaryBadge, badges } from "@/config/badges";
 import type { BadgeDefinition } from "@/config/badges";
@@ -21,7 +19,9 @@ export function getBadgeDefinitionRef() {
 /**
  * Return the correct badge definition based on the attendee's ticket release title.
  */
-export function getBadgeForRelease(releaseTitle: string): BadgeDefinition | null {
+export function getBadgeForRelease(
+  releaseTitle: string,
+): BadgeDefinition | null {
   if (releaseTitle === REMOTE_RELEASE_TITLE) {
     return badges.find((b) => b.remote) ?? null;
   }

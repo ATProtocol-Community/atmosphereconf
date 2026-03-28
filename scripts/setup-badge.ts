@@ -7,7 +7,7 @@ import {
   findExistingBadgeDefinition,
   createBadgeDefinition,
   BADGE_DEFINITION_COLLECTION,
-} from "@fujocoded/atproto-badge";
+} from "@fujocoded/atproto-badger";
 import { promptPushCredentials } from "./lib/auth";
 import { readFileSync, appendFileSync, existsSync } from "node:fs";
 
@@ -77,7 +77,8 @@ async function handleGenerateKey() {
   if (env.BADGE_SIGNING_KEY) {
     p.log.warn("BADGE_SIGNING_KEY already exists in .env");
     const overwrite = await p.confirm({
-      message: "Generate a new key anyway? (The old key will NOT be removed automatically.)",
+      message:
+        "Generate a new key anyway? (The old key will NOT be removed automatically.)",
       initialValue: false,
     });
     if (p.isCancel(overwrite) || !overwrite) {
@@ -88,11 +89,12 @@ async function handleGenerateKey() {
 
   const { identifier, password } = await promptPushCredentials();
 
-  const { privateKeyBase64url, publicDidKey } =
-    await generateSigningKeys();
+  const { privateKeyBase64url, publicDidKey } = await generateSigningKeys();
 
   p.log.info("Generated P-256 Keypair");
-  p.log.info("Public key (for DID document #attestations verification method):");
+  p.log.info(
+    "Public key (for DID document #attestations verification method):",
+  );
   console.log(`\n${publicDidKey}\n`);
 
   await offerSaveToEnv({ BADGE_SIGNING_KEY: privateKeyBase64url });
@@ -104,9 +106,7 @@ async function handleGenerateKey() {
   if (!p.isCancel(updateNow) && updateNow) {
     await handleUpdateDid(publicDidKey, { identifier, password });
   } else {
-    p.log.info(
-      'Run this script again and select "update-did" when ready.',
-    );
+    p.log.info('Run this script again and select "update-did" when ready.');
   }
 }
 
@@ -158,21 +158,31 @@ async function handleCreateDefinition() {
   }
   s2.stop("No existing definition found");
 
-  const desc = description && !p.isCancel(description) ? description.trim() : undefined;
+  const desc =
+    description && !p.isCancel(description) ? description.trim() : undefined;
 
   if (DRY_RUN) {
     p.log.info(`[dry run] Would create badge definition "${name}"`);
     if (desc) p.log.info(`[dry run] Description: ${desc}`);
-    p.log.info(`[dry run] Browse: https://pdsls.dev/at/${did}/${BADGE_DEFINITION_COLLECTION}`);
+    p.log.info(
+      `[dry run] Browse: https://pdsls.dev/at/${did}/${BADGE_DEFINITION_COLLECTION}`,
+    );
     return;
   }
 
   const s3 = p.spinner();
   s3.start("Creating badge definition");
-  const data = await createBadgeDefinition({ agent, did, name, description: desc || undefined });
+  const data = await createBadgeDefinition({
+    agent,
+    did,
+    name,
+    description: desc || undefined,
+  });
   s3.stop("Created");
 
-  p.log.info(`Browse: https://pdsls.dev/at/${did}/${BADGE_DEFINITION_COLLECTION}`);
+  p.log.info(
+    `Browse: https://pdsls.dev/at/${did}/${BADGE_DEFINITION_COLLECTION}`,
+  );
   await offerSaveToEnv({
     BADGE_DEFINITION_URI: data.uri,
     BADGE_DEFINITION_CID: data.cid,
@@ -181,7 +191,10 @@ async function handleCreateDefinition() {
 
 // --- update-did ---
 
-async function handleUpdateDid(existingPublicKey?: string, credentials?: { identifier: string; password: string }) {
+async function handleUpdateDid(
+  existingPublicKey?: string,
+  credentials?: { identifier: string; password: string },
+) {
   let publicDidKey: string;
   if (existingPublicKey) {
     publicDidKey = existingPublicKey;
@@ -198,7 +211,8 @@ async function handleUpdateDid(existingPublicKey?: string, credentials?: { ident
     publicDidKey = input;
   }
 
-  const { identifier, password } = credentials ?? await promptPushCredentials();
+  const { identifier, password } =
+    credentials ?? (await promptPushCredentials());
 
   const s = p.spinner();
   s.start("Resolving identity and checking current DID document");
@@ -227,7 +241,9 @@ async function handleUpdateDid(existingPublicKey?: string, credentials?: { ident
     );
 
     if (DRY_RUN) {
-      p.log.info(`[dry run] Would overwrite #attestations key with ${publicDidKey.trim()}`);
+      p.log.info(
+        `[dry run] Would overwrite #attestations key with ${publicDidKey.trim()}`,
+      );
       return;
     }
 
@@ -242,7 +258,9 @@ async function handleUpdateDid(existingPublicKey?: string, credentials?: { ident
   }
 
   if (DRY_RUN) {
-    p.log.info(`[dry run] Would add #attestations verification method to ${did}`);
+    p.log.info(
+      `[dry run] Would add #attestations verification method to ${did}`,
+    );
     p.log.info(`[dry run] Key: ${publicDidKey.trim()}`);
     return;
   }
