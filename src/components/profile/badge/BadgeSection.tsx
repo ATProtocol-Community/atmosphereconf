@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { BadgePill } from "./BadgePill";
 import { BadgeClaim } from "./BadgeClaim";
 import type { BadgeAwardInfo } from "@/lib/profile";
@@ -18,24 +18,39 @@ export function BadgeSection({
   isOwnProfile,
   isTicketHolder,
 }: BadgeSectionProps) {
-  const [justClaimed, setJustClaimed] = useState(false);
-  const reloadTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const [claimedAward, setClaimedAward] = useState<BadgeAwardInfo | null>(null);
+  const [celebrating, setCelebrating] = useState(false);
 
-  useEffect(() => () => clearTimeout(reloadTimerRef.current), []);
+  const [removed, setRemoved] = useState(false);
+  const displayAward = removed ? null : (badgeAward ?? claimedAward);
 
-  const handleClaimed = () => {
-    setJustClaimed(true);
-    reloadTimerRef.current = setTimeout(() => window.location.reload(), 1500);
+  const handleClaimed = (result: { uri: string; badgeDefinitionUri: string }) => {
+    setClaimedAward({
+      uri: result.uri,
+      badgeDefinitionUri: result.badgeDefinitionUri,
+      issuedAt: new Date().toISOString(),
+      pdsUrl: undefined,
+      badgeName: undefined,
+      badgeDescription: undefined,
+    });
+    setCelebrating(true);
   };
 
-  if (badgeAward || justClaimed) {
+  const handleUnclaimed = () => {
+    setRemoved(true);
+    setClaimedAward(null);
+    setCelebrating(false);
+  };
+
+  if (displayAward) {
     return (
       <BadgePill
         did={did}
         handle={handle}
-        badgeAward={badgeAward}
+        badgeAward={displayAward}
         canUnclaim={isOwnProfile}
-        celebrating={justClaimed}
+        celebrating={celebrating}
+        onUnclaimed={handleUnclaimed}
       />
     );
   }

@@ -28,16 +28,6 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
-      BADGE_DEFINITION_URI: envField.string({
-        context: "server",
-        access: "public",
-        optional: true,
-      }),
-      BADGE_DEFINITION_CID: envField.string({
-        context: "server",
-        access: "public",
-        optional: true,
-      }),
     },
   },
   output: "server",
