@@ -9,6 +9,7 @@ interface BadgeCertificateProps {
   badgeAward: BadgeAwardInfo | null;
   canUnclaim: boolean;
   onVerified?: () => void;
+  onUnclaimed?: () => void;
 }
 
 interface VerifyResult {
@@ -30,6 +31,7 @@ export function BadgeCertificate({
   badgeAward,
   canUnclaim,
   onVerified,
+  onUnclaimed,
 }: BadgeCertificateProps) {
   const [verifying, setVerifying] = useState(false);
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(() => {
@@ -78,7 +80,7 @@ export function BadgeCertificate({
         return;
       }
       try { sessionStorage.removeItem(VERIFY_KEY_PREFIX + did); } catch {}
-      window.location.reload();
+      onUnclaimed?.();
     } catch {
       setUnclaimError("Failed to remove badge");
     } finally {
@@ -147,7 +149,7 @@ export function BadgeCertificate({
                 <button
                   onClick={handleVerify}
                   disabled={verifying}
-                  className="bg-secondary text-secondary-foreground border-border inline-flex items-center gap-1 border rounded px-1.5 py-px text-[10px] font-bold uppercase tracking-wide transition-colors hover:opacity-80 disabled:opacity-50"
+                  className="badge-verify-btn inline-flex items-center gap-1 rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide cursor-pointer disabled:opacity-50 disabled:animate-none"
                 >
                   {verifying ? (
                     <>
@@ -155,7 +157,7 @@ export function BadgeCertificate({
                       checking...
                     </>
                   ) : (
-                    "[verify]"
+                    "Verify Badge"
                   )}
                 </button>
                 {verifyResult && !verifyResult.verified && (

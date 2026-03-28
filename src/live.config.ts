@@ -93,6 +93,7 @@ const titoHandles = defineLiveCollection({
     ticketEmail: z.string(),
     ticketName: z.string(),
     handle: z.string(),
+    releaseTitle: z.string(),
   }),
 });
 

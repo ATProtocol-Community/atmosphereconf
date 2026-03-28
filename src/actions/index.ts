@@ -11,9 +11,9 @@ import {
 } from "@fujocoded/atproto-badge";
 import type { BadgeAward } from "@fujocoded/atproto-badge";
 import {
-  isTicketHolder,
+  getTicketRelease,
+  getBadgeForRelease,
   getExistingBadgeAward,
-  getBadgeDefinitionRef,
   getOrganizerDid,
 } from "@/lib/badge";
 import { BADGE_SIGNING_KEY } from "astro:env/server";
@@ -160,30 +160,39 @@ export const server = {
       const { loggedInUser } = context.locals;
       if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
 
-      const badgeRef = getBadgeDefinitionRef();
-      if (!badgeRef || !BADGE_SIGNING_KEY) {
+      if (!BADGE_SIGNING_KEY) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Badge system not configured",
         });
       }
 
-      // Verify ticket holder
-      let ticketHolder: boolean;
+      // Look up ticket release to determine badge type
+      let releaseTitle: string | null;
       try {
-        ticketHolder = await isTicketHolder(loggedInUser.handle);
+        releaseTitle = await getTicketRelease(loggedInUser.handle);
       } catch {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Could not verify ticket status. Please try again.",
         });
       }
-      if (!ticketHolder) {
+      if (!releaseTitle) {
         throw new ActionError({
           code: "FORBIDDEN",
           message: "Badge is only available to ticket holders",
         });
       }
+
+      // Pick the correct badge definition based on ticket type
+      const badge = getBadgeForRelease(releaseTitle);
+      if (!badge || !badge.uri || !badge.cid) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Badge system not configured",
+        });
+      }
+      const badgeRef = { uri: badge.uri, cid: badge.cid };
 
       // Check for existing award
       let existing: { uri: string } | null;
@@ -196,7 +205,7 @@ export const server = {
         });
       }
       if (existing) {
-        return { uri: existing.uri, alreadyClaimed: true };
+        return { uri: existing.uri, alreadyClaimed: true, badgeDefinitionUri: badgeRef.uri };
       }
 
       // Load signing key
@@ -230,14 +239,14 @@ export const server = {
           rkey,
           record,
         });
-        return { uri: data.uri, alreadyClaimed: false };
+        return { uri: data.uri, alreadyClaimed: false, badgeDefinitionUri: badgeRef.uri };
       } catch (err: unknown) {
         // If the record already exists at this rkey, treat as success
         if (
           err instanceof Error &&
           err.message.includes("conflict")
         ) {
-          return { uri: `at://${loggedInUser.did}/${BADGE_COLLECTION}/${rkey}`, alreadyClaimed: true };
+          return { uri: `at://${loggedInUser.did}/${BADGE_COLLECTION}/${rkey}`, alreadyClaimed: true, badgeDefinitionUri: badgeRef.uri };
         }
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
@@ -252,8 +261,9 @@ export const server = {
       did: z.string(),
     }),
     handler: async ({ did }) => {
-      const badgeRef = getBadgeDefinitionRef();
-      if (!badgeRef) {
+      const { badges: allBadges } = await import("@/config/badges");
+      const badgeUris = new Set(allBadges.map((b) => b.uri));
+      if (badgeUris.size === 0) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Badge system not configured",
@@ -278,7 +288,7 @@ export const server = {
       const awardRecord = data.records.find((rec) => {
         const value = rec.value as Record<string, unknown>;
         const badge = value.badge as { uri?: string } | undefined;
-        return badge?.uri === badgeRef.uri;
+        return badge?.uri && badgeUris.has(badge.uri);
       });
 
       if (!awardRecord) {
@@ -341,14 +351,6 @@ export const server = {
       const { loggedInUser } = context.locals;
       if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
 
-      const badgeRef = getBadgeDefinitionRef();
-      if (!badgeRef) {
-        throw new ActionError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Badge system not configured",
-        });
-      }
-
       const pdsAgent = await getPdsAgent({ loggedInUser });
       if (!pdsAgent) {
         throw new ActionError({
@@ -357,12 +359,32 @@ export const server = {
         });
       }
 
-      const rkey = getBadgeRkey({ badgeDefinitionUri: badgeRef.uri });
-      await pdsAgent.com.atproto.repo.deleteRecord({
+      // Find and delete whichever badge the user has
+      const { badges: allBadges } = await import("@/config/badges");
+      const badgeUris = new Set(allBadges.map((b) => b.uri));
+
+      const { data } = await pdsAgent.com.atproto.repo.listRecords({
         repo: loggedInUser.did,
         collection: BADGE_COLLECTION,
-        rkey,
+        limit: 100,
       });
+
+      const awardRecord = data.records.find((rec) => {
+        const value = rec.value as Record<string, unknown>;
+        const badge = value.badge as { uri?: string } | undefined;
+        return badge?.uri && badgeUris.has(badge.uri);
+      });
+
+      if (awardRecord) {
+        const rkeyMatch = awardRecord.uri.match(/\/([^/]+)$/);
+        if (rkeyMatch) {
+          await pdsAgent.com.atproto.repo.deleteRecord({
+            repo: loggedInUser.did,
+            collection: BADGE_COLLECTION,
+            rkey: rkeyMatch[1],
+          });
+        }
+      }
 
       return { success: true };
     },

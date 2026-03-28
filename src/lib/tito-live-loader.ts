@@ -15,12 +15,19 @@ interface TitoAnswer {
   question_title: string;
 }
 
+interface TitoTicket {
+  slug: string;
+  release_title: string;
+  [key: string]: unknown;
+}
+
 export interface TitoAnswerData {
   ticketReference: string;
   ticketSlug: string;
   ticketEmail: string;
   ticketName: string;
   handle: string;
+  releaseTitle: string;
 }
 
 interface TitoAnswerLoaderOptions {
@@ -56,12 +63,24 @@ interface TitoAnswersResponse {
   };
 }
 
+interface TitoTicketsResponse {
+  tickets: TitoTicket[];
+  meta: {
+    current_page: number;
+    next_page: number | null;
+    total_pages: number;
+    total_count: number;
+  };
+}
+
 function normalizeHandle(raw: string): string {
-  // Strip leading @ and whitespace
   return raw.trim().replace(/^@/, "");
 }
 
-function answerToEntry(answer: TitoAnswer): LiveDataEntry<TitoAnswerData> {
+function answerToEntry(
+  answer: TitoAnswer,
+  releaseMap: Map<string, string>,
+): LiveDataEntry<TitoAnswerData> {
   return {
     id: answer.ticket_slug,
     data: {
@@ -70,8 +89,32 @@ function answerToEntry(answer: TitoAnswer): LiveDataEntry<TitoAnswerData> {
       ticketEmail: answer.ticket_email,
       ticketName: answer.ticket_name,
       handle: normalizeHandle(answer.response),
+      releaseTitle: releaseMap.get(answer.ticket_slug) ?? "",
     },
   };
+}
+
+async function fetchAllTickets(
+  accountSlug: string,
+  eventSlug: string,
+  apiToken: string,
+): Promise<Map<string, string>> {
+  const releaseMap = new Map<string, string>();
+  let page = 1;
+
+  do {
+    const data = await titoFetch<TitoTicketsResponse>(
+      `/${accountSlug}/${eventSlug}/tickets?page[number]=${page}&page[size]=100`,
+      apiToken,
+    );
+    for (const ticket of data.tickets) {
+      releaseMap.set(ticket.slug, ticket.release_title);
+    }
+    if (!data.meta.next_page) break;
+    page = data.meta.next_page;
+  } while (true);
+
+  return releaseMap;
 }
 
 async function fetchAllAnswers(
@@ -80,6 +123,7 @@ async function fetchAllAnswers(
   questionId: number,
   apiToken: string,
 ): Promise<LiveDataEntry<TitoAnswerData>[]> {
+  const releaseMap = await fetchAllTickets(accountSlug, eventSlug, apiToken);
   const entries: LiveDataEntry<TitoAnswerData>[] = [];
   let page = 1;
 
@@ -90,7 +134,7 @@ async function fetchAllAnswers(
     );
     for (const answer of data.answers) {
       if (answer.response) {
-        entries.push(answerToEntry(answer));
+        entries.push(answerToEntry(answer, releaseMap));
       }
     }
     if (!data.meta.next_page) break;

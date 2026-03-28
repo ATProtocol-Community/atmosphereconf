@@ -2,8 +2,13 @@ import { useState } from "react";
 import { actions } from "astro:actions";
 import { Loader2, Star } from "lucide-react";
 
+interface BadgeClaimResult {
+  uri: string;
+  badgeDefinitionUri: string;
+}
+
 interface BadgeClaimProps {
-  onSuccess: () => void;
+  onSuccess: (result: BadgeClaimResult) => void;
 }
 
 export function BadgeClaim({ onSuccess }: BadgeClaimProps) {
@@ -19,7 +24,10 @@ export function BadgeClaim({ onSuccess }: BadgeClaimProps) {
         setError(result.error.message);
         return;
       }
-      onSuccess();
+      onSuccess({
+        uri: result.data.uri,
+        badgeDefinitionUri: result.data.badgeDefinitionUri,
+      });
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {

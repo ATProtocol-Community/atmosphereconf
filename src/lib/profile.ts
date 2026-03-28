@@ -4,7 +4,8 @@ import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl, parseRichText } from "./bsky";
 import type { RichTextSegment } from "./bsky";
 import { BADGE_COLLECTION } from "@fujocoded/atproto-badge";
-import { getBadgeDefinitionRef } from "./badge";
+import { badges } from "@/config/badges";
+import type { BadgeDefinition } from "@/config/badges";
 
 type AvatarBlob = {
   $type: "blob";
@@ -144,14 +145,15 @@ export async function loadProfile(
     ? getBlobCDNUrl(did, conf.avatar)
     : bskyAvatarUrl;
 
-  // Extract badge award if one matches our badge definition
+  // Extract badge award if one matches any configured badge definition
   let badgeAward: BadgeAwardInfo | null = null;
-  const badgeRef = getBadgeDefinitionRef();
-  if (badgeResult.status === "fulfilled" && badgeRef) {
+  const badgeUris = new Set(badges.map((b) => b.uri));
+  if (badgeResult.status === "fulfilled" && badgeUris.size > 0) {
     for (const rec of badgeResult.value.data.records) {
       const value = rec.value as Record<string, unknown>;
       const badge = value.badge as { uri?: string } | undefined;
-      if (badge?.uri === badgeRef.uri) {
+      if (badge?.uri && badgeUris.has(badge.uri)) {
+        const matchedUri = badge.uri;
         // Build direct PDS link: parse at:// URI into xrpc getRecord URL
         let directPdsUrl: string | undefined;
         if (pdsUrl) {
@@ -164,7 +166,7 @@ export async function loadProfile(
         // Fetch badge definition for name + description
         let badgeName: string | undefined;
         let badgeDescription: string | undefined;
-        const defMatch = badgeRef.uri.match(
+        const defMatch = matchedUri.match(
           /^at:\/\/([^/]+)\/([^/]+)\/(.+)$/,
         );
         if (defMatch) {
@@ -194,7 +196,7 @@ export async function loadProfile(
 
         badgeAward = {
           uri: rec.uri,
-          badgeDefinitionUri: badgeRef.uri,
+          badgeDefinitionUri: matchedUri,
           issuedAt: typeof value.issued === "string" ? value.issued : undefined,
           pdsUrl: directPdsUrl,
           badgeName,
