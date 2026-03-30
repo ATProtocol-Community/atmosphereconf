@@ -31,8 +31,10 @@ export function ProfileView({
   activeIcons,
   editData,
   badgeAward,
+  connectionBadgeAward,
   isTicketHolder,
   ticketEditUrl,
+  connectionCount,
 }: ProfileViewProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -145,6 +147,8 @@ export function ProfileView({
       ticketEditUrl={ticketEditUrl}
       onEdit={() => setIsEditing(true)}
       badgeAward={badgeAward}
+      connectionBadgeAward={connectionBadgeAward}
+      connectionCount={connectionCount}
     />
   );
 }

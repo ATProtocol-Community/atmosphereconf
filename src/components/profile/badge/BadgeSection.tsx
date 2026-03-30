@@ -25,6 +25,7 @@ export function BadgeSection({
   const displayAward = removed ? null : (badgeAward ?? claimedAward);
 
   const handleClaimed = (result: { uri: string; badgeDefinitionUri: string }) => {
+    setRemoved(false);
     setClaimedAward({
       uri: result.uri,
       badgeDefinitionUri: result.badgeDefinitionUri,

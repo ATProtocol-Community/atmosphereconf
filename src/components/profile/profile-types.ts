@@ -42,8 +42,10 @@ export interface ProfileViewProps {
   activeIcons: ActiveIcon[];
   editData?: ProfileEditData;
   badgeAward?: BadgeAwardInfo | null;
+  connectionBadgeAward?: BadgeAwardInfo | null;
   isTicketHolder?: boolean;
   ticketEditUrl?: string;
+  connectionCount?: number;
 }
 
 export interface EditSaveData {

@@ -16,6 +16,12 @@ import {
   getExistingBadgeAward,
   getOrganizerDid,
 } from "@/lib/badge";
+import { getConnectionCount } from "@/lib/connections";
+import {
+  getConnectionBadgeForCount,
+  connectionBadges,
+  getAllBadgeUris,
+} from "@/config/badges";
 import { BADGE_SIGNING_KEY } from "astro:env/server";
 
 const MAX_AVATAR_SIZE = 1_000_000; // 1MB
@@ -270,8 +276,7 @@ export const server = {
       did: z.string(),
     }),
     handler: async ({ did }) => {
-      const { badges: allBadges } = await import("@/config/badges");
-      const badgeUris = new Set(allBadges.map((b) => b.uri));
+      const badgeUris = getAllBadgeUris();
       if (badgeUris.size === 0) {
         throw new ActionError({
           code: "INTERNAL_SERVER_ERROR",
@@ -368,9 +373,7 @@ export const server = {
         });
       }
 
-      // Find and delete whichever badge the user has
-      const { badges: allBadges } = await import("@/config/badges");
-      const badgeUris = new Set(allBadges.map((b) => b.uri));
+      const badgeUris = getAllBadgeUris();
 
       const { data } = await pdsAgent.com.atproto.repo.listRecords({
         repo: loggedInUser.did,
@@ -396,6 +399,129 @@ export const server = {
       }
 
       return { success: true };
+    },
+  }),
+
+  claimConnectionBadge: defineAction({
+    handler: async (_input, context) => {
+      const { loggedInUser } = context.locals;
+      if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
+
+      if (!BADGE_SIGNING_KEY) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Badge system not configured",
+        });
+      }
+
+      // Check if user already has a connection badge — they must unclaim first
+      const connectionBadgeUris = new Set(connectionBadges.map((b) => b.uri));
+      const pdsAgent = await getPdsAgent({ loggedInUser });
+      if (!pdsAgent) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to connect to PDS",
+        });
+      }
+
+      const { data: existingRecords } =
+        await pdsAgent.com.atproto.repo.listRecords({
+          repo: loggedInUser.did,
+          collection: BADGE_COLLECTION,
+          limit: 100,
+        });
+
+      const existingConnectionBadge = existingRecords.records.find((rec) => {
+        const value = rec.value as Record<string, unknown>;
+        const badge = value.badge as { uri?: string } | undefined;
+        return badge?.uri && connectionBadgeUris.has(badge.uri);
+      });
+
+      if (existingConnectionBadge) {
+        const existingBadgeUri = (
+          (existingConnectionBadge.value as Record<string, unknown>).badge as {
+            uri: string;
+          }
+        ).uri;
+        return {
+          uri: existingConnectionBadge.uri,
+          alreadyClaimed: true,
+          badgeDefinitionUri: existingBadgeUri,
+        };
+      }
+
+      // Calculate connection count
+      let count: number;
+      try {
+        count = await getConnectionCount(loggedInUser.did);
+      } catch {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not count connections. Please try again.",
+        });
+      }
+
+      // Determine which tier they qualify for
+      const badge = getConnectionBadgeForCount(count);
+      if (!badge) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message: `You need at least 1 connection to earn a badge. You currently have ${count}.`,
+        });
+      }
+
+      if (badge.uri === "TODO" || badge.cid === "TODO") {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Connection badge definitions not yet configured",
+        });
+      }
+
+      const badgeRef = { uri: badge.uri, cid: badge.cid };
+
+      // Load signing key
+      const signingKey = await loadSigningKey({
+        privateKeyBase64url: BADGE_SIGNING_KEY,
+      });
+
+      // Create badge award record
+      const organizerDid = await getOrganizerDid();
+      const record = await createBadgeAwardRecord({
+        recipientDid: loggedInUser.did,
+        badgeRef,
+        organizerDid,
+        signingKey,
+      });
+
+      // Write to user's repo
+      const rkey = getBadgeRkey({ badgeDefinitionUri: badgeRef.uri });
+      try {
+        const { data } = await pdsAgent.com.atproto.repo.putRecord({
+          repo: loggedInUser.did,
+          collection: BADGE_COLLECTION,
+          rkey,
+          record,
+        });
+        return {
+          uri: data.uri,
+          alreadyClaimed: false,
+          badgeDefinitionUri: badgeRef.uri,
+          connectionCount: count,
+        };
+      } catch (err: unknown) {
+        if (err instanceof Error && err.message.includes("conflict")) {
+          return {
+            uri: `at://${loggedInUser.did}/${BADGE_COLLECTION}/${rkey}`,
+            alreadyClaimed: true,
+            badgeDefinitionUri: badgeRef.uri,
+            connectionCount: count,
+          };
+        }
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to write badge. Please try again.",
+        });
+      }
     },
   }),
 };

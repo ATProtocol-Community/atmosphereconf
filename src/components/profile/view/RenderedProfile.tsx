@@ -4,6 +4,7 @@ import { RichText } from "./RichText";
 import { GermButton } from "./GermButton";
 import type { ActiveIcon, ProfileViewProps } from "../profile-types";
 import { BadgeSection } from "../badge/BadgeSection";
+import { ConnectionBadgeSection } from "../badge/ConnectionBadge";
 
 export function RenderedProfile({
   did,
@@ -24,6 +25,8 @@ export function RenderedProfile({
   ticketEditUrl,
   onEdit,
   badgeAward,
+  connectionBadgeAward,
+  connectionCount,
 }: Omit<ProfileViewProps, "editData"> & { onEdit: () => void }) {
   const germDmUrl = germMessageMeUrl
     ? viewerDid
@@ -98,14 +101,23 @@ export function RenderedProfile({
         </p>
       )}
 
-      {/* Badge */}
-      <BadgeSection
-        did={did}
-        handle={handle}
-        badgeAward={badgeAward ?? null}
-        isOwnProfile={!!isOwnProfile}
-        isTicketHolder={!!isTicketHolder}
-      />
+      {/* Badges */}
+      <div className="flex flex-wrap items-center gap-2">
+        <BadgeSection
+          did={did}
+          handle={handle}
+          badgeAward={badgeAward ?? null}
+          isOwnProfile={!!isOwnProfile}
+          isTicketHolder={!!isTicketHolder}
+        />
+        <ConnectionBadgeSection
+          did={did}
+          handle={handle}
+          connectionBadgeAward={connectionBadgeAward ?? null}
+          isOwnProfile={!!isOwnProfile}
+          connectionCount={connectionCount ?? 0}
+        />
+      </div>
 
       {/* Pronouns + website + germ */}
       {showLinksRow && (
