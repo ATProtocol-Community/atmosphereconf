@@ -10,6 +10,8 @@ interface BadgeCertificateProps {
   canUnclaim: boolean;
   onVerified?: () => void;
   onUnclaimed?: () => void;
+  unclaimAction?: () => Promise<{ error?: { message: string } }>;
+  variant?: "default" | "connection";
 }
 
 interface VerifyResult {
@@ -32,11 +34,15 @@ export function BadgeCertificate({
   canUnclaim,
   onVerified,
   onUnclaimed,
+  unclaimAction,
+  variant = "default",
 }: BadgeCertificateProps) {
+  const isConnection = variant === "connection";
+  const cacheKey = VERIFY_KEY_PREFIX + did + (badgeAward?.badgeDefinitionUri ? `:${badgeAward.badgeDefinitionUri}` : "");
   const [verifying, setVerifying] = useState(false);
   const [verifyResult, setVerifyResult] = useState<VerifyResult | null>(() => {
     try {
-      const cached = sessionStorage.getItem(VERIFY_KEY_PREFIX + did);
+      const cached = sessionStorage.getItem(cacheKey);
       if (cached) return JSON.parse(cached);
     } catch {}
     return null;
@@ -48,7 +54,7 @@ export function BadgeCertificate({
     setVerifying(true);
     setVerifyResult(null);
     try {
-      const result = await actions.verifyBadge({ did });
+      const result = await actions.verifyBadge({ did, badgeDefinitionUri: badgeAward?.badgeDefinitionUri });
       if (result.error) {
         setVerifyResult({ verified: false, error: result.error.message });
         return;
@@ -56,10 +62,7 @@ export function BadgeCertificate({
       setVerifyResult(result.data);
       if (result.data.verified) {
         try {
-          sessionStorage.setItem(
-            VERIFY_KEY_PREFIX + did,
-            JSON.stringify(result.data),
-          );
+          sessionStorage.setItem(cacheKey, JSON.stringify(result.data));
         } catch {}
         onVerified?.();
       }
@@ -74,12 +77,12 @@ export function BadgeCertificate({
     setUnclaiming(true);
     setUnclaimError(null);
     try {
-      const result = await actions.unclaimBadge();
+      const result = unclaimAction ? await unclaimAction() : await actions.unclaimBadge();
       if (result.error) {
         setUnclaimError(`Failed to remove badge: ${result.error.message}`);
         return;
       }
-      try { sessionStorage.removeItem(VERIFY_KEY_PREFIX + did); } catch {}
+      try { sessionStorage.removeItem(cacheKey); } catch {}
       onUnclaimed?.();
     } catch {
       setUnclaimError("Failed to remove badge");
@@ -89,7 +92,7 @@ export function BadgeCertificate({
   };
 
   return (
-    <div className={`badge-certificate w-96 rounded font-mono${verifyResult?.verified ? " badge-certificate-verified" : ""}`}>
+    <div className={`badge-certificate w-96 rounded font-mono${verifyResult?.verified ? " badge-certificate-verified" : ""}${isConnection ? " badge-certificate-connection" : ""}`}>
       {verifyResult?.verified && <div className="badge-cert-shine" />}
       {/* Certificate stamp */}
       <div className="badge-cert-seal">
@@ -119,8 +122,8 @@ export function BadgeCertificate({
         {/* Single grid for all rows */}
         <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[11px]">
           <span className={labelClass}>Subject</span>
-          <span className="font-bold text-amber-700 dark:text-amber-300">
-            {badgeAward?.badgeName || "Attendee Badge"}
+          <span className={`font-bold ${isConnection ? "text-blue-700 dark:text-blue-300" : "text-amber-700 dark:text-amber-300"}`}>
+            {badgeAward?.badgeName || (isConnection ? "Connection Badge" : "Attendee Badge")}
           </span>
 
           <span className={labelClass}>Issued&nbsp;to</span>
@@ -196,15 +199,15 @@ export function BadgeCertificate({
 
       {/* Footer */}
       <div className="border-border/60 flex items-center gap-3 border-t px-3 py-1.5 text-[10px]">
-        {badgeAward?.pdsUrl && (
+        {badgeAward?.uri && (
           <a
-            href={badgeAward.pdsUrl}
+            href={`https://pdsls.dev/${badgeAward.uri}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 hover:underline"
           >
             <ExternalLink aria-hidden="true" className="size-2.5" />
-            View on PDS
+            View on PDSls
           </a>
         )}
         {canUnclaim && (
