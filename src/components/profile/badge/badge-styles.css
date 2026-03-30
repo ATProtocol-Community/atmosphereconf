@@ -103,10 +103,10 @@
   }
 }
 .badge-btn-unverified {
-  animation: badge-nudge 3.5s ease-in-out 2s infinite;
+  animation: badge-nudge 5s ease-in-out 2s infinite;
 }
 :is(.dark *).badge-btn-unverified {
-  animation: badge-nudge-dark 3.5s ease-in-out 2s infinite;
+  animation: badge-nudge-dark 5s ease-in-out 2s infinite;
 }
 
 /* ── Claim celebration ── */
@@ -248,6 +248,135 @@
   left: var(--sparkle-x, 0);
 }
 
+/* ── Connection badge (blue variant) ── */
+.badge-btn.badge-btn-connection {
+  background:
+    repeating-conic-gradient(rgba(0, 0, 0, 0.06) 0% 25%, transparent 0% 50%)
+      0 0 / 2px 2px,
+    #3b82f6;
+  border-color: #bfdbfe #1e3a8a #1e3a8a #bfdbfe;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.35),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.1);
+}
+.badge-btn.badge-btn-connection:hover {
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.5),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 8px rgba(59, 130, 246, 0.4);
+}
+.badge-btn.badge-btn-connection::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+}
+.badge-btn.badge-btn-connection:active {
+  border-color: #1e3a8a #bfdbfe #bfdbfe #1e3a8a;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+.badge-btn.badge-btn-connection:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+:is(.dark *).badge-btn.badge-btn-connection {
+  background:
+    repeating-conic-gradient(
+        rgba(255, 255, 255, 0.04) 0% 25%,
+        transparent 0% 50%
+      )
+      0 0 / 2px 2px,
+    rgba(59, 130, 246, 0.25);
+  border-color: rgba(147, 197, 253, 0.25) rgba(30, 58, 138, 0.4) rgba(30, 58, 138, 0.4) rgba(147, 197, 253, 0.25);
+  box-shadow:
+    inset 1px 1px 0 rgba(147, 197, 253, 0.15),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.15);
+}
+:is(.dark *).badge-btn.badge-btn-connection::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(147, 197, 253, 0.2),
+    transparent
+  );
+}
+:is(.dark *).badge-btn.badge-btn-connection:hover {
+  box-shadow:
+    inset 1px 1px 0 rgba(147, 197, 253, 0.2),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 8px rgba(59, 130, 246, 0.15);
+}
+
+/* Connection nudge (blue) */
+@keyframes badge-nudge-connection {
+  0%, 80% {
+    border-color: #bfdbfe #1e3a8a #1e3a8a #bfdbfe;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.35), inset -1px -1px 0 rgba(0,0,0,.1);
+  }
+  82% {
+    border-color: #1e3a8a #bfdbfe #bfdbfe #1e3a8a;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,.25);
+  }
+  84% {
+    border-color: #bfdbfe #1e3a8a #1e3a8a #bfdbfe;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.35), inset -1px -1px 0 rgba(0,0,0,.1);
+  }
+  86% {
+    border-color: #1e3a8a #bfdbfe #bfdbfe #1e3a8a;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,.25);
+  }
+  88%, 100% {
+    border-color: #bfdbfe #1e3a8a #1e3a8a #bfdbfe;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,.35), inset -1px -1px 0 rgba(0,0,0,.1);
+  }
+}
+@keyframes badge-nudge-connection-dark {
+  0%, 80% {
+    border-color: rgba(147,197,253,.25) rgba(30,58,138,.4) rgba(30,58,138,.4) rgba(147,197,253,.25);
+    box-shadow: inset 1px 1px 0 rgba(147,197,253,.15), inset -1px -1px 0 rgba(0,0,0,.15);
+  }
+  82% {
+    border-color: rgba(30,58,138,.4) rgba(147,197,253,.25) rgba(147,197,253,.25) rgba(30,58,138,.4);
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,.3);
+  }
+  84% {
+    border-color: rgba(147,197,253,.25) rgba(30,58,138,.4) rgba(30,58,138,.4) rgba(147,197,253,.25);
+    box-shadow: inset 1px 1px 0 rgba(147,197,253,.15), inset -1px -1px 0 rgba(0,0,0,.15);
+  }
+  86% {
+    border-color: rgba(30,58,138,.4) rgba(147,197,253,.25) rgba(147,197,253,.25) rgba(30,58,138,.4);
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,.3);
+  }
+  88%, 100% {
+    border-color: rgba(147,197,253,.25) rgba(30,58,138,.4) rgba(30,58,138,.4) rgba(147,197,253,.25);
+    box-shadow: inset 1px 1px 0 rgba(147,197,253,.15), inset -1px -1px 0 rgba(0,0,0,.15);
+  }
+}
+.badge-btn-connection.badge-btn-unverified {
+  animation: badge-nudge-connection 5s ease-in-out 2s infinite;
+}
+:is(.dark *).badge-btn-connection.badge-btn-unverified {
+  animation: badge-nudge-connection-dark 5s ease-in-out 2s infinite;
+}
+
+/* Connection celebrate (blue glow) */
+.badge-btn-connection.badge-btn-celebrate {
+  animation: celebrate-glow-connection 1.2s ease-out;
+}
+@keyframes celebrate-glow-connection {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+  40% { box-shadow: 0 0 20px 6px rgba(59, 130, 246, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+/* Connection sparkles (blue) */
+.badge-pill-wrap:has(.badge-btn-connection) .badge-sparkle {
+  background: #3b82f6;
+  box-shadow: 0 0 8px 3px rgba(59, 130, 246, 0.7);
+}
+
 /* ── Popup ── */
 @keyframes popup-in {
   0% {
@@ -309,6 +438,23 @@
     filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
   }
 }
+/* Connection certificate (blue seal + sparkles) */
+.badge-certificate-connection .badge-cert-seal svg {
+  color: #2563eb;
+}
+.badge-certificate-connection.badge-certificate-verified .badge-cert-seal svg {
+  color: #3b82f6;
+  animation: seal-glow-connection 3s ease-in-out infinite;
+}
+@keyframes seal-glow-connection {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  50% { filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.5)); }
+}
+.badge-certificate-connection .badge-cert-seal-sparkle {
+  background: #3b82f6;
+  box-shadow: 0 0 6px 2px rgba(59, 130, 246, 0.7);
+}
+
 .badge-cert-seal-sparkle {
   position: absolute;
   width: var(--sparkle-size, 5px);

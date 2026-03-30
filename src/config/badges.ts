@@ -38,19 +38,19 @@ export const connectionBadges: ConnectionBadgeDefinition[] = [
   {
     uri: "at://did:plc:3xewinw4wtimo2lqfy5fm5sw/community.lexicon.badge.definition/3mibdepi65a2h",
     cid: "bafyreicojyz4watt3e7rpzl6qffilhzflzpfcvpdsj4ig2jmqunchdoutm",
-    shortName: "Head Honk-o",
+    shortName: "Serial Honk-nector",
     threshold: 75,
   },
   {
     uri: "at://did:plc:3xewinw4wtimo2lqfy5fm5sw/community.lexicon.badge.definition/3mibdbosli42x",
     cid: "bafyreiadf73bhu65qjqj33fxqppyaqz5nhytcij54r4aqc7oqye5pbnnia",
-    shortName: "Honk Captain",
+    shortName: "Down to Nest",
     threshold: 50,
   },
   {
     uri: "at://did:plc:3xewinw4wtimo2lqfy5fm5sw/community.lexicon.badge.definition/3mibcvr5uj72b",
     cid: "bafyreidnomhgfu46iriqg5b4oxthfyyqqywx5np55fl7hfeqaaquoseh6e",
-    shortName: "Flock Leader",
+    shortName: "Gaggle Gatherer",
     threshold: 25,
   },
   {
