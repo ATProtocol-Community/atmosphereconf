@@ -3,6 +3,7 @@ import { FlippableProfileCard } from "@/components/profile/FlippableProfileCard"
 import { getActiveIcons } from "@/components/profile/lexicon-icons";
 import { getTalksByHandle } from "@/lib/talks";
 import { fetchAuthorFeedPage } from "@/lib/bsky";
+import { getConnectionCount } from "@/lib/connections";
 import type { LoadedProfile } from "@/lib/profile";
 import type { ProfileEditData } from "@/components/profile/ProfileView";
 
@@ -45,6 +46,13 @@ try {
 } catch {
   authorFeedInitialData = { posts: [], cursor: undefined };
 }
+
+let connectionCount = 0;
+try {
+  connectionCount = await getConnectionCount(profile.did);
+} catch {
+  // non-critical
+}
 ---
 
 <style is:global>
@@ -66,5 +74,6 @@ try {
     authorFeedInitialData={authorFeedInitialData}
     isTicketHolder={isTicketHolder}
     ticketEditUrl={ticketEditUrl}
+    connectionCount={connectionCount}
   />
 </div>
