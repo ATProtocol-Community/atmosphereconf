@@ -1,23 +1,104 @@
 ---
-import TitoWidget from "@/components/shared/TitoWidget.astro";
-
-const titoSrc = import.meta.env.DEV
-  ? "https://js.tito.io/v2/with/inline,development_mode"
-  : "https://js.tito.io/v2/with/inline";
 ---
 
-<div class="tito-widgets">
-  <TitoWidget type="live" class:list="group-[.remote]:hidden" />
-  <TitoWidget type="remote" class:list="group-[.live]:hidden" />
+<div class="sign-container">
+  <div class="sign">
+    <div class="sign-holes">
+      <span class="hole"></span>
+      <span class="hole"></span>
+    </div>
+    <div class="sign-content">
+      <p class="sign-title">Be Back Soon</p>
+      <div class="sign-divider"></div>
+      <p class="sign-subtitle">Thank you all, see you next season</p>
+    </div>
+    <div class="sign-string left"></div>
+    <div class="sign-string right"></div>
+  </div>
 </div>
 
-<script is:inline src={titoSrc} async />
-<a
-  href="https://ti.to/atmosphereconf/2026"
-  class="ngerakines-buy-btn"
-  style="display: none;"
-  target="_blank"
-  rel="noopener"
->
-  BUY TICKETS NOW!!!
-</a>
+<style>
+  .sign-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+
+  .sign {
+    position: relative;
+    background: var(--card);
+    border: 3px solid var(--foreground);
+    border-radius: 0.5rem;
+    padding: 2.5rem 3rem 2rem;
+    box-shadow:
+      4px 4px 0 var(--foreground),
+      0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: rotate(-2deg);
+    max-width: 28rem;
+    width: 100%;
+  }
+
+  .sign-holes {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 0.75rem;
+    left: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .hole {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    border: 2px solid var(--foreground);
+    background: var(--background);
+  }
+
+  .sign-content {
+    text-align: center;
+  }
+
+  .sign-title {
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--foreground);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .sign-divider {
+    width: 4rem;
+    height: 3px;
+    background: var(--primary);
+    margin: 0.75rem auto;
+    border-radius: 2px;
+  }
+
+  .sign-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--muted-foreground);
+    letter-spacing: 0.02em;
+  }
+
+  .sign-string {
+    position: absolute;
+    top: -1.5rem;
+    width: 2px;
+    height: 1.5rem;
+    background: var(--foreground);
+  }
+
+  .sign-string.left {
+    left: 1.75rem;
+    transform: rotate(6deg);
+  }
+
+  .sign-string.right {
+    right: 1.75rem;
+    transform: rotate(-6deg);
+  }
+</style>

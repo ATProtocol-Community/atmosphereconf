@@ -4,8 +4,7 @@ import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl, parseRichText } from "./bsky";
 import type { RichTextSegment } from "./bsky";
 import { BADGE_COLLECTION } from "@fujocoded/atproto-badger";
-import { badges } from "@/config/badges";
-import type { BadgeDefinition } from "@/config/badges";
+import { badges, connectionBadges, getAllBadgeUris } from "@/config/badges";
 
 type AvatarBlob = {
   $type: "blob";
@@ -43,6 +42,7 @@ export type LoadedProfile = {
   collections: string[];
   confAvatarBlob: AvatarBlob | null;
   badgeAward: BadgeAwardInfo | null;
+  connectionBadgeAward: BadgeAwardInfo | null;
 };
 
 const publicAgent = new AtpAgent({ service: "https://public.api.bsky.app" });
@@ -145,64 +145,80 @@ export async function loadProfile(
     ? getBlobCDNUrl(did, conf.avatar)
     : bskyAvatarUrl;
 
-  // Extract badge award if one matches any configured badge definition
+  // Extract badge awards — attendee and connection badges separately
   let badgeAward: BadgeAwardInfo | null = null;
-  const badgeUris = new Set(badges.map((b) => b.uri));
-  if (badgeResult.status === "fulfilled" && badgeUris.size > 0) {
+  let connectionBadgeAward: BadgeAwardInfo | null = null;
+  const attendeeUris = new Set(badges.map((b) => b.uri));
+  const connectionUris = new Set(connectionBadges.map((b) => b.uri));
+
+  async function extractBadgeInfo(
+    rec: { uri: string; value: unknown },
+    matchedUri: string,
+  ): Promise<BadgeAwardInfo> {
+    let directPdsUrl: string | undefined;
+    if (pdsUrl) {
+      const atMatch = rec.uri.match(/^at:\/\/([^/]+)\/([^/]+)\/(.+)$/);
+      if (atMatch) {
+        const base = pdsUrl.replace(/\/$/, "");
+        directPdsUrl = `${base}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(atMatch[1])}&collection=${encodeURIComponent(atMatch[2])}&rkey=${encodeURIComponent(atMatch[3])}`;
+      }
+    }
+    let badgeName: string | undefined;
+    let badgeDescription: string | undefined;
+    const defMatch = matchedUri.match(/^at:\/\/([^/]+)\/([^/]+)\/(.+)$/);
+    if (defMatch) {
+      try {
+        const defAgent = await getPdsAgent({ didOrHandle: defMatch[1] });
+        if (defAgent) {
+          const { data: defData } = await defAgent.com.atproto.repo.getRecord({
+            repo: defMatch[1],
+            collection: defMatch[2],
+            rkey: defMatch[3],
+          });
+          const defVal = defData.value as Record<string, unknown>;
+          badgeName = typeof defVal.name === "string" ? defVal.name : undefined;
+          badgeDescription =
+            typeof defVal.description === "string"
+              ? defVal.description
+              : undefined;
+        }
+      } catch {
+        // non-critical
+      }
+    }
+    const value = rec.value as Record<string, unknown>;
+    return {
+      uri: rec.uri,
+      badgeDefinitionUri: matchedUri,
+      issuedAt: typeof value.issued === "string" ? value.issued : undefined,
+      pdsUrl: directPdsUrl,
+      badgeName,
+      badgeDescription,
+    };
+  }
+
+  if (badgeResult.status === "fulfilled") {
+    const extractionPromises: Promise<void>[] = [];
     for (const rec of badgeResult.value.data.records) {
       const value = rec.value as Record<string, unknown>;
       const badge = value.badge as { uri?: string } | undefined;
-      if (badge?.uri && badgeUris.has(badge.uri)) {
-        const matchedUri = badge.uri;
-        // Build direct PDS link: parse at:// URI into xrpc getRecord URL
-        let directPdsUrl: string | undefined;
-        if (pdsUrl) {
-          const atMatch = rec.uri.match(/^at:\/\/([^/]+)\/([^/]+)\/(.+)$/);
-          if (atMatch) {
-            const base = pdsUrl.replace(/\/$/, "");
-            directPdsUrl = `${base}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(atMatch[1])}&collection=${encodeURIComponent(atMatch[2])}&rkey=${encodeURIComponent(atMatch[3])}`;
-          }
-        }
-        // Fetch badge definition for name + description
-        let badgeName: string | undefined;
-        let badgeDescription: string | undefined;
-        const defMatch = matchedUri.match(/^at:\/\/([^/]+)\/([^/]+)\/(.+)$/);
-        if (defMatch) {
-          try {
-            const defAgent = await getPdsAgent({
-              didOrHandle: defMatch[1],
-            });
-            if (defAgent) {
-              const { data: defData } =
-                await defAgent.com.atproto.repo.getRecord({
-                  repo: defMatch[1],
-                  collection: defMatch[2],
-                  rkey: defMatch[3],
-                });
-              const defVal = defData.value as Record<string, unknown>;
-              badgeName =
-                typeof defVal.name === "string" ? defVal.name : undefined;
-              badgeDescription =
-                typeof defVal.description === "string"
-                  ? defVal.description
-                  : undefined;
-            }
-          } catch {
-            // non-critical — fall back to generic text
-          }
-        }
+      if (!badge?.uri) continue;
 
-        badgeAward = {
-          uri: rec.uri,
-          badgeDefinitionUri: matchedUri,
-          issuedAt: typeof value.issued === "string" ? value.issued : undefined,
-          pdsUrl: directPdsUrl,
-          badgeName,
-          badgeDescription,
-        };
-        break;
+      if (!badgeAward && attendeeUris.has(badge.uri)) {
+        extractionPromises.push(
+          extractBadgeInfo(rec, badge.uri).then((info) => {
+            badgeAward = info;
+          }),
+        );
+      } else if (!connectionBadgeAward && connectionUris.has(badge.uri)) {
+        extractionPromises.push(
+          extractBadgeInfo(rec, badge.uri).then((info) => {
+            connectionBadgeAward = info;
+          }),
+        );
       }
     }
+    await Promise.all(extractionPromises);
   }
 
   return {
@@ -225,5 +241,6 @@ export async function loadProfile(
     collections,
     confAvatarBlob: conf?.avatar ?? null,
     badgeAward,
+    connectionBadgeAward,
   };
 }
