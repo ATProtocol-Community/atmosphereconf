@@ -274,8 +274,9 @@ export const server = {
   verifyBadge: defineAction({
     input: z.object({
       did: z.string(),
+      badgeDefinitionUri: z.string().optional(),
     }),
-    handler: async ({ did }) => {
+    handler: async ({ did, badgeDefinitionUri }) => {
       const badgeUris = getAllBadgeUris();
       if (badgeUris.size === 0) {
         throw new ActionError({
@@ -302,7 +303,9 @@ export const server = {
       const awardRecord = data.records.find((rec) => {
         const value = rec.value as Record<string, unknown>;
         const badge = value.badge as { uri?: string } | undefined;
-        return badge?.uri && badgeUris.has(badge.uri);
+        if (!badge?.uri || !badgeUris.has(badge.uri)) return false;
+        if (badgeDefinitionUri) return badge.uri === badgeDefinitionUri;
+        return true;
       });
 
       if (!awardRecord) {
@@ -385,6 +388,48 @@ export const server = {
         const value = rec.value as Record<string, unknown>;
         const badge = value.badge as { uri?: string } | undefined;
         return badge?.uri && badgeUris.has(badge.uri);
+      });
+
+      if (awardRecord) {
+        const rkeyMatch = awardRecord.uri.match(/\/([^/]+)$/);
+        if (rkeyMatch) {
+          await pdsAgent.com.atproto.repo.deleteRecord({
+            repo: loggedInUser.did,
+            collection: BADGE_COLLECTION,
+            rkey: rkeyMatch[1],
+          });
+        }
+      }
+
+      return { success: true };
+    },
+  }),
+
+  unclaimConnectionBadge: defineAction({
+    handler: async (_input, context) => {
+      const { loggedInUser } = context.locals;
+      if (!loggedInUser) throw new ActionError({ code: "UNAUTHORIZED" });
+
+      const pdsAgent = await getPdsAgent({ loggedInUser });
+      if (!pdsAgent) {
+        throw new ActionError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to connect to PDS",
+        });
+      }
+
+      const connectionBadgeUris = new Set(connectionBadges.map((b) => b.uri));
+
+      const { data } = await pdsAgent.com.atproto.repo.listRecords({
+        repo: loggedInUser.did,
+        collection: BADGE_COLLECTION,
+        limit: 100,
+      });
+
+      const awardRecord = data.records.find((rec) => {
+        const value = rec.value as Record<string, unknown>;
+        const badge = value.badge as { uri?: string } | undefined;
+        return badge?.uri && connectionBadgeUris.has(badge.uri);
       });
 
       if (awardRecord) {

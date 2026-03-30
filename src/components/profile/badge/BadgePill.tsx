@@ -107,6 +107,8 @@ interface BadgePillProps {
   canUnclaim: boolean;
   celebrating?: boolean;
   onUnclaimed?: () => void;
+  unclaimAction?: () => Promise<{ error?: { message: string } }>;
+  variant?: "default" | "connection";
 }
 
 const VERIFY_KEY_PREFIX = "badge-verified:";
@@ -118,10 +120,13 @@ export function BadgePill({
   canUnclaim,
   celebrating = false,
   onUnclaimed,
+  unclaimAction,
+  variant = "default",
 }: BadgePillProps) {
+  const cacheKey = VERIFY_KEY_PREFIX + did + (badgeAward?.badgeDefinitionUri ? `:${badgeAward.badgeDefinitionUri}` : "");
   const [verified, setVerified] = useState(() => {
     try {
-      return sessionStorage.getItem(VERIFY_KEY_PREFIX + did) !== null;
+      return sessionStorage.getItem(cacheKey) !== null;
     } catch {
       return false;
     }
@@ -139,7 +144,7 @@ export function BadgePill({
         <Popover.Trigger asChild>
           <button
             type="button"
-            className={`badge-btn${verified ? " badge-btn-verified" : open ? "" : " badge-btn-unverified"} inline-flex items-center gap-1.5 rounded px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wide text-stone-950 cursor-pointer dark:text-amber-100${celebrating ? " badge-btn-celebrate" : ""}`}
+            className={`badge-btn${variant === "connection" ? " badge-btn-connection" : ""}${verified ? " badge-btn-verified" : open ? "" : " badge-btn-unverified"} inline-flex items-center gap-1.5 rounded px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wide ${variant === "connection" ? "text-blue-950 dark:text-blue-100" : "text-stone-950 dark:text-amber-100"} cursor-pointer${celebrating ? " badge-btn-celebrate" : ""}`}
           >
             {celebrating && <span className="badge-claim-shine" />}
             {verified && <span className="badge-verified-shine" />}
@@ -292,6 +297,8 @@ export function BadgePill({
             canUnclaim={canUnclaim}
             onVerified={handleVerified}
             onUnclaimed={onUnclaimed}
+            unclaimAction={unclaimAction}
+            variant={variant}
           />
         </Popover.Content>
       </Popover.Portal>
