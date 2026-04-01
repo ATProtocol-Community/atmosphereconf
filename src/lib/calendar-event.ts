@@ -27,6 +27,7 @@ export type EventData = {
   room?: string;
   link_url?: string;
   link_text?: string;
+  vodAtUri?: string;
 };
 
 export type CalendarEventRecord = {
@@ -141,6 +142,9 @@ export function calendarRecordToEventData(
   }
   if (ad.room) {
     event.room = ad.room as string;
+  }
+  if (typeof ad.vodAtUri === "string") {
+    event.vodAtUri = ad.vodAtUri;
   }
 
   const uris = Array.isArray(value.uris)

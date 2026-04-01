@@ -65,6 +65,7 @@ const events = defineLiveCollection({
     link_url: z.string().optional(),
     link_text: z.string().optional(),
     headerUrl: z.string().optional(),
+    vodAtUri: z.string().optional(),
   }),
 });
 
