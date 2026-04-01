@@ -1,13 +1,3 @@
-/*
- * Theme: <name>
- * Source: <url>
- *
- * To add this theme, see the checklist in src/components/profile/client-themes.ts
- *
- * This uses a selector that never matches, so it's valid CSS you can copy.
- * Replace TEMPLATE with your theme name.
- */
-
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 
 [data-theme="laelaps"] {
@@ -17,7 +7,7 @@
   --theme-muted: #ffffff;
   --theme-accent: #7837f1;
   --theme-surface: #1c0648;
-  --theme-border: rgba(92, 4, 207, 0.575);
+  --theme-border: #5c04cf93;
 
   /* Semantic overrides */
   --background: var(--theme-bg);
@@ -82,11 +72,10 @@
   --event-unconference-sub: #ffffff;
 }
 
-/* Site header, hero, and navigation buttons */
 [data-theme="laelaps"] #site-header {
   font-weight: 900 !important;
   text-transform: uppercase;
-  letter-spacing: 0.23rem;
+  letter-spacing: 0.2rem;
 }
 
 [data-theme="laelaps"] button#theme-toggle,
@@ -95,35 +84,43 @@
   letter-spacing: normal;
 }
 
-[data-theme="laelaps"] h1 + p {
+[data-theme="laelaps"] .ticket-label,
+[data-theme="laelaps"] .program-day-chip-kicker,
+[data-theme="laelaps"] .program-bookmarks-link,
+[data-theme="laelaps"] a[data-section="info"],
+[data-theme="laelaps"] a[data-section="hotel"],
+[data-theme="laelaps"] a[data-section="remote"],
+[data-theme="laelaps"] a[data-section="coc"] {
+  color: var(--theme-fg) !important;
   text-transform: uppercase;
-  letter-spacing: 0.2rem;
+  letter-spacing: 0.1rem !important;
 }
 
+[data-theme="laelaps"] h1 + p,
 [data-theme="laelaps"] time,
-[data-theme="laelaps"] .ticket-main {
+[data-theme="laelaps"] .ticket-main,
+[data-theme="laelaps"] #nav-menu-btn,
+[data-theme="laelaps"] .location-subtext,
+[data-theme="laelaps"] .program-mode-toggle,
+[data-theme="laelaps"] .section-kicker-link,
+[data-theme="laelaps"] .program-paper-summary,
+[data-theme="laelaps"] .details-heading,
+[data-theme="laelaps"] div.panel-header > a.inline-link {
+  color: var(--theme-fg) !important;
   text-transform: uppercase;
-  letter-spacing: 0.1rem;
+  font-weight: 900 !important;
+  letter-spacing: 0.2rem !important;
 }
 
 [data-theme="laelaps"] h1,
 [data-theme="laelaps"] h2#schedule,
-[data-theme="laelaps"] h2#join-us {
+[data-theme="laelaps"] h2#join-us,
+[data-theme="laelaps"] h2#dispatches-from-the-atmosphere,
+[data-theme="laelaps"] h2#sponsors,
+[data-theme="laelaps"] h2#faqs {
   text-transform: uppercase;
   letter-spacing: 0.3rem;
-}
-
-/* would be more performant to have font-ui affect these attributes in the code itself, but quick workaround */
-[data-theme="laelaps"] .section-kicker-link,
-[data-theme="laelaps"] p.rail-other-day-meta,
-[data-theme="laelaps"] a.rail-other-day-button,
-[data-theme="laelaps"] span.program-day-chip-kicker,
-[data-theme="laelaps"] span.rail-lucky-label,
-[data-theme="laelaps"] span.rail-other-day-time,
-[data-theme="laelaps"] a.program-paper-summary,
-[data-theme="laelaps"] a.program-mode-toggle {
-  font-family: var(--font-ui);
-  letter-spacing: 0.15rem;
+  color: var(--theme-fg);
 }
 
 [data-theme="laelaps"] tito-widget .tito-release-description,
