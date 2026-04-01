@@ -10,6 +10,7 @@ import mapPinIconSvg from "@/components/ui/icons/MapPinIcon.svg?raw";
 import remoteBadgeSvg from "@/components/ui/icons/RemoteBadge.svg?raw";
 import inPersonIconSvg from "@/components/ui/icons/InPersonIcon.svg?raw";
 import { isRemoteAccessible } from "@/lib/calendar-event";
+import VodPlayer from "@/components/ui/VodPlayer.astro";
 
 const { id } = Astro.params;
 const user = Astro.locals.loggedInUser;
@@ -47,6 +48,7 @@ const {
   start,
   end,
   headerUrl,
+  vodAtUri,
 } = entry.data;
 
 const typeNames: Record<string, string> = {
@@ -235,6 +237,12 @@ const streamTrack = isRemoteAccessible(mode)
             </p>
           )
         }
+
+        {vodAtUri && (
+          <div class="mt-6">
+            <VodPlayer vodAtUri={vodAtUri} title={plainTitle} />
+          </div>
+        )}
       </Card>
     </div>
   </div>
