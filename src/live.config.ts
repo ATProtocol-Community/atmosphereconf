@@ -37,9 +37,11 @@ const events = defineLiveCollection({
           }>)
         : undefined;
       const header = media?.find((m) => m?.role === "header");
-      if (header?.content?.ref?.$link) {
+      const ref = header?.content?.ref;
+      const cid = ref?.$link ?? (ref?.toString ? ref.toString() : undefined);
+      if (cid) {
         (data as Record<string, unknown>).headerUrl =
-          `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${header.content.ref.$link}@jpeg`;
+          `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${cid}@jpeg`;
       }
 
       if (data.title) {
