@@ -69,14 +69,18 @@ const playlistUrl = `${VOD_PLAYBACK_BASE}?uri=${encodeURIComponent(vodAtUri)}`;
           "current-time",
           "mute",
           "volume",
+          "captions",
           "settings",
           "fullscreen",
         ],
-        settings: ["speed"],
+        settings: ["captions", "speed"],
         speed: {
           selected: 1,
           options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
         },
+        // `update: true` makes Plyr re-detect <track> elements added after
+        // init — InteractiveTranscript appends the captions track post-hoc.
+        captions: { active: true, language: "auto", update: true },
         ratio: "16:9",
       });
 
