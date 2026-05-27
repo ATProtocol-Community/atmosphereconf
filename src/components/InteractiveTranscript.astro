@@ -1,0 +1,391 @@
+---
+interface Props {
+  uid: string;
+  transcriptHtml: string;
+  playerSelector?: string;
+}
+
+const { uid, transcriptHtml, playerSelector = ".vod-video" } = Astro.props;
+// Plain `clip` is intentional: each event page has at most one transcript,
+// so namespacing the DOM id by slug just makes share URLs uglier — HAL
+// derives the hash-fragment prefix from `transcript.id`, so this becomes
+// `#clip=START,END`.
+const transcriptId = "clip";
+---
+
+<div
+  class="interactive-transcript"
+  data-uid={uid}
+  data-player-selector={playerSelector}
+>
+  <div
+    id={transcriptId}
+    class="hyperaudio-transcript"
+    set:html={transcriptHtml}
+  />
+  <div class="share-popover" hidden>
+    <button class="share-popover-btn" type="button" data-mode="link">
+      <span class="label-default">Copy link</span>
+      <span class="label-copied" hidden>Copied</span>
+    </button>
+    <button class="share-popover-btn" type="button" data-mode="quote">
+      <span class="label-default">Copy with quote</span>
+      <span class="label-copied" hidden>Copied</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { HyperaudioLite } from "@/lib/hyperaudio-lite.js";
+  import { caption } from "@/lib/caption.js";
+
+  document
+    .querySelectorAll<HTMLElement>(".interactive-transcript")
+    .forEach((container) => {
+      const uid = container.dataset.uid!;
+      const playerSelector = container.dataset.playerSelector || ".vod-video";
+      // Must match the DOM id set in the Astro frontmatter — share URLs
+      // derive their hash fragment from this (`#clip=START,END`).
+      const transcriptId = "clip";
+      const playerId = `hyperplayer-${uid}`;
+
+      // HAL needs an id on the video element; find the sibling player and
+      // assign one. Walking to the parent first scopes the search so multiple
+      // talks on a page don't cross-wire.
+      const scope = container.parentElement ?? document;
+      const video = scope.querySelector<HTMLVideoElement>(playerSelector);
+      if (!video) return;
+      if (!video.id) video.id = playerId;
+
+      // (transcriptId, playerId, minimised, autoscroll, doubleClick, webMonetization, playOnClick)
+      const hal = new HyperaudioLite(
+        transcriptId,
+        video.id,
+        false,
+        true,
+        false,
+        false,
+        true,
+      );
+
+      // HAL's poll loop only runs while playing, so scrubbing the player
+      // while paused doesn't update the highlight on its own. Bridge it —
+      // and HAL also skips word-level .active when paused, so reapply it
+      // ourselves using the index it returns.
+      video.addEventListener("seeked", () => {
+        if (!video.paused) return;
+        const { currentWordIndex } = hal.updateTranscriptVisualState(
+          video.currentTime,
+        );
+        if (currentWordIndex > 0 && hal.wordArr[currentWordIndex - 1]) {
+          hal.wordArr[currentWordIndex - 1].n.classList.add("active");
+        }
+      });
+
+      // Attach a <track> to the video so HAL's caption.js has somewhere to
+      // write its generated VTT. caption.js looks up the track by id (the
+      // convention is `${playerId}-vtt`) and sets its src to a data: URL
+      // once the video fires loadedmetadata.
+      const trackId = `${video.id}-vtt`;
+      if (!document.getElementById(trackId)) {
+        const trackEl = document.createElement("track");
+        trackEl.id = trackId;
+        trackEl.kind = "captions";
+        trackEl.label = "English";
+        trackEl.srclang = "en";
+        trackEl.default = true;
+        video.appendChild(trackEl);
+      }
+      caption().init(transcriptId, video.id, undefined, undefined, "English", "en");
+
+      // --- Deeplink receive: hash like
+      //     #hypertranscript-{slug}=4.40,12.60
+      // HAL parses it and positions the transcript visually, but does NOT
+      // seek the player. Seek the underlying video ourselves so a shared
+      // link starts playback at the right time once the user hits play.
+      const initialStart = parseFloat(hal.hashArray?.[0]);
+      if (!isNaN(initialStart)) {
+        const applyStart = () => {
+          video.currentTime = initialStart;
+        };
+        if (video.readyState >= 1) {
+          applyStart();
+        } else {
+          video.addEventListener("loadedmetadata", applyStart, { once: true });
+        }
+      }
+
+      // --- Deeplink send: surface a popover with two copy actions when the
+      // user finishes selecting text inside the transcript. HAL's
+      // getSelectionMediaFragment() does the time-range math; we wrap a
+      // small UI around it.
+      const popover = container.querySelector<HTMLElement>(".share-popover");
+      const popoverBtns = popover
+        ? Array.from(
+            popover.querySelectorAll<HTMLButtonElement>(".share-popover-btn"),
+          )
+        : [];
+
+      const resetButtonLabel = (btn: HTMLButtonElement) => {
+        const def = btn.querySelector<HTMLElement>(".label-default");
+        const cop = btn.querySelector<HTMLElement>(".label-copied");
+        if (def) def.hidden = false;
+        if (cop) cop.hidden = true;
+      };
+      const showCopiedLabel = (btn: HTMLButtonElement) => {
+        const def = btn.querySelector<HTMLElement>(".label-default");
+        const cop = btn.querySelector<HTMLElement>(".label-copied");
+        if (def) def.hidden = true;
+        if (cop) cop.hidden = false;
+      };
+
+      const hideSharePopover = () => {
+        if (!popover) return;
+        popover.hidden = true;
+        popoverBtns.forEach(resetButtonLabel);
+      };
+
+      const positionSharePopover = (rect: DOMRect) => {
+        if (!popover) return;
+        // Show first so we can measure offsetWidth.
+        popover.hidden = false;
+        const containerRect = container.getBoundingClientRect();
+        const top = rect.bottom - containerRect.top + 6;
+        const left = Math.min(
+          rect.left - containerRect.left,
+          container.clientWidth - popover.offsetWidth - 12,
+        );
+        popover.style.top = `${top}px`;
+        popover.style.left = `${Math.max(left, 8)}px`;
+      };
+
+      const transcriptEl = document.getElementById(transcriptId);
+
+      // Show only AFTER selection is complete — selectionchange fires
+      // mid-drag, so reacting to it would make the popover flicker.
+      const showIfValidSelection = () => {
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) {
+          hideSharePopover();
+          return;
+        }
+        const range = selection.getRangeAt(0);
+        if (
+          !transcriptEl ||
+          !transcriptEl.contains(range.commonAncestorContainer)
+        ) {
+          hideSharePopover();
+          return;
+        }
+        positionSharePopover(range.getBoundingClientRect());
+      };
+      document.addEventListener("mouseup", showIfValidSelection);
+      document.addEventListener("touchend", showIfValidSelection);
+
+      // Hide as soon as the selection collapses (e.g. user clicks elsewhere).
+      document.addEventListener("selectionchange", () => {
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) hideSharePopover();
+      });
+
+      // Track the selection while the transcript (or the page) scrolls so
+      // the popover stays anchored to the selected text. Hide while the
+      // selection is scrolled outside the visible transcript pane; re-show
+      // when it comes back. rAF-throttled because `scroll` fires a lot.
+      let scrollRafId = 0;
+      const repositionOrHideOnScroll = () => {
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) return;
+        const range = selection.getRangeAt(0);
+        if (!transcriptEl?.contains(range.commonAncestorContainer)) return;
+
+        const rect = range.getBoundingClientRect();
+        const tRect = transcriptEl.getBoundingClientRect();
+        if (rect.bottom < tRect.top || rect.top > tRect.bottom) {
+          if (popover && !popover.hidden) {
+            popover.hidden = true;
+            popoverBtns.forEach(resetButtonLabel);
+          }
+        } else {
+          positionSharePopover(rect);
+        }
+      };
+      const onScroll = () => {
+        if (scrollRafId) return;
+        scrollRafId = requestAnimationFrame(() => {
+          scrollRafId = 0;
+          repositionOrHideOnScroll();
+        });
+      };
+      document.addEventListener("scroll", onScroll, true);
+
+      const copyToClipboard = async (text: string, btn: HTMLButtonElement) => {
+        try {
+          await navigator.clipboard.writeText(text);
+          showCopiedLabel(btn);
+          setTimeout(hideSharePopover, 1500);
+        } catch {
+          // Clipboard API not available; fall back to writing the hash to
+          // the URL bar so the user can copy it themselves.
+          const fragment = hal.getSelectionMediaFragment();
+          if (fragment) location.hash = fragment;
+        }
+      };
+
+      popoverBtns.forEach((btn) => {
+        // mousedown.preventDefault keeps the document selection alive when
+        // the user clicks the button — otherwise focus shifts and the
+        // selection collapses before our click handler runs.
+        btn.addEventListener("mousedown", (e) => e.preventDefault());
+
+        btn.addEventListener("click", async () => {
+          const fragment = hal.getSelectionMediaFragment();
+          if (!fragment) return;
+          const url = `${location.origin}${location.pathname}#${fragment}`;
+
+          if (btn.dataset.mode === "quote") {
+            const selectedText =
+              window.getSelection()?.toString().trim().replace(/\s+/g, " ") ??
+              "";
+            const payload = selectedText
+              ? `"${selectedText}"\n\n${url}`
+              : url;
+            await copyToClipboard(payload, btn);
+          } else {
+            await copyToClipboard(url, btn);
+          }
+        });
+      });
+    });
+</script>
+
+<style>
+  .interactive-transcript {
+    position: relative;
+    margin-top: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 0.75rem);
+    background: var(--card, transparent);
+  }
+
+  .hyperaudio-transcript {
+    max-height: 24rem;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    line-height: 1.7;
+    color: var(--foreground);
+    font-size: 0.95rem;
+  }
+
+  .hyperaudio-transcript :global(p) {
+    margin: 0 0 0.85em 0;
+  }
+
+  .hyperaudio-transcript :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Speaker label at the start of paragraphs that have one. Omitted from
+     the rendered HTML entirely for paragraphs without a speaker. */
+  .hyperaudio-transcript :global(.speaker) {
+    display: inline;
+    margin-right: 0.4em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .hyperaudio-transcript :global(span) {
+    cursor: pointer;
+    transition:
+      color 120ms ease,
+      background-color 80ms ease;
+    border-radius: 2px;
+    /* Default before HAL applies .read / .unread — match the .unread tone
+       so the initial paint matches the "not yet played" state. */
+    color: var(--muted-foreground);
+  }
+
+  /* Words already played: full foreground contrast. */
+  .hyperaudio-transcript :global(span.read) {
+    color: var(--foreground);
+  }
+
+  /* Words not yet played: lighter. */
+  .hyperaudio-transcript :global(span.unread) {
+    color: var(--muted-foreground);
+  }
+
+  .hyperaudio-transcript :global(span:hover) {
+    background: color-mix(in oklch, var(--accent), transparent 85%);
+  }
+
+  /* Active word: underline, slight accent tint. Underline (not bold) so the
+     line height and word widths stay stable as the highlight advances. */
+  .hyperaudio-transcript :global(.active > .active) {
+    color: var(--foreground);
+    background: color-mix(in oklch, var(--accent), transparent 75%);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  /* Words inside a deeplinked range (#clip=start,end). HAL applies
+     .share-match to every span in the range when the page loads with a hash
+     fragment. Reuses the workshop-event color tokens (a muted green
+     theme-aware pair) so it stays distinct from .active (accent-tinted) and
+     adapts to dark themes. */
+  .hyperaudio-transcript :global(span.share-match) {
+    background: var(--event-workshop-bg);
+    color: var(--event-workshop-fg);
+  }
+
+  .share-popover {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    gap: 0.35rem;
+    padding: 0.3rem;
+    background: var(--card, var(--background, #fff));
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+
+  .share-popover-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.8rem;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+    background: #3e97ff;
+    border: 1px solid #3e97ff;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      transform 100ms ease,
+      background-color 80ms ease,
+      border-color 80ms ease;
+  }
+
+  .share-popover-btn:hover {
+    background: #2d83e6;
+    border-color: #2d83e6;
+  }
+
+  .share-popover-btn:active {
+    transform: translateY(1px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hyperaudio-transcript :global(span),
+    .share-popover-btn {
+      transition: none;
+    }
+  }
+</style>
