@@ -95,6 +95,11 @@ const transcriptId = "clip";
         trackEl.srclang = "en";
         trackEl.default = true;
         video.appendChild(trackEl);
+        // Plyr renders captions via its own overlay; the native <track> only
+        // needs to be in "hidden" mode (cues still parse, which is all HAL
+        // needs) so the browser's caption UI doesn't stack on top of Plyr's
+        // during the window before Plyr re-reads the track and suppresses it.
+        if (trackEl.track) trackEl.track.mode = "hidden";
       }
       caption().init(transcriptId, video.id, undefined, undefined, "English", "en");
 

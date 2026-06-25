@@ -12,17 +12,8 @@ import inPersonIconSvg from "@/components/ui/icons/InPersonIcon.svg?raw";
 import { isRemoteAccessible } from "@/lib/calendar-event";
 import VodPlayer from "@/components/ui/VodPlayer.astro";
 import InteractiveTranscript from "@/components/InteractiveTranscript.astro";
-import {
-  transcriptJsonToHtml,
-  type TranscriptJson,
-} from "@/lib/transcript-json";
-
-// Vite parses .json imports into objects at build time; with eager:false we
-// get a per-file lazy loader, then choose by slug at request time.
-const transcriptModules = import.meta.glob<TranscriptJson>(
-  "/src/content/transcripts/*.json",
-  { import: "default", eager: false },
-);
+import { transcriptJsonToHtml } from "@/lib/transcript-json";
+import { loadTranscript } from "@/lib/transcript-loader";
 
 const { id } = Astro.params;
 const user = Astro.locals.loggedInUser;
@@ -92,11 +83,8 @@ const streamTrack = isRemoteAccessible(mode)
   ? streamTracks.find((t) => t.room === room)
   : null;
 
-const transcriptLoader =
-  transcriptModules[`/src/content/transcripts/${id}.json`];
-const transcriptHtml = transcriptLoader
-  ? transcriptJsonToHtml(await transcriptLoader())
-  : null;
+const transcript = id ? await loadTranscript(id) : null;
+const transcriptHtml = transcript ? transcriptJsonToHtml(transcript) : null;
 ---
 
 <Layout
