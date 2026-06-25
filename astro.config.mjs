@@ -18,6 +18,11 @@ export default defineConfig({
         access: "public",
         default: "atmosphereconf.org",
       }),
+      IONOSPHERE_OWNER_DID_OR_HANDLE: envField.string({
+        context: "server",
+        access: "public",
+        default: "did:plc:lkeq4oghyhnztbu4dxr3joff",
+      }),
       TITO_API_TOKEN: envField.string({
         context: "server",
         access: "secret",

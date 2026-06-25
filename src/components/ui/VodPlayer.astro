@@ -8,7 +8,46 @@ const VOD_PLAYBACK_BASE =
   "https://vod-beta.stream.place/xrpc/place.stream.playback.getVideoPlaylist";
 
 const { vodAtUri, title } = Astro.props;
-const playlistUrl = `${VOD_PLAYBACK_BASE}?uri=${encodeURIComponent(vodAtUri)}`;
+
+// Streamplace VOD CDN substitute — direct MP4s mirrored from the YouTube
+// upload, keyed by place.stream.video rkey. Used until/unless the upstream
+// VOD endpoint returns. Falls through to VOD_PLAYBACK_BASE for any rkey
+// not listed here.
+const VOD_OVERRIDES: Record<string, string> = {
+  "3miac22soys22": "https://lab.hyperaud.io/temp/media/atprotoconf26/NfS6AXZ6o5M.mp4", // Affordances of the Atmosphere
+  "3miighlz53o22": "https://lab.hyperaud.io/temp/media/atprotoconf26/e-weP-OQPHc.mp4", // Building Bridgy, Not Walls
+  "3mi7zxhekcu2d": "https://lab.hyperaud.io/temp/media/atprotoconf26/Wc2pZEylZeM.mp4", // Building decentralized AI on atproto
+  "3mi5lexqbqf2z": "https://lab.hyperaud.io/temp/media/atprotoconf26/lVQN_HIqOjA.mp4", // Building Public-Interest Infrastructure on ATProto
+  "3mipbt7pzjf2m": "https://lab.hyperaud.io/temp/media/atprotoconf26/jYx8aWL04iM.mp4", // Chive: Decentralized preprints with ATProto
+  "3mi7rpxijg725": "https://lab.hyperaud.io/temp/media/atprotoconf26/qVTr3KiK8jY.mp4", // Community privacy in a decentralized network
+  "3mia3vm5oyd2u": "https://lab.hyperaud.io/temp/media/atprotoconf26/cnbOF11ArqY.mp4", // Coop: Open source Trust & Safety infrastructure for all
+  "3miadvkvhfv2h": "https://lab.hyperaud.io/temp/media/atprotoconf26/mmJzIK3kCq0.mp4", // DID:PLC War Games
+  "3mi5itmi65s2z": "https://lab.hyperaud.io/temp/media/atprotoconf26/mUkA6E1Ra0Y.mp4", // Feeds Are The New Websites
+  "3mi54oonum62b": "https://lab.hyperaud.io/temp/media/atprotoconf26/OImF_M8ui2A.mp4", // Groundings with my Siblings
+  "3mi5stzyxji2e": "https://lab.hyperaud.io/temp/media/atprotoconf26/h5p_g3CVbMI.mp4", // How Streamplace Works: VODs
+  "3mi7ok5zmuk2k": "https://lab.hyperaud.io/temp/media/atprotoconf26/Z33R5gQkEvU.mp4", // How to have more non-english speaking users
+  "3mi54jqrm372z": "https://lab.hyperaud.io/temp/media/atprotoconf26/DWFD_AiSTyM.mp4", // Landslide/Holdfast
+  "3mi5jrjmk6y2n": "https://lab.hyperaud.io/temp/media/atprotoconf26/X3AckEvuNYc.mp4", // Open social tech and geopolitical risk
+  "3mia5khdija2h": "https://lab.hyperaud.io/temp/media/atprotoconf26/9z0z-Qu66yM.mp4", // Protocol Governance & Hard Decentralization
+  "3miaef2b4mh2h": "https://lab.hyperaud.io/temp/media/atprotoconf26/qNT8vWZ_I0w.mp4", // Rewilding the internet with ATProto
+  "3miabh2g67c2c": "https://lab.hyperaud.io/temp/media/atprotoconf26/2T15FAihJCA.mp4", // Scaling the Atmosphere
+  "3mi5q57diht27": "https://lab.hyperaud.io/temp/media/atprotoconf26/ptOMKK1lC4Q.mp4", // Semble: Rediscovering the Magic of Trails
+  "3mi7ztge2sf2h": "https://lab.hyperaud.io/temp/media/atprotoconf26/LjGU_I0sDVM.mp4", // Social Components
+  "3miieadvruo22": "https://lab.hyperaud.io/temp/media/atprotoconf26/qhgp4yvd-y8.mp4", // The Astrosky Ecosystem
+  "3mi56m3hnrq2z": "https://lab.hyperaud.io/temp/media/atprotoconf26/2XzBBvckxuA.mp4", // The Economics of Sovereign Media
+  "3mi5rm4y7ts2b": "https://lab.hyperaud.io/temp/media/atprotoconf26/VMsahVMrmb4.mp4", // The Future of Open Source is Social
+  "3mi5spj6izy2a": "https://lab.hyperaud.io/temp/media/atprotoconf26/_f_j7HigkiE.mp4", // The Phoenix Architecture
+  "3mi5unhqisv22": "https://lab.hyperaud.io/temp/media/atprotoconf26/bMUL4bp3riA.mp4", // This Title Left Intentionally Blank
+  "3mia26ffz2j2c": "https://lab.hyperaud.io/temp/media/atprotoconf26/IhHYPy3SAn8.mp4", // Two Years of Skywatch
+  "3miac3urhgt23": "https://lab.hyperaud.io/temp/media/atprotoconf26/cNYkvxZEmEA.mp4", // Using GraphQL to build with ATProto
+  "3mia5q5vu4q2h": "https://lab.hyperaud.io/temp/media/atprotoconf26/Gd25dA-yG5I.mp4", // WebTiles Showcase
+  "3miadb23fme2a": "https://lab.hyperaud.io/temp/media/atprotoconf26/sl0IYQuRErk.mp4", // Wherever You Get Your Podcasts
+  "3mi56n6j2g22d": "https://lab.hyperaud.io/temp/media/atprotoconf26/GVOywon3X-Q.mp4", // Who owns the group chat?
+};
+const rkey = vodAtUri.split("/").pop() ?? "";
+const playlistUrl =
+  VOD_OVERRIDES[rkey] ||
+  `${VOD_PLAYBACK_BASE}?uri=${encodeURIComponent(vodAtUri)}`;
 ---
 
 <div class="vod-player" data-playlist-url={playlistUrl} data-title={title}>
@@ -39,7 +78,10 @@ const playlistUrl = `${VOD_PLAYBACK_BASE}?uri=${encodeURIComponent(vodAtUri)}`;
     }
 
     try {
-      if (Hls.isSupported()) {
+      // VOD_OVERRIDES serves direct MP4s — skip HLS for those.
+      if (/\.mp4(\?|$)/i.test(playlistUrl)) {
+        videoEl.src = playlistUrl;
+      } else if (Hls.isSupported()) {
         hls = new Hls({ autoStartLoad: false });
         hls.loadSource(playlistUrl);
         hls.attachMedia(videoEl);
