@@ -85,6 +85,17 @@ const streamTrack = isRemoteAccessible(mode)
 
 const transcript = id ? await loadTranscript(id) : null;
 const transcriptHtml = transcript ? transcriptJsonToHtml(transcript) : null;
+
+// If the ionosphere talk was created against a different upload of the
+// video than what the calendar event points to, the transcript's word
+// timings won't line up with playback. Surface that to the user instead
+// of silently misleading them — the words are still useful for reading,
+// just not for click-to-seek. Only fires when both sides report a vodUri
+// (locally-authored JSONs don't set one, so they never trigger this).
+const vodMismatch =
+  transcript?.videoUri && vodAtUri && transcript.videoUri !== vodAtUri
+    ? { expected: vodAtUri, actual: transcript.videoUri }
+    : null;
 ---
 
 <Layout
@@ -251,6 +262,7 @@ const transcriptHtml = transcript ? transcriptJsonToHtml(transcript) : null;
               <InteractiveTranscript
                 uid={id}
                 transcriptHtml={transcriptHtml}
+                vodMismatch={vodMismatch}
               />
             )}
           </div>

@@ -17,6 +17,14 @@ export interface TranscriptParagraph {
 export interface TranscriptJson {
   words: TranscriptWord[];
   paragraphs: TranscriptParagraph[];
+  // When the transcript came from the ionosphere PDS, this carries the
+  // `videoUri` field of the underlying tv.ionosphere.talk record — i.e.,
+  // the specific place.stream.video upload the transcript was generated
+  // against. Callers can compare this to the calendar event's vodAtUri
+  // to detect when the played video is a different upload of the same
+  // talk and surface a "timings may not match" warning. Absent for
+  // locally-authored transcripts (Parakeet/WhisperX JSON files).
+  videoUri?: string;
 }
 
 const escapeHtml = (s: string): string =>

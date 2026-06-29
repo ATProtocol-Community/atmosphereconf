@@ -3,9 +3,19 @@ interface Props {
   uid: string;
   transcriptHtml: string;
   playerSelector?: string;
+  // When the played video and the transcript were authored against
+  // different place.stream.video uploads, the timings won't line up.
+  // Pass the two diverging URIs so we can surface the inconsistency
+  // instead of silently misleading the user.
+  vodMismatch?: { expected: string; actual: string } | null;
 }
 
-const { uid, transcriptHtml, playerSelector = ".vod-video" } = Astro.props;
+const {
+  uid,
+  transcriptHtml,
+  playerSelector = ".vod-video",
+  vodMismatch = null,
+} = Astro.props;
 // Plain `clip` is intentional: each event page has at most one transcript,
 // so namespacing the DOM id by slug just makes share URLs uglier — HAL
 // derives the hash-fragment prefix from `transcript.id`, so this becomes
@@ -18,6 +28,29 @@ const transcriptId = "clip";
   data-uid={uid}
   data-player-selector={playerSelector}
 >
+  {vodMismatch && (
+    <aside class="transcript-warning" role="status">
+      <p>
+        <strong>Transcript may not match this video.</strong> The ionosphere
+        talk record was generated against a different upload of this video
+        than the one currently playing, so word timings won't line up. The
+        text is still readable, but click-to-seek and the active-word
+        highlight will be off.
+      </p>
+      <dl>
+        <dt>Playing</dt>
+        <dd><code>{vodMismatch.expected}</code></dd>
+        <dt>Transcript source</dt>
+        <dd><code>{vodMismatch.actual}</code></dd>
+      </dl>
+      <p class="fix-hint">
+        <strong>Fix at source:</strong> reconcile the calendar event's
+        <code>vodAtUri</code> with the ionosphere talk's <code>vodUri</code> —
+        either re-point one at the other's upload, or regenerate the
+        transcript against the currently-played upload.
+      </p>
+    </aside>
+  )}
   <div
     id={transcriptId}
     class="hyperaudio-transcript"
@@ -271,6 +304,56 @@ const transcriptId = "clip";
     border: 1px solid var(--border);
     border-radius: var(--radius-lg, 0.75rem);
     background: var(--card, transparent);
+  }
+
+  .transcript-warning {
+    margin: 0;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in oklch, #f59e0b, transparent 88%);
+    color: var(--foreground);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    border-top-left-radius: var(--radius-lg, 0.75rem);
+    border-top-right-radius: var(--radius-lg, 0.75rem);
+  }
+
+  .transcript-warning p {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .transcript-warning p:last-child {
+    margin-bottom: 0;
+  }
+
+  .transcript-warning dl {
+    margin: 0 0 0.5rem 0;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.15rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .transcript-warning dt {
+    color: var(--muted-foreground);
+  }
+
+  .transcript-warning dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .transcript-warning code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    padding: 0.05rem 0.3rem;
+    background: color-mix(in oklch, var(--foreground), transparent 92%);
+    border-radius: 0.25rem;
+  }
+
+  .transcript-warning .fix-hint {
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
   }
 
   .hyperaudio-transcript {

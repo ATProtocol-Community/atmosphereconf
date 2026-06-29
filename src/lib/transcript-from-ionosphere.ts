@@ -123,6 +123,10 @@ interface TalkRecord {
   startsAt?: string;
   endsAt?: string;
   title?: string;
+  // The specific place.stream.video upload this talk record was created
+  // against. Surfaced to callers so they can detect upload divergence
+  // between ionosphere and the calendar event's vodAtUri.
+  videoUri?: string;
 }
 
 interface SpeakerRecord {
@@ -285,5 +289,9 @@ export async function ionosphereTalkToTranscriptJson(
     });
   }
 
-  return { words, paragraphs };
+  return {
+    words,
+    paragraphs,
+    ...(talk.videoUri ? { videoUri: talk.videoUri } : {}),
+  };
 }
