@@ -5,7 +5,7 @@ interface Props {
 }
 
 const VOD_PLAYBACK_BASE =
-  "https://vod-beta.stream.place/xrpc/place.stream.playback.getVideoPlaylist";
+  "https://stream.place/xrpc/place.stream.playback.getVideoPlaylist";
 
 const { vodAtUri, title } = Astro.props;
 const playlistUrl = `${VOD_PLAYBACK_BASE}?uri=${encodeURIComponent(vodAtUri)}`;
