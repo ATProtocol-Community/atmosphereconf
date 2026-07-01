@@ -11,6 +11,9 @@ import remoteBadgeSvg from "@/components/ui/icons/RemoteBadge.svg?raw";
 import inPersonIconSvg from "@/components/ui/icons/InPersonIcon.svg?raw";
 import { isRemoteAccessible } from "@/lib/calendar-event";
 import VodPlayer from "@/components/ui/VodPlayer.astro";
+import InteractiveTranscript from "@/components/InteractiveTranscript.astro";
+import { transcriptJsonToHtml } from "@/lib/transcript-json";
+import { loadTranscript } from "@/lib/transcript-loader";
 
 const { id } = Astro.params;
 const user = Astro.locals.loggedInUser;
@@ -79,6 +82,20 @@ const dateDisplay = start ? formatConferenceDay(start) : null;
 const streamTrack = isRemoteAccessible(mode)
   ? streamTracks.find((t) => t.room === room)
   : null;
+
+const transcript = id ? await loadTranscript(id) : null;
+const transcriptHtml = transcript ? transcriptJsonToHtml(transcript) : null;
+
+// If the ionosphere talk was created against a different upload of the
+// video than what the calendar event points to, the transcript's word
+// timings won't line up with playback. Surface that to the user instead
+// of silently misleading them — the words are still useful for reading,
+// just not for click-to-seek. Only fires when both sides report a vodUri
+// (locally-authored JSONs don't set one, so they never trigger this).
+const vodMismatch =
+  transcript?.videoUri && vodAtUri && transcript.videoUri !== vodAtUri
+    ? { expected: vodAtUri, actual: transcript.videoUri }
+    : null;
 ---
 
 <Layout
@@ -241,6 +258,13 @@ const streamTrack = isRemoteAccessible(mode)
         {vodAtUri && (
           <div class="mt-6">
             <VodPlayer vodAtUri={vodAtUri} title={plainTitle} />
+            {transcriptHtml && id && (
+              <InteractiveTranscript
+                uid={id}
+                transcriptHtml={transcriptHtml}
+                vodMismatch={vodMismatch}
+              />
+            )}
           </div>
         )}
       </Card>
