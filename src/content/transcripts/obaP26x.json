@@ -5052,13 +5052,8 @@
     },
     {
       "start": 354.48,
-      "end": 354.8,
-      "text": "open"
-    },
-    {
-      "start": 354.96,
       "end": 356.71999999999997,
-      "text": "social.community."
+      "text": "open.social.community."
     },
     {
       "start": 356.88,
@@ -6952,13 +6947,8 @@
     },
     {
       "start": 485.6,
-      "end": 485.84000000000003,
-      "text": "open"
-    },
-    {
-      "start": 485.92,
       "end": 487.12,
-      "text": "social.community."
+      "text": "open.social.community."
     },
     {
       "start": 487.2,
@@ -7258,7 +7248,7 @@
     {
       "start": 504.64,
       "end": 505.44,
-      "text": "EeroSky,"
+      "text": "Eurosky,"
     },
     {
       "start": 505.44,
@@ -9562,13 +9552,8 @@
     },
     {
       "start": 664.72,
-      "end": 664.88,
-      "text": "open"
-    },
-    {
-      "start": 664.96,
       "end": 665.84,
-      "text": "social.community"
+      "text": "open.social.community"
     },
     {
       "start": 665.92,
@@ -9942,13 +9927,8 @@
     },
     {
       "start": 688.08,
-      "end": 688.24,
-      "text": "open"
-    },
-    {
-      "start": 688.32,
       "end": 689.36,
-      "text": "social.community."
+      "text": "open.social.community."
     },
     {
       "start": 689.44,
@@ -13172,13 +13152,8 @@
     },
     {
       "start": 913.04,
-      "end": 913.28,
-      "text": "open"
-    },
-    {
-      "start": 913.36,
       "end": 914.72,
-      "text": "social.community."
+      "text": "open.social.community."
     },
     {
       "start": 916.48,
