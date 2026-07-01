@@ -92,8 +92,8 @@ Not used for transcription content anymore, but scanned during QA (Section
 
 ## 3. HLS audio download
 
-Implementation: **[`hls-to-m4a.mjs`](./scripts/hls-to-m4a.mjs)** +
-**[`hls-to-mp4.mjs`](./scripts/hls-to-mp4.mjs)**
+Implementation: **[`hls-to-m4a.mjs`](../../tools/transcript-pipeline/hls-to-m4a.mjs)** +
+**[`hls-to-mp4.mjs`](../../tools/transcript-pipeline/hls-to-mp4.mjs)**
 (Node ESM, scratchpad).
 
 ### Why not `ffmpeg -i <master> -c copy out.mp4`?
@@ -105,7 +105,7 @@ round-trip latency at ~2 s per range GET × 800 segments.
 
 ### What worked: manual HLS parse + parallel ranged fetch
 
-[`hls-to-m4a.mjs`](./scripts/hls-to-m4a.mjs):
+[`hls-to-m4a.mjs`](../../tools/transcript-pipeline/hls-to-m4a.mjs):
 
 - Parses master playlist → audio sub-playlist URL.
 - Parses audio sub-playlist for the init segment (`#EXT-X-MAP`) plus each
@@ -129,9 +129,9 @@ talk). The samples in the concatenated `mdat`s are correct; only the
 container's global metadata is off.
 
 **Fix**:
-[`hls-to-mp4.mjs`](./scripts/hls-to-mp4.mjs)
+[`hls-to-mp4.mjs`](../../tools/transcript-pipeline/hls-to-mp4.mjs)
 wraps
-[`hls-to-m4a.mjs`](./scripts/hls-to-m4a.mjs)
+[`hls-to-m4a.mjs`](../../tools/transcript-pipeline/hls-to-m4a.mjs)
 and runs
 
 ```
@@ -302,7 +302,7 @@ after transcription. Nothing but the JSON is kept.
 - Emitted JSON is already the canonical `TranscriptJson` shape our loader
   reads: `{ words: [{start, end, text}], paragraphs: [{start, end}] }`.
 
-### Architecture of the harness ([`batch.mjs`](./scripts/batch.mjs))
+### Architecture of the harness ([`batch.mjs`](../../tools/transcript-pipeline/batch.mjs))
 
 Serves HAL Editor via a minimal Node HTTP static file server on a random
 localhost port (needed because `navigator.gpu` requires a secure context —
@@ -358,7 +358,7 @@ talks 20–30 s, full 30-min talks 75–90 s).
 
 ### Resumability
 
-[`batch.mjs`](./scripts/batch.mjs) skips any talk whose `<eid>.json` already exists in the
+[`batch.mjs`](../../tools/transcript-pipeline/batch.mjs) skips any talk whose `<eid>.json` already exists in the
 transcripts dir. Combined with per-talk logging to a status JSONL, this lets
 you re-run the batch to mop up transient failures without redoing anything.
 
@@ -441,7 +441,7 @@ User-provided fixes:
 The verb "did" and the atproto `DID` acronym are homographs. A blind
 case-swap would corrupt 265+ real verb usages.
 
-The classifier ([`did-classify.py`](./scripts/did-classify.py)) looks at each `did`/`Did` token and:
+The classifier ([`did-classify.py`](../../tools/transcript-pipeline/did-classify.py)) looks at each `did`/`Did` token and:
 
 - Checks the immediate predecessor. If it's a firm subject pronoun (`I`,
   `we`, `you`, `they`, `he`, `she`, `who`, `what`, question words, etc.) →
@@ -629,7 +629,7 @@ case, letting the user quickly triage.
 - **Submit changes** button — POSTs the diff to a local server endpoint.
 - **Next unmarked ↓** — focuses the next unchanged card and scrolls to it.
 
-### Submission server ([`review-server.py`](./scripts/review-server.py))
+### Submission server ([`review-server.py`](../../tools/transcript-pipeline/review-server.py))
 
 Because `file://` origins are treated as unique security origins, hls.js
 can't fetch cross-origin from stream.place if you double-click the HTML.
@@ -692,16 +692,16 @@ All scripts live in the [`scripts/`](./scripts/) subdirectory:
 
 | File | Purpose | Lines |
 |---|---|---|
-| [`hls-to-m4a.mjs`](./scripts/hls-to-m4a.mjs) | Parses HLS master + audio sub-playlist; parallel Range-GET of ~800 byte-ranged fMP4 segments (16-way concurrency); concatenates init + segments. | 108 |
-| [`hls-to-mp4.mjs`](./scripts/hls-to-mp4.mjs) | Wraps `hls-to-m4a.mjs`; post-remuxes the raw fMP4 through `ffmpeg -c copy` to fix the bogus `mvhd` duration. | 30 |
-| [`transcribe-one.mjs`](./scripts/transcribe-one.mjs) | Single-talk Playwright harness. Launches Chrome, drives HAL Editor's Parakeet workflow, writes one JSON. Used as the canary before the batch. | 108 |
-| [`batch.mjs`](./scripts/batch.mjs) | Full-batch harness. Long-lived Chrome instance, 1-deep download/transcribe pipeline, resumable (skips talks with existing JSON), per-talk status log. | 172 |
-| [`review-server.py`](./scripts/review-server.py) | Minimal Python `SimpleHTTPRequestHandler` subclass — serves `~/Desktop` for the review UI to load, and accepts POST `/submit` for the review UI to push its diff back. | 37 |
-| [`did-classify.py`](./scripts/did-classify.py) | The `did` acronym-vs-verb classifier. Importable as a module (used by `apply-fixes.py` and the review-UI builder). | 112 |
-| [`apply-fixes.py`](./scripts/apply-fixes.py) | Applies the high-confidence single-token/domain fixes + the classifier's `acronym` verdicts; dumps the `ambiguous` cases to a review file. | 103 |
-| [`fix-transcripts.py`](./scripts/fix-transcripts.py) | First-pass brand-name sweep — Bluesky / BlackSky / ATProto (word-pair merges) + Atmosphere capitalisation + a few common single-token fixes. | 96 |
-| [`suspect-scan.py`](./scripts/suspect-scan.py) | Surveys the corpus for rare / weird-shape tokens, triple-repeat runs, and miscapitalized ecosystem terms. Output feeds the manual/web-search review step. | 105 |
-| [`build-did-review.py`](./scripts/build-did-review.py) | Builds the self-contained `did-review.html` from the ambiguous-cases TSV + pre-grabbed video frames + transcript JSONs. Emits ~1.4 MB single file (frames base64-inlined) to `~/Desktop`. | ~230 |
+| [`hls-to-m4a.mjs`](../../tools/transcript-pipeline/hls-to-m4a.mjs) | Parses HLS master + audio sub-playlist; parallel Range-GET of ~800 byte-ranged fMP4 segments (16-way concurrency); concatenates init + segments. | 108 |
+| [`hls-to-mp4.mjs`](../../tools/transcript-pipeline/hls-to-mp4.mjs) | Wraps `hls-to-m4a.mjs`; post-remuxes the raw fMP4 through `ffmpeg -c copy` to fix the bogus `mvhd` duration. | 30 |
+| [`transcribe-one.mjs`](../../tools/transcript-pipeline/transcribe-one.mjs) | Single-talk Playwright harness. Launches Chrome, drives HAL Editor's Parakeet workflow, writes one JSON. Used as the canary before the batch. | 108 |
+| [`batch.mjs`](../../tools/transcript-pipeline/batch.mjs) | Full-batch harness. Long-lived Chrome instance, 1-deep download/transcribe pipeline, resumable (skips talks with existing JSON), per-talk status log. | 172 |
+| [`review-server.py`](../../tools/transcript-pipeline/review-server.py) | Minimal Python `SimpleHTTPRequestHandler` subclass — serves `~/Desktop` for the review UI to load, and accepts POST `/submit` for the review UI to push its diff back. | 37 |
+| [`did-classify.py`](../../tools/transcript-pipeline/did-classify.py) | The `did` acronym-vs-verb classifier. Importable as a module (used by `apply-fixes.py` and the review-UI builder). | 112 |
+| [`apply-fixes.py`](../../tools/transcript-pipeline/apply-fixes.py) | Applies the high-confidence single-token/domain fixes + the classifier's `acronym` verdicts; dumps the `ambiguous` cases to a review file. | 103 |
+| [`fix-transcripts.py`](../../tools/transcript-pipeline/fix-transcripts.py) | First-pass brand-name sweep — Bluesky / BlackSky / ATProto (word-pair merges) + Atmosphere capitalisation + a few common single-token fixes. | 96 |
+| [`suspect-scan.py`](../../tools/transcript-pipeline/suspect-scan.py) | Surveys the corpus for rare / weird-shape tokens, triple-repeat runs, and miscapitalized ecosystem terms. Output feeds the manual/web-search review step. | 105 |
+| [`build-did-review.py`](../../tools/transcript-pipeline/build-did-review.py) | Builds the self-contained `did-review.html` from the ambiguous-cases TSV + pre-grabbed video frames + transcript JSONs. Emits ~1.4 MB single file (frames base64-inlined) to `~/Desktop`. | ~230 |
 
 Host-specific paths (`/private/tmp/…`, `/Users/markb/…`) have been rewritten
 to placeholders (`./work`, `./atmosphereconf-site`, `./hyperaudio-lite-editor`)
