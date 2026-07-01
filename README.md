@@ -13,6 +13,8 @@ Suggestions, code, and design contributions welcome! Join the [ATProto Touchers 
 
 ## Documentation
 
+### Transcripts Pipeline
+
 - [`docs/transcript-pipeline/`](docs/transcript-pipeline/) — end-to-end write-up of how the interactive event transcripts under [`src/content/transcripts/`](src/content/transcripts/) were produced (HLS→Parakeet chain, correction sweeps, review UI). Scripts live at [`tools/transcript-pipeline/`](tools/transcript-pipeline/).
 
 ## License
