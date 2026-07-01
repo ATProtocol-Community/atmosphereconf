@@ -1,0 +1,9284 @@
+{
+  "words": [
+    {
+      "start": 4.8,
+      "end": 5.12,
+      "text": "Okay,"
+    },
+    {
+      "start": 5.2,
+      "end": 5.28,
+      "text": "so"
+    },
+    {
+      "start": 5.44,
+      "end": 5.52,
+      "text": "hi"
+    },
+    {
+      "start": 5.76,
+      "end": 6.24,
+      "text": "everybody,"
+    },
+    {
+      "start": 6.32,
+      "end": 6.72,
+      "text": "welcome"
+    },
+    {
+      "start": 6.8,
+      "end": 6.88,
+      "text": "to"
+    },
+    {
+      "start": 7.04,
+      "end": 7.12,
+      "text": "our"
+    },
+    {
+      "start": 7.28,
+      "end": 7.52,
+      "text": "talk"
+    },
+    {
+      "start": 7.68,
+      "end": 7.76,
+      "text": "on"
+    },
+    {
+      "start": 8.0,
+      "end": 8.56,
+      "text": "transparent"
+    },
+    {
+      "start": 8.64,
+      "end": 9.12,
+      "text": "feeds."
+    },
+    {
+      "start": 9.12,
+      "end": 9.36,
+      "text": "I'm"
+    },
+    {
+      "start": 9.44,
+      "end": 9.92,
+      "text": "Udit"
+    },
+    {
+      "start": 10.08,
+      "end": 10.16,
+      "text": "and"
+    },
+    {
+      "start": 10.32,
+      "end": 10.4,
+      "text": "this"
+    },
+    {
+      "start": 10.56,
+      "end": 10.64,
+      "text": "is"
+    },
+    {
+      "start": 10.8,
+      "end": 10.88,
+      "text": "uh"
+    },
+    {
+      "start": 11.2,
+      "end": 11.76,
+      "text": "Cole."
+    },
+    {
+      "start": 11.84,
+      "end": 12.08,
+      "text": "We're"
+    },
+    {
+      "start": 12.08,
+      "end": 12.16,
+      "text": "from"
+    },
+    {
+      "start": 12.24,
+      "end": 12.32,
+      "text": "uh"
+    },
+    {
+      "start": 12.48,
+      "end": 12.88,
+      "text": "Haifa"
+    },
+    {
+      "start": 13.12,
+      "end": 13.36,
+      "text": "Worker"
+    },
+    {
+      "start": 13.52,
+      "end": 13.92,
+      "text": "Co-op"
+    },
+    {
+      "start": 14.16,
+      "end": 14.24,
+      "text": "and"
+    },
+    {
+      "start": 14.4,
+      "end": 14.48,
+      "text": "uh"
+    },
+    {
+      "start": 14.72,
+      "end": 15.2,
+      "text": "starting"
+    },
+    {
+      "start": 15.44,
+      "end": 15.92,
+      "text": "lab."
+    },
+    {
+      "start": 16.0,
+      "end": 16.24,
+      "text": "Uh"
+    },
+    {
+      "start": 16.4,
+      "end": 16.88,
+      "text": "Haifa"
+    },
+    {
+      "start": 17.2,
+      "end": 17.28,
+      "text": "is"
+    },
+    {
+      "start": 17.44,
+      "end": 17.52,
+      "text": "a"
+    },
+    {
+      "start": 17.76,
+      "end": 17.84,
+      "text": "tech"
+    },
+    {
+      "start": 18.4,
+      "end": 18.72,
+      "text": "worker"
+    },
+    {
+      "start": 18.8,
+      "end": 19.28,
+      "text": "co-op."
+    },
+    {
+      "start": 19.28,
+      "end": 19.36,
+      "text": "We"
+    },
+    {
+      "start": 19.36,
+      "end": 19.44,
+      "text": "do"
+    },
+    {
+      "start": 19.44,
+      "end": 19.52,
+      "text": "a"
+    },
+    {
+      "start": 19.52,
+      "end": 19.68,
+      "text": "bunch"
+    },
+    {
+      "start": 19.68,
+      "end": 19.76,
+      "text": "of"
+    },
+    {
+      "start": 19.76,
+      "end": 19.84,
+      "text": "ad"
+    },
+    {
+      "start": 20.08,
+      "end": 20.16,
+      "text": "proto"
+    },
+    {
+      "start": 20.56,
+      "end": 21.12,
+      "text": "things."
+    },
+    {
+      "start": 21.2,
+      "end": 21.28,
+      "text": "And"
+    },
+    {
+      "start": 21.44,
+      "end": 21.52,
+      "text": "uh"
+    },
+    {
+      "start": 21.76,
+      "end": 22.24,
+      "text": "Starling"
+    },
+    {
+      "start": 22.56,
+      "end": 22.64,
+      "text": "Lab"
+    },
+    {
+      "start": 22.88,
+      "end": 22.96,
+      "text": "is"
+    },
+    {
+      "start": 23.12,
+      "end": 23.2,
+      "text": "a"
+    },
+    {
+      "start": 23.36,
+      "end": 23.44,
+      "text": "lab"
+    },
+    {
+      "start": 23.68,
+      "end": 23.76,
+      "text": "uh"
+    },
+    {
+      "start": 23.92,
+      "end": 24.0,
+      "text": "that"
+    },
+    {
+      "start": 24.16,
+      "end": 24.64,
+      "text": "focuses"
+    },
+    {
+      "start": 24.88,
+      "end": 24.96,
+      "text": "on"
+    },
+    {
+      "start": 25.04,
+      "end": 25.44,
+      "text": "questions"
+    },
+    {
+      "start": 25.52,
+      "end": 25.84,
+      "text": "around"
+    },
+    {
+      "start": 25.92,
+      "end": 26.16,
+      "text": "information"
+    },
+    {
+      "start": 26.32,
+      "end": 26.96,
+      "text": "integrity"
+    },
+    {
+      "start": 27.36,
+      "end": 27.76,
+      "text": "based"
+    },
+    {
+      "start": 28.0,
+      "end": 28.08,
+      "text": "out"
+    },
+    {
+      "start": 28.24,
+      "end": 28.32,
+      "text": "of"
+    },
+    {
+      "start": 28.48,
+      "end": 28.56,
+      "text": "uh"
+    },
+    {
+      "start": 28.72,
+      "end": 29.44,
+      "text": "Stanford"
+    },
+    {
+      "start": 29.6,
+      "end": 29.68,
+      "text": "and"
+    },
+    {
+      "start": 29.92,
+      "end": 30.0,
+      "text": "uh"
+    },
+    {
+      "start": 30.16,
+      "end": 31.44,
+      "text": "USC."
+    },
+    {
+      "start": 31.6,
+      "end": 31.68,
+      "text": "Um"
+    },
+    {
+      "start": 32.16,
+      "end": 32.24,
+      "text": "I"
+    },
+    {
+      "start": 32.48,
+      "end": 32.88,
+      "text": "probably"
+    },
+    {
+      "start": 33.04,
+      "end": 33.44,
+      "text": "don't"
+    },
+    {
+      "start": 33.36,
+      "end": 33.44,
+      "text": "have"
+    },
+    {
+      "start": 33.52,
+      "end": 33.6,
+      "text": "to"
+    },
+    {
+      "start": 33.68,
+      "end": 34.08,
+      "text": "convince"
+    },
+    {
+      "start": 34.16,
+      "end": 34.24,
+      "text": "a"
+    },
+    {
+      "start": 34.24,
+      "end": 34.32,
+      "text": "lot"
+    },
+    {
+      "start": 34.4,
+      "end": 34.48,
+      "text": "of"
+    },
+    {
+      "start": 34.64,
+      "end": 34.72,
+      "text": "you"
+    },
+    {
+      "start": 34.8,
+      "end": 35.04,
+      "text": "around"
+    },
+    {
+      "start": 35.36,
+      "end": 35.44,
+      "text": "that"
+    },
+    {
+      "start": 36.16,
+      "end": 36.88,
+      "text": "misinformation"
+    },
+    {
+      "start": 37.04,
+      "end": 37.12,
+      "text": "and"
+    },
+    {
+      "start": 37.28,
+      "end": 38.16,
+      "text": "disinformation"
+    },
+    {
+      "start": 38.4,
+      "end": 38.48,
+      "text": "are"
+    },
+    {
+      "start": 38.56,
+      "end": 38.64,
+      "text": "uh"
+    },
+    {
+      "start": 38.8,
+      "end": 39.28,
+      "text": "growing"
+    },
+    {
+      "start": 39.44,
+      "end": 40.24,
+      "text": "concerns."
+    },
+    {
+      "start": 40.4,
+      "end": 40.48,
+      "text": "For"
+    },
+    {
+      "start": 40.72,
+      "end": 41.36,
+      "text": "example,"
+    },
+    {
+      "start": 41.36,
+      "end": 41.44,
+      "text": "uh"
+    },
+    {
+      "start": 41.68,
+      "end": 41.76,
+      "text": "some"
+    },
+    {
+      "start": 41.92,
+      "end": 42.0,
+      "text": "of"
+    },
+    {
+      "start": 42.16,
+      "end": 42.24,
+      "text": "you"
+    },
+    {
+      "start": 42.4,
+      "end": 42.48,
+      "text": "may"
+    },
+    {
+      "start": 42.64,
+      "end": 42.72,
+      "text": "have"
+    },
+    {
+      "start": 42.88,
+      "end": 43.2,
+      "text": "seen"
+    },
+    {
+      "start": 43.28,
+      "end": 43.36,
+      "text": "the"
+    },
+    {
+      "start": 43.44,
+      "end": 43.68,
+      "text": "image"
+    },
+    {
+      "start": 43.76,
+      "end": 43.84,
+      "text": "on"
+    },
+    {
+      "start": 43.92,
+      "end": 44.0,
+      "text": "the"
+    },
+    {
+      "start": 44.08,
+      "end": 44.16,
+      "text": "right"
+    },
+    {
+      "start": 44.32,
+      "end": 44.4,
+      "text": "on"
+    },
+    {
+      "start": 44.64,
+      "end": 44.72,
+      "text": "social"
+    },
+    {
+      "start": 44.96,
+      "end": 45.6,
+      "text": "media."
+    },
+    {
+      "start": 45.6,
+      "end": 45.84,
+      "text": "Uh"
+    },
+    {
+      "start": 46.0,
+      "end": 46.08,
+      "text": "this"
+    },
+    {
+      "start": 46.32,
+      "end": 46.4,
+      "text": "is"
+    },
+    {
+      "start": 46.88,
+      "end": 46.96,
+      "text": "a"
+    },
+    {
+      "start": 47.2,
+      "end": 47.28,
+      "text": "uh"
+    },
+    {
+      "start": 47.52,
+      "end": 47.6,
+      "text": "an"
+    },
+    {
+      "start": 47.84,
+      "end": 48.16,
+      "text": "image"
+    },
+    {
+      "start": 48.32,
+      "end": 48.4,
+      "text": "uh"
+    },
+    {
+      "start": 48.48,
+      "end": 48.96,
+      "text": "claiming"
+    },
+    {
+      "start": 49.04,
+      "end": 49.12,
+      "text": "to"
+    },
+    {
+      "start": 49.12,
+      "end": 49.2,
+      "text": "be"
+    },
+    {
+      "start": 49.28,
+      "end": 49.36,
+      "text": "about"
+    },
+    {
+      "start": 49.44,
+      "end": 49.52,
+      "text": "the"
+    },
+    {
+      "start": 49.52,
+      "end": 49.6,
+      "text": "war"
+    },
+    {
+      "start": 49.76,
+      "end": 49.84,
+      "text": "in"
+    },
+    {
+      "start": 49.84,
+      "end": 49.92,
+      "text": "the"
+    },
+    {
+      "start": 49.92,
+      "end": 50.16,
+      "text": "Middle"
+    },
+    {
+      "start": 50.16,
+      "end": 50.48,
+      "text": "East."
+    },
+    {
+      "start": 50.48,
+      "end": 50.72,
+      "text": "It's"
+    },
+    {
+      "start": 50.64,
+      "end": 50.88,
+      "text": "actually"
+    },
+    {
+      "start": 51.04,
+      "end": 51.52,
+      "text": "false."
+    },
+    {
+      "start": 51.6,
+      "end": 51.76,
+      "text": "Uh"
+    },
+    {
+      "start": 51.76,
+      "end": 51.84,
+      "text": "the"
+    },
+    {
+      "start": 52.0,
+      "end": 52.08,
+      "text": "real"
+    },
+    {
+      "start": 52.24,
+      "end": 52.56,
+      "text": "image"
+    },
+    {
+      "start": 52.64,
+      "end": 52.72,
+      "text": "is"
+    },
+    {
+      "start": 52.88,
+      "end": 52.96,
+      "text": "the"
+    },
+    {
+      "start": 53.12,
+      "end": 53.2,
+      "text": "one"
+    },
+    {
+      "start": 53.28,
+      "end": 53.36,
+      "text": "on"
+    },
+    {
+      "start": 53.44,
+      "end": 53.52,
+      "text": "the"
+    },
+    {
+      "start": 53.6,
+      "end": 54.0,
+      "text": "left,"
+    },
+    {
+      "start": 54.0,
+      "end": 54.08,
+      "text": "which"
+    },
+    {
+      "start": 54.16,
+      "end": 54.24,
+      "text": "is"
+    },
+    {
+      "start": 54.32,
+      "end": 54.4,
+      "text": "a"
+    },
+    {
+      "start": 54.48,
+      "end": 54.96,
+      "text": "satellite"
+    },
+    {
+      "start": 55.04,
+      "end": 55.28,
+      "text": "image"
+    },
+    {
+      "start": 55.36,
+      "end": 55.44,
+      "text": "from"
+    },
+    {
+      "start": 55.6,
+      "end": 55.68,
+      "text": "a"
+    },
+    {
+      "start": 55.76,
+      "end": 55.92,
+      "text": "few"
+    },
+    {
+      "start": 56.0,
+      "end": 56.24,
+      "text": "years"
+    },
+    {
+      "start": 56.4,
+      "end": 56.88,
+      "text": "ago."
+    },
+    {
+      "start": 56.96,
+      "end": 57.04,
+      "text": "And"
+    },
+    {
+      "start": 57.28,
+      "end": 57.36,
+      "text": "when"
+    },
+    {
+      "start": 57.6,
+      "end": 57.68,
+      "text": "we"
+    },
+    {
+      "start": 57.84,
+      "end": 57.92,
+      "text": "have"
+    },
+    {
+      "start": 58.0,
+      "end": 58.24,
+      "text": "both"
+    },
+    {
+      "start": 58.32,
+      "end": 58.4,
+      "text": "of"
+    },
+    {
+      "start": 58.56,
+      "end": 58.64,
+      "text": "these"
+    },
+    {
+      "start": 58.8,
+      "end": 59.2,
+      "text": "images"
+    },
+    {
+      "start": 59.44,
+      "end": 59.52,
+      "text": "uh"
+    },
+    {
+      "start": 59.68,
+      "end": 60.0,
+      "text": "shown"
+    },
+    {
+      "start": 60.08,
+      "end": 60.4,
+      "text": "together"
+    },
+    {
+      "start": 60.56,
+      "end": 60.64,
+      "text": "with"
+    },
+    {
+      "start": 60.8,
+      "end": 60.88,
+      "text": "a"
+    },
+    {
+      "start": 60.88,
+      "end": 61.44,
+      "text": "context,"
+    },
+    {
+      "start": 61.44,
+      "end": 61.52,
+      "text": "you"
+    },
+    {
+      "start": 61.68,
+      "end": 61.76,
+      "text": "know"
+    },
+    {
+      "start": 61.92,
+      "end": 62.0,
+      "text": "that"
+    },
+    {
+      "start": 62.16,
+      "end": 62.24,
+      "text": "the"
+    },
+    {
+      "start": 62.4,
+      "end": 62.48,
+      "text": "the"
+    },
+    {
+      "start": 62.64,
+      "end": 62.72,
+      "text": "one"
+    },
+    {
+      "start": 62.8,
+      "end": 62.88,
+      "text": "on"
+    },
+    {
+      "start": 62.96,
+      "end": 63.04,
+      "text": "the"
+    },
+    {
+      "start": 63.2,
+      "end": 63.28,
+      "text": "right"
+    },
+    {
+      "start": 63.36,
+      "end": 63.44,
+      "text": "is"
+    },
+    {
+      "start": 63.52,
+      "end": 64.08,
+      "text": "false,"
+    },
+    {
+      "start": 64.08,
+      "end": 64.16,
+      "text": "but"
+    },
+    {
+      "start": 64.32,
+      "end": 64.56,
+      "text": "often"
+    },
+    {
+      "start": 64.72,
+      "end": 64.8,
+      "text": "we"
+    },
+    {
+      "start": 64.88,
+      "end": 65.12,
+      "text": "don't"
+    },
+    {
+      "start": 65.04,
+      "end": 65.12,
+      "text": "have"
+    },
+    {
+      "start": 65.2,
+      "end": 65.28,
+      "text": "all"
+    },
+    {
+      "start": 65.44,
+      "end": 65.52,
+      "text": "the"
+    },
+    {
+      "start": 65.52,
+      "end": 66.0,
+      "text": "context,"
+    },
+    {
+      "start": 66.0,
+      "end": 66.08,
+      "text": "and"
+    },
+    {
+      "start": 66.16,
+      "end": 66.4,
+      "text": "it's"
+    },
+    {
+      "start": 66.4,
+      "end": 66.56,
+      "text": "hard"
+    },
+    {
+      "start": 66.64,
+      "end": 66.72,
+      "text": "to"
+    },
+    {
+      "start": 66.96,
+      "end": 67.2,
+      "text": "tell"
+    },
+    {
+      "start": 67.36,
+      "end": 67.44,
+      "text": "uh"
+    },
+    {
+      "start": 67.68,
+      "end": 67.76,
+      "text": "what"
+    },
+    {
+      "start": 68.0,
+      "end": 68.4,
+      "text": "images"
+    },
+    {
+      "start": 68.56,
+      "end": 68.64,
+      "text": "are"
+    },
+    {
+      "start": 68.8,
+      "end": 68.88,
+      "text": "real"
+    },
+    {
+      "start": 69.04,
+      "end": 69.12,
+      "text": "and"
+    },
+    {
+      "start": 69.2,
+      "end": 69.28,
+      "text": "what"
+    },
+    {
+      "start": 69.44,
+      "end": 69.76,
+      "text": "images"
+    },
+    {
+      "start": 69.92,
+      "end": 70.0,
+      "text": "are"
+    },
+    {
+      "start": 70.24,
+      "end": 71.2,
+      "text": "fake."
+    },
+    {
+      "start": 71.44,
+      "end": 71.52,
+      "text": "And"
+    },
+    {
+      "start": 71.76,
+      "end": 71.84,
+      "text": "we"
+    },
+    {
+      "start": 72.08,
+      "end": 72.16,
+      "text": "think"
+    },
+    {
+      "start": 72.4,
+      "end": 72.48,
+      "text": "this"
+    },
+    {
+      "start": 72.56,
+      "end": 72.64,
+      "text": "is"
+    },
+    {
+      "start": 72.72,
+      "end": 72.8,
+      "text": "a"
+    },
+    {
+      "start": 72.88,
+      "end": 73.36,
+      "text": "growing"
+    },
+    {
+      "start": 73.52,
+      "end": 74.24,
+      "text": "concern,"
+    },
+    {
+      "start": 74.32,
+      "end": 74.4,
+      "text": "not"
+    },
+    {
+      "start": 74.64,
+      "end": 74.72,
+      "text": "only"
+    },
+    {
+      "start": 74.96,
+      "end": 75.04,
+      "text": "because"
+    },
+    {
+      "start": 75.6,
+      "end": 76.0,
+      "text": "fakes"
+    },
+    {
+      "start": 76.24,
+      "end": 76.64,
+      "text": "promote"
+    },
+    {
+      "start": 76.8,
+      "end": 77.12,
+      "text": "false"
+    },
+    {
+      "start": 77.2,
+      "end": 78.08,
+      "text": "narratives,"
+    },
+    {
+      "start": 78.24,
+      "end": 78.32,
+      "text": "but"
+    },
+    {
+      "start": 78.56,
+      "end": 78.64,
+      "text": "also"
+    },
+    {
+      "start": 79.04,
+      "end": 79.44,
+      "text": "fakes"
+    },
+    {
+      "start": 79.6,
+      "end": 79.68,
+      "text": "make"
+    },
+    {
+      "start": 79.84,
+      "end": 79.92,
+      "text": "it"
+    },
+    {
+      "start": 80.0,
+      "end": 80.4,
+      "text": "easier"
+    },
+    {
+      "start": 80.48,
+      "end": 80.56,
+      "text": "for"
+    },
+    {
+      "start": 80.72,
+      "end": 80.88,
+      "text": "bad"
+    },
+    {
+      "start": 81.04,
+      "end": 81.44,
+      "text": "actors"
+    },
+    {
+      "start": 81.52,
+      "end": 81.6,
+      "text": "to"
+    },
+    {
+      "start": 81.76,
+      "end": 82.16,
+      "text": "deny"
+    },
+    {
+      "start": 82.32,
+      "end": 82.96,
+      "text": "reality."
+    },
+    {
+      "start": 83.04,
+      "end": 83.12,
+      "text": "This"
+    },
+    {
+      "start": 83.28,
+      "end": 83.36,
+      "text": "is"
+    },
+    {
+      "start": 83.52,
+      "end": 83.6,
+      "text": "uh"
+    },
+    {
+      "start": 83.92,
+      "end": 84.0,
+      "text": "this"
+    },
+    {
+      "start": 84.16,
+      "end": 84.24,
+      "text": "is"
+    },
+    {
+      "start": 84.32,
+      "end": 84.56,
+      "text": "called"
+    },
+    {
+      "start": 84.56,
+      "end": 84.64,
+      "text": "a"
+    },
+    {
+      "start": 84.72,
+      "end": 85.28,
+      "text": "liar's"
+    },
+    {
+      "start": 85.28,
+      "end": 85.92,
+      "text": "dividend,"
+    },
+    {
+      "start": 86.0,
+      "end": 86.08,
+      "text": "and"
+    },
+    {
+      "start": 86.16,
+      "end": 86.24,
+      "text": "uh"
+    },
+    {
+      "start": 86.32,
+      "end": 86.4,
+      "text": "we"
+    },
+    {
+      "start": 86.56,
+      "end": 86.64,
+      "text": "think"
+    },
+    {
+      "start": 86.8,
+      "end": 86.88,
+      "text": "one"
+    },
+    {
+      "start": 86.96,
+      "end": 87.04,
+      "text": "of"
+    },
+    {
+      "start": 87.04,
+      "end": 87.12,
+      "text": "the"
+    },
+    {
+      "start": 87.12,
+      "end": 87.28,
+      "text": "things"
+    },
+    {
+      "start": 87.36,
+      "end": 87.6,
+      "text": "that's"
+    },
+    {
+      "start": 87.6,
+      "end": 87.76,
+      "text": "gonna"
+    },
+    {
+      "start": 87.76,
+      "end": 88.0,
+      "text": "happen"
+    },
+    {
+      "start": 88.08,
+      "end": 88.16,
+      "text": "with"
+    },
+    {
+      "start": 88.4,
+      "end": 88.48,
+      "text": "this"
+    },
+    {
+      "start": 88.64,
+      "end": 88.72,
+      "text": "is"
+    },
+    {
+      "start": 89.04,
+      "end": 89.84,
+      "text": "increasingly"
+    },
+    {
+      "start": 90.08,
+      "end": 90.4,
+      "text": "we're"
+    },
+    {
+      "start": 90.4,
+      "end": 90.64,
+      "text": "gonna"
+    },
+    {
+      "start": 90.64,
+      "end": 90.72,
+      "text": "see"
+    },
+    {
+      "start": 90.8,
+      "end": 90.88,
+      "text": "an"
+    },
+    {
+      "start": 90.96,
+      "end": 91.36,
+      "text": "erosion"
+    },
+    {
+      "start": 91.44,
+      "end": 91.52,
+      "text": "of"
+    },
+    {
+      "start": 91.6,
+      "end": 92.4,
+      "text": "accountability"
+    },
+    {
+      "start": 92.72,
+      "end": 92.8,
+      "text": "and"
+    },
+    {
+      "start": 93.04,
+      "end": 93.12,
+      "text": "uh"
+    },
+    {
+      "start": 93.44,
+      "end": 93.52,
+      "text": "and"
+    },
+    {
+      "start": 93.68,
+      "end": 93.84,
+      "text": "sort"
+    },
+    {
+      "start": 93.92,
+      "end": 94.0,
+      "text": "of"
+    },
+    {
+      "start": 94.16,
+      "end": 94.64,
+      "text": "assault"
+    },
+    {
+      "start": 94.88,
+      "end": 94.96,
+      "text": "on"
+    },
+    {
+      "start": 95.04,
+      "end": 95.12,
+      "text": "uh"
+    },
+    {
+      "start": 95.28,
+      "end": 96.56,
+      "text": "democracy."
+    },
+    {
+      "start": 96.8,
+      "end": 96.88,
+      "text": "So"
+    },
+    {
+      "start": 97.44,
+      "end": 97.52,
+      "text": "what"
+    },
+    {
+      "start": 97.76,
+      "end": 97.84,
+      "text": "can"
+    },
+    {
+      "start": 98.32,
+      "end": 98.4,
+      "text": "we"
+    },
+    {
+      "start": 98.64,
+      "end": 99.04,
+      "text": "do?"
+    },
+    {
+      "start": 99.04,
+      "end": 99.12,
+      "text": "And"
+    },
+    {
+      "start": 99.36,
+      "end": 99.76,
+      "text": "specifically"
+    },
+    {
+      "start": 99.92,
+      "end": 100.0,
+      "text": "what"
+    },
+    {
+      "start": 100.08,
+      "end": 100.16,
+      "text": "can"
+    },
+    {
+      "start": 100.24,
+      "end": 100.32,
+      "text": "we"
+    },
+    {
+      "start": 100.48,
+      "end": 100.56,
+      "text": "do"
+    },
+    {
+      "start": 100.64,
+      "end": 100.72,
+      "text": "in"
+    },
+    {
+      "start": 100.8,
+      "end": 100.88,
+      "text": "the"
+    },
+    {
+      "start": 101.04,
+      "end": 101.6,
+      "text": "Bluesky"
+    },
+    {
+      "start": 101.76,
+      "end": 101.84,
+      "text": "and"
+    },
+    {
+      "start": 101.92,
+      "end": 102.48,
+      "text": "Atmosphere"
+    },
+    {
+      "start": 102.88,
+      "end": 102.96,
+      "text": "uh"
+    },
+    {
+      "start": 103.2,
+      "end": 104.4,
+      "text": "context."
+    },
+    {
+      "start": 104.48,
+      "end": 104.56,
+      "text": "Um"
+    },
+    {
+      "start": 104.8,
+      "end": 104.88,
+      "text": "and"
+    },
+    {
+      "start": 105.04,
+      "end": 105.12,
+      "text": "so"
+    },
+    {
+      "start": 105.36,
+      "end": 105.44,
+      "text": "one"
+    },
+    {
+      "start": 105.6,
+      "end": 105.68,
+      "text": "of"
+    },
+    {
+      "start": 105.68,
+      "end": 105.76,
+      "text": "the"
+    },
+    {
+      "start": 105.76,
+      "end": 106.0,
+      "text": "things"
+    },
+    {
+      "start": 106.08,
+      "end": 106.32,
+      "text": "we've"
+    },
+    {
+      "start": 106.32,
+      "end": 106.4,
+      "text": "been"
+    },
+    {
+      "start": 106.56,
+      "end": 106.8,
+      "text": "working"
+    },
+    {
+      "start": 107.04,
+      "end": 107.12,
+      "text": "on"
+    },
+    {
+      "start": 107.36,
+      "end": 107.44,
+      "text": "is"
+    },
+    {
+      "start": 107.84,
+      "end": 107.92,
+      "text": "uh"
+    },
+    {
+      "start": 108.08,
+      "end": 108.16,
+      "text": "the"
+    },
+    {
+      "start": 108.4,
+      "end": 109.04,
+      "text": "Nectar"
+    },
+    {
+      "start": 109.2,
+      "end": 109.76,
+      "text": "API,"
+    },
+    {
+      "start": 109.84,
+      "end": 109.92,
+      "text": "which"
+    },
+    {
+      "start": 110.08,
+      "end": 110.16,
+      "text": "is"
+    },
+    {
+      "start": 110.32,
+      "end": 110.4,
+      "text": "a"
+    },
+    {
+      "start": 110.56,
+      "end": 111.04,
+      "text": "similar"
+    },
+    {
+      "start": 111.2,
+      "end": 111.92,
+      "text": "search,"
+    },
+    {
+      "start": 111.92,
+      "end": 112.0,
+      "text": "uh"
+    },
+    {
+      "start": 112.24,
+      "end": 112.64,
+      "text": "similar"
+    },
+    {
+      "start": 112.72,
+      "end": 113.04,
+      "text": "image"
+    },
+    {
+      "start": 113.12,
+      "end": 113.36,
+      "text": "search"
+    },
+    {
+      "start": 113.44,
+      "end": 113.84,
+      "text": "API."
+    },
+    {
+      "start": 113.84,
+      "end": 113.92,
+      "text": "So"
+    },
+    {
+      "start": 114.0,
+      "end": 114.08,
+      "text": "you"
+    },
+    {
+      "start": 114.08,
+      "end": 114.16,
+      "text": "can"
+    },
+    {
+      "start": 114.24,
+      "end": 114.4,
+      "text": "find"
+    },
+    {
+      "start": 114.48,
+      "end": 114.88,
+      "text": "similar"
+    },
+    {
+      "start": 115.04,
+      "end": 115.44,
+      "text": "images"
+    },
+    {
+      "start": 115.92,
+      "end": 116.0,
+      "text": "uh"
+    },
+    {
+      "start": 116.24,
+      "end": 116.32,
+      "text": "on"
+    },
+    {
+      "start": 116.56,
+      "end": 116.64,
+      "text": "the"
+    },
+    {
+      "start": 116.88,
+      "end": 117.84,
+      "text": "Atmosphere."
+    },
+    {
+      "start": 117.92,
+      "end": 118.16,
+      "text": "Uh"
+    },
+    {
+      "start": 118.16,
+      "end": 118.24,
+      "text": "one"
+    },
+    {
+      "start": 118.4,
+      "end": 118.48,
+      "text": "of"
+    },
+    {
+      "start": 118.48,
+      "end": 118.56,
+      "text": "the"
+    },
+    {
+      "start": 118.56,
+      "end": 118.72,
+      "text": "things"
+    },
+    {
+      "start": 118.8,
+      "end": 118.88,
+      "text": "we"
+    },
+    {
+      "start": 118.96,
+      "end": 119.04,
+      "text": "do"
+    },
+    {
+      "start": 119.12,
+      "end": 119.2,
+      "text": "is"
+    },
+    {
+      "start": 119.36,
+      "end": 119.44,
+      "text": "we"
+    },
+    {
+      "start": 119.6,
+      "end": 119.68,
+      "text": "run"
+    },
+    {
+      "start": 119.84,
+      "end": 119.92,
+      "text": "a"
+    },
+    {
+      "start": 119.92,
+      "end": 120.16,
+      "text": "bunch"
+    },
+    {
+      "start": 120.32,
+      "end": 120.4,
+      "text": "of"
+    },
+    {
+      "start": 120.56,
+      "end": 120.88,
+      "text": "image"
+    },
+    {
+      "start": 121.04,
+      "end": 122.0,
+      "text": "fingerprinting"
+    },
+    {
+      "start": 122.16,
+      "end": 122.24,
+      "text": "on"
+    },
+    {
+      "start": 122.48,
+      "end": 122.56,
+      "text": "uh"
+    },
+    {
+      "start": 122.64,
+      "end": 122.72,
+      "text": "in"
+    },
+    {
+      "start": 122.8,
+      "end": 122.88,
+      "text": "the"
+    },
+    {
+      "start": 122.88,
+      "end": 123.44,
+      "text": "background,"
+    },
+    {
+      "start": 123.44,
+      "end": 123.52,
+      "text": "so"
+    },
+    {
+      "start": 123.6,
+      "end": 123.68,
+      "text": "we"
+    },
+    {
+      "start": 123.76,
+      "end": 124.32,
+      "text": "fingerprint"
+    },
+    {
+      "start": 124.4,
+      "end": 124.48,
+      "text": "all"
+    },
+    {
+      "start": 124.64,
+      "end": 125.04,
+      "text": "images"
+    },
+    {
+      "start": 125.28,
+      "end": 125.6,
+      "text": "coming"
+    },
+    {
+      "start": 125.68,
+      "end": 126.0,
+      "text": "through"
+    },
+    {
+      "start": 126.08,
+      "end": 126.16,
+      "text": "uh"
+    },
+    {
+      "start": 126.24,
+      "end": 126.32,
+      "text": "the"
+    },
+    {
+      "start": 126.4,
+      "end": 126.72,
+      "text": "fire"
+    },
+    {
+      "start": 126.88,
+      "end": 127.68,
+      "text": "host."
+    },
+    {
+      "start": 127.92,
+      "end": 128.0,
+      "text": "And"
+    },
+    {
+      "start": 129.12,
+      "end": 129.2,
+      "text": "uh"
+    },
+    {
+      "start": 129.52,
+      "end": 129.6,
+      "text": "on"
+    },
+    {
+      "start": 129.76,
+      "end": 129.92,
+      "text": "top"
+    },
+    {
+      "start": 130.0,
+      "end": 130.08,
+      "text": "of"
+    },
+    {
+      "start": 130.24,
+      "end": 130.32,
+      "text": "that"
+    },
+    {
+      "start": 130.64,
+      "end": 130.72,
+      "text": "to"
+    },
+    {
+      "start": 130.96,
+      "end": 131.36,
+      "text": "demo"
+    },
+    {
+      "start": 131.6,
+      "end": 132.0,
+      "text": "exactly"
+    },
+    {
+      "start": 132.08,
+      "end": 132.16,
+      "text": "how"
+    },
+    {
+      "start": 132.32,
+      "end": 132.4,
+      "text": "you"
+    },
+    {
+      "start": 132.4,
+      "end": 132.48,
+      "text": "can"
+    },
+    {
+      "start": 132.64,
+      "end": 132.72,
+      "text": "use"
+    },
+    {
+      "start": 132.8,
+      "end": 132.88,
+      "text": "this"
+    },
+    {
+      "start": 133.04,
+      "end": 133.12,
+      "text": "in"
+    },
+    {
+      "start": 133.2,
+      "end": 133.28,
+      "text": "a"
+    },
+    {
+      "start": 133.28,
+      "end": 133.84,
+      "text": "misinformation"
+    },
+    {
+      "start": 134.0,
+      "end": 134.08,
+      "text": "and"
+    },
+    {
+      "start": 134.16,
+      "end": 134.8,
+      "text": "disinformation"
+    },
+    {
+      "start": 134.88,
+      "end": 135.6,
+      "text": "context,"
+    },
+    {
+      "start": 135.76,
+      "end": 136.0,
+      "text": "we've"
+    },
+    {
+      "start": 136.08,
+      "end": 136.48,
+      "text": "built"
+    },
+    {
+      "start": 136.56,
+      "end": 136.64,
+      "text": "uh"
+    },
+    {
+      "start": 136.88,
+      "end": 136.96,
+      "text": "a"
+    },
+    {
+      "start": 137.12,
+      "end": 137.6,
+      "text": "browser"
+    },
+    {
+      "start": 137.68,
+      "end": 138.0,
+      "text": "extension"
+    },
+    {
+      "start": 138.08,
+      "end": 138.24,
+      "text": "called"
+    },
+    {
+      "start": 138.4,
+      "end": 139.2,
+      "text": "Pollen,"
+    },
+    {
+      "start": 139.36,
+      "end": 139.44,
+      "text": "which"
+    },
+    {
+      "start": 139.6,
+      "end": 139.76,
+      "text": "makes"
+    },
+    {
+      "start": 139.84,
+      "end": 139.92,
+      "text": "it"
+    },
+    {
+      "start": 140.08,
+      "end": 140.56,
+      "text": "easier"
+    },
+    {
+      "start": 140.88,
+      "end": 140.96,
+      "text": "uh"
+    },
+    {
+      "start": 141.12,
+      "end": 141.2,
+      "text": "for"
+    },
+    {
+      "start": 141.44,
+      "end": 141.52,
+      "text": "us"
+    },
+    {
+      "start": 141.76,
+      "end": 141.84,
+      "text": "to"
+    },
+    {
+      "start": 141.92,
+      "end": 142.32,
+      "text": "attach"
+    },
+    {
+      "start": 142.48,
+      "end": 143.12,
+      "text": "provenance"
+    },
+    {
+      "start": 143.44,
+      "end": 144.08,
+      "text": "claims"
+    },
+    {
+      "start": 144.32,
+      "end": 144.4,
+      "text": "and"
+    },
+    {
+      "start": 144.64,
+      "end": 144.72,
+      "text": "add"
+    },
+    {
+      "start": 145.12,
+      "end": 145.68,
+      "text": "context"
+    },
+    {
+      "start": 145.92,
+      "end": 146.0,
+      "text": "to"
+    },
+    {
+      "start": 146.24,
+      "end": 147.12,
+      "text": "images."
+    },
+    {
+      "start": 147.12,
+      "end": 147.2,
+      "text": "Um"
+    },
+    {
+      "start": 147.6,
+      "end": 147.92,
+      "text": "I'm"
+    },
+    {
+      "start": 147.92,
+      "end": 148.16,
+      "text": "gonna"
+    },
+    {
+      "start": 148.24,
+      "end": 148.32,
+      "text": "hand"
+    },
+    {
+      "start": 148.48,
+      "end": 148.56,
+      "text": "it"
+    },
+    {
+      "start": 148.72,
+      "end": 148.8,
+      "text": "over"
+    },
+    {
+      "start": 149.04,
+      "end": 149.12,
+      "text": "to"
+    },
+    {
+      "start": 149.36,
+      "end": 149.76,
+      "text": "Cole"
+    },
+    {
+      "start": 149.92,
+      "end": 150.0,
+      "text": "to"
+    },
+    {
+      "start": 150.16,
+      "end": 150.48,
+      "text": "demo"
+    },
+    {
+      "start": 150.56,
+      "end": 150.64,
+      "text": "what"
+    },
+    {
+      "start": 150.88,
+      "end": 150.96,
+      "text": "this"
+    },
+    {
+      "start": 151.12,
+      "end": 151.36,
+      "text": "looks"
+    },
+    {
+      "start": 151.52,
+      "end": 151.6,
+      "text": "like"
+    },
+    {
+      "start": 151.68,
+      "end": 151.76,
+      "text": "in"
+    },
+    {
+      "start": 152.0,
+      "end": 153.2,
+      "text": "practice."
+    },
+    {
+      "start": 154.08,
+      "end": 154.16,
+      "text": "All"
+    },
+    {
+      "start": 154.32,
+      "end": 154.56,
+      "text": "right,"
+    },
+    {
+      "start": 154.64,
+      "end": 154.72,
+      "text": "so"
+    },
+    {
+      "start": 154.88,
+      "end": 155.28,
+      "text": "here's"
+    },
+    {
+      "start": 155.2,
+      "end": 155.28,
+      "text": "just"
+    },
+    {
+      "start": 155.36,
+      "end": 155.44,
+      "text": "a"
+    },
+    {
+      "start": 155.6,
+      "end": 156.0,
+      "text": "quick"
+    },
+    {
+      "start": 156.16,
+      "end": 156.24,
+      "text": "uh"
+    },
+    {
+      "start": 156.48,
+      "end": 156.56,
+      "text": "video"
+    },
+    {
+      "start": 156.96,
+      "end": 157.2,
+      "text": "demo"
+    },
+    {
+      "start": 157.28,
+      "end": 157.36,
+      "text": "of"
+    },
+    {
+      "start": 157.52,
+      "end": 158.16,
+      "text": "pollen."
+    },
+    {
+      "start": 158.24,
+      "end": 158.48,
+      "text": "Here"
+    },
+    {
+      "start": 158.56,
+      "end": 158.8,
+      "text": "we're"
+    },
+    {
+      "start": 158.8,
+      "end": 158.88,
+      "text": "on"
+    },
+    {
+      "start": 158.96,
+      "end": 160.16,
+      "text": "BSky.app,"
+    },
+    {
+      "start": 160.16,
+      "end": 160.24,
+      "text": "the"
+    },
+    {
+      "start": 160.24,
+      "end": 160.48,
+      "text": "regular"
+    },
+    {
+      "start": 160.56,
+      "end": 160.96,
+      "text": "website,"
+    },
+    {
+      "start": 160.96,
+      "end": 161.04,
+      "text": "and"
+    },
+    {
+      "start": 161.12,
+      "end": 161.2,
+      "text": "we"
+    },
+    {
+      "start": 161.2,
+      "end": 161.28,
+      "text": "have"
+    },
+    {
+      "start": 161.28,
+      "end": 161.36,
+      "text": "our"
+    },
+    {
+      "start": 161.44,
+      "end": 161.84,
+      "text": "Pollen"
+    },
+    {
+      "start": 161.92,
+      "end": 162.24,
+      "text": "browser"
+    },
+    {
+      "start": 162.32,
+      "end": 162.72,
+      "text": "extension"
+    },
+    {
+      "start": 162.8,
+      "end": 163.12,
+      "text": "loaded"
+    },
+    {
+      "start": 163.2,
+      "end": 163.28,
+      "text": "into"
+    },
+    {
+      "start": 163.44,
+      "end": 163.52,
+      "text": "the"
+    },
+    {
+      "start": 163.52,
+      "end": 164.16,
+      "text": "browser."
+    },
+    {
+      "start": 164.16,
+      "end": 164.24,
+      "text": "And"
+    },
+    {
+      "start": 164.4,
+      "end": 164.64,
+      "text": "we're"
+    },
+    {
+      "start": 164.56,
+      "end": 164.8,
+      "text": "looking"
+    },
+    {
+      "start": 164.8,
+      "end": 164.88,
+      "text": "at"
+    },
+    {
+      "start": 164.96,
+      "end": 165.04,
+      "text": "an"
+    },
+    {
+      "start": 165.12,
+      "end": 165.44,
+      "text": "example"
+    },
+    {
+      "start": 165.6,
+      "end": 165.84,
+      "text": "news"
+    },
+    {
+      "start": 165.92,
+      "end": 166.16,
+      "text": "account"
+    },
+    {
+      "start": 166.24,
+      "end": 166.32,
+      "text": "that"
+    },
+    {
+      "start": 166.32,
+      "end": 166.4,
+      "text": "we"
+    },
+    {
+      "start": 166.48,
+      "end": 166.72,
+      "text": "created"
+    },
+    {
+      "start": 166.8,
+      "end": 166.88,
+      "text": "for"
+    },
+    {
+      "start": 166.96,
+      "end": 167.04,
+      "text": "the"
+    },
+    {
+      "start": 167.04,
+      "end": 167.28,
+      "text": "demo"
+    },
+    {
+      "start": 167.44,
+      "end": 167.68,
+      "text": "called"
+    },
+    {
+      "start": 167.76,
+      "end": 168.0,
+      "text": "News"
+    },
+    {
+      "start": 168.08,
+      "end": 168.8,
+      "text": "123."
+    },
+    {
+      "start": 168.8,
+      "end": 168.88,
+      "text": "And"
+    },
+    {
+      "start": 169.04,
+      "end": 169.12,
+      "text": "in"
+    },
+    {
+      "start": 169.12,
+      "end": 169.2,
+      "text": "this"
+    },
+    {
+      "start": 169.28,
+      "end": 169.68,
+      "text": "demo,"
+    },
+    {
+      "start": 169.68,
+      "end": 169.76,
+      "text": "they"
+    },
+    {
+      "start": 169.84,
+      "end": 169.92,
+      "text": "post"
+    },
+    {
+      "start": 170.08,
+      "end": 170.16,
+      "text": "you"
+    },
+    {
+      "start": 170.16,
+      "end": 170.24,
+      "text": "know"
+    },
+    {
+      "start": 170.4,
+      "end": 171.12,
+      "text": "headlines,"
+    },
+    {
+      "start": 171.28,
+      "end": 171.84,
+      "text": "stories,"
+    },
+    {
+      "start": 171.92,
+      "end": 172.0,
+      "text": "they"
+    },
+    {
+      "start": 172.16,
+      "end": 172.24,
+      "text": "post"
+    },
+    {
+      "start": 172.48,
+      "end": 172.56,
+      "text": "uh"
+    },
+    {
+      "start": 172.64,
+      "end": 173.76,
+      "text": "photographs."
+    },
+    {
+      "start": 173.84,
+      "end": 174.08,
+      "text": "Uh"
+    },
+    {
+      "start": 174.24,
+      "end": 174.32,
+      "text": "so"
+    },
+    {
+      "start": 174.48,
+      "end": 174.8,
+      "text": "we're"
+    },
+    {
+      "start": 174.88,
+      "end": 174.96,
+      "text": "about"
+    },
+    {
+      "start": 175.04,
+      "end": 175.12,
+      "text": "to"
+    },
+    {
+      "start": 175.28,
+      "end": 175.36,
+      "text": "see"
+    },
+    {
+      "start": 175.6,
+      "end": 175.68,
+      "text": "them"
+    },
+    {
+      "start": 175.92,
+      "end": 176.0,
+      "text": "make"
+    },
+    {
+      "start": 176.24,
+      "end": 176.32,
+      "text": "a"
+    },
+    {
+      "start": 176.56,
+      "end": 178.08,
+      "text": "post,"
+    },
+    {
+      "start": 178.32,
+      "end": 178.4,
+      "text": "which"
+    },
+    {
+      "start": 178.56,
+      "end": 178.88,
+      "text": "we'll"
+    },
+    {
+      "start": 178.88,
+      "end": 178.96,
+      "text": "see"
+    },
+    {
+      "start": 179.04,
+      "end": 179.12,
+      "text": "in"
+    },
+    {
+      "start": 179.28,
+      "end": 179.36,
+      "text": "one"
+    },
+    {
+      "start": 179.6,
+      "end": 180.08,
+      "text": "moment."
+    },
+    {
+      "start": 180.24,
+      "end": 180.56,
+      "text": "Uh"
+    },
+    {
+      "start": 180.64,
+      "end": 180.72,
+      "text": "and"
+    },
+    {
+      "start": 180.88,
+      "end": 180.96,
+      "text": "the"
+    },
+    {
+      "start": 181.2,
+      "end": 181.28,
+      "text": "post"
+    },
+    {
+      "start": 181.44,
+      "end": 181.52,
+      "text": "is"
+    },
+    {
+      "start": 181.6,
+      "end": 181.68,
+      "text": "about"
+    },
+    {
+      "start": 181.76,
+      "end": 181.84,
+      "text": "the"
+    },
+    {
+      "start": 181.92,
+      "end": 182.48,
+      "text": "Chicago"
+    },
+    {
+      "start": 182.64,
+      "end": 182.96,
+      "text": "River"
+    },
+    {
+      "start": 183.12,
+      "end": 183.36,
+      "text": "being"
+    },
+    {
+      "start": 183.52,
+      "end": 183.84,
+      "text": "dyed"
+    },
+    {
+      "start": 183.92,
+      "end": 184.08,
+      "text": "green"
+    },
+    {
+      "start": 184.16,
+      "end": 184.24,
+      "text": "for"
+    },
+    {
+      "start": 184.32,
+      "end": 184.48,
+      "text": "St."
+    },
+    {
+      "start": 184.56,
+      "end": 185.04,
+      "text": "Patrick's"
+    },
+    {
+      "start": 185.04,
+      "end": 185.28,
+      "text": "Day,"
+    },
+    {
+      "start": 185.28,
+      "end": 185.36,
+      "text": "which"
+    },
+    {
+      "start": 185.44,
+      "end": 185.52,
+      "text": "just"
+    },
+    {
+      "start": 185.6,
+      "end": 185.84,
+      "text": "happened"
+    },
+    {
+      "start": 185.92,
+      "end": 186.0,
+      "text": "this"
+    },
+    {
+      "start": 186.08,
+      "end": 186.16,
+      "text": "past"
+    },
+    {
+      "start": 186.32,
+      "end": 186.4,
+      "text": "uh"
+    },
+    {
+      "start": 186.56,
+      "end": 186.72,
+      "text": "March"
+    },
+    {
+      "start": 186.8,
+      "end": 187.44,
+      "text": "17th,"
+    },
+    {
+      "start": 187.44,
+      "end": 187.52,
+      "text": "and"
+    },
+    {
+      "start": 187.6,
+      "end": 187.84,
+      "text": "they're"
+    },
+    {
+      "start": 187.76,
+      "end": 187.92,
+      "text": "gonna"
+    },
+    {
+      "start": 188.0,
+      "end": 188.24,
+      "text": "attach"
+    },
+    {
+      "start": 188.32,
+      "end": 188.4,
+      "text": "an"
+    },
+    {
+      "start": 188.48,
+      "end": 188.64,
+      "text": "image"
+    },
+    {
+      "start": 188.72,
+      "end": 188.8,
+      "text": "from"
+    },
+    {
+      "start": 188.88,
+      "end": 188.96,
+      "text": "one"
+    },
+    {
+      "start": 189.04,
+      "end": 189.12,
+      "text": "of"
+    },
+    {
+      "start": 189.12,
+      "end": 189.2,
+      "text": "their"
+    },
+    {
+      "start": 189.28,
+      "end": 190.16,
+      "text": "photojournalists"
+    },
+    {
+      "start": 190.24,
+      "end": 190.32,
+      "text": "of"
+    },
+    {
+      "start": 190.32,
+      "end": 190.4,
+      "text": "that"
+    },
+    {
+      "start": 190.56,
+      "end": 190.96,
+      "text": "happening."
+    },
+    {
+      "start": 191.12,
+      "end": 191.2,
+      "text": "So"
+    },
+    {
+      "start": 191.28,
+      "end": 191.52,
+      "text": "far,"
+    },
+    {
+      "start": 191.52,
+      "end": 191.6,
+      "text": "this"
+    },
+    {
+      "start": 191.68,
+      "end": 191.76,
+      "text": "is"
+    },
+    {
+      "start": 191.84,
+      "end": 191.92,
+      "text": "just"
+    },
+    {
+      "start": 192.0,
+      "end": 192.08,
+      "text": "a"
+    },
+    {
+      "start": 192.16,
+      "end": 192.4,
+      "text": "regular"
+    },
+    {
+      "start": 192.48,
+      "end": 193.04,
+      "text": "Bluesky"
+    },
+    {
+      "start": 193.12,
+      "end": 193.44,
+      "text": "flow"
+    },
+    {
+      "start": 193.6,
+      "end": 193.68,
+      "text": "and"
+    },
+    {
+      "start": 193.76,
+      "end": 194.0,
+      "text": "nothing"
+    },
+    {
+      "start": 194.08,
+      "end": 194.16,
+      "text": "has"
+    },
+    {
+      "start": 194.24,
+      "end": 194.32,
+      "text": "been"
+    },
+    {
+      "start": 194.4,
+      "end": 194.8,
+      "text": "modified"
+    },
+    {
+      "start": 194.88,
+      "end": 194.96,
+      "text": "by"
+    },
+    {
+      "start": 195.04,
+      "end": 195.12,
+      "text": "our"
+    },
+    {
+      "start": 195.2,
+      "end": 195.84,
+      "text": "extension."
+    },
+    {
+      "start": 196.0,
+      "end": 196.48,
+      "text": "There's"
+    },
+    {
+      "start": 196.4,
+      "end": 196.48,
+      "text": "the"
+    },
+    {
+      "start": 196.64,
+      "end": 197.12,
+      "text": "image."
+    },
+    {
+      "start": 197.2,
+      "end": 197.52,
+      "text": "They're"
+    },
+    {
+      "start": 197.52,
+      "end": 197.76,
+      "text": "gonna"
+    },
+    {
+      "start": 197.84,
+      "end": 197.92,
+      "text": "post"
+    },
+    {
+      "start": 198.0,
+      "end": 198.08,
+      "text": "it"
+    },
+    {
+      "start": 198.24,
+      "end": 198.32,
+      "text": "and"
+    },
+    {
+      "start": 198.4,
+      "end": 198.48,
+      "text": "it"
+    },
+    {
+      "start": 198.56,
+      "end": 198.72,
+      "text": "goes"
+    },
+    {
+      "start": 198.72,
+      "end": 198.8,
+      "text": "into"
+    },
+    {
+      "start": 198.96,
+      "end": 199.04,
+      "text": "their"
+    },
+    {
+      "start": 199.2,
+      "end": 200.24,
+      "text": "PDS."
+    },
+    {
+      "start": 200.4,
+      "end": 200.48,
+      "text": "But"
+    },
+    {
+      "start": 200.72,
+      "end": 200.8,
+      "text": "when"
+    },
+    {
+      "start": 200.96,
+      "end": 201.04,
+      "text": "they"
+    },
+    {
+      "start": 201.2,
+      "end": 201.28,
+      "text": "post"
+    },
+    {
+      "start": 201.52,
+      "end": 201.6,
+      "text": "that"
+    },
+    {
+      "start": 201.76,
+      "end": 202.24,
+      "text": "image,"
+    },
+    {
+      "start": 202.4,
+      "end": 202.48,
+      "text": "if"
+    },
+    {
+      "start": 202.64,
+      "end": 202.72,
+      "text": "they"
+    },
+    {
+      "start": 202.8,
+      "end": 203.04,
+      "text": "hover"
+    },
+    {
+      "start": 203.12,
+      "end": 203.2,
+      "text": "over"
+    },
+    {
+      "start": 203.28,
+      "end": 203.52,
+      "text": "it,"
+    },
+    {
+      "start": 203.52,
+      "end": 203.76,
+      "text": "they're"
+    },
+    {
+      "start": 203.68,
+      "end": 203.92,
+      "text": "gonna"
+    },
+    {
+      "start": 203.92,
+      "end": 204.0,
+      "text": "see"
+    },
+    {
+      "start": 204.08,
+      "end": 204.16,
+      "text": "in"
+    },
+    {
+      "start": 204.16,
+      "end": 204.24,
+      "text": "the"
+    },
+    {
+      "start": 204.24,
+      "end": 204.48,
+      "text": "corner"
+    },
+    {
+      "start": 204.64,
+      "end": 204.72,
+      "text": "this"
+    },
+    {
+      "start": 204.8,
+      "end": 205.12,
+      "text": "claim"
+    },
+    {
+      "start": 205.2,
+      "end": 205.68,
+      "text": "button."
+    },
+    {
+      "start": 205.76,
+      "end": 205.84,
+      "text": "And"
+    },
+    {
+      "start": 206.0,
+      "end": 206.08,
+      "text": "the"
+    },
+    {
+      "start": 206.08,
+      "end": 206.4,
+      "text": "claim"
+    },
+    {
+      "start": 206.48,
+      "end": 206.72,
+      "text": "button"
+    },
+    {
+      "start": 206.8,
+      "end": 206.88,
+      "text": "is"
+    },
+    {
+      "start": 206.88,
+      "end": 206.96,
+      "text": "a"
+    },
+    {
+      "start": 206.96,
+      "end": 207.2,
+      "text": "button"
+    },
+    {
+      "start": 207.28,
+      "end": 207.44,
+      "text": "being"
+    },
+    {
+      "start": 207.52,
+      "end": 207.76,
+      "text": "added"
+    },
+    {
+      "start": 207.84,
+      "end": 207.92,
+      "text": "by"
+    },
+    {
+      "start": 207.92,
+      "end": 208.0,
+      "text": "our"
+    },
+    {
+      "start": 208.08,
+      "end": 208.4,
+      "text": "browser"
+    },
+    {
+      "start": 208.48,
+      "end": 208.88,
+      "text": "extension"
+    },
+    {
+      "start": 208.96,
+      "end": 209.04,
+      "text": "where"
+    },
+    {
+      "start": 209.2,
+      "end": 209.28,
+      "text": "any"
+    },
+    {
+      "start": 209.44,
+      "end": 209.68,
+      "text": "user"
+    },
+    {
+      "start": 209.76,
+      "end": 209.84,
+      "text": "can"
+    },
+    {
+      "start": 209.92,
+      "end": 210.0,
+      "text": "make"
+    },
+    {
+      "start": 210.16,
+      "end": 210.24,
+      "text": "a"
+    },
+    {
+      "start": 210.24,
+      "end": 210.64,
+      "text": "claim"
+    },
+    {
+      "start": 210.8,
+      "end": 210.88,
+      "text": "on"
+    },
+    {
+      "start": 211.04,
+      "end": 211.12,
+      "text": "any"
+    },
+    {
+      "start": 211.28,
+      "end": 211.36,
+      "text": "other"
+    },
+    {
+      "start": 211.44,
+      "end": 211.68,
+      "text": "image"
+    },
+    {
+      "start": 211.76,
+      "end": 211.84,
+      "text": "on"
+    },
+    {
+      "start": 211.92,
+      "end": 212.0,
+      "text": "the"
+    },
+    {
+      "start": 212.0,
+      "end": 212.32,
+      "text": "network"
+    },
+    {
+      "start": 212.4,
+      "end": 212.48,
+      "text": "and"
+    },
+    {
+      "start": 212.56,
+      "end": 212.64,
+      "text": "they"
+    },
+    {
+      "start": 212.72,
+      "end": 212.8,
+      "text": "get"
+    },
+    {
+      "start": 212.88,
+      "end": 212.96,
+      "text": "this"
+    },
+    {
+      "start": 213.04,
+      "end": 213.28,
+      "text": "text"
+    },
+    {
+      "start": 213.36,
+      "end": 213.52,
+      "text": "box"
+    },
+    {
+      "start": 213.6,
+      "end": 213.68,
+      "text": "where"
+    },
+    {
+      "start": 213.76,
+      "end": 213.84,
+      "text": "they"
+    },
+    {
+      "start": 213.92,
+      "end": 214.0,
+      "text": "can"
+    },
+    {
+      "start": 214.08,
+      "end": 214.32,
+      "text": "enter"
+    },
+    {
+      "start": 214.4,
+      "end": 214.48,
+      "text": "more"
+    },
+    {
+      "start": 214.64,
+      "end": 215.2,
+      "text": "information,"
+    },
+    {
+      "start": 215.2,
+      "end": 215.28,
+      "text": "more"
+    },
+    {
+      "start": 215.44,
+      "end": 215.84,
+      "text": "context"
+    },
+    {
+      "start": 215.92,
+      "end": 216.0,
+      "text": "on"
+    },
+    {
+      "start": 216.08,
+      "end": 216.16,
+      "text": "the"
+    },
+    {
+      "start": 216.16,
+      "end": 216.64,
+      "text": "image."
+    },
+    {
+      "start": 216.72,
+      "end": 216.8,
+      "text": "We"
+    },
+    {
+      "start": 216.88,
+      "end": 217.04,
+      "text": "call"
+    },
+    {
+      "start": 217.12,
+      "end": 217.2,
+      "text": "this"
+    },
+    {
+      "start": 217.28,
+      "end": 217.36,
+      "text": "like"
+    },
+    {
+      "start": 217.52,
+      "end": 217.6,
+      "text": "a"
+    },
+    {
+      "start": 217.68,
+      "end": 218.32,
+      "text": "claim."
+    },
+    {
+      "start": 218.48,
+      "end": 218.56,
+      "text": "And"
+    },
+    {
+      "start": 218.8,
+      "end": 218.88,
+      "text": "so"
+    },
+    {
+      "start": 219.04,
+      "end": 219.12,
+      "text": "um"
+    },
+    {
+      "start": 219.28,
+      "end": 219.36,
+      "text": "in"
+    },
+    {
+      "start": 219.44,
+      "end": 219.52,
+      "text": "this"
+    },
+    {
+      "start": 219.6,
+      "end": 219.84,
+      "text": "case,"
+    },
+    {
+      "start": 219.92,
+      "end": 220.24,
+      "text": "news"
+    },
+    {
+      "start": 220.32,
+      "end": 220.8,
+      "text": "123"
+    },
+    {
+      "start": 220.96,
+      "end": 221.04,
+      "text": "is"
+    },
+    {
+      "start": 221.04,
+      "end": 221.28,
+      "text": "gonna"
+    },
+    {
+      "start": 221.28,
+      "end": 221.36,
+      "text": "add"
+    },
+    {
+      "start": 221.44,
+      "end": 221.52,
+      "text": "a"
+    },
+    {
+      "start": 221.52,
+      "end": 221.76,
+      "text": "claim"
+    },
+    {
+      "start": 221.84,
+      "end": 221.92,
+      "text": "on"
+    },
+    {
+      "start": 221.92,
+      "end": 222.0,
+      "text": "their"
+    },
+    {
+      "start": 222.08,
+      "end": 222.24,
+      "text": "own"
+    },
+    {
+      "start": 222.24,
+      "end": 222.56,
+      "text": "image."
+    },
+    {
+      "start": 222.56,
+      "end": 222.8,
+      "text": "They're"
+    },
+    {
+      "start": 222.72,
+      "end": 222.88,
+      "text": "gonna"
+    },
+    {
+      "start": 222.96,
+      "end": 223.04,
+      "text": "say"
+    },
+    {
+      "start": 223.28,
+      "end": 223.6,
+      "text": "something"
+    },
+    {
+      "start": 223.84,
+      "end": 223.92,
+      "text": "about"
+    },
+    {
+      "start": 224.08,
+      "end": 224.16,
+      "text": "their"
+    },
+    {
+      "start": 224.24,
+      "end": 224.4,
+      "text": "own"
+    },
+    {
+      "start": 224.48,
+      "end": 224.96,
+      "text": "content."
+    },
+    {
+      "start": 225.04,
+      "end": 225.12,
+      "text": "It"
+    },
+    {
+      "start": 225.2,
+      "end": 225.28,
+      "text": "could"
+    },
+    {
+      "start": 225.44,
+      "end": 225.52,
+      "text": "be"
+    },
+    {
+      "start": 225.68,
+      "end": 225.76,
+      "text": "any"
+    },
+    {
+      "start": 226.0,
+      "end": 226.48,
+      "text": "user's"
+    },
+    {
+      "start": 226.56,
+      "end": 227.04,
+      "text": "content,"
+    },
+    {
+      "start": 227.12,
+      "end": 227.2,
+      "text": "but"
+    },
+    {
+      "start": 227.36,
+      "end": 227.44,
+      "text": "in"
+    },
+    {
+      "start": 227.44,
+      "end": 227.52,
+      "text": "this"
+    },
+    {
+      "start": 227.6,
+      "end": 227.76,
+      "text": "case"
+    },
+    {
+      "start": 227.84,
+      "end": 228.08,
+      "text": "it's"
+    },
+    {
+      "start": 228.0,
+      "end": 228.08,
+      "text": "their"
+    },
+    {
+      "start": 228.16,
+      "end": 228.4,
+      "text": "own,"
+    },
+    {
+      "start": 228.4,
+      "end": 228.48,
+      "text": "and"
+    },
+    {
+      "start": 228.56,
+      "end": 228.64,
+      "text": "so"
+    },
+    {
+      "start": 228.72,
+      "end": 228.96,
+      "text": "they're"
+    },
+    {
+      "start": 229.04,
+      "end": 229.28,
+      "text": "gonna"
+    },
+    {
+      "start": 229.52,
+      "end": 229.6,
+      "text": "put"
+    },
+    {
+      "start": 229.76,
+      "end": 229.84,
+      "text": "just"
+    },
+    {
+      "start": 230.0,
+      "end": 230.08,
+      "text": "a"
+    },
+    {
+      "start": 230.24,
+      "end": 230.32,
+      "text": "little"
+    },
+    {
+      "start": 230.4,
+      "end": 230.64,
+      "text": "piece"
+    },
+    {
+      "start": 230.64,
+      "end": 230.72,
+      "text": "of"
+    },
+    {
+      "start": 230.8,
+      "end": 231.04,
+      "text": "text"
+    },
+    {
+      "start": 231.12,
+      "end": 231.2,
+      "text": "in"
+    },
+    {
+      "start": 231.28,
+      "end": 231.6,
+      "text": "there."
+    },
+    {
+      "start": 231.68,
+      "end": 232.0,
+      "text": "They're"
+    },
+    {
+      "start": 232.08,
+      "end": 232.16,
+      "text": "going"
+    },
+    {
+      "start": 232.24,
+      "end": 232.32,
+      "text": "to"
+    },
+    {
+      "start": 232.48,
+      "end": 232.96,
+      "text": "describe"
+    },
+    {
+      "start": 232.96,
+      "end": 233.04,
+      "text": "the"
+    },
+    {
+      "start": 233.2,
+      "end": 233.44,
+      "text": "content"
+    },
+    {
+      "start": 233.52,
+      "end": 233.6,
+      "text": "of"
+    },
+    {
+      "start": 233.6,
+      "end": 233.68,
+      "text": "the"
+    },
+    {
+      "start": 233.76,
+      "end": 234.08,
+      "text": "image,"
+    },
+    {
+      "start": 234.08,
+      "end": 234.4,
+      "text": "say,"
+    },
+    {
+      "start": 234.4,
+      "end": 234.48,
+      "text": "you"
+    },
+    {
+      "start": 234.48,
+      "end": 234.64,
+      "text": "know,"
+    },
+    {
+      "start": 234.64,
+      "end": 234.72,
+      "text": "this"
+    },
+    {
+      "start": 234.8,
+      "end": 234.88,
+      "text": "is"
+    },
+    {
+      "start": 234.88,
+      "end": 234.96,
+      "text": "the"
+    },
+    {
+      "start": 235.04,
+      "end": 235.52,
+      "text": "Chicago"
+    },
+    {
+      "start": 235.68,
+      "end": 236.08,
+      "text": "River."
+    },
+    {
+      "start": 236.16,
+      "end": 236.24,
+      "text": "We"
+    },
+    {
+      "start": 236.32,
+      "end": 236.48,
+      "text": "took"
+    },
+    {
+      "start": 236.56,
+      "end": 236.64,
+      "text": "the"
+    },
+    {
+      "start": 236.64,
+      "end": 236.88,
+      "text": "photo"
+    },
+    {
+      "start": 236.96,
+      "end": 237.04,
+      "text": "on"
+    },
+    {
+      "start": 237.04,
+      "end": 237.12,
+      "text": "this"
+    },
+    {
+      "start": 237.28,
+      "end": 237.6,
+      "text": "day,"
+    },
+    {
+      "start": 237.6,
+      "end": 237.68,
+      "text": "it"
+    },
+    {
+      "start": 237.68,
+      "end": 237.76,
+      "text": "was"
+    },
+    {
+      "start": 237.84,
+      "end": 238.0,
+      "text": "taken"
+    },
+    {
+      "start": 238.0,
+      "end": 238.08,
+      "text": "by"
+    },
+    {
+      "start": 238.16,
+      "end": 238.32,
+      "text": "us,"
+    },
+    {
+      "start": 238.4,
+      "end": 238.56,
+      "text": "news"
+    },
+    {
+      "start": 238.64,
+      "end": 238.72,
+      "text": "one"
+    },
+    {
+      "start": 238.88,
+      "end": 238.96,
+      "text": "two"
+    },
+    {
+      "start": 239.04,
+      "end": 239.28,
+      "text": "three,"
+    },
+    {
+      "start": 239.28,
+      "end": 239.36,
+      "text": "and"
+    },
+    {
+      "start": 239.36,
+      "end": 239.44,
+      "text": "so"
+    },
+    {
+      "start": 239.52,
+      "end": 239.76,
+      "text": "they're"
+    },
+    {
+      "start": 239.68,
+      "end": 239.76,
+      "text": "just"
+    },
+    {
+      "start": 239.76,
+      "end": 240.0,
+      "text": "adding"
+    },
+    {
+      "start": 240.08,
+      "end": 240.16,
+      "text": "that"
+    },
+    {
+      "start": 240.24,
+      "end": 240.64,
+      "text": "context"
+    },
+    {
+      "start": 240.72,
+      "end": 240.8,
+      "text": "to"
+    },
+    {
+      "start": 240.8,
+      "end": 240.88,
+      "text": "the"
+    },
+    {
+      "start": 240.96,
+      "end": 241.2,
+      "text": "image"
+    },
+    {
+      "start": 241.36,
+      "end": 241.92,
+      "text": "itself."
+    },
+    {
+      "start": 242.08,
+      "end": 242.16,
+      "text": "And"
+    },
+    {
+      "start": 242.32,
+      "end": 242.4,
+      "text": "they"
+    },
+    {
+      "start": 242.48,
+      "end": 242.8,
+      "text": "click"
+    },
+    {
+      "start": 243.04,
+      "end": 243.68,
+      "text": "create,"
+    },
+    {
+      "start": 243.76,
+      "end": 243.84,
+      "text": "and"
+    },
+    {
+      "start": 244.0,
+      "end": 244.4,
+      "text": "immediately"
+    },
+    {
+      "start": 244.48,
+      "end": 244.56,
+      "text": "we"
+    },
+    {
+      "start": 244.64,
+      "end": 244.96,
+      "text": "see,"
+    },
+    {
+      "start": 244.96,
+      "end": 245.12,
+      "text": "thanks"
+    },
+    {
+      "start": 245.12,
+      "end": 245.2,
+      "text": "to"
+    },
+    {
+      "start": 245.28,
+      "end": 245.36,
+      "text": "the"
+    },
+    {
+      "start": 245.36,
+      "end": 245.84,
+      "text": "extension,"
+    },
+    {
+      "start": 245.92,
+      "end": 246.0,
+      "text": "one"
+    },
+    {
+      "start": 246.08,
+      "end": 246.48,
+      "text": "claim,"
+    },
+    {
+      "start": 246.48,
+      "end": 246.56,
+      "text": "and"
+    },
+    {
+      "start": 246.72,
+      "end": 246.8,
+      "text": "we"
+    },
+    {
+      "start": 246.8,
+      "end": 246.88,
+      "text": "see"
+    },
+    {
+      "start": 246.96,
+      "end": 247.04,
+      "text": "this"
+    },
+    {
+      "start": 247.2,
+      "end": 247.52,
+      "text": "drawer"
+    },
+    {
+      "start": 247.6,
+      "end": 247.68,
+      "text": "here"
+    },
+    {
+      "start": 247.84,
+      "end": 248.08,
+      "text": "that's"
+    },
+    {
+      "start": 248.08,
+      "end": 248.16,
+      "text": "been"
+    },
+    {
+      "start": 248.24,
+      "end": 248.48,
+      "text": "created"
+    },
+    {
+      "start": 248.56,
+      "end": 248.64,
+      "text": "by"
+    },
+    {
+      "start": 248.72,
+      "end": 248.8,
+      "text": "the"
+    },
+    {
+      "start": 248.88,
+      "end": 249.36,
+      "text": "extension"
+    },
+    {
+      "start": 249.6,
+      "end": 249.68,
+      "text": "where"
+    },
+    {
+      "start": 249.84,
+      "end": 249.92,
+      "text": "you"
+    },
+    {
+      "start": 249.92,
+      "end": 250.0,
+      "text": "can"
+    },
+    {
+      "start": 250.08,
+      "end": 250.16,
+      "text": "see"
+    },
+    {
+      "start": 250.24,
+      "end": 250.32,
+      "text": "the"
+    },
+    {
+      "start": 250.4,
+      "end": 250.72,
+      "text": "account"
+    },
+    {
+      "start": 250.8,
+      "end": 250.88,
+      "text": "that"
+    },
+    {
+      "start": 251.04,
+      "end": 251.44,
+      "text": "created"
+    },
+    {
+      "start": 251.6,
+      "end": 251.92,
+      "text": "it,"
+    },
+    {
+      "start": 252.0,
+      "end": 252.08,
+      "text": "and"
+    },
+    {
+      "start": 252.24,
+      "end": 252.32,
+      "text": "you"
+    },
+    {
+      "start": 252.56,
+      "end": 252.64,
+      "text": "can"
+    },
+    {
+      "start": 252.88,
+      "end": 252.96,
+      "text": "see"
+    },
+    {
+      "start": 253.04,
+      "end": 253.12,
+      "text": "the"
+    },
+    {
+      "start": 253.28,
+      "end": 253.36,
+      "text": "um"
+    },
+    {
+      "start": 253.84,
+      "end": 253.92,
+      "text": "the"
+    },
+    {
+      "start": 254.16,
+      "end": 254.48,
+      "text": "text"
+    },
+    {
+      "start": 254.56,
+      "end": 254.64,
+      "text": "of"
+    },
+    {
+      "start": 255.04,
+      "end": 255.12,
+      "text": "their"
+    },
+    {
+      "start": 255.28,
+      "end": 255.76,
+      "text": "claim."
+    },
+    {
+      "start": 255.92,
+      "end": 256.08,
+      "text": "If"
+    },
+    {
+      "start": 256.08,
+      "end": 256.16,
+      "text": "you"
+    },
+    {
+      "start": 256.24,
+      "end": 256.4,
+      "text": "open"
+    },
+    {
+      "start": 256.48,
+      "end": 256.56,
+      "text": "the"
+    },
+    {
+      "start": 256.56,
+      "end": 256.8,
+      "text": "claim"
+    },
+    {
+      "start": 256.88,
+      "end": 256.96,
+      "text": "and"
+    },
+    {
+      "start": 256.96,
+      "end": 257.04,
+      "text": "look"
+    },
+    {
+      "start": 257.12,
+      "end": 257.2,
+      "text": "at"
+    },
+    {
+      "start": 257.2,
+      "end": 257.44,
+      "text": "it,"
+    },
+    {
+      "start": 257.44,
+      "end": 257.52,
+      "text": "you"
+    },
+    {
+      "start": 257.6,
+      "end": 257.68,
+      "text": "see"
+    },
+    {
+      "start": 257.76,
+      "end": 258.0,
+      "text": "it's"
+    },
+    {
+      "start": 257.92,
+      "end": 258.0,
+      "text": "not"
+    },
+    {
+      "start": 258.0,
+      "end": 258.08,
+      "text": "a"
+    },
+    {
+      "start": 258.08,
+      "end": 258.64,
+      "text": "Bluesky"
+    },
+    {
+      "start": 258.88,
+      "end": 259.2,
+      "text": "post."
+    },
+    {
+      "start": 259.2,
+      "end": 259.44,
+      "text": "It's"
+    },
+    {
+      "start": 259.44,
+      "end": 259.52,
+      "text": "our"
+    },
+    {
+      "start": 259.6,
+      "end": 259.76,
+      "text": "own"
+    },
+    {
+      "start": 259.76,
+      "end": 259.84,
+      "text": "kind"
+    },
+    {
+      "start": 259.92,
+      "end": 260.0,
+      "text": "of"
+    },
+    {
+      "start": 260.0,
+      "end": 260.32,
+      "text": "claim"
+    },
+    {
+      "start": 260.4,
+      "end": 260.56,
+      "text": "record"
+    },
+    {
+      "start": 260.72,
+      "end": 260.8,
+      "text": "and"
+    },
+    {
+      "start": 260.88,
+      "end": 260.96,
+      "text": "it"
+    },
+    {
+      "start": 261.04,
+      "end": 261.12,
+      "text": "has"
+    },
+    {
+      "start": 261.2,
+      "end": 261.36,
+      "text": "extra"
+    },
+    {
+      "start": 261.44,
+      "end": 261.6,
+      "text": "data"
+    },
+    {
+      "start": 261.68,
+      "end": 261.76,
+      "text": "in"
+    },
+    {
+      "start": 261.76,
+      "end": 261.84,
+      "text": "there"
+    },
+    {
+      "start": 261.92,
+      "end": 262.0,
+      "text": "and"
+    },
+    {
+      "start": 262.08,
+      "end": 262.16,
+      "text": "has"
+    },
+    {
+      "start": 262.24,
+      "end": 262.32,
+      "text": "a"
+    },
+    {
+      "start": 262.32,
+      "end": 262.8,
+      "text": "perceptual"
+    },
+    {
+      "start": 262.96,
+      "end": 263.52,
+      "text": "hash,"
+    },
+    {
+      "start": 263.6,
+      "end": 263.68,
+      "text": "it"
+    },
+    {
+      "start": 263.92,
+      "end": 264.0,
+      "text": "has"
+    },
+    {
+      "start": 264.16,
+      "end": 264.24,
+      "text": "the"
+    },
+    {
+      "start": 264.4,
+      "end": 264.8,
+      "text": "text,"
+    },
+    {
+      "start": 264.88,
+      "end": 264.96,
+      "text": "it"
+    },
+    {
+      "start": 265.04,
+      "end": 265.12,
+      "text": "is"
+    },
+    {
+      "start": 265.2,
+      "end": 265.28,
+      "text": "a"
+    },
+    {
+      "start": 265.28,
+      "end": 265.44,
+      "text": "link"
+    },
+    {
+      "start": 265.52,
+      "end": 265.6,
+      "text": "to"
+    },
+    {
+      "start": 265.68,
+      "end": 265.76,
+      "text": "the"
+    },
+    {
+      "start": 265.76,
+      "end": 266.0,
+      "text": "original"
+    },
+    {
+      "start": 266.08,
+      "end": 266.4,
+      "text": "post,"
+    },
+    {
+      "start": 266.4,
+      "end": 266.48,
+      "text": "so"
+    },
+    {
+      "start": 266.56,
+      "end": 266.64,
+      "text": "we"
+    },
+    {
+      "start": 266.72,
+      "end": 266.8,
+      "text": "have"
+    },
+    {
+      "start": 266.8,
+      "end": 266.88,
+      "text": "all"
+    },
+    {
+      "start": 267.04,
+      "end": 267.12,
+      "text": "this"
+    },
+    {
+      "start": 267.36,
+      "end": 267.44,
+      "text": "important"
+    },
+    {
+      "start": 267.6,
+      "end": 267.92,
+      "text": "information"
+    },
+    {
+      "start": 268.08,
+      "end": 268.4,
+      "text": "that's"
+    },
+    {
+      "start": 268.4,
+      "end": 269.36,
+      "text": "attached."
+    },
+    {
+      "start": 269.52,
+      "end": 269.6,
+      "text": "But"
+    },
+    {
+      "start": 269.84,
+      "end": 269.92,
+      "text": "when"
+    },
+    {
+      "start": 270.08,
+      "end": 270.16,
+      "text": "this"
+    },
+    {
+      "start": 270.32,
+      "end": 270.4,
+      "text": "really"
+    },
+    {
+      "start": 270.48,
+      "end": 270.64,
+      "text": "comes"
+    },
+    {
+      "start": 270.72,
+      "end": 270.8,
+      "text": "into"
+    },
+    {
+      "start": 270.96,
+      "end": 271.2,
+      "text": "play"
+    },
+    {
+      "start": 271.28,
+      "end": 271.36,
+      "text": "is"
+    },
+    {
+      "start": 271.52,
+      "end": 271.6,
+      "text": "when"
+    },
+    {
+      "start": 271.68,
+      "end": 271.76,
+      "text": "you"
+    },
+    {
+      "start": 271.84,
+      "end": 271.92,
+      "text": "see"
+    },
+    {
+      "start": 272.0,
+      "end": 272.08,
+      "text": "it"
+    },
+    {
+      "start": 272.16,
+      "end": 272.24,
+      "text": "in"
+    },
+    {
+      "start": 272.4,
+      "end": 272.48,
+      "text": "other"
+    },
+    {
+      "start": 272.72,
+      "end": 273.6,
+      "text": "contexts."
+    },
+    {
+      "start": 273.76,
+      "end": 273.84,
+      "text": "So"
+    },
+    {
+      "start": 274.0,
+      "end": 274.32,
+      "text": "we're"
+    },
+    {
+      "start": 274.24,
+      "end": 274.4,
+      "text": "gonna"
+    },
+    {
+      "start": 274.4,
+      "end": 274.64,
+      "text": "switch"
+    },
+    {
+      "start": 274.72,
+      "end": 274.8,
+      "text": "to"
+    },
+    {
+      "start": 274.8,
+      "end": 274.88,
+      "text": "a"
+    },
+    {
+      "start": 274.88,
+      "end": 275.12,
+      "text": "different"
+    },
+    {
+      "start": 275.12,
+      "end": 275.36,
+      "text": "account"
+    },
+    {
+      "start": 275.44,
+      "end": 275.52,
+      "text": "for"
+    },
+    {
+      "start": 275.6,
+      "end": 275.68,
+      "text": "the"
+    },
+    {
+      "start": 275.76,
+      "end": 276.08,
+      "text": "demo"
+    },
+    {
+      "start": 276.24,
+      "end": 276.48,
+      "text": "called"
+    },
+    {
+      "start": 276.56,
+      "end": 277.36,
+      "text": "Mallory."
+    },
+    {
+      "start": 277.44,
+      "end": 277.84,
+      "text": "Mallory"
+    },
+    {
+      "start": 278.08,
+      "end": 278.24,
+      "text": "gets"
+    },
+    {
+      "start": 278.24,
+      "end": 278.32,
+      "text": "her"
+    },
+    {
+      "start": 278.4,
+      "end": 278.72,
+      "text": "information"
+    },
+    {
+      "start": 278.8,
+      "end": 278.88,
+      "text": "from"
+    },
+    {
+      "start": 278.96,
+      "end": 279.04,
+      "text": "all"
+    },
+    {
+      "start": 279.12,
+      "end": 279.36,
+      "text": "kinds"
+    },
+    {
+      "start": 279.36,
+      "end": 279.44,
+      "text": "of"
+    },
+    {
+      "start": 279.52,
+      "end": 279.6,
+      "text": "other"
+    },
+    {
+      "start": 279.68,
+      "end": 280.24,
+      "text": "sources,"
+    },
+    {
+      "start": 280.24,
+      "end": 280.48,
+      "text": "maybe"
+    },
+    {
+      "start": 280.56,
+      "end": 280.88,
+      "text": "Facebook"
+    },
+    {
+      "start": 280.96,
+      "end": 281.04,
+      "text": "and"
+    },
+    {
+      "start": 281.12,
+      "end": 281.44,
+      "text": "Instagram"
+    },
+    {
+      "start": 281.52,
+      "end": 281.6,
+      "text": "as"
+    },
+    {
+      "start": 281.68,
+      "end": 281.76,
+      "text": "well"
+    },
+    {
+      "start": 281.76,
+      "end": 281.84,
+      "text": "as"
+    },
+    {
+      "start": 281.92,
+      "end": 282.8,
+      "text": "Bluesky."
+    },
+    {
+      "start": 282.8,
+      "end": 283.12,
+      "text": "Maybe"
+    },
+    {
+      "start": 283.12,
+      "end": 283.2,
+      "text": "she"
+    },
+    {
+      "start": 283.28,
+      "end": 283.44,
+      "text": "wants"
+    },
+    {
+      "start": 283.52,
+      "end": 283.6,
+      "text": "to"
+    },
+    {
+      "start": 283.68,
+      "end": 284.08,
+      "text": "misinform"
+    },
+    {
+      "start": 284.24,
+      "end": 284.32,
+      "text": "people"
+    },
+    {
+      "start": 284.48,
+      "end": 284.56,
+      "text": "like"
+    },
+    {
+      "start": 284.64,
+      "end": 285.52,
+      "text": "maliciously."
+    },
+    {
+      "start": 285.6,
+      "end": 285.84,
+      "text": "Maybe"
+    },
+    {
+      "start": 285.92,
+      "end": 286.16,
+      "text": "she's"
+    },
+    {
+      "start": 286.16,
+      "end": 286.24,
+      "text": "just"
+    },
+    {
+      "start": 286.32,
+      "end": 286.96,
+      "text": "misinformed"
+    },
+    {
+      "start": 287.04,
+      "end": 287.6,
+      "text": "herself."
+    },
+    {
+      "start": 287.68,
+      "end": 287.76,
+      "text": "But"
+    },
+    {
+      "start": 287.84,
+      "end": 287.92,
+      "text": "in"
+    },
+    {
+      "start": 288.0,
+      "end": 288.08,
+      "text": "any"
+    },
+    {
+      "start": 288.24,
+      "end": 288.48,
+      "text": "case,"
+    },
+    {
+      "start": 288.48,
+      "end": 288.56,
+      "text": "you"
+    },
+    {
+      "start": 288.56,
+      "end": 288.72,
+      "text": "know,"
+    },
+    {
+      "start": 288.72,
+      "end": 288.96,
+      "text": "she's"
+    },
+    {
+      "start": 288.96,
+      "end": 289.28,
+      "text": "writing"
+    },
+    {
+      "start": 289.28,
+      "end": 289.36,
+      "text": "her"
+    },
+    {
+      "start": 289.44,
+      "end": 289.6,
+      "text": "own"
+    },
+    {
+      "start": 289.68,
+      "end": 290.24,
+      "text": "posts."
+    },
+    {
+      "start": 290.4,
+      "end": 290.72,
+      "text": "She's"
+    },
+    {
+      "start": 290.72,
+      "end": 291.2,
+      "text": "writing"
+    },
+    {
+      "start": 291.44,
+      "end": 291.84,
+      "text": "Toxic"
+    },
+    {
+      "start": 292.0,
+      "end": 292.24,
+      "text": "Spill"
+    },
+    {
+      "start": 292.48,
+      "end": 292.64,
+      "text": "turns"
+    },
+    {
+      "start": 292.72,
+      "end": 292.8,
+      "text": "a"
+    },
+    {
+      "start": 292.8,
+      "end": 292.96,
+      "text": "river"
+    },
+    {
+      "start": 293.12,
+      "end": 293.44,
+      "text": "neon"
+    },
+    {
+      "start": 293.52,
+      "end": 293.68,
+      "text": "green"
+    },
+    {
+      "start": 293.76,
+      "end": 293.84,
+      "text": "in"
+    },
+    {
+      "start": 293.92,
+      "end": 294.24,
+      "text": "London,"
+    },
+    {
+      "start": 294.24,
+      "end": 294.32,
+      "text": "a"
+    },
+    {
+      "start": 294.32,
+      "end": 294.56,
+      "text": "totally"
+    },
+    {
+      "start": 294.64,
+      "end": 294.96,
+      "text": "different"
+    },
+    {
+      "start": 294.96,
+      "end": 295.44,
+      "text": "idea."
+    },
+    {
+      "start": 295.52,
+      "end": 295.6,
+      "text": "And"
+    },
+    {
+      "start": 295.68,
+      "end": 295.92,
+      "text": "she's"
+    },
+    {
+      "start": 295.92,
+      "end": 296.32,
+      "text": "attaching"
+    },
+    {
+      "start": 296.4,
+      "end": 296.48,
+      "text": "her"
+    },
+    {
+      "start": 296.56,
+      "end": 296.72,
+      "text": "own"
+    },
+    {
+      "start": 296.72,
+      "end": 297.04,
+      "text": "image."
+    },
+    {
+      "start": 297.04,
+      "end": 297.12,
+      "text": "This"
+    },
+    {
+      "start": 297.2,
+      "end": 297.28,
+      "text": "is"
+    },
+    {
+      "start": 297.36,
+      "end": 297.44,
+      "text": "a"
+    },
+    {
+      "start": 297.44,
+      "end": 297.68,
+      "text": "different"
+    },
+    {
+      "start": 297.76,
+      "end": 298.0,
+      "text": "image"
+    },
+    {
+      "start": 298.08,
+      "end": 298.16,
+      "text": "that"
+    },
+    {
+      "start": 298.24,
+      "end": 298.48,
+      "text": "she's"
+    },
+    {
+      "start": 298.48,
+      "end": 298.56,
+      "text": "going"
+    },
+    {
+      "start": 298.56,
+      "end": 298.64,
+      "text": "to"
+    },
+    {
+      "start": 298.72,
+      "end": 299.12,
+      "text": "attach"
+    },
+    {
+      "start": 299.28,
+      "end": 299.6,
+      "text": "coming"
+    },
+    {
+      "start": 299.68,
+      "end": 299.76,
+      "text": "from"
+    },
+    {
+      "start": 299.84,
+      "end": 299.92,
+      "text": "a"
+    },
+    {
+      "start": 299.92,
+      "end": 300.24,
+      "text": "different"
+    },
+    {
+      "start": 300.32,
+      "end": 300.72,
+      "text": "site."
+    },
+    {
+      "start": 300.88,
+      "end": 301.12,
+      "text": "It's"
+    },
+    {
+      "start": 301.12,
+      "end": 301.2,
+      "text": "got"
+    },
+    {
+      "start": 301.28,
+      "end": 301.36,
+      "text": "a"
+    },
+    {
+      "start": 301.36,
+      "end": 301.68,
+      "text": "smaller"
+    },
+    {
+      "start": 301.76,
+      "end": 302.4,
+      "text": "resolution,"
+    },
+    {
+      "start": 302.4,
+      "end": 302.64,
+      "text": "it's"
+    },
+    {
+      "start": 302.64,
+      "end": 302.72,
+      "text": "more"
+    },
+    {
+      "start": 302.88,
+      "end": 303.44,
+      "text": "compressed,"
+    },
+    {
+      "start": 303.44,
+      "end": 303.52,
+      "text": "which"
+    },
+    {
+      "start": 303.6,
+      "end": 303.68,
+      "text": "you"
+    },
+    {
+      "start": 303.68,
+      "end": 303.76,
+      "text": "can"
+    },
+    {
+      "start": 303.84,
+      "end": 303.92,
+      "text": "see"
+    },
+    {
+      "start": 304.0,
+      "end": 304.08,
+      "text": "a"
+    },
+    {
+      "start": 304.08,
+      "end": 304.16,
+      "text": "little"
+    },
+    {
+      "start": 304.24,
+      "end": 304.32,
+      "text": "bit"
+    },
+    {
+      "start": 304.4,
+      "end": 304.48,
+      "text": "on"
+    },
+    {
+      "start": 304.48,
+      "end": 304.56,
+      "text": "the"
+    },
+    {
+      "start": 304.56,
+      "end": 304.72,
+      "text": "left"
+    },
+    {
+      "start": 304.8,
+      "end": 305.04,
+      "text": "side"
+    },
+    {
+      "start": 305.12,
+      "end": 305.44,
+      "text": "there."
+    },
+    {
+      "start": 305.6,
+      "end": 305.68,
+      "text": "The"
+    },
+    {
+      "start": 305.76,
+      "end": 306.08,
+      "text": "visual"
+    },
+    {
+      "start": 306.16,
+      "end": 306.4,
+      "text": "content"
+    },
+    {
+      "start": 306.48,
+      "end": 306.56,
+      "text": "is"
+    },
+    {
+      "start": 306.72,
+      "end": 307.04,
+      "text": "obviously"
+    },
+    {
+      "start": 307.12,
+      "end": 307.2,
+      "text": "the"
+    },
+    {
+      "start": 307.28,
+      "end": 307.6,
+      "text": "same,"
+    },
+    {
+      "start": 307.68,
+      "end": 307.76,
+      "text": "but"
+    },
+    {
+      "start": 307.84,
+      "end": 307.92,
+      "text": "the"
+    },
+    {
+      "start": 308.0,
+      "end": 308.24,
+      "text": "image"
+    },
+    {
+      "start": 308.32,
+      "end": 308.72,
+      "text": "bytes,"
+    },
+    {
+      "start": 308.72,
+      "end": 308.8,
+      "text": "the"
+    },
+    {
+      "start": 308.88,
+      "end": 308.96,
+      "text": "C"
+    },
+    {
+      "start": 309.12,
+      "end": 309.52,
+      "text": "ID,"
+    },
+    {
+      "start": 309.52,
+      "end": 309.76,
+      "text": "it's"
+    },
+    {
+      "start": 309.76,
+      "end": 310.0,
+      "text": "totally"
+    },
+    {
+      "start": 310.16,
+      "end": 311.04,
+      "text": "different."
+    },
+    {
+      "start": 311.2,
+      "end": 311.28,
+      "text": "And"
+    },
+    {
+      "start": 311.44,
+      "end": 311.52,
+      "text": "so"
+    },
+    {
+      "start": 311.6,
+      "end": 311.92,
+      "text": "she's"
+    },
+    {
+      "start": 311.92,
+      "end": 312.16,
+      "text": "gonna"
+    },
+    {
+      "start": 312.24,
+      "end": 312.32,
+      "text": "post"
+    },
+    {
+      "start": 312.4,
+      "end": 312.48,
+      "text": "that"
+    },
+    {
+      "start": 312.56,
+      "end": 312.64,
+      "text": "to"
+    },
+    {
+      "start": 312.8,
+      "end": 312.88,
+      "text": "her"
+    },
+    {
+      "start": 313.04,
+      "end": 314.48,
+      "text": "PDS."
+    },
+    {
+      "start": 314.64,
+      "end": 314.72,
+      "text": "And"
+    },
+    {
+      "start": 314.96,
+      "end": 315.04,
+      "text": "what"
+    },
+    {
+      "start": 315.2,
+      "end": 315.28,
+      "text": "we"
+    },
+    {
+      "start": 315.36,
+      "end": 315.44,
+      "text": "see"
+    },
+    {
+      "start": 315.6,
+      "end": 316.32,
+      "text": "immediately,"
+    },
+    {
+      "start": 316.4,
+      "end": 316.48,
+      "text": "one"
+    },
+    {
+      "start": 316.64,
+      "end": 317.2,
+      "text": "claim."
+    },
+    {
+      "start": 317.28,
+      "end": 317.36,
+      "text": "So"
+    },
+    {
+      "start": 317.52,
+      "end": 317.76,
+      "text": "that's"
+    },
+    {
+      "start": 317.76,
+      "end": 317.84,
+      "text": "the"
+    },
+    {
+      "start": 317.92,
+      "end": 318.32,
+      "text": "Nectar"
+    },
+    {
+      "start": 318.4,
+      "end": 318.72,
+      "text": "API"
+    },
+    {
+      "start": 318.8,
+      "end": 318.88,
+      "text": "and"
+    },
+    {
+      "start": 318.88,
+      "end": 318.96,
+      "text": "the"
+    },
+    {
+      "start": 318.96,
+      "end": 319.36,
+      "text": "Pollen"
+    },
+    {
+      "start": 319.44,
+      "end": 319.76,
+      "text": "browser"
+    },
+    {
+      "start": 319.84,
+      "end": 320.32,
+      "text": "extension"
+    },
+    {
+      "start": 320.56,
+      "end": 321.04,
+      "text": "carrying"
+    },
+    {
+      "start": 321.12,
+      "end": 321.44,
+      "text": "through"
+    },
+    {
+      "start": 321.6,
+      "end": 321.68,
+      "text": "this"
+    },
+    {
+      "start": 321.84,
+      "end": 322.24,
+      "text": "claim"
+    },
+    {
+      "start": 322.32,
+      "end": 322.64,
+      "text": "information"
+    },
+    {
+      "start": 322.8,
+      "end": 322.88,
+      "text": "because"
+    },
+    {
+      "start": 323.04,
+      "end": 323.28,
+      "text": "it's"
+    },
+    {
+      "start": 323.28,
+      "end": 323.68,
+      "text": "matched"
+    },
+    {
+      "start": 323.84,
+      "end": 323.92,
+      "text": "these"
+    },
+    {
+      "start": 324.08,
+      "end": 324.48,
+      "text": "visually"
+    },
+    {
+      "start": 324.64,
+      "end": 324.96,
+      "text": "similar"
+    },
+    {
+      "start": 325.12,
+      "end": 325.84,
+      "text": "images."
+    },
+    {
+      "start": 326.0,
+      "end": 326.08,
+      "text": "And"
+    },
+    {
+      "start": 326.16,
+      "end": 326.24,
+      "text": "so"
+    },
+    {
+      "start": 326.4,
+      "end": 326.48,
+      "text": "we"
+    },
+    {
+      "start": 326.72,
+      "end": 326.8,
+      "text": "see"
+    },
+    {
+      "start": 326.88,
+      "end": 326.96,
+      "text": "a"
+    },
+    {
+      "start": 327.04,
+      "end": 327.36,
+      "text": "different"
+    },
+    {
+      "start": 327.36,
+      "end": 327.6,
+      "text": "idea"
+    },
+    {
+      "start": 327.76,
+      "end": 327.84,
+      "text": "that"
+    },
+    {
+      "start": 327.92,
+      "end": 328.24,
+      "text": "it's"
+    },
+    {
+      "start": 328.16,
+      "end": 328.24,
+      "text": "the"
+    },
+    {
+      "start": 328.24,
+      "end": 328.72,
+      "text": "Chicago"
+    },
+    {
+      "start": 328.8,
+      "end": 329.04,
+      "text": "River"
+    },
+    {
+      "start": 329.12,
+      "end": 329.36,
+      "text": "that's"
+    },
+    {
+      "start": 329.28,
+      "end": 329.36,
+      "text": "been"
+    },
+    {
+      "start": 329.52,
+      "end": 329.92,
+      "text": "died."
+    },
+    {
+      "start": 330.0,
+      "end": 330.08,
+      "text": "This"
+    },
+    {
+      "start": 330.16,
+      "end": 330.64,
+      "text": "contradicts"
+    },
+    {
+      "start": 330.72,
+      "end": 331.36,
+      "text": "Mallory,"
+    },
+    {
+      "start": 331.36,
+      "end": 331.44,
+      "text": "and"
+    },
+    {
+      "start": 331.52,
+      "end": 331.6,
+      "text": "as"
+    },
+    {
+      "start": 331.6,
+      "end": 331.68,
+      "text": "a"
+    },
+    {
+      "start": 331.68,
+      "end": 332.08,
+      "text": "viewer,"
+    },
+    {
+      "start": 332.08,
+      "end": 332.16,
+      "text": "as"
+    },
+    {
+      "start": 332.24,
+      "end": 332.32,
+      "text": "a"
+    },
+    {
+      "start": 332.32,
+      "end": 332.72,
+      "text": "user,"
+    },
+    {
+      "start": 332.72,
+      "end": 332.8,
+      "text": "we"
+    },
+    {
+      "start": 332.88,
+      "end": 332.96,
+      "text": "get"
+    },
+    {
+      "start": 333.04,
+      "end": 333.12,
+      "text": "to"
+    },
+    {
+      "start": 333.12,
+      "end": 333.36,
+      "text": "decide"
+    },
+    {
+      "start": 333.52,
+      "end": 333.6,
+      "text": "who"
+    },
+    {
+      "start": 333.76,
+      "end": 333.84,
+      "text": "we"
+    },
+    {
+      "start": 333.92,
+      "end": 334.32,
+      "text": "trust,"
+    },
+    {
+      "start": 334.4,
+      "end": 335.36,
+      "text": "news123"
+    },
+    {
+      "start": 335.52,
+      "end": 335.6,
+      "text": "or"
+    },
+    {
+      "start": 335.68,
+      "end": 336.48,
+      "text": "Mallory."
+    },
+    {
+      "start": 336.56,
+      "end": 336.64,
+      "text": "We"
+    },
+    {
+      "start": 336.8,
+      "end": 336.88,
+      "text": "also"
+    },
+    {
+      "start": 336.96,
+      "end": 337.04,
+      "text": "get"
+    },
+    {
+      "start": 337.12,
+      "end": 337.2,
+      "text": "some"
+    },
+    {
+      "start": 337.28,
+      "end": 337.52,
+      "text": "extra"
+    },
+    {
+      "start": 337.6,
+      "end": 338.0,
+      "text": "information."
+    },
+    {
+      "start": 338.0,
+      "end": 338.08,
+      "text": "We"
+    },
+    {
+      "start": 338.16,
+      "end": 338.24,
+      "text": "get"
+    },
+    {
+      "start": 338.32,
+      "end": 338.4,
+      "text": "to"
+    },
+    {
+      "start": 338.4,
+      "end": 338.48,
+      "text": "see"
+    },
+    {
+      "start": 338.56,
+      "end": 338.64,
+      "text": "the"
+    },
+    {
+      "start": 338.72,
+      "end": 338.96,
+      "text": "user"
+    },
+    {
+      "start": 339.04,
+      "end": 339.44,
+      "text": "name,"
+    },
+    {
+      "start": 339.44,
+      "end": 339.52,
+      "text": "and"
+    },
+    {
+      "start": 339.68,
+      "end": 339.76,
+      "text": "we"
+    },
+    {
+      "start": 339.84,
+      "end": 339.92,
+      "text": "get"
+    },
+    {
+      "start": 340.0,
+      "end": 340.08,
+      "text": "to"
+    },
+    {
+      "start": 340.08,
+      "end": 340.16,
+      "text": "see"
+    },
+    {
+      "start": 340.32,
+      "end": 340.96,
+      "text": "95%"
+    },
+    {
+      "start": 341.2,
+      "end": 341.6,
+      "text": "match."
+    },
+    {
+      "start": 341.6,
+      "end": 341.84,
+      "text": "That's"
+    },
+    {
+      "start": 341.84,
+      "end": 341.92,
+      "text": "our"
+    },
+    {
+      "start": 342.0,
+      "end": 342.32,
+      "text": "matching"
+    },
+    {
+      "start": 342.4,
+      "end": 342.88,
+      "text": "algorithm"
+    },
+    {
+      "start": 342.96,
+      "end": 343.04,
+      "text": "at"
+    },
+    {
+      "start": 343.2,
+      "end": 343.6,
+      "text": "work,"
+    },
+    {
+      "start": 343.68,
+      "end": 343.76,
+      "text": "just"
+    },
+    {
+      "start": 343.92,
+      "end": 344.24,
+      "text": "telling"
+    },
+    {
+      "start": 344.24,
+      "end": 344.32,
+      "text": "you"
+    },
+    {
+      "start": 344.48,
+      "end": 344.56,
+      "text": "like"
+    },
+    {
+      "start": 344.72,
+      "end": 344.8,
+      "text": "how"
+    },
+    {
+      "start": 344.88,
+      "end": 345.12,
+      "text": "close"
+    },
+    {
+      "start": 345.2,
+      "end": 345.28,
+      "text": "these"
+    },
+    {
+      "start": 345.44,
+      "end": 345.68,
+      "text": "images"
+    },
+    {
+      "start": 345.76,
+      "end": 345.84,
+      "text": "are"
+    },
+    {
+      "start": 346.0,
+      "end": 346.4,
+      "text": "visually."
+    },
+    {
+      "start": 346.48,
+      "end": 347.04,
+      "text": "95%"
+    },
+    {
+      "start": 347.2,
+      "end": 347.28,
+      "text": "is"
+    },
+    {
+      "start": 347.36,
+      "end": 347.6,
+      "text": "pretty"
+    },
+    {
+      "start": 347.6,
+      "end": 348.0,
+      "text": "high,"
+    },
+    {
+      "start": 348.08,
+      "end": 348.16,
+      "text": "and"
+    },
+    {
+      "start": 348.24,
+      "end": 348.32,
+      "text": "so"
+    },
+    {
+      "start": 348.48,
+      "end": 348.56,
+      "text": "you"
+    },
+    {
+      "start": 348.64,
+      "end": 348.72,
+      "text": "know"
+    },
+    {
+      "start": 348.8,
+      "end": 349.04,
+      "text": "that's"
+    },
+    {
+      "start": 349.12,
+      "end": 349.44,
+      "text": "great."
+    },
+    {
+      "start": 349.6,
+      "end": 349.68,
+      "text": "We"
+    },
+    {
+      "start": 349.84,
+      "end": 349.92,
+      "text": "also"
+    },
+    {
+      "start": 350.0,
+      "end": 350.08,
+      "text": "see"
+    },
+    {
+      "start": 350.24,
+      "end": 350.48,
+      "text": "view"
+    },
+    {
+      "start": 350.64,
+      "end": 351.12,
+      "text": "claimed"
+    },
+    {
+      "start": 351.28,
+      "end": 351.84,
+      "text": "post,"
+    },
+    {
+      "start": 351.92,
+      "end": 352.0,
+      "text": "which"
+    },
+    {
+      "start": 352.16,
+      "end": 352.24,
+      "text": "is"
+    },
+    {
+      "start": 352.32,
+      "end": 352.4,
+      "text": "a"
+    },
+    {
+      "start": 352.4,
+      "end": 352.56,
+      "text": "button"
+    },
+    {
+      "start": 352.64,
+      "end": 352.72,
+      "text": "that"
+    },
+    {
+      "start": 352.8,
+      "end": 353.04,
+      "text": "takes"
+    },
+    {
+      "start": 353.04,
+      "end": 353.12,
+      "text": "you"
+    },
+    {
+      "start": 353.2,
+      "end": 353.28,
+      "text": "to"
+    },
+    {
+      "start": 353.36,
+      "end": 353.44,
+      "text": "the"
+    },
+    {
+      "start": 353.44,
+      "end": 353.68,
+      "text": "original"
+    },
+    {
+      "start": 353.84,
+      "end": 353.92,
+      "text": "post"
+    },
+    {
+      "start": 354.16,
+      "end": 354.24,
+      "text": "the"
+    },
+    {
+      "start": 354.24,
+      "end": 354.56,
+      "text": "claim"
+    },
+    {
+      "start": 354.56,
+      "end": 354.64,
+      "text": "is"
+    },
+    {
+      "start": 354.64,
+      "end": 354.88,
+      "text": "on,"
+    },
+    {
+      "start": 354.88,
+      "end": 354.96,
+      "text": "so"
+    },
+    {
+      "start": 355.12,
+      "end": 355.2,
+      "text": "you"
+    },
+    {
+      "start": 355.2,
+      "end": 355.28,
+      "text": "can"
+    },
+    {
+      "start": 355.36,
+      "end": 355.6,
+      "text": "trace"
+    },
+    {
+      "start": 355.68,
+      "end": 355.76,
+      "text": "the"
+    },
+    {
+      "start": 355.76,
+      "end": 356.24,
+      "text": "provenance"
+    },
+    {
+      "start": 356.32,
+      "end": 356.4,
+      "text": "of"
+    },
+    {
+      "start": 356.4,
+      "end": 356.48,
+      "text": "the"
+    },
+    {
+      "start": 356.56,
+      "end": 356.96,
+      "text": "image."
+    },
+    {
+      "start": 357.04,
+      "end": 357.12,
+      "text": "You"
+    },
+    {
+      "start": 357.2,
+      "end": 357.28,
+      "text": "can"
+    },
+    {
+      "start": 357.36,
+      "end": 357.6,
+      "text": "find"
+    },
+    {
+      "start": 357.68,
+      "end": 357.76,
+      "text": "the"
+    },
+    {
+      "start": 358.0,
+      "end": 358.4,
+      "text": "original"
+    },
+    {
+      "start": 358.64,
+      "end": 358.72,
+      "text": "um"
+    },
+    {
+      "start": 358.88,
+      "end": 358.96,
+      "text": "place"
+    },
+    {
+      "start": 359.28,
+      "end": 359.36,
+      "text": "that"
+    },
+    {
+      "start": 359.44,
+      "end": 359.52,
+      "text": "the"
+    },
+    {
+      "start": 359.52,
+      "end": 359.76,
+      "text": "claim"
+    },
+    {
+      "start": 359.76,
+      "end": 359.84,
+      "text": "was"
+    },
+    {
+      "start": 359.92,
+      "end": 360.08,
+      "text": "made"
+    },
+    {
+      "start": 360.16,
+      "end": 360.24,
+      "text": "and"
+    },
+    {
+      "start": 360.32,
+      "end": 360.48,
+      "text": "allow"
+    },
+    {
+      "start": 360.56,
+      "end": 360.64,
+      "text": "you"
+    },
+    {
+      "start": 360.72,
+      "end": 360.8,
+      "text": "to"
+    },
+    {
+      "start": 360.8,
+      "end": 360.88,
+      "text": "see"
+    },
+    {
+      "start": 361.04,
+      "end": 361.12,
+      "text": "like"
+    },
+    {
+      "start": 361.36,
+      "end": 361.44,
+      "text": "you"
+    },
+    {
+      "start": 361.44,
+      "end": 361.6,
+      "text": "know,"
+    },
+    {
+      "start": 361.6,
+      "end": 361.68,
+      "text": "if"
+    },
+    {
+      "start": 361.76,
+      "end": 361.84,
+      "text": "you"
+    },
+    {
+      "start": 361.84,
+      "end": 362.08,
+      "text": "don't"
+    },
+    {
+      "start": 362.0,
+      "end": 362.16,
+      "text": "trust"
+    },
+    {
+      "start": 362.24,
+      "end": 362.32,
+      "text": "the"
+    },
+    {
+      "start": 362.32,
+      "end": 362.64,
+      "text": "matching"
+    },
+    {
+      "start": 362.64,
+      "end": 363.2,
+      "text": "algorithm,"
+    },
+    {
+      "start": 363.2,
+      "end": 363.28,
+      "text": "you"
+    },
+    {
+      "start": 363.28,
+      "end": 363.36,
+      "text": "can"
+    },
+    {
+      "start": 363.44,
+      "end": 363.52,
+      "text": "see"
+    },
+    {
+      "start": 363.6,
+      "end": 363.68,
+      "text": "what"
+    },
+    {
+      "start": 363.84,
+      "end": 363.92,
+      "text": "the"
+    },
+    {
+      "start": 363.92,
+      "end": 364.16,
+      "text": "actual"
+    },
+    {
+      "start": 364.24,
+      "end": 364.56,
+      "text": "original"
+    },
+    {
+      "start": 364.64,
+      "end": 364.96,
+      "text": "image"
+    },
+    {
+      "start": 365.04,
+      "end": 365.12,
+      "text": "was"
+    },
+    {
+      "start": 365.36,
+      "end": 365.44,
+      "text": "and"
+    },
+    {
+      "start": 365.6,
+      "end": 365.68,
+      "text": "all"
+    },
+    {
+      "start": 365.76,
+      "end": 365.84,
+      "text": "that"
+    },
+    {
+      "start": 365.92,
+      "end": 366.0,
+      "text": "kind"
+    },
+    {
+      "start": 366.08,
+      "end": 366.16,
+      "text": "of"
+    },
+    {
+      "start": 366.24,
+      "end": 366.64,
+      "text": "stuff."
+    },
+    {
+      "start": 366.88,
+      "end": 366.96,
+      "text": "So"
+    },
+    {
+      "start": 367.12,
+      "end": 367.36,
+      "text": "that's"
+    },
+    {
+      "start": 367.36,
+      "end": 367.44,
+      "text": "just"
+    },
+    {
+      "start": 367.52,
+      "end": 367.6,
+      "text": "a"
+    },
+    {
+      "start": 367.6,
+      "end": 367.84,
+      "text": "simple"
+    },
+    {
+      "start": 367.92,
+      "end": 368.16,
+      "text": "demo"
+    },
+    {
+      "start": 368.4,
+      "end": 368.48,
+      "text": "or"
+    },
+    {
+      "start": 368.72,
+      "end": 369.28,
+      "text": "extension."
+    },
+    {
+      "start": 369.36,
+      "end": 369.44,
+      "text": "We"
+    },
+    {
+      "start": 369.52,
+      "end": 369.6,
+      "text": "think"
+    },
+    {
+      "start": 369.68,
+      "end": 369.76,
+      "text": "the"
+    },
+    {
+      "start": 369.92,
+      "end": 370.0,
+      "text": "really"
+    },
+    {
+      "start": 370.08,
+      "end": 370.48,
+      "text": "interesting"
+    },
+    {
+      "start": 370.56,
+      "end": 370.8,
+      "text": "thing"
+    },
+    {
+      "start": 370.96,
+      "end": 371.04,
+      "text": "here"
+    },
+    {
+      "start": 371.2,
+      "end": 371.28,
+      "text": "is"
+    },
+    {
+      "start": 371.44,
+      "end": 371.52,
+      "text": "that"
+    },
+    {
+      "start": 371.68,
+      "end": 372.0,
+      "text": "we've"
+    },
+    {
+      "start": 372.0,
+      "end": 372.08,
+      "text": "now"
+    },
+    {
+      "start": 372.16,
+      "end": 372.4,
+      "text": "created"
+    },
+    {
+      "start": 372.48,
+      "end": 372.56,
+      "text": "the"
+    },
+    {
+      "start": 372.56,
+      "end": 372.88,
+      "text": "ability"
+    },
+    {
+      "start": 372.96,
+      "end": 373.04,
+      "text": "to"
+    },
+    {
+      "start": 373.12,
+      "end": 373.28,
+      "text": "create"
+    },
+    {
+      "start": 373.36,
+      "end": 373.76,
+      "text": "records"
+    },
+    {
+      "start": 373.84,
+      "end": 373.92,
+      "text": "that"
+    },
+    {
+      "start": 374.0,
+      "end": 374.32,
+      "text": "refer"
+    },
+    {
+      "start": 374.48,
+      "end": 374.56,
+      "text": "to"
+    },
+    {
+      "start": 374.64,
+      "end": 375.04,
+      "text": "images"
+    },
+    {
+      "start": 375.2,
+      "end": 375.92,
+      "text": "themselves,"
+    },
+    {
+      "start": 376.0,
+      "end": 376.08,
+      "text": "not"
+    },
+    {
+      "start": 376.24,
+      "end": 376.32,
+      "text": "just"
+    },
+    {
+      "start": 376.4,
+      "end": 376.72,
+      "text": "records"
+    },
+    {
+      "start": 376.8,
+      "end": 376.88,
+      "text": "that"
+    },
+    {
+      "start": 376.96,
+      "end": 377.12,
+      "text": "refer"
+    },
+    {
+      "start": 377.2,
+      "end": 377.28,
+      "text": "to"
+    },
+    {
+      "start": 377.44,
+      "end": 377.84,
+      "text": "posts,"
+    },
+    {
+      "start": 377.84,
+      "end": 377.92,
+      "text": "like"
+    },
+    {
+      "start": 378.0,
+      "end": 378.08,
+      "text": "when"
+    },
+    {
+      "start": 378.16,
+      "end": 378.24,
+      "text": "you"
+    },
+    {
+      "start": 378.32,
+      "end": 378.4,
+      "text": "make"
+    },
+    {
+      "start": 378.48,
+      "end": 378.56,
+      "text": "a"
+    },
+    {
+      "start": 378.72,
+      "end": 379.2,
+      "text": "reply"
+    },
+    {
+      "start": 379.28,
+      "end": 379.36,
+      "text": "on"
+    },
+    {
+      "start": 379.52,
+      "end": 379.6,
+      "text": "the"
+    },
+    {
+      "start": 379.76,
+      "end": 380.4,
+      "text": "network."
+    },
+    {
+      "start": 380.64,
+      "end": 380.72,
+      "text": "So"
+    },
+    {
+      "start": 380.88,
+      "end": 380.96,
+      "text": "if"
+    },
+    {
+      "start": 381.12,
+      "end": 381.2,
+      "text": "we"
+    },
+    {
+      "start": 381.28,
+      "end": 381.44,
+      "text": "move"
+    },
+    {
+      "start": 381.52,
+      "end": 381.6,
+      "text": "to"
+    },
+    {
+      "start": 381.76,
+      "end": 381.84,
+      "text": "the"
+    },
+    {
+      "start": 381.84,
+      "end": 382.08,
+      "text": "next"
+    },
+    {
+      "start": 382.32,
+      "end": 382.96,
+      "text": "slide."
+    },
+    {
+      "start": 383.76,
+      "end": 383.84,
+      "text": "So"
+    },
+    {
+      "start": 384.0,
+      "end": 384.32,
+      "text": "yeah,"
+    },
+    {
+      "start": 384.32,
+      "end": 384.4,
+      "text": "that"
+    },
+    {
+      "start": 384.56,
+      "end": 384.64,
+      "text": "in"
+    },
+    {
+      "start": 384.72,
+      "end": 385.12,
+      "text": "Pollen"
+    },
+    {
+      "start": 385.2,
+      "end": 385.44,
+      "text": "we've"
+    },
+    {
+      "start": 385.44,
+      "end": 385.52,
+      "text": "just"
+    },
+    {
+      "start": 385.52,
+      "end": 385.76,
+      "text": "created"
+    },
+    {
+      "start": 385.84,
+      "end": 386.08,
+      "text": "text"
+    },
+    {
+      "start": 386.16,
+      "end": 386.64,
+      "text": "claims."
+    },
+    {
+      "start": 386.64,
+      "end": 386.72,
+      "text": "We"
+    },
+    {
+      "start": 386.72,
+      "end": 386.8,
+      "text": "think"
+    },
+    {
+      "start": 386.88,
+      "end": 387.12,
+      "text": "there's"
+    },
+    {
+      "start": 387.12,
+      "end": 387.2,
+      "text": "a"
+    },
+    {
+      "start": 387.2,
+      "end": 387.28,
+      "text": "lot"
+    },
+    {
+      "start": 387.44,
+      "end": 387.52,
+      "text": "to"
+    },
+    {
+      "start": 387.52,
+      "end": 387.84,
+      "text": "explore"
+    },
+    {
+      "start": 387.92,
+      "end": 388.0,
+      "text": "here"
+    },
+    {
+      "start": 388.08,
+      "end": 388.16,
+      "text": "with"
+    },
+    {
+      "start": 388.24,
+      "end": 388.48,
+      "text": "different"
+    },
+    {
+      "start": 388.48,
+      "end": 388.72,
+      "text": "kinds"
+    },
+    {
+      "start": 388.72,
+      "end": 388.8,
+      "text": "of"
+    },
+    {
+      "start": 388.8,
+      "end": 389.28,
+      "text": "claims."
+    },
+    {
+      "start": 389.36,
+      "end": 389.44,
+      "text": "You"
+    },
+    {
+      "start": 389.44,
+      "end": 389.52,
+      "text": "could"
+    },
+    {
+      "start": 389.6,
+      "end": 389.68,
+      "text": "do"
+    },
+    {
+      "start": 389.68,
+      "end": 389.76,
+      "text": "a"
+    },
+    {
+      "start": 389.84,
+      "end": 390.64,
+      "text": "geolocation"
+    },
+    {
+      "start": 390.72,
+      "end": 391.04,
+      "text": "claim,"
+    },
+    {
+      "start": 391.04,
+      "end": 391.12,
+      "text": "for"
+    },
+    {
+      "start": 391.2,
+      "end": 391.6,
+      "text": "example."
+    },
+    {
+      "start": 391.68,
+      "end": 391.76,
+      "text": "So"
+    },
+    {
+      "start": 391.92,
+      "end": 392.16,
+      "text": "users"
+    },
+    {
+      "start": 392.32,
+      "end": 392.56,
+      "text": "instead"
+    },
+    {
+      "start": 392.56,
+      "end": 392.64,
+      "text": "of"
+    },
+    {
+      "start": 392.64,
+      "end": 392.88,
+      "text": "writing"
+    },
+    {
+      "start": 392.96,
+      "end": 393.28,
+      "text": "text,"
+    },
+    {
+      "start": 393.28,
+      "end": 393.36,
+      "text": "they"
+    },
+    {
+      "start": 393.36,
+      "end": 393.44,
+      "text": "put"
+    },
+    {
+      "start": 393.52,
+      "end": 393.6,
+      "text": "a"
+    },
+    {
+      "start": 393.6,
+      "end": 393.76,
+      "text": "pin"
+    },
+    {
+      "start": 393.76,
+      "end": 393.84,
+      "text": "on"
+    },
+    {
+      "start": 393.84,
+      "end": 393.92,
+      "text": "a"
+    },
+    {
+      "start": 393.92,
+      "end": 394.08,
+      "text": "map"
+    },
+    {
+      "start": 394.24,
+      "end": 394.32,
+      "text": "and"
+    },
+    {
+      "start": 394.32,
+      "end": 394.56,
+      "text": "they're"
+    },
+    {
+      "start": 394.48,
+      "end": 394.72,
+      "text": "claiming"
+    },
+    {
+      "start": 394.88,
+      "end": 394.96,
+      "text": "you"
+    },
+    {
+      "start": 394.96,
+      "end": 395.04,
+      "text": "know"
+    },
+    {
+      "start": 395.12,
+      "end": 395.2,
+      "text": "this"
+    },
+    {
+      "start": 395.28,
+      "end": 395.52,
+      "text": "photo"
+    },
+    {
+      "start": 395.52,
+      "end": 395.6,
+      "text": "was"
+    },
+    {
+      "start": 395.68,
+      "end": 395.84,
+      "text": "taken"
+    },
+    {
+      "start": 395.92,
+      "end": 396.0,
+      "text": "in"
+    },
+    {
+      "start": 396.16,
+      "end": 396.24,
+      "text": "this"
+    },
+    {
+      "start": 396.4,
+      "end": 396.96,
+      "text": "location."
+    },
+    {
+      "start": 397.12,
+      "end": 397.2,
+      "text": "You"
+    },
+    {
+      "start": 397.28,
+      "end": 397.36,
+      "text": "could"
+    },
+    {
+      "start": 397.36,
+      "end": 397.44,
+      "text": "do"
+    },
+    {
+      "start": 397.52,
+      "end": 398.16,
+      "text": "timestamping"
+    },
+    {
+      "start": 398.24,
+      "end": 398.64,
+      "text": "claims."
+    },
+    {
+      "start": 398.64,
+      "end": 398.88,
+      "text": "Every"
+    },
+    {
+      "start": 398.88,
+      "end": 399.12,
+      "text": "record"
+    },
+    {
+      "start": 399.2,
+      "end": 399.44,
+      "text": "already"
+    },
+    {
+      "start": 399.44,
+      "end": 399.52,
+      "text": "has"
+    },
+    {
+      "start": 399.6,
+      "end": 399.68,
+      "text": "a"
+    },
+    {
+      "start": 399.68,
+      "end": 400.4,
+      "text": "timestamp,"
+    },
+    {
+      "start": 400.48,
+      "end": 400.56,
+      "text": "but"
+    },
+    {
+      "start": 400.64,
+      "end": 400.72,
+      "text": "if"
+    },
+    {
+      "start": 400.8,
+      "end": 400.88,
+      "text": "you"
+    },
+    {
+      "start": 400.88,
+      "end": 400.96,
+      "text": "want"
+    },
+    {
+      "start": 401.04,
+      "end": 401.12,
+      "text": "to"
+    },
+    {
+      "start": 401.2,
+      "end": 401.44,
+      "text": "prove"
+    },
+    {
+      "start": 401.52,
+      "end": 401.6,
+      "text": "when"
+    },
+    {
+      "start": 401.76,
+      "end": 401.84,
+      "text": "an"
+    },
+    {
+      "start": 401.92,
+      "end": 402.16,
+      "text": "image"
+    },
+    {
+      "start": 402.24,
+      "end": 402.32,
+      "text": "was"
+    },
+    {
+      "start": 402.4,
+      "end": 402.88,
+      "text": "taken,"
+    },
+    {
+      "start": 402.96,
+      "end": 403.04,
+      "text": "you"
+    },
+    {
+      "start": 403.12,
+      "end": 403.2,
+      "text": "can"
+    },
+    {
+      "start": 403.28,
+      "end": 403.36,
+      "text": "use"
+    },
+    {
+      "start": 403.52,
+      "end": 404.0,
+      "text": "external"
+    },
+    {
+      "start": 404.08,
+      "end": 404.16,
+      "text": "uh"
+    },
+    {
+      "start": 404.24,
+      "end": 404.64,
+      "text": "parties"
+    },
+    {
+      "start": 404.72,
+      "end": 404.8,
+      "text": "to"
+    },
+    {
+      "start": 404.88,
+      "end": 404.96,
+      "text": "do"
+    },
+    {
+      "start": 404.96,
+      "end": 405.2,
+      "text": "that."
+    },
+    {
+      "start": 405.28,
+      "end": 405.36,
+      "text": "You"
+    },
+    {
+      "start": 405.52,
+      "end": 405.6,
+      "text": "can"
+    },
+    {
+      "start": 405.68,
+      "end": 406.0,
+      "text": "register"
+    },
+    {
+      "start": 406.16,
+      "end": 406.24,
+      "text": "the"
+    },
+    {
+      "start": 406.24,
+      "end": 406.48,
+      "text": "image"
+    },
+    {
+      "start": 406.48,
+      "end": 406.56,
+      "text": "on"
+    },
+    {
+      "start": 406.64,
+      "end": 406.72,
+      "text": "a"
+    },
+    {
+      "start": 406.72,
+      "end": 407.04,
+      "text": "blockchain"
+    },
+    {
+      "start": 407.12,
+      "end": 407.2,
+      "text": "like"
+    },
+    {
+      "start": 407.28,
+      "end": 407.36,
+      "text": "the"
+    },
+    {
+      "start": 407.44,
+      "end": 407.92,
+      "text": "Cardano"
+    },
+    {
+      "start": 408.08,
+      "end": 408.64,
+      "text": "blockchain,"
+    },
+    {
+      "start": 408.72,
+      "end": 408.8,
+      "text": "put"
+    },
+    {
+      "start": 408.96,
+      "end": 409.04,
+      "text": "that"
+    },
+    {
+      "start": 409.12,
+      "end": 409.52,
+      "text": "registration"
+    },
+    {
+      "start": 409.6,
+      "end": 409.68,
+      "text": "in"
+    },
+    {
+      "start": 409.76,
+      "end": 409.84,
+      "text": "the"
+    },
+    {
+      "start": 409.84,
+      "end": 410.0,
+      "text": "record"
+    },
+    {
+      "start": 410.16,
+      "end": 410.24,
+      "text": "and"
+    },
+    {
+      "start": 410.32,
+      "end": 410.4,
+      "text": "that"
+    },
+    {
+      "start": 410.48,
+      "end": 410.72,
+      "text": "proves"
+    },
+    {
+      "start": 410.8,
+      "end": 410.88,
+      "text": "the"
+    },
+    {
+      "start": 410.88,
+      "end": 411.12,
+      "text": "image"
+    },
+    {
+      "start": 411.2,
+      "end": 411.6,
+      "text": "existed"
+    },
+    {
+      "start": 411.76,
+      "end": 412.0,
+      "text": "before"
+    },
+    {
+      "start": 412.08,
+      "end": 412.16,
+      "text": "a"
+    },
+    {
+      "start": 412.32,
+      "end": 412.56,
+      "text": "certain"
+    },
+    {
+      "start": 412.64,
+      "end": 412.72,
+      "text": "point"
+    },
+    {
+      "start": 412.8,
+      "end": 412.88,
+      "text": "in"
+    },
+    {
+      "start": 413.04,
+      "end": 413.36,
+      "text": "time."
+    },
+    {
+      "start": 413.44,
+      "end": 413.52,
+      "text": "Or"
+    },
+    {
+      "start": 413.68,
+      "end": 413.76,
+      "text": "you"
+    },
+    {
+      "start": 413.76,
+      "end": 413.84,
+      "text": "can"
+    },
+    {
+      "start": 413.92,
+      "end": 414.0,
+      "text": "use"
+    },
+    {
+      "start": 414.08,
+      "end": 414.16,
+      "text": "a"
+    },
+    {
+      "start": 414.16,
+      "end": 414.32,
+      "text": "third"
+    },
+    {
+      "start": 414.4,
+      "end": 414.72,
+      "text": "party"
+    },
+    {
+      "start": 414.8,
+      "end": 414.88,
+      "text": "with"
+    },
+    {
+      "start": 414.96,
+      "end": 415.04,
+      "text": "a"
+    },
+    {
+      "start": 415.12,
+      "end": 415.52,
+      "text": "trusted"
+    },
+    {
+      "start": 415.6,
+      "end": 415.68,
+      "text": "time"
+    },
+    {
+      "start": 415.84,
+      "end": 416.16,
+      "text": "stamping"
+    },
+    {
+      "start": 416.24,
+      "end": 416.56,
+      "text": "protocol"
+    },
+    {
+      "start": 416.8,
+      "end": 416.88,
+      "text": "that"
+    },
+    {
+      "start": 417.04,
+      "end": 417.28,
+      "text": "signs"
+    },
+    {
+      "start": 417.36,
+      "end": 417.44,
+      "text": "the"
+    },
+    {
+      "start": 417.52,
+      "end": 417.76,
+      "text": "hash"
+    },
+    {
+      "start": 417.84,
+      "end": 417.92,
+      "text": "of"
+    },
+    {
+      "start": 417.92,
+      "end": 418.0,
+      "text": "the"
+    },
+    {
+      "start": 418.08,
+      "end": 418.48,
+      "text": "image,"
+    },
+    {
+      "start": 418.48,
+      "end": 418.56,
+      "text": "you"
+    },
+    {
+      "start": 418.72,
+      "end": 419.04,
+      "text": "insert"
+    },
+    {
+      "start": 419.12,
+      "end": 419.2,
+      "text": "that"
+    },
+    {
+      "start": 419.28,
+      "end": 419.84,
+      "text": "signature."
+    },
+    {
+      "start": 420.0,
+      "end": 420.4,
+      "text": "Anyway,"
+    },
+    {
+      "start": 420.4,
+      "end": 420.64,
+      "text": "there's"
+    },
+    {
+      "start": 420.64,
+      "end": 420.8,
+      "text": "lots"
+    },
+    {
+      "start": 420.88,
+      "end": 420.96,
+      "text": "of"
+    },
+    {
+      "start": 420.96,
+      "end": 421.2,
+      "text": "different"
+    },
+    {
+      "start": 421.2,
+      "end": 421.36,
+      "text": "things"
+    },
+    {
+      "start": 421.44,
+      "end": 421.52,
+      "text": "you"
+    },
+    {
+      "start": 421.52,
+      "end": 421.6,
+      "text": "can"
+    },
+    {
+      "start": 421.68,
+      "end": 422.0,
+      "text": "do."
+    },
+    {
+      "start": 422.08,
+      "end": 422.16,
+      "text": "We"
+    },
+    {
+      "start": 422.24,
+      "end": 422.32,
+      "text": "think"
+    },
+    {
+      "start": 422.4,
+      "end": 422.48,
+      "text": "this"
+    },
+    {
+      "start": 422.56,
+      "end": 422.64,
+      "text": "is"
+    },
+    {
+      "start": 422.72,
+      "end": 422.8,
+      "text": "like"
+    },
+    {
+      "start": 422.88,
+      "end": 422.96,
+      "text": "an"
+    },
+    {
+      "start": 422.96,
+      "end": 423.12,
+      "text": "open"
+    },
+    {
+      "start": 423.2,
+      "end": 423.52,
+      "text": "standard"
+    },
+    {
+      "start": 423.6,
+      "end": 423.68,
+      "text": "that"
+    },
+    {
+      "start": 423.76,
+      "end": 424.0,
+      "text": "we've"
+    },
+    {
+      "start": 424.0,
+      "end": 424.24,
+      "text": "created"
+    },
+    {
+      "start": 424.32,
+      "end": 424.4,
+      "text": "that"
+    },
+    {
+      "start": 424.56,
+      "end": 424.64,
+      "text": "people"
+    },
+    {
+      "start": 424.8,
+      "end": 424.88,
+      "text": "can"
+    },
+    {
+      "start": 424.96,
+      "end": 425.36,
+      "text": "explore."
+    },
+    {
+      "start": 425.36,
+      "end": 425.44,
+      "text": "You"
+    },
+    {
+      "start": 425.52,
+      "end": 425.6,
+      "text": "could"
+    },
+    {
+      "start": 425.6,
+      "end": 425.68,
+      "text": "do"
+    },
+    {
+      "start": 425.76,
+      "end": 425.84,
+      "text": "like"
+    },
+    {
+      "start": 425.92,
+      "end": 426.08,
+      "text": "voice"
+    },
+    {
+      "start": 426.16,
+      "end": 426.56,
+      "text": "notes,"
+    },
+    {
+      "start": 426.56,
+      "end": 426.64,
+      "text": "you"
+    },
+    {
+      "start": 426.64,
+      "end": 426.72,
+      "text": "could"
+    },
+    {
+      "start": 426.8,
+      "end": 426.88,
+      "text": "do"
+    },
+    {
+      "start": 426.88,
+      "end": 426.96,
+      "text": "all"
+    },
+    {
+      "start": 427.04,
+      "end": 427.2,
+      "text": "kinds"
+    },
+    {
+      "start": 427.28,
+      "end": 427.36,
+      "text": "of"
+    },
+    {
+      "start": 427.36,
+      "end": 427.68,
+      "text": "different"
+    },
+    {
+      "start": 427.76,
+      "end": 428.08,
+      "text": "cool"
+    },
+    {
+      "start": 428.16,
+      "end": 428.64,
+      "text": "claims"
+    },
+    {
+      "start": 428.72,
+      "end": 428.8,
+      "text": "with"
+    },
+    {
+      "start": 428.88,
+      "end": 429.68,
+      "text": "Pollen."
+    },
+    {
+      "start": 429.84,
+      "end": 429.92,
+      "text": "So"
+    },
+    {
+      "start": 430.08,
+      "end": 430.16,
+      "text": "just"
+    },
+    {
+      "start": 430.24,
+      "end": 430.32,
+      "text": "to"
+    },
+    {
+      "start": 430.32,
+      "end": 430.8,
+      "text": "recap,"
+    },
+    {
+      "start": 430.8,
+      "end": 431.04,
+      "text": "we've"
+    },
+    {
+      "start": 431.04,
+      "end": 431.2,
+      "text": "created"
+    },
+    {
+      "start": 431.36,
+      "end": 431.92,
+      "text": "Nectar,"
+    },
+    {
+      "start": 431.92,
+      "end": 432.0,
+      "text": "which"
+    },
+    {
+      "start": 432.08,
+      "end": 432.16,
+      "text": "is"
+    },
+    {
+      "start": 432.24,
+      "end": 432.32,
+      "text": "an"
+    },
+    {
+      "start": 432.32,
+      "end": 432.64,
+      "text": "API"
+    },
+    {
+      "start": 432.72,
+      "end": 432.8,
+      "text": "to"
+    },
+    {
+      "start": 432.88,
+      "end": 433.12,
+      "text": "find"
+    },
+    {
+      "start": 433.2,
+      "end": 433.52,
+      "text": "similar"
+    },
+    {
+      "start": 433.52,
+      "end": 433.84,
+      "text": "images"
+    },
+    {
+      "start": 433.92,
+      "end": 434.16,
+      "text": "across"
+    },
+    {
+      "start": 434.16,
+      "end": 434.24,
+      "text": "the"
+    },
+    {
+      "start": 434.32,
+      "end": 434.8,
+      "text": "Atmosphere"
+    },
+    {
+      "start": 434.96,
+      "end": 435.04,
+      "text": "with"
+    },
+    {
+      "start": 435.2,
+      "end": 435.68,
+      "text": "perceptual"
+    },
+    {
+      "start": 435.76,
+      "end": 436.24,
+      "text": "hashing,"
+    },
+    {
+      "start": 436.32,
+      "end": 436.4,
+      "text": "which"
+    },
+    {
+      "start": 436.48,
+      "end": 436.72,
+      "text": "I'm"
+    },
+    {
+      "start": 436.64,
+      "end": 436.88,
+      "text": "happy"
+    },
+    {
+      "start": 436.88,
+      "end": 436.96,
+      "text": "to"
+    },
+    {
+      "start": 436.96,
+      "end": 437.12,
+      "text": "talk"
+    },
+    {
+      "start": 437.2,
+      "end": 437.28,
+      "text": "about"
+    },
+    {
+      "start": 437.44,
+      "end": 438.16,
+      "text": "afterward."
+    },
+    {
+      "start": 438.24,
+      "end": 438.32,
+      "text": "Um"
+    },
+    {
+      "start": 438.64,
+      "end": 438.72,
+      "text": "and"
+    },
+    {
+      "start": 438.88,
+      "end": 438.96,
+      "text": "then"
+    },
+    {
+      "start": 439.04,
+      "end": 439.12,
+      "text": "we"
+    },
+    {
+      "start": 439.2,
+      "end": 439.36,
+      "text": "created"
+    },
+    {
+      "start": 439.44,
+      "end": 439.92,
+      "text": "Pollen"
+    },
+    {
+      "start": 440.0,
+      "end": 440.08,
+      "text": "as"
+    },
+    {
+      "start": 440.16,
+      "end": 440.24,
+      "text": "an"
+    },
+    {
+      "start": 440.24,
+      "end": 440.56,
+      "text": "example"
+    },
+    {
+      "start": 440.64,
+      "end": 441.12,
+      "text": "demo."
+    },
+    {
+      "start": 441.12,
+      "end": 441.2,
+      "text": "But"
+    },
+    {
+      "start": 441.28,
+      "end": 441.36,
+      "text": "we"
+    },
+    {
+      "start": 441.36,
+      "end": 441.44,
+      "text": "think"
+    },
+    {
+      "start": 441.52,
+      "end": 441.92,
+      "text": "there's"
+    },
+    {
+      "start": 441.84,
+      "end": 442.0,
+      "text": "lots"
+    },
+    {
+      "start": 442.0,
+      "end": 442.08,
+      "text": "of"
+    },
+    {
+      "start": 442.16,
+      "end": 442.4,
+      "text": "cool"
+    },
+    {
+      "start": 442.48,
+      "end": 442.56,
+      "text": "other"
+    },
+    {
+      "start": 442.72,
+      "end": 442.8,
+      "text": "use"
+    },
+    {
+      "start": 443.04,
+      "end": 443.28,
+      "text": "cases"
+    },
+    {
+      "start": 443.36,
+      "end": 443.44,
+      "text": "that"
+    },
+    {
+      "start": 443.52,
+      "end": 443.6,
+      "text": "you"
+    },
+    {
+      "start": 443.68,
+      "end": 443.76,
+      "text": "can"
+    },
+    {
+      "start": 443.84,
+      "end": 443.92,
+      "text": "do"
+    },
+    {
+      "start": 444.08,
+      "end": 444.16,
+      "text": "with"
+    },
+    {
+      "start": 444.24,
+      "end": 444.32,
+      "text": "this"
+    },
+    {
+      "start": 444.4,
+      "end": 444.88,
+      "text": "API."
+    },
+    {
+      "start": 444.96,
+      "end": 445.04,
+      "text": "You"
+    },
+    {
+      "start": 445.2,
+      "end": 445.28,
+      "text": "could"
+    },
+    {
+      "start": 445.44,
+      "end": 445.68,
+      "text": "track"
+    },
+    {
+      "start": 445.84,
+      "end": 446.08,
+      "text": "image"
+    },
+    {
+      "start": 446.16,
+      "end": 446.72,
+      "text": "reposts"
+    },
+    {
+      "start": 446.8,
+      "end": 447.12,
+      "text": "across"
+    },
+    {
+      "start": 447.12,
+      "end": 447.2,
+      "text": "the"
+    },
+    {
+      "start": 447.28,
+      "end": 447.76,
+      "text": "network."
+    },
+    {
+      "start": 447.84,
+      "end": 447.92,
+      "text": "You"
+    },
+    {
+      "start": 448.0,
+      "end": 448.08,
+      "text": "could"
+    },
+    {
+      "start": 448.16,
+      "end": 448.24,
+      "text": "use"
+    },
+    {
+      "start": 448.32,
+      "end": 448.4,
+      "text": "it"
+    },
+    {
+      "start": 448.4,
+      "end": 448.48,
+      "text": "for"
+    },
+    {
+      "start": 448.56,
+      "end": 448.72,
+      "text": "trust"
+    },
+    {
+      "start": 448.8,
+      "end": 448.88,
+      "text": "and"
+    },
+    {
+      "start": 448.96,
+      "end": 449.28,
+      "text": "safety"
+    },
+    {
+      "start": 449.36,
+      "end": 449.44,
+      "text": "to"
+    },
+    {
+      "start": 449.44,
+      "end": 449.52,
+      "text": "do"
+    },
+    {
+      "start": 449.68,
+      "end": 450.08,
+      "text": "moderation"
+    },
+    {
+      "start": 450.16,
+      "end": 450.24,
+      "text": "of"
+    },
+    {
+      "start": 450.32,
+      "end": 450.72,
+      "text": "similar"
+    },
+    {
+      "start": 450.8,
+      "end": 451.36,
+      "text": "images."
+    },
+    {
+      "start": 451.44,
+      "end": 451.52,
+      "text": "You"
+    },
+    {
+      "start": 451.6,
+      "end": 451.68,
+      "text": "can"
+    },
+    {
+      "start": 451.76,
+      "end": 451.84,
+      "text": "do"
+    },
+    {
+      "start": 451.92,
+      "end": 452.0,
+      "text": "social"
+    },
+    {
+      "start": 452.24,
+      "end": 452.64,
+      "text": "research"
+    },
+    {
+      "start": 452.8,
+      "end": 452.88,
+      "text": "like"
+    },
+    {
+      "start": 452.96,
+      "end": 453.04,
+      "text": "uh"
+    },
+    {
+      "start": 453.12,
+      "end": 453.2,
+      "text": "the"
+    },
+    {
+      "start": 453.28,
+      "end": 453.68,
+      "text": "previous"
+    },
+    {
+      "start": 453.68,
+      "end": 453.92,
+      "text": "talk"
+    },
+    {
+      "start": 454.16,
+      "end": 454.24,
+      "text": "where"
+    },
+    {
+      "start": 454.32,
+      "end": 454.4,
+      "text": "you"
+    },
+    {
+      "start": 454.48,
+      "end": 454.72,
+      "text": "track"
+    },
+    {
+      "start": 454.88,
+      "end": 454.96,
+      "text": "like"
+    },
+    {
+      "start": 455.12,
+      "end": 455.36,
+      "text": "um,"
+    },
+    {
+      "start": 455.36,
+      "end": 455.68,
+      "text": "okay,"
+    },
+    {
+      "start": 455.76,
+      "end": 455.84,
+      "text": "this"
+    },
+    {
+      "start": 456.0,
+      "end": 456.32,
+      "text": "image"
+    },
+    {
+      "start": 456.48,
+      "end": 456.56,
+      "text": "is"
+    },
+    {
+      "start": 456.64,
+      "end": 456.72,
+      "text": "been"
+    },
+    {
+      "start": 456.96,
+      "end": 457.04,
+      "text": "has"
+    },
+    {
+      "start": 457.12,
+      "end": 457.2,
+      "text": "been"
+    },
+    {
+      "start": 457.28,
+      "end": 457.36,
+      "text": "like"
+    },
+    {
+      "start": 457.52,
+      "end": 457.84,
+      "text": "posted"
+    },
+    {
+      "start": 457.92,
+      "end": 458.0,
+      "text": "this"
+    },
+    {
+      "start": 458.16,
+      "end": 458.4,
+      "text": "many"
+    },
+    {
+      "start": 458.48,
+      "end": 458.72,
+      "text": "times"
+    },
+    {
+      "start": 458.88,
+      "end": 458.96,
+      "text": "over"
+    },
+    {
+      "start": 459.12,
+      "end": 459.2,
+      "text": "this"
+    },
+    {
+      "start": 459.36,
+      "end": 459.44,
+      "text": "time"
+    },
+    {
+      "start": 459.6,
+      "end": 460.16,
+      "text": "frame."
+    },
+    {
+      "start": 460.32,
+      "end": 460.4,
+      "text": "You"
+    },
+    {
+      "start": 460.48,
+      "end": 460.56,
+      "text": "could"
+    },
+    {
+      "start": 460.56,
+      "end": 460.64,
+      "text": "do"
+    },
+    {
+      "start": 460.8,
+      "end": 461.12,
+      "text": "community"
+    },
+    {
+      "start": 461.2,
+      "end": 461.6,
+      "text": "notes."
+    },
+    {
+      "start": 461.6,
+      "end": 461.68,
+      "text": "We"
+    },
+    {
+      "start": 461.68,
+      "end": 461.76,
+      "text": "see"
+    },
+    {
+      "start": 461.84,
+      "end": 462.16,
+      "text": "pollen"
+    },
+    {
+      "start": 462.24,
+      "end": 462.32,
+      "text": "as"
+    },
+    {
+      "start": 462.4,
+      "end": 462.48,
+      "text": "like"
+    },
+    {
+      "start": 462.64,
+      "end": 462.88,
+      "text": "step"
+    },
+    {
+      "start": 462.96,
+      "end": 463.44,
+      "text": "towards"
+    },
+    {
+      "start": 463.52,
+      "end": 463.6,
+      "text": "the"
+    },
+    {
+      "start": 463.68,
+      "end": 463.92,
+      "text": "idea"
+    },
+    {
+      "start": 463.92,
+      "end": 464.0,
+      "text": "of"
+    },
+    {
+      "start": 464.08,
+      "end": 464.56,
+      "text": "community"
+    },
+    {
+      "start": 464.72,
+      "end": 464.96,
+      "text": "notes"
+    },
+    {
+      "start": 465.04,
+      "end": 465.12,
+      "text": "on"
+    },
+    {
+      "start": 465.2,
+      "end": 465.76,
+      "text": "Bluesky"
+    },
+    {
+      "start": 465.84,
+      "end": 465.92,
+      "text": "and"
+    },
+    {
+      "start": 466.0,
+      "end": 466.08,
+      "text": "on"
+    },
+    {
+      "start": 466.16,
+      "end": 466.24,
+      "text": "the"
+    },
+    {
+      "start": 466.24,
+      "end": 466.72,
+      "text": "Atmosphere"
+    },
+    {
+      "start": 466.8,
+      "end": 466.88,
+      "text": "at"
+    },
+    {
+      "start": 466.88,
+      "end": 467.28,
+      "text": "large."
+    },
+    {
+      "start": 467.36,
+      "end": 467.44,
+      "text": "And"
+    },
+    {
+      "start": 467.52,
+      "end": 467.6,
+      "text": "you"
+    },
+    {
+      "start": 467.6,
+      "end": 467.68,
+      "text": "can"
+    },
+    {
+      "start": 467.76,
+      "end": 467.84,
+      "text": "also"
+    },
+    {
+      "start": 467.92,
+      "end": 468.0,
+      "text": "do"
+    },
+    {
+      "start": 468.16,
+      "end": 468.4,
+      "text": "rights"
+    },
+    {
+      "start": 468.48,
+      "end": 468.8,
+      "text": "management"
+    },
+    {
+      "start": 468.88,
+      "end": 468.96,
+      "text": "to"
+    },
+    {
+      "start": 469.04,
+      "end": 469.2,
+      "text": "track"
+    },
+    {
+      "start": 469.28,
+      "end": 470.0,
+      "text": "copyrighted"
+    },
+    {
+      "start": 470.08,
+      "end": 470.32,
+      "text": "content"
+    },
+    {
+      "start": 470.48,
+      "end": 470.56,
+      "text": "or"
+    },
+    {
+      "start": 470.64,
+      "end": 470.72,
+      "text": "just"
+    },
+    {
+      "start": 470.8,
+      "end": 471.12,
+      "text": "content"
+    },
+    {
+      "start": 471.2,
+      "end": 471.28,
+      "text": "you"
+    },
+    {
+      "start": 471.36,
+      "end": 471.76,
+      "text": "didn't"
+    },
+    {
+      "start": 471.68,
+      "end": 471.76,
+      "text": "want"
+    },
+    {
+      "start": 471.84,
+      "end": 471.92,
+      "text": "to"
+    },
+    {
+      "start": 472.0,
+      "end": 472.08,
+      "text": "be"
+    },
+    {
+      "start": 472.16,
+      "end": 472.24,
+      "text": "post"
+    },
+    {
+      "start": 472.56,
+      "end": 473.28,
+      "text": "posted."
+    },
+    {
+      "start": 473.44,
+      "end": 473.92,
+      "text": "Excuse"
+    },
+    {
+      "start": 474.08,
+      "end": 474.96,
+      "text": "me."
+    },
+    {
+      "start": 475.2,
+      "end": 475.28,
+      "text": "So"
+    },
+    {
+      "start": 475.52,
+      "end": 475.76,
+      "text": "that's"
+    },
+    {
+      "start": 475.84,
+      "end": 476.56,
+      "text": "Nectar."
+    },
+    {
+      "start": 476.64,
+      "end": 476.72,
+      "text": "You"
+    },
+    {
+      "start": 476.8,
+      "end": 476.88,
+      "text": "can"
+    },
+    {
+      "start": 476.96,
+      "end": 477.12,
+      "text": "check"
+    },
+    {
+      "start": 477.12,
+      "end": 477.2,
+      "text": "us"
+    },
+    {
+      "start": 477.2,
+      "end": 477.28,
+      "text": "out"
+    },
+    {
+      "start": 477.36,
+      "end": 477.44,
+      "text": "at"
+    },
+    {
+      "start": 477.52,
+      "end": 478.96,
+      "text": "Nectar.hyfa.co"
+    },
+    {
+      "start": 479.12,
+      "end": 479.52,
+      "text": "op."
+    },
+    {
+      "start": 479.6,
+      "end": 479.76,
+      "text": "If"
+    },
+    {
+      "start": 479.68,
+      "end": 479.92,
+      "text": "you're"
+    },
+    {
+      "start": 479.92,
+      "end": 480.24,
+      "text": "interested"
+    },
+    {
+      "start": 480.32,
+      "end": 480.4,
+      "text": "in"
+    },
+    {
+      "start": 480.48,
+      "end": 480.72,
+      "text": "adding"
+    },
+    {
+      "start": 480.8,
+      "end": 481.04,
+      "text": "image"
+    },
+    {
+      "start": 481.2,
+      "end": 481.68,
+      "text": "annotations"
+    },
+    {
+      "start": 481.84,
+      "end": 481.92,
+      "text": "to"
+    },
+    {
+      "start": 481.92,
+      "end": 482.0,
+      "text": "your"
+    },
+    {
+      "start": 482.16,
+      "end": 482.48,
+      "text": "application"
+    },
+    {
+      "start": 482.56,
+      "end": 482.64,
+      "text": "or"
+    },
+    {
+      "start": 482.8,
+      "end": 483.12,
+      "text": "image"
+    },
+    {
+      "start": 483.2,
+      "end": 483.52,
+      "text": "search"
+    },
+    {
+      "start": 483.52,
+      "end": 483.6,
+      "text": "to"
+    },
+    {
+      "start": 483.68,
+      "end": 483.76,
+      "text": "your"
+    },
+    {
+      "start": 483.84,
+      "end": 484.4,
+      "text": "application,"
+    },
+    {
+      "start": 484.48,
+      "end": 484.56,
+      "text": "if"
+    },
+    {
+      "start": 484.64,
+      "end": 484.72,
+      "text": "you"
+    },
+    {
+      "start": 484.72,
+      "end": 484.8,
+      "text": "want"
+    },
+    {
+      "start": 484.88,
+      "end": 484.96,
+      "text": "to"
+    },
+    {
+      "start": 484.96,
+      "end": 485.44,
+      "text": "collaborate"
+    },
+    {
+      "start": 485.52,
+      "end": 485.6,
+      "text": "with"
+    },
+    {
+      "start": 485.6,
+      "end": 485.68,
+      "text": "us"
+    },
+    {
+      "start": 485.76,
+      "end": 485.84,
+      "text": "on"
+    },
+    {
+      "start": 486.0,
+      "end": 486.08,
+      "text": "this"
+    },
+    {
+      "start": 486.16,
+      "end": 486.72,
+      "text": "project,"
+    },
+    {
+      "start": 486.88,
+      "end": 486.96,
+      "text": "fund"
+    },
+    {
+      "start": 487.28,
+      "end": 487.36,
+      "text": "the"
+    },
+    {
+      "start": 487.44,
+      "end": 487.92,
+      "text": "project,"
+    },
+    {
+      "start": 488.0,
+      "end": 488.08,
+      "text": "partner"
+    },
+    {
+      "start": 488.4,
+      "end": 488.48,
+      "text": "with"
+    },
+    {
+      "start": 488.56,
+      "end": 488.8,
+      "text": "us,"
+    },
+    {
+      "start": 488.88,
+      "end": 489.12,
+      "text": "either"
+    },
+    {
+      "start": 489.2,
+      "end": 489.36,
+      "text": "reach"
+    },
+    {
+      "start": 489.44,
+      "end": 489.52,
+      "text": "out"
+    },
+    {
+      "start": 489.68,
+      "end": 489.76,
+      "text": "in"
+    },
+    {
+      "start": 489.76,
+      "end": 489.84,
+      "text": "person"
+    },
+    {
+      "start": 490.0,
+      "end": 490.08,
+      "text": "to"
+    },
+    {
+      "start": 490.24,
+      "end": 490.72,
+      "text": "Udit"
+    },
+    {
+      "start": 490.88,
+      "end": 490.96,
+      "text": "or"
+    },
+    {
+      "start": 491.04,
+      "end": 491.52,
+      "text": "myself,"
+    },
+    {
+      "start": 491.52,
+      "end": 491.6,
+      "text": "or"
+    },
+    {
+      "start": 491.76,
+      "end": 491.92,
+      "text": "check"
+    },
+    {
+      "start": 492.0,
+      "end": 492.08,
+      "text": "us"
+    },
+    {
+      "start": 492.08,
+      "end": 492.16,
+      "text": "out"
+    },
+    {
+      "start": 492.24,
+      "end": 492.32,
+      "text": "at"
+    },
+    {
+      "start": 492.48,
+      "end": 494.64,
+      "text": "Nectar.hyfa.coop."
+    },
+    {
+      "start": 494.72,
+      "end": 494.88,
+      "text": "Thank"
+    },
+    {
+      "start": 494.96,
+      "end": 495.04,
+      "text": "you"
+    },
+    {
+      "start": 495.2,
+      "end": 495.28,
+      "text": "very"
+    },
+    {
+      "start": 495.52,
+      "end": 501.84,
+      "text": "much."
+    },
+    {
+      "start": 502.08,
+      "end": 502.32,
+      "text": "If"
+    },
+    {
+      "start": 502.4,
+      "end": 502.48,
+      "text": "we"
+    },
+    {
+      "start": 502.56,
+      "end": 502.64,
+      "text": "have"
+    },
+    {
+      "start": 502.72,
+      "end": 502.8,
+      "text": "time"
+    },
+    {
+      "start": 502.88,
+      "end": 502.96,
+      "text": "for"
+    },
+    {
+      "start": 503.2,
+      "end": 503.92,
+      "text": "questions."
+    },
+    {
+      "start": 506.8,
+      "end": 507.04,
+      "text": "Thank"
+    },
+    {
+      "start": 507.12,
+      "end": 507.36,
+      "text": "you."
+    },
+    {
+      "start": 508.0,
+      "end": 508.08,
+      "text": "I"
+    },
+    {
+      "start": 508.16,
+      "end": 508.24,
+      "text": "see"
+    },
+    {
+      "start": 508.48,
+      "end": 508.56,
+      "text": "the"
+    },
+    {
+      "start": 508.64,
+      "end": 509.2,
+      "text": "screenplay"
+    },
+    {
+      "start": 509.36,
+      "end": 509.52,
+      "text": "folks"
+    },
+    {
+      "start": 509.68,
+      "end": 509.76,
+      "text": "are"
+    },
+    {
+      "start": 509.84,
+      "end": 509.92,
+      "text": "right"
+    },
+    {
+      "start": 510.0,
+      "end": 510.16,
+      "text": "here."
+    },
+    {
+      "start": 510.4,
+      "end": 510.48,
+      "text": "I"
+    },
+    {
+      "start": 510.48,
+      "end": 510.56,
+      "text": "know"
+    },
+    {
+      "start": 510.72,
+      "end": 511.2,
+      "text": "ELI"
+    },
+    {
+      "start": 511.36,
+      "end": 511.68,
+      "text": "recently"
+    },
+    {
+      "start": 511.76,
+      "end": 512.16,
+      "text": "published"
+    },
+    {
+      "start": 512.24,
+      "end": 512.32,
+      "text": "a"
+    },
+    {
+      "start": 512.4,
+      "end": 512.64,
+      "text": "blog"
+    },
+    {
+      "start": 512.88,
+      "end": 512.96,
+      "text": "about"
+    },
+    {
+      "start": 513.2,
+      "end": 513.52,
+      "text": "using"
+    },
+    {
+      "start": 513.76,
+      "end": 514.0,
+      "text": "Suma"
+    },
+    {
+      "start": 514.4,
+      "end": 514.48,
+      "text": "and"
+    },
+    {
+      "start": 514.72,
+      "end": 515.36,
+      "text": "Moxle"
+    },
+    {
+      "start": 515.68,
+      "end": 515.76,
+      "text": "some"
+    },
+    {
+      "start": 516.0,
+      "end": 516.48,
+      "text": "standards"
+    },
+    {
+      "start": 516.64,
+      "end": 516.72,
+      "text": "to"
+    },
+    {
+      "start": 516.8,
+      "end": 517.04,
+      "text": "try"
+    },
+    {
+      "start": 517.12,
+      "end": 517.2,
+      "text": "to"
+    },
+    {
+      "start": 517.68,
+      "end": 518.08,
+      "text": "ensure"
+    },
+    {
+      "start": 518.8,
+      "end": 519.12,
+      "text": "hashing"
+    },
+    {
+      "start": 519.36,
+      "end": 519.44,
+      "text": "of"
+    },
+    {
+      "start": 519.76,
+      "end": 520.08,
+      "text": "videos"
+    },
+    {
+      "start": 520.32,
+      "end": 520.4,
+      "text": "of"
+    },
+    {
+      "start": 520.4,
+      "end": 520.48,
+      "text": "all"
+    },
+    {
+      "start": 520.64,
+      "end": 521.44,
+      "text": "authenticity."
+    },
+    {
+      "start": 521.84,
+      "end": 522.16,
+      "text": "Along"
+    },
+    {
+      "start": 522.32,
+      "end": 522.88,
+      "text": "relatively"
+    },
+    {
+      "start": 522.96,
+      "end": 523.36,
+      "text": "similar"
+    },
+    {
+      "start": 523.52,
+      "end": 523.76,
+      "text": "lines"
+    },
+    {
+      "start": 523.92,
+      "end": 524.0,
+      "text": "is"
+    },
+    {
+      "start": 524.24,
+      "end": 524.56,
+      "text": "this."
+    },
+    {
+      "start": 525.04,
+      "end": 525.36,
+      "text": "I'm"
+    },
+    {
+      "start": 525.44,
+      "end": 525.76,
+      "text": "curious"
+    },
+    {
+      "start": 525.92,
+      "end": 526.0,
+      "text": "if"
+    },
+    {
+      "start": 526.08,
+      "end": 526.16,
+      "text": "you"
+    },
+    {
+      "start": 526.56,
+      "end": 526.64,
+      "text": "look"
+    },
+    {
+      "start": 526.8,
+      "end": 526.88,
+      "text": "into"
+    },
+    {
+      "start": 527.04,
+      "end": 527.2,
+      "text": "those"
+    },
+    {
+      "start": 527.28,
+      "end": 527.52,
+      "text": "standards"
+    },
+    {
+      "start": 527.6,
+      "end": 527.84,
+      "text": "too."
+    },
+    {
+      "start": 528.0,
+      "end": 528.08,
+      "text": "Do"
+    },
+    {
+      "start": 528.08,
+      "end": 528.16,
+      "text": "you"
+    },
+    {
+      "start": 528.16,
+      "end": 528.24,
+      "text": "think"
+    },
+    {
+      "start": 528.32,
+      "end": 528.4,
+      "text": "the"
+    },
+    {
+      "start": 528.48,
+      "end": 528.8,
+      "text": "UX"
+    },
+    {
+      "start": 528.96,
+      "end": 529.04,
+      "text": "for"
+    },
+    {
+      "start": 529.28,
+      "end": 529.68,
+      "text": "images"
+    },
+    {
+      "start": 529.76,
+      "end": 529.84,
+      "text": "and"
+    },
+    {
+      "start": 530.0,
+      "end": 530.08,
+      "text": "video"
+    },
+    {
+      "start": 530.48,
+      "end": 530.56,
+      "text": "can"
+    },
+    {
+      "start": 530.72,
+      "end": 530.8,
+      "text": "be"
+    },
+    {
+      "start": 530.88,
+      "end": 531.28,
+      "text": "similar"
+    },
+    {
+      "start": 531.36,
+      "end": 531.44,
+      "text": "in"
+    },
+    {
+      "start": 531.52,
+      "end": 531.6,
+      "text": "this"
+    },
+    {
+      "start": 531.76,
+      "end": 532.0,
+      "text": "way?"
+    },
+    {
+      "start": 532.0,
+      "end": 532.08,
+      "text": "And"
+    },
+    {
+      "start": 532.32,
+      "end": 532.4,
+      "text": "you"
+    },
+    {
+      "start": 532.56,
+      "end": 532.72,
+      "text": "might"
+    },
+    {
+      "start": 532.88,
+      "end": 532.96,
+      "text": "want"
+    },
+    {
+      "start": 533.04,
+      "end": 533.12,
+      "text": "to"
+    },
+    {
+      "start": 533.12,
+      "end": 533.44,
+      "text": "develop"
+    },
+    {
+      "start": 533.6,
+      "end": 533.68,
+      "text": "your"
+    },
+    {
+      "start": 533.84,
+      "end": 534.24,
+      "text": "extenders"
+    },
+    {
+      "start": 534.48,
+      "end": 534.56,
+      "text": "for"
+    },
+    {
+      "start": 536.64,
+      "end": 536.72,
+      "text": "the"
+    },
+    {
+      "start": 537.2,
+      "end": 537.76,
+      "text": "question."
+    },
+    {
+      "start": 537.92,
+      "end": 538.16,
+      "text": "Yeah,"
+    },
+    {
+      "start": 538.16,
+      "end": 538.32,
+      "text": "yeah."
+    },
+    {
+      "start": 538.32,
+      "end": 538.4,
+      "text": "So"
+    },
+    {
+      "start": 538.48,
+      "end": 538.56,
+      "text": "just"
+    },
+    {
+      "start": 538.64,
+      "end": 538.72,
+      "text": "to"
+    },
+    {
+      "start": 538.72,
+      "end": 538.96,
+      "text": "repeat"
+    },
+    {
+      "start": 538.96,
+      "end": 539.04,
+      "text": "the"
+    },
+    {
+      "start": 539.04,
+      "end": 539.36,
+      "text": "question,"
+    },
+    {
+      "start": 539.36,
+      "end": 539.68,
+      "text": "it's"
+    },
+    {
+      "start": 539.6,
+      "end": 539.68,
+      "text": "about"
+    },
+    {
+      "start": 539.76,
+      "end": 540.0,
+      "text": "whether"
+    },
+    {
+      "start": 540.08,
+      "end": 540.8,
+      "text": "Eli's"
+    },
+    {
+      "start": 540.88,
+      "end": 540.96,
+      "text": "um"
+    },
+    {
+      "start": 541.12,
+      "end": 541.6,
+      "text": "standards"
+    },
+    {
+      "start": 541.68,
+      "end": 542.0,
+      "text": "around"
+    },
+    {
+      "start": 542.08,
+      "end": 542.16,
+      "text": "video"
+    },
+    {
+      "start": 542.4,
+      "end": 542.64,
+      "text": "hashing"
+    },
+    {
+      "start": 542.88,
+      "end": 542.96,
+      "text": "are"
+    },
+    {
+      "start": 543.12,
+      "end": 543.44,
+      "text": "relevant"
+    },
+    {
+      "start": 543.52,
+      "end": 543.6,
+      "text": "to"
+    },
+    {
+      "start": 543.68,
+      "end": 543.76,
+      "text": "our"
+    },
+    {
+      "start": 543.84,
+      "end": 544.08,
+      "text": "work."
+    },
+    {
+      "start": 544.16,
+      "end": 544.24,
+      "text": "So"
+    },
+    {
+      "start": 544.4,
+      "end": 544.64,
+      "text": "yeah,"
+    },
+    {
+      "start": 544.64,
+      "end": 544.72,
+      "text": "we"
+    },
+    {
+      "start": 544.8,
+      "end": 545.04,
+      "text": "we've"
+    },
+    {
+      "start": 545.04,
+      "end": 545.2,
+      "text": "actually"
+    },
+    {
+      "start": 545.28,
+      "end": 545.44,
+      "text": "worked"
+    },
+    {
+      "start": 545.52,
+      "end": 545.6,
+      "text": "with"
+    },
+    {
+      "start": 545.76,
+      "end": 546.08,
+      "text": "Eli"
+    },
+    {
+      "start": 546.48,
+      "end": 546.56,
+      "text": "uh"
+    },
+    {
+      "start": 546.72,
+      "end": 546.8,
+      "text": "and"
+    },
+    {
+      "start": 547.04,
+      "end": 547.12,
+      "text": "we"
+    },
+    {
+      "start": 547.28,
+      "end": 547.36,
+      "text": "we"
+    },
+    {
+      "start": 547.52,
+      "end": 548.0,
+      "text": "discussed"
+    },
+    {
+      "start": 548.08,
+      "end": 548.16,
+      "text": "the"
+    },
+    {
+      "start": 548.24,
+      "end": 548.48,
+      "text": "standard"
+    },
+    {
+      "start": 548.64,
+      "end": 548.72,
+      "text": "and"
+    },
+    {
+      "start": 548.8,
+      "end": 549.36,
+      "text": "everything."
+    },
+    {
+      "start": 549.52,
+      "end": 549.6,
+      "text": "The"
+    },
+    {
+      "start": 549.92,
+      "end": 550.0,
+      "text": "the"
+    },
+    {
+      "start": 550.08,
+      "end": 550.32,
+      "text": "actual"
+    },
+    {
+      "start": 550.4,
+      "end": 550.8,
+      "text": "technical"
+    },
+    {
+      "start": 550.88,
+      "end": 551.28,
+      "text": "details"
+    },
+    {
+      "start": 551.36,
+      "end": 551.44,
+      "text": "of"
+    },
+    {
+      "start": 551.6,
+      "end": 551.68,
+      "text": "how"
+    },
+    {
+      "start": 551.84,
+      "end": 551.92,
+      "text": "this"
+    },
+    {
+      "start": 552.0,
+      "end": 552.4,
+      "text": "works,"
+    },
+    {
+      "start": 552.48,
+      "end": 552.64,
+      "text": "uh,"
+    },
+    {
+      "start": 552.72,
+      "end": 552.96,
+      "text": "we're"
+    },
+    {
+      "start": 552.96,
+      "end": 553.12,
+      "text": "using"
+    },
+    {
+      "start": 553.2,
+      "end": 553.68,
+      "text": "perceptual"
+    },
+    {
+      "start": 553.76,
+      "end": 554.16,
+      "text": "hashing,"
+    },
+    {
+      "start": 554.16,
+      "end": 554.24,
+      "text": "so"
+    },
+    {
+      "start": 554.32,
+      "end": 554.56,
+      "text": "it's"
+    },
+    {
+      "start": 554.48,
+      "end": 554.72,
+      "text": "slightly"
+    },
+    {
+      "start": 554.8,
+      "end": 555.04,
+      "text": "different"
+    },
+    {
+      "start": 555.12,
+      "end": 555.2,
+      "text": "than"
+    },
+    {
+      "start": 555.28,
+      "end": 555.36,
+      "text": "the"
+    },
+    {
+      "start": 555.36,
+      "end": 555.6,
+      "text": "idea"
+    },
+    {
+      "start": 555.6,
+      "end": 555.68,
+      "text": "of"
+    },
+    {
+      "start": 555.76,
+      "end": 556.4,
+      "text": "cryptographic"
+    },
+    {
+      "start": 556.48,
+      "end": 556.88,
+      "text": "hashes"
+    },
+    {
+      "start": 556.96,
+      "end": 557.04,
+      "text": "that"
+    },
+    {
+      "start": 557.12,
+      "end": 557.6,
+      "text": "match."
+    },
+    {
+      "start": 557.76,
+      "end": 557.84,
+      "text": "We"
+    },
+    {
+      "start": 557.92,
+      "end": 558.0,
+      "text": "also"
+    },
+    {
+      "start": 558.16,
+      "end": 558.24,
+      "text": "did"
+    },
+    {
+      "start": 558.4,
+      "end": 558.64,
+      "text": "create"
+    },
+    {
+      "start": 558.72,
+      "end": 558.8,
+      "text": "a"
+    },
+    {
+      "start": 558.8,
+      "end": 559.12,
+      "text": "standard"
+    },
+    {
+      "start": 559.2,
+      "end": 559.28,
+      "text": "for"
+    },
+    {
+      "start": 559.44,
+      "end": 560.0,
+      "text": "perceptual"
+    },
+    {
+      "start": 560.0,
+      "end": 560.48,
+      "text": "hashing,"
+    },
+    {
+      "start": 560.56,
+      "end": 560.64,
+      "text": "which"
+    },
+    {
+      "start": 560.72,
+      "end": 560.8,
+      "text": "is"
+    },
+    {
+      "start": 560.96,
+      "end": 561.04,
+      "text": "uh"
+    },
+    {
+      "start": 561.28,
+      "end": 561.36,
+      "text": "with"
+    },
+    {
+      "start": 561.6,
+      "end": 562.16,
+      "text": "Dazzle,"
+    },
+    {
+      "start": 562.16,
+      "end": 562.24,
+      "text": "uh"
+    },
+    {
+      "start": 562.32,
+      "end": 562.56,
+      "text": "Robin"
+    },
+    {
+      "start": 562.72,
+      "end": 562.96,
+      "text": "who's"
+    },
+    {
+      "start": 562.96,
+      "end": 563.12,
+      "text": "working"
+    },
+    {
+      "start": 563.12,
+      "end": 563.2,
+      "text": "at"
+    },
+    {
+      "start": 563.28,
+      "end": 563.6,
+      "text": "Dazzle"
+    },
+    {
+      "start": 563.76,
+      "end": 563.92,
+      "text": "there."
+    },
+    {
+      "start": 564.08,
+      "end": 564.32,
+      "text": "Yeah."
+    },
+    {
+      "start": 565.44,
+      "end": 565.52,
+      "text": "So"
+    },
+    {
+      "start": 565.84,
+      "end": 565.92,
+      "text": "uh"
+    },
+    {
+      "start": 566.4,
+      "end": 566.48,
+      "text": "but"
+    },
+    {
+      "start": 566.64,
+      "end": 566.88,
+      "text": "it's"
+    },
+    {
+      "start": 566.96,
+      "end": 567.12,
+      "text": "still"
+    },
+    {
+      "start": 567.2,
+      "end": 567.68,
+      "text": "relevant,"
+    },
+    {
+      "start": 567.68,
+      "end": 568.0,
+      "text": "right?"
+    },
+    {
+      "start": 568.08,
+      "end": 568.24,
+      "text": "Like"
+    },
+    {
+      "start": 568.4,
+      "end": 568.72,
+      "text": "maybe"
+    },
+    {
+      "start": 568.8,
+      "end": 569.04,
+      "text": "less"
+    },
+    {
+      "start": 569.2,
+      "end": 569.28,
+      "text": "so"
+    },
+    {
+      "start": 569.44,
+      "end": 569.52,
+      "text": "uh"
+    },
+    {
+      "start": 569.76,
+      "end": 569.84,
+      "text": "with"
+    },
+    {
+      "start": 570.0,
+      "end": 570.32,
+      "text": "exact"
+    },
+    {
+      "start": 570.56,
+      "end": 570.88,
+      "text": "hash"
+    },
+    {
+      "start": 570.96,
+      "end": 571.52,
+      "text": "matching,"
+    },
+    {
+      "start": 571.52,
+      "end": 571.6,
+      "text": "but"
+    },
+    {
+      "start": 571.76,
+      "end": 571.84,
+      "text": "like"
+    },
+    {
+      "start": 572.0,
+      "end": 572.08,
+      "text": "there"
+    },
+    {
+      "start": 572.24,
+      "end": 572.32,
+      "text": "are"
+    },
+    {
+      "start": 572.48,
+      "end": 572.88,
+      "text": "hashes"
+    },
+    {
+      "start": 572.96,
+      "end": 573.04,
+      "text": "that"
+    },
+    {
+      "start": 573.2,
+      "end": 573.44,
+      "text": "apply"
+    },
+    {
+      "start": 573.52,
+      "end": 573.6,
+      "text": "to"
+    },
+    {
+      "start": 573.76,
+      "end": 573.84,
+      "text": "video"
+    },
+    {
+      "start": 574.08,
+      "end": 574.16,
+      "text": "that"
+    },
+    {
+      "start": 574.24,
+      "end": 574.32,
+      "text": "could"
+    },
+    {
+      "start": 574.4,
+      "end": 574.48,
+      "text": "be"
+    },
+    {
+      "start": 574.56,
+      "end": 574.72,
+      "text": "used"
+    },
+    {
+      "start": 574.8,
+      "end": 574.88,
+      "text": "to"
+    },
+    {
+      "start": 574.96,
+      "end": 575.12,
+      "text": "match"
+    },
+    {
+      "start": 575.2,
+      "end": 575.6,
+      "text": "similar"
+    },
+    {
+      "start": 575.76,
+      "end": 575.84,
+      "text": "video"
+    },
+    {
+      "start": 576.0,
+      "end": 576.56,
+      "text": "content."
+    },
+    {
+      "start": 576.64,
+      "end": 576.72,
+      "text": "We"
+    },
+    {
+      "start": 576.8,
+      "end": 577.04,
+      "text": "started"
+    },
+    {
+      "start": 577.12,
+      "end": 577.2,
+      "text": "with"
+    },
+    {
+      "start": 577.28,
+      "end": 577.6,
+      "text": "images"
+    },
+    {
+      "start": 577.68,
+      "end": 577.76,
+      "text": "because"
+    },
+    {
+      "start": 577.92,
+      "end": 578.16,
+      "text": "that's"
+    },
+    {
+      "start": 578.24,
+      "end": 578.32,
+      "text": "like"
+    },
+    {
+      "start": 578.4,
+      "end": 578.48,
+      "text": "the"
+    },
+    {
+      "start": 578.56,
+      "end": 579.04,
+      "text": "easiest"
+    },
+    {
+      "start": 579.12,
+      "end": 579.6,
+      "text": "lift,"
+    },
+    {
+      "start": 579.6,
+      "end": 579.68,
+      "text": "but"
+    },
+    {
+      "start": 579.84,
+      "end": 579.92,
+      "text": "you"
+    },
+    {
+      "start": 580.0,
+      "end": 580.08,
+      "text": "could"
+    },
+    {
+      "start": 580.16,
+      "end": 580.4,
+      "text": "expand"
+    },
+    {
+      "start": 580.48,
+      "end": 580.56,
+      "text": "it"
+    },
+    {
+      "start": 580.64,
+      "end": 580.72,
+      "text": "to"
+    },
+    {
+      "start": 580.88,
+      "end": 581.36,
+      "text": "images,"
+    },
+    {
+      "start": 581.36,
+      "end": 581.44,
+      "text": "I"
+    },
+    {
+      "start": 581.44,
+      "end": 581.6,
+      "text": "mean"
+    },
+    {
+      "start": 581.84,
+      "end": 582.16,
+      "text": "video,"
+    },
+    {
+      "start": 582.24,
+      "end": 582.72,
+      "text": "audio,"
+    },
+    {
+      "start": 582.72,
+      "end": 582.8,
+      "text": "and"
+    },
+    {
+      "start": 582.88,
+      "end": 582.96,
+      "text": "and"
+    },
+    {
+      "start": 583.04,
+      "end": 583.12,
+      "text": "so"
+    },
+    {
+      "start": 583.28,
+      "end": 583.52,
+      "text": "on,"
+    },
+    {
+      "start": 583.68,
+      "end": 584.32,
+      "text": "text."
+    },
+    {
+      "start": 584.4,
+      "end": 584.64,
+      "text": "Uh"
+    },
+    {
+      "start": 584.72,
+      "end": 584.8,
+      "text": "so"
+    },
+    {
+      "start": 584.96,
+      "end": 585.28,
+      "text": "it's"
+    },
+    {
+      "start": 585.28,
+      "end": 585.52,
+      "text": "definitely"
+    },
+    {
+      "start": 585.76,
+      "end": 586.48,
+      "text": "applicable."
+    },
+    {
+      "start": 588.56,
+      "end": 588.96,
+      "text": "Okay,"
+    },
+    {
+      "start": 588.96,
+      "end": 589.2,
+      "text": "thank"
+    },
+    {
+      "start": 589.2,
+      "end": 589.28,
+      "text": "you"
+    },
+    {
+      "start": 589.44,
+      "end": 589.52,
+      "text": "very"
+    },
+    {
+      "start": 589.76,
+      "end": 590.08,
+      "text": "much."
+    }
+  ],
+  "paragraphs": [
+    {
+      "start": 4.8,
+      "end": 45.6
+    },
+    {
+      "start": 45.6,
+      "end": 82.96
+    },
+    {
+      "start": 83.04,
+      "end": 127.68
+    },
+    {
+      "start": 127.92,
+      "end": 168.8
+    },
+    {
+      "start": 168.8,
+      "end": 205.68
+    },
+    {
+      "start": 205.76,
+      "end": 231.6
+    },
+    {
+      "start": 231.68,
+      "end": 259.2
+    },
+    {
+      "start": 259.2,
+      "end": 290.24
+    },
+    {
+      "start": 290.4,
+      "end": 325.84
+    },
+    {
+      "start": 326.0,
+      "end": 356.96
+    },
+    {
+      "start": 357.04,
+      "end": 386.64
+    },
+    {
+      "start": 386.64,
+      "end": 413.36
+    },
+    {
+      "start": 413.44,
+      "end": 441.12
+    },
+    {
+      "start": 441.12,
+      "end": 473.28
+    },
+    {
+      "start": 473.44,
+      "end": 521.44
+    },
+    {
+      "start": 521.84,
+      "end": 557.6
+    },
+    {
+      "start": 557.76,
+      "end": 590.08
+    }
+  ]
+}
