@@ -4,7 +4,7 @@ End-to-end write-up of the pipeline that:
 
 1. Downloads AtmosphereConf 2026 talk audio from `stream.place` HLS.
 2. Transcribes each talk with **Parakeet** (NVIDIA `parakeet-tdt-0.6b-v3`) by
-   driving the **Hyperaudio Lite Editor** headlessly via Playwright.
+   driving the **[Hyperaudio Lite Editor](https://github.com/hyperaudio/hyperaudio-lite-editor/)** headlessly via Playwright.
 3. Emits canonical `TranscriptJson` JSON files that the atmosphereconf Astro
    site's local-first transcript loader picks up automatically.
 4. Post-processes those JSON files to fix Parakeet mistranscriptions
