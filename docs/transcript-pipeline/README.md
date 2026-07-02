@@ -12,8 +12,7 @@ End-to-end write-up of the pipeline that:
    name corrections, etc.).
 
 The pipeline replaces the previous approach of pulling transcripts live from
-the ionosphere PDS, which suffered from a linear timing drift (~0.22 s/min)
-inherent to the vanilla-Whisper pipeline ionosphere uses.
+the ionosphere PDS, which appears to suffer from a linear timing drift (~0.22 s/min).
 
 ---
 
