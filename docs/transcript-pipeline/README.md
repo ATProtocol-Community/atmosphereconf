@@ -879,10 +879,11 @@ without a transcript pane, which is the correct fallback.
 
 ## 10. Update — HAL Editor native HLS ingestion (beta)
 
-After this pipeline shipped, Hyperaudio Lite Editor added direct support
-for HLS/VOD URLs (<PR URL>). At time of writing the feature is still
-beta, so what follows is what the next iteration would probably look
-like rather than a settled recommendation.
+After this pipeline shipped, Hyperaudio Lite Editor added [direct support
+for HLS/VOD URLs](https://github.com/hyperaudio/hyperaudio-lite-editor/pull/364). 
+At time of writing the feature is still beta, so what follows is what 
+the next iteration would probably look like rather than a settled 
+recommendation.
 
 ### What could be dropped
 
