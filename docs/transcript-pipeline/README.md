@@ -876,3 +876,51 @@ without a transcript pane, which is the correct fallback.
   things you spot with your eyes in 2 seconds and no fuzzy matcher
   finds. Preview-and-flag by humans is a first-class step, not just a
   QA safety net.
+
+  ## 10. Update — HAL Editor native HLS ingestion (beta)
+
+  After this pipeline shipped, Hyperaudio Lite Editor added direct support
+  for HLS/VOD URLs (<PR URL>). At time of writing the feature is still
+  beta, so what follows is what the next iteration would probably look
+  like rather than a settled recommendation.
+
+  ### What could be dropped
+
+  If HAL Editor's HLS path holds up under a full batch:
+
+  - [`hls-to-m4a.mjs`](../../tools/transcript-pipeline/hls-to-m4a.mjs) and
+    [`hls-to-mp4.mjs`](../../tools/transcript-pipeline/hls-to-mp4.mjs) —
+    no longer needed. HAL Editor handles the fetch and decode internally.
+  - **`ffmpeg`** as a runtime dependency — same reason.
+  - The `audio-tmp/` scratch directory and the ~80 MB per-talk MP4 (about
+    7.5 GB across the full batch) — no local media files on disk.
+  - The `setInputFiles('#parakeet-file-input', …)` step in the Playwright
+    harness — replaced by whatever URL-input surface HAL Editor exposes.
+
+  ### What stays the same
+
+  - The Playwright harness itself
+    ([`transcribe-one.mjs`](../../tools/transcript-pipeline/transcribe-one.mjs),
+    [`batch.mjs`](../../tools/transcript-pipeline/batch.mjs)) — still
+    needed to open the transcribe modal, wait for completion, and extract
+    the JSON from `#hypertranscript`.
+  - Every correction sweep in §5 — the ASR output and its quirks are
+    independent of the ingestion path.
+  - The review UI (§6) and its POST-capable server.
+  - The 2dp float clean-up (§5.7) — the noise comes from HAL Editor's
+    `htmlToJson` doing `start + duration` in JS, not from the audio
+    ingestion. Same fix still applies until HAL Editor rounds on emit.
+
+  ### Caveats before switching
+
+  - **Beta feature.** Canary on a known-good talk (e.g. `rjQ96kl`) and
+    diff the resulting JSON against this pipeline's output before
+    batching.
+  - **Concurrency.** This pipeline's HLS fetcher used 16-way parallel Range
+    GETs — a per-talk ingest took ~45 s. If HAL Editor's internal fetcher
+    is single-threaded, a batch could be slower per talk even if the
+    harness is much simpler.
+  - **Model cache.** This pipeline used a Playwright persistent context so
+    the ~600 MB of Parakeet ONNX shards only downloaded once. The
+    URL-input flow doesn't change that, but confirm the cache still
+    persists across talks in whatever revised harness you build.
