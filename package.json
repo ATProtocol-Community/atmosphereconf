@@ -36,6 +36,7 @@
     "date-fns": "^4.1.0",
     "h3-js": "^4.3.0",
     "hls.js": "^1.6.15",
+    "hyperaudio-lite": "^2.6.1",
     "lucide-react": "^0.556.0",
     "marked": "^17.0.1",
     "papaparse": "^5.5.3",
