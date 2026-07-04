@@ -220,10 +220,22 @@ const transcriptId = "clip";
       document.addEventListener("mouseup", showIfValidSelection);
       document.addEventListener("touchend", showIfValidSelection);
 
-      // Hide as soon as the selection collapses (e.g. user clicks elsewhere).
+      // Mobile: selection happens via long-press + dragging the native
+      // selection handles, which never yields a post-selection touchend on
+      // the document — the mouseup/touchend path above never fires with a
+      // live selection. Debounce selectionchange instead: once the selection
+      // stops changing for a beat, show the popover if it's valid. The
+      // debounce also avoids the mid-drag flicker that showing from raw
+      // selectionchange would cause. Collapse still hides immediately.
+      let selectionSettleTimer = 0;
       document.addEventListener("selectionchange", () => {
         const selection = window.getSelection();
-        if (!selection || selection.isCollapsed) hideSharePopover();
+        if (!selection || selection.isCollapsed) {
+          hideSharePopover();
+          return;
+        }
+        window.clearTimeout(selectionSettleTimer);
+        selectionSettleTimer = window.setTimeout(showIfValidSelection, 350);
       });
 
       // Track the selection while the transcript (or the page) scrolls so
@@ -271,12 +283,7 @@ const transcriptId = "clip";
       };
 
       popoverBtns.forEach((btn) => {
-        // mousedown.preventDefault keeps the document selection alive when
-        // the user clicks the button — otherwise focus shifts and the
-        // selection collapses before our click handler runs.
-        btn.addEventListener("mousedown", (e) => e.preventDefault());
-
-        btn.addEventListener("click", async () => {
+        const runCopyAction = async () => {
           const fragment = hal.getSelectionMediaFragment();
           if (!fragment) return;
           const url = `${location.origin}${location.pathname}#${fragment}`;
@@ -292,6 +299,20 @@ const transcriptId = "clip";
           } else {
             await copyToClipboard(url, btn);
           }
+        };
+
+        // mousedown.preventDefault keeps the document selection alive when
+        // the user clicks the button — otherwise focus shifts and the
+        // selection collapses before our click handler runs.
+        btn.addEventListener("mousedown", (e) => e.preventDefault());
+        btn.addEventListener("click", runCopyAction);
+
+        // Touch equivalent: preventDefault on touchend suppresses the
+        // synthesized click/focus that would collapse the selection on
+        // mobile, so invoke the action directly from here instead.
+        btn.addEventListener("touchend", (e) => {
+          e.preventDefault();
+          runCopyAction();
         });
       });
     });
