@@ -1,9 +1,14 @@
 import { defineLiveCollection } from "astro:content";
 import { z } from "astro/zod";
-import { atprotoLiveLoader } from "./lib/atproto-live-loader";
+import {
+  defineAtProtoLiveCollection,
+  isAtBlob,
+  toHostedBlob,
+} from "@fujocoded/astro-atproto-loader";
 import {
   calendarRecordToEventData,
   EVENT_CATEGORIES,
+  extractMedia,
 } from "./lib/calendar-event";
 import { liveBlueskyLoader } from "@ascorbic/bluesky-loader";
 import { standardSiteLiveLoader } from "@/lib/leaflet-loader";
@@ -17,45 +22,29 @@ const speakerSchema = z.object({
   id: z.string().optional(),
 });
 
-const events = defineLiveCollection({
-  loader: atprotoLiveLoader({
-    did: EVENTS_OWNER_DID_OR_HANDLE,
+const events = defineAtProtoLiveCollection({
+  source: {
+    repo: EVENTS_OWNER_DID_OR_HANDLE,
     collection: "community.lexicon.calendar.event",
-    filter: (value) => {
-      const ad = value.additionalData as Record<string, unknown> | undefined;
-      return !!ad?.isAtmosphereconf;
-    },
-    transform: (value, rkey, did) => {
-      const ad = value.additionalData as Record<string, unknown> | undefined;
-      const data = calendarRecordToEventData(value);
+    limit: "all",
+  },
+  cacheTtl: 60_000,
+  filter: ({ value }) => {
+    return Boolean(value.additionalData && (value.additionalData as Record<string, unknown>).isAtmosphereconf);
+  },
+  transform: ({ repo, rkey, value }) => {
+    const additionalData = value.additionalData as Record<string, unknown> | undefined;
+    const data = calendarRecordToEventData(value);
+    const { headerUrl } = extractMedia(value, { did: repo.did, pds: repo.pds });
+    data.headerUrl = headerUrl ?? undefined;
 
-      // Extract header image CDN URL from media array
-      const media = Array.isArray(value.media)
-        ? (value.media as Array<{
-            role: string;
-            content: { ref: { $link: string } };
-          }>)
-        : undefined;
-      const header = media?.find((m) => m?.role === "header");
-      const ref = header?.content?.ref;
-      const cid = ref?.$link ?? (ref?.toString ? ref.toString() : undefined);
-      if (cid) {
-        (data as Record<string, unknown>).headerUrl =
-          `https://cdn.bsky.app/img/feed_fullsize/plain/${did}/${cid}@jpeg`;
-      }
-
-      if (data.title) {
-        data.title = parseInline(data.title) as string;
-      }
-
-      return {
-        id: (ad?.sourceId as string) || (ad?.submissionId as string) || rkey,
-        data,
-      };
-    },
-  }),
-  schema: z.object({
-    title: z.string(),
+    return {
+      id: (additionalData?.sourceId as string) ?? (additionalData?.submissionId as string) ?? rkey,
+      data,
+    };
+  },
+  outputSchema: z.object({
+    title: z.string().transform((val) => parseInline(val) as string),
     type: z.string(),
     mode: z.enum(["inperson", "remote", "hybrid"]).optional(),
     speakers: z.array(speakerSchema).optional(),
@@ -75,12 +64,10 @@ const blueskyPosts = defineLiveCollection({
   loader: liveBlueskyLoader({ identifier: "atprotocol.dev" }),
 });
 
-const leafletPosts = defineLiveCollection({
-  loader: standardSiteLiveLoader({
-    repo: "did:plc:lehcqqkwzcwvjvw66uthu5oq",
-    publication:
-      "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i",
-  }),
+const leafletPosts = standardSiteLiveLoader({
+  repo: "did:plc:lehcqqkwzcwvjvw66uthu5oq",
+  publication:
+    "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i",
 });
 
 const titoHandles = defineLiveCollection({

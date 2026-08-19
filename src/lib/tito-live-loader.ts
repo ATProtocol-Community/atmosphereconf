@@ -22,6 +22,7 @@ interface TitoTicket {
 }
 
 export interface TitoAnswerData {
+  [key: string]: unknown;
   ticketReference: string;
   ticketSlug: string;
   ticketEmail: string;
@@ -200,7 +201,7 @@ export function titoAnswerLoader(
   return {
     name: "tito-answer-loader",
 
-    async loadCollection(): Promise<LiveDataCollection<TitoAnswerData>> {
+    async loadCollection() {
       return { entries: await getEntries() };
     },
 

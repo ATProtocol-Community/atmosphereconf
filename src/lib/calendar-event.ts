@@ -1,3 +1,5 @@
+import { isAtBlob, toHostedBlob } from "node_modules/@fujocoded/astro-atproto-loader/dist/blobs";
+
 export type Speaker = { name: string; id?: string };
 
 export type EventMode = "inperson" | "remote" | "hybrid";
@@ -28,6 +30,18 @@ export type EventData = {
   link_url?: string;
   link_text?: string;
   vodAtUri?: string;
+  headerUrl?: string;
+};
+
+export type CalendarEventMedia = {
+  role?: string;
+  content?: unknown;
+};
+
+export type CalendarEventMediaResult = {
+  media: CalendarEventMedia[];
+  header: CalendarEventMedia | null;
+  headerUrl: string | null;
 };
 
 export type CalendarEventRecord = {
@@ -161,4 +175,21 @@ export function calendarRecordToEventData(
   }
 
   return event;
+}
+
+export function extractMedia(
+  value: Record<string, unknown>,
+  repo: { did: string; pds: string },
+): CalendarEventMediaResult {
+  const media = Array.isArray(value.media)
+    ? (value.media as CalendarEventMedia[])
+    : [];
+
+  const header = media?.find((entry) => entry?.role === "header") ?? null;
+  const headerBlob = header?.content;
+  const headerUrl = isAtBlob(headerBlob) ? toHostedBlob({
+    repo,
+    blob: headerBlob,
+  }).url : null;
+  return { media, header, headerUrl };
 }
