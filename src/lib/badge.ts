@@ -1,7 +1,7 @@
 import { getLiveCollection } from "astro:content";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { IdResolver } from "@atproto/identity";
-import { getExistingBadgeAward as getExistingBadgeAwardFromPds } from "@fujocoded/atproto-badger";
+import { getExistingBadgeAward as getExistingBadgeAwardFromPds } from "@fujocoded/atproto-badges";
 import { EVENTS_OWNER_DID_OR_HANDLE } from "astro:env/server";
 import { getPrimaryBadge, badges } from "@/config/badges";
 import type { BadgeDefinition } from "@/config/badges";
@@ -68,6 +68,8 @@ export async function getExistingBadgeAward(
   try {
     for (const badge of badges) {
       const result = await getExistingBadgeAwardFromPds({
+        // @ts-expect-error The helper only uses com.atproto.repo.getRecord,
+        // which AtpBaseClient provides; its declaration requires AtpAgent.
         agent,
         did,
         badgeDefinitionUri: badge.uri,

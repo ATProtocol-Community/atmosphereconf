@@ -3,7 +3,7 @@ import { lexToJson } from "@atproto/lexicon";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 import { getBlobCDNUrl, parseRichText } from "./bsky";
 import type { RichTextSegment } from "./bsky";
-import { BADGE_COLLECTION } from "@fujocoded/atproto-badger";
+import { BADGE_COLLECTION } from "@fujocoded/atproto-badges";
 import { badges, connectionBadges, getAllBadgeUris } from "@/config/badges";
 
 type AvatarBlob = {

@@ -25,8 +25,8 @@
     "@atproto/api": "^0.19.3",
     "@atproto/identity": "^0.4.8",
     "@fujocoded/astro-atproto-loader": "^0.2.2",
-    "@fujocoded/atproto-badger": "^0.0.1",
-    "@fujocoded/authproto": "^0.2.1",
+    "@fujocoded/atproto-badges": "^0.2.0",
+    "@fujocoded/authproto": "^0.4.0",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-popover": "^1.1.15",
     "@tailwindcss/vite": "^4.1.17",
@@ -61,5 +61,9 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tsx": "^4.19.0",
     "vitest": "^4.1.0"
+  },
+  "overrides": {
+    "@atproto-labs/fetch-node": "^0.3.7",
+    "@atproto-labs/handle-resolver-node": "^0.2.8"
   }
 }
