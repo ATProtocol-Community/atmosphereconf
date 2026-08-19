@@ -8,8 +8,8 @@ import {
   getBadgeRkey,
   verifyBadgeAward,
   BADGE_COLLECTION,
-} from "@fujocoded/atproto-badger";
-import type { BadgeAward } from "@fujocoded/atproto-badger";
+} from "@fujocoded/atproto-badges";
+import type { BadgeAward } from "@fujocoded/atproto-badges";
 import {
   getTicketRelease,
   getBadgeForRelease,
