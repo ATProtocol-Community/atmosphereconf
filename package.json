@@ -24,6 +24,7 @@
     "@atcute/bluesky-richtext-parser": "^2.1.1",
     "@atproto/api": "^0.19.3",
     "@atproto/identity": "^0.4.8",
+    "@fujocoded/astro-atproto-loader": "^0.2.2",
     "@fujocoded/atproto-badger": "^0.0.1",
     "@fujocoded/authproto": "^0.2.1",
     "@hookform/resolvers": "^5.2.2",
