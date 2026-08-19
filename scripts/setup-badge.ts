@@ -7,7 +7,7 @@ import {
   findExistingBadgeDefinition,
   createBadgeDefinition,
   BADGE_DEFINITION_COLLECTION,
-} from "@fujocoded/atproto-badger";
+} from "@fujocoded/atproto-badges";
 import { promptPushCredentials } from "./lib/auth";
 import { readFileSync, appendFileSync, existsSync } from "node:fs";
 
