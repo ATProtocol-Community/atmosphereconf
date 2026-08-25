@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host 127.0.0.1",
     "build": "astro build",
     "start": "node ./dist/server/entry.mjs",
     "preview": "astro preview",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@ascorbic/bluesky-loader": "^0.1.0",
     "@astro-community/astro-embed-bluesky": "^0.1.6",
+    "@astrojs/check": "^0.9.10",
     "@astrojs/node": "^9.5.2",
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",
@@ -49,6 +50,7 @@
     "sharp": "^0.34.5",
     "slugify": "^1.6.6",
     "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
     "zod": "^3.25.76"
   },
   "devDependencies": {

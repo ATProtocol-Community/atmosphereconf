@@ -58,6 +58,7 @@ type EventEntry = {
     description?: string;
     link_url?: string;
     link_text?: string;
+    vodAtUri?: string;
   };
 };
 
@@ -79,6 +80,7 @@ export interface ProgramEvent {
   description?: string;
   link_url?: string;
   link_text?: string;
+  vodAtUri?: string;
   typeName: string;
 }
 
