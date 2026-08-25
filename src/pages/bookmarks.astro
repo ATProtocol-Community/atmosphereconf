@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Card from "@/components/ui/card.astro";
 import BookmarkIcon from "@/components/ui/BookmarkIcon.astro";
+import RecordingIcon from "@/components/ui/RecordingIcon.astro";
 import EventBadge from "@/components/ui/EventBadge.astro";
 import { getLiveCollection } from "astro:content";
 import {
@@ -56,7 +57,10 @@ function enrichEvent(t: (typeof events)[number]) {
   };
 }
 
-function getTimeAnchor(event: { start?: string; dateKey: string }): string | null {
+function getTimeAnchor(event: {
+  start?: string;
+  dateKey: string;
+}): string | null {
   if (!event.start || !event.dateKey) return null;
   const parts = getConferenceDateTimeParts(event.start);
   if (!parts) return null;
@@ -163,7 +167,15 @@ const slots = slotOrder.map((key) => {
               <div class="timeline-row flex items-stretch">
                 {/* Time column — desktop only */}
                 <div class="time-col hidden w-20 shrink-0 sm:block">
-                  <a href={getTimeAnchor(slot.first) ? `/#${getTimeAnchor(slot.first)}` : undefined} class="time-label text-muted-foreground block pt-2 pr-3 text-right text-xs font-medium whitespace-nowrap hover:text-primary transition-colors" data-time-start={slot.first.start || ""}>
+                  <a
+                    href={
+                      getTimeAnchor(slot.first)
+                        ? `/#${getTimeAnchor(slot.first)}`
+                        : undefined
+                    }
+                    class="time-label text-muted-foreground hover:text-primary block pt-2 pr-3 text-right text-xs font-medium whitespace-nowrap transition-colors"
+                    data-time-start={slot.first.start || ""}
+                  >
                     {slot.first.timeLabel}
                   </a>
                 </div>
@@ -190,7 +202,13 @@ const slots = slotOrder.map((key) => {
                         <div class="info-card">
                           <span class="info-card-title" set:html={talk.title} />
                           {talk.timeRange && (
-                            <span class="info-card-time" data-time-start={talk.start || ""} data-time-end={talk.end || ""}>{talk.timeRange}</span>
+                            <span
+                              class="info-card-time"
+                              data-time-start={talk.start || ""}
+                              data-time-end={talk.end || ""}
+                            >
+                              {talk.timeRange}
+                            </span>
                           )}
                         </div>
                       ) : (
@@ -199,6 +217,18 @@ const slots = slotOrder.map((key) => {
                           class="event-card group/card relative rounded-lg border px-5 py-4 transition-all hover:shadow-md"
                           style="border-color: var(--border); background: var(--card);"
                         >
+                          {talk.vodAtUri && (
+                            <span
+                              class="recording-indicator pointer-events-none absolute top-3 right-14"
+                              role="img"
+                              aria-label="Recording available"
+                              title="Recording available"
+                              data-recording-available="true"
+                            >
+                              <RecordingIcon />
+                            </span>
+                          )}
+
                           {/* Bookmark button */}
                           <button
                             class="bookmark-btn"
@@ -265,12 +295,24 @@ const slots = slotOrder.map((key) => {
                           {/* Details: time, room, mode */}
                           <div class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
                             {talk.timeRange && (
-                              <a href={getTimeAnchor(talk) ? `/#${getTimeAnchor(talk)}` : undefined} class="flex items-center gap-1.5 hover:text-primary transition-colors">
+                              <a
+                                href={
+                                  getTimeAnchor(talk)
+                                    ? `/#${getTimeAnchor(talk)}`
+                                    : undefined
+                                }
+                                class="hover:text-primary flex items-center gap-1.5 transition-colors"
+                              >
                                 <span
                                   class="h-3.5 w-3.5 flex-none"
                                   set:html={clockIconSvg}
                                 />
-                                <span data-time-start={talk.start || ""} data-time-end={talk.end || ""}>{talk.timeRange}</span>
+                                <span
+                                  data-time-start={talk.start || ""}
+                                  data-time-end={talk.end || ""}
+                                >
+                                  {talk.timeRange}
+                                </span>
                               </a>
                             )}
                             {talk.room && (
@@ -318,7 +360,11 @@ const slots = slotOrder.map((key) => {
         }
       </div>
 
-      <script id="date-anchor-map" type="application/json" set:html={JSON.stringify(dateAnchorMap)} />
+      <script
+        id="date-anchor-map"
+        type="application/json"
+        set:html={JSON.stringify(dateAnchorMap)}
+      />
 
       {/* Templates for dynamically-created elements */}
       <template id="gap-tpl">
@@ -328,7 +374,8 @@ const slots = slotOrder.map((key) => {
             <div
               class="track-col relative flex w-5 shrink-0 flex-col items-center"
             >
-              <div class="gap-dot z-10 mt-2 h-2 w-2 shrink-0 rounded-full"></div>
+              <div class="gap-dot z-10 mt-2 h-2 w-2 shrink-0 rounded-full">
+              </div>
               <div class="track-line w-px flex-1"></div>
             </div>
             <div class="card-col flex-1 py-2 pl-3 sm:pl-4">
@@ -375,7 +422,8 @@ const slots = slotOrder.map((key) => {
               <h3
                 class="text-foreground text-sm font-semibold tracking-wide uppercase"
                 style="font-family: var(--font-ui);"
-              ></h3>
+              >
+              </h3>
             </div>
           </div>
           <div class="empty-day-msg">
@@ -385,13 +433,40 @@ const slots = slotOrder.map((key) => {
         </div>
       </template>
 
-      <script id="all-conference-days" type="application/json" set:html={JSON.stringify(allConferenceDays)} />
+      <script
+        id="all-conference-days"
+        type="application/json"
+        set:html={JSON.stringify(allConferenceDays)}
+      />
     </Card>
 
     <button id="go-to-now" class="go-to-now hidden" aria-label="Scroll to now">
-      <svg class="go-to-now-clock" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg
+        class="go-to-now-clock"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><circle cx="12" cy="12" r="10"></circle><polyline
+          points="12 6 12 12 16 14"></polyline></svg
+      >
       <span>back to now</span>
-      <svg class="go-to-now-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      <svg
+        class="go-to-now-arrow"
+        width="10"
+        height="10"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><polyline points="18 15 12 9 6 15"></polyline></svg
+      >
     </button>
   </div>
 </Layout>
@@ -417,19 +492,25 @@ const slots = slotOrder.map((key) => {
   }
 
   /* --- Conflict: multiple bookmarked events at same time --- */
-  .has-conflict:not(.conflict-expanded) .bookmark-item:not(.hidden) .event-card {
+  .has-conflict:not(.conflict-expanded)
+    .bookmark-item:not(.hidden)
+    .event-card {
     max-height: 5.5rem;
     overflow: hidden;
     mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
   }
 
-  .has-conflict:not(.conflict-expanded) .bookmark-item:not(.hidden) + .bookmark-item:not(.hidden) {
+  .has-conflict:not(.conflict-expanded)
+    .bookmark-item:not(.hidden)
+    + .bookmark-item:not(.hidden) {
     margin-top: -2rem;
   }
 
   /* Gap between cards when expanded */
-  .has-conflict.conflict-expanded .bookmark-item:not(.hidden) + .bookmark-item:not(.hidden) {
+  .has-conflict.conflict-expanded
+    .bookmark-item:not(.hidden)
+    + .bookmark-item:not(.hidden) {
     margin-top: 0.75rem;
   }
 
@@ -446,7 +527,10 @@ const slots = slotOrder.map((key) => {
     cursor: pointer;
     font-family: var(--font-ui);
     box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
-    transition: border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+    transition:
+      border-color 120ms ease,
+      background 120ms ease,
+      box-shadow 120ms ease;
   }
 
   :global(.see-all-btn:hover) {
@@ -472,7 +556,8 @@ const slots = slotOrder.map((key) => {
 
   /* --- Gap after info/unconference items --- */
   .info-item:not(.hidden) + .slot-item:not(.hidden),
-  .bookmark-item[data-category="Unconference"]:not(.hidden) + .bookmark-item:not(.hidden) {
+  .bookmark-item[data-category="Unconference"]:not(.hidden)
+    + .bookmark-item:not(.hidden) {
     margin-top: 0.375rem;
   }
 
@@ -545,6 +630,16 @@ const slots = slotOrder.map((key) => {
     transition: color 150ms ease;
   }
 
+  .recording-indicator {
+    display: inline-flex;
+    color: var(--muted-foreground);
+  }
+
+  .recording-indicator :global(svg) {
+    width: 1rem;
+    height: 1rem;
+  }
+
   .bookmark-btn:hover {
     color: var(--theme-accent);
   }
@@ -604,7 +699,9 @@ const slots = slotOrder.map((key) => {
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    transition: border-color 120ms ease, background 120ms ease;
+    transition:
+      border-color 120ms ease,
+      background 120ms ease;
   }
 
   .gap-card:hover {
@@ -745,7 +842,9 @@ const slots = slotOrder.map((key) => {
     font-family: var(--font-ui);
     cursor: pointer;
     box-shadow: 0 2px 12px rgb(0 0 0 / 0.12);
-    transition: opacity 200ms ease, transform 200ms ease;
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
   }
 
   .go-to-now:hover {
@@ -819,7 +918,9 @@ const slots = slotOrder.map((key) => {
     font: inherit;
     letter-spacing: inherit;
     text-transform: inherit;
-    transition: color 150ms ease, background 150ms ease;
+    transition:
+      color 150ms ease,
+      background 150ms ease;
     white-space: nowrap;
   }
 
@@ -952,9 +1053,7 @@ const slots = slotOrder.map((key) => {
       hour: "numeric",
       hour12: false,
     }).formatToParts(new Date(ms));
-    const h24 = parseInt(
-      parts.find((p) => p.type === "hour")?.value || "0",
-    );
+    const h24 = parseInt(parts.find((p) => p.type === "hour")?.value || "0");
     const p = h24 >= 12 ? "PM" : "AM";
     const h12 = h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24;
     return `time-${dateKey}-${h12}${p}`;
@@ -967,7 +1066,9 @@ const slots = slotOrder.map((key) => {
 
     // Clean up previously-created dynamic elements
     timeline
-      .querySelectorAll(".timeline-gap, .now-marker, .see-all-btn, .empty-day-section")
+      .querySelectorAll(
+        ".timeline-gap, .now-marker, .see-all-btn, .empty-day-section",
+      )
       .forEach((el) => el.remove());
 
     // Read bookmarks
@@ -1015,8 +1116,12 @@ const slots = slotOrder.map((key) => {
       );
       slot.classList.toggle("has-conflict", visibleBookmarks.length > 1);
 
-      const hasVisibleInfo = slot.querySelector(".info-item:not(.hidden)") !== null;
-      slot.classList.toggle("is-info-only", hasVisible && hasVisibleInfo && visibleBookmarks.length === 0);
+      const hasVisibleInfo =
+        slot.querySelector(".info-item:not(.hidden)") !== null;
+      slot.classList.toggle(
+        "is-info-only",
+        hasVisible && hasVisibleInfo && visibleBookmarks.length === 0,
+      );
     });
 
     // Inject "see all" buttons into conflict slots
@@ -1143,7 +1248,12 @@ const slots = slotOrder.map((key) => {
         const crossingDays = !prevDateKey || prevDateKey !== dateKey;
 
         // "stand by" mode: previous day's events are over, next event is 30+ min away
-        if (crossingDays && prevDateKey && prevDayMaxEndMs > 0 && prevDayMaxEndMs < nowMs) {
+        if (
+          crossingDays &&
+          prevDateKey &&
+          prevDayMaxEndMs > 0 &&
+          prevDayMaxEndMs < nowMs
+        ) {
           const thirtyMin = 30 * 60 * 1000;
           if (startMs - nowMs > thirtyMin) {
             const markerDiv = marker.querySelector(".now-marker");
@@ -1221,7 +1331,6 @@ const slots = slotOrder.map((key) => {
         }
       }
     }
-
   }
 
   buildTimeline();

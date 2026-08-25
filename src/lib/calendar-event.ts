@@ -1,4 +1,7 @@
-import { isAtBlob, toHostedBlob } from "node_modules/@fujocoded/astro-atproto-loader/dist/blobs";
+import {
+  isAtBlob,
+  toHostedBlob,
+} from "node_modules/@fujocoded/astro-atproto-loader/dist/blobs";
 
 export type Speaker = { name: string; id?: string };
 
@@ -61,6 +64,7 @@ export type CalendarEventRecord = {
     room?: string;
     submissionId?: string;
     sourceId?: string;
+    vodAtUri?: string;
     isAtmosphereconf: true;
   };
 };
@@ -103,6 +107,9 @@ export function eventDataToCalendarRecord(
   }
   if (event.room) {
     record.additionalData!.room = event.room;
+  }
+  if (event.vodAtUri) {
+    record.additionalData!.vodAtUri = event.vodAtUri;
   }
 
   if (event.link_url) {
@@ -148,10 +155,7 @@ export function calendarRecordToEventData(
   if (value.description) {
     event.description = value.description as string;
   }
-  if (
-    ad.category &&
-    EVENT_CATEGORIES.includes(ad.category as EventCategory)
-  ) {
+  if (ad.category && EVENT_CATEGORIES.includes(ad.category as EventCategory)) {
     event.category = ad.category as string;
   }
   if (ad.room) {
@@ -187,9 +191,11 @@ export function extractMedia(
 
   const header = media?.find((entry) => entry?.role === "header") ?? null;
   const headerBlob = header?.content;
-  const headerUrl = isAtBlob(headerBlob) ? toHostedBlob({
-    repo,
-    blob: headerBlob,
-  }).url : null;
+  const headerUrl = isAtBlob(headerBlob)
+    ? toHostedBlob({
+        repo,
+        blob: headerBlob,
+      }).url
+    : null;
   return { media, header, headerUrl };
 }
