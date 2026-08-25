@@ -11,6 +11,9 @@ import { envField } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
+  devToolbar: {
+    enabled: process.env.PLAYWRIGHT !== "1",
+  },
   env: {
     schema: {
       EVENTS_OWNER_DID_OR_HANDLE: envField.string({

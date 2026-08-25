@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 3,
   reporter: [["html"], ["list"]],
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:4321",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:54321",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     actionTimeout: 15000,
@@ -51,9 +51,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "PLAYWRIGHT=1 npm run dev -- --host 127.0.0.1 --port 4321",
-    url: "http://127.0.0.1:4321",
-    reuseExistingServer: !process.env.CI,
+    command: "PLAYWRIGHT=1 npm run dev -- --host 127.0.0.1 --port 54321",
+    url: "http://127.0.0.1:54321",
+    reuseExistingServer: false,
     timeout: 120 * 1000,
   },
   expect: {

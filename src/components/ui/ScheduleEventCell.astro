@@ -1,6 +1,7 @@
 ---
 import { formatConferenceTime } from "@/lib/datetime";
 import BookmarkIcon from "@/components/ui/BookmarkIcon.astro";
+import RecordingIcon from "@/components/ui/RecordingIcon.astro";
 
 interface Speaker {
   name: string;
@@ -18,6 +19,7 @@ interface Props {
     end?: string;
     category?: string;
     description?: string;
+    vodAtUri?: string;
   };
 }
 
@@ -117,7 +119,20 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
     ]}
     data-type={event.type}
     data-mode={event.mode}
+    data-recording-available={event.vodAtUri ? "true" : "false"}
   >
+    {
+      event.vodAtUri && (
+        <span
+          class="recording-indicator pointer-events-none absolute top-1 right-3 z-[2]"
+          role="img"
+          aria-label="Recording available"
+          title="Recording available"
+        >
+          <RecordingIcon />
+        </span>
+      )
+    }
     <p class="schedule-event-title" set:html={event.title} />
     {
       showSpeakers && (
@@ -184,6 +199,17 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
     z-index: 1;
   }
 
+  .recording-indicator {
+    display: inline-flex;
+    color: currentColor;
+    opacity: 0.8;
+  }
+
+  .recording-indicator :global(svg) {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+
   .schedule-event-title {
     display: -webkit-box;
     overflow: hidden;
@@ -221,6 +247,16 @@ const showSpeakers = !isInfo && !!speakerNames && durationMin >= 120;
   .schedule-event-card-tiny {
     padding: 0.2rem 0.4rem;
     justify-content: center;
+  }
+
+  .schedule-event-card-tiny .recording-indicator {
+    top: 0.15rem;
+    right: 0.2rem;
+  }
+
+  .schedule-event-card-tiny .recording-indicator :global(svg) {
+    width: 0.65rem;
+    height: 0.65rem;
   }
 
   .schedule-event-card-tiny .schedule-event-title {

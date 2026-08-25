@@ -44,6 +44,24 @@ async function waitForVisualReady(page: Page) {
 
   await page.addStyleTag({
     content: `
+      #header-goose {
+        margin-left: -1.75rem !important;
+        opacity: 0 !important;
+      }
+
+      [data-nav-section] {
+        text-decoration: none !important;
+      }
+
+      #nav-ticket-peel,
+      #nav-ticket-tape {
+        display: none !important;
+      }
+
+      .feed-scroll-content {
+        visibility: hidden !important;
+      }
+
       *, *::before, *::after {
         caret-color: transparent !important;
       }
@@ -54,7 +72,9 @@ async function waitForVisualReady(page: Page) {
 }
 
 const fujocodedStabilizer = `
-  [data-theme="fujocoded"] [data-header-bar] {
+  [data-theme="fujocoded"] [data-header-bar],
+  [data-theme="fujocoded"] .themed-card,
+  [data-theme="fujocoded"] [data-hero] {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
