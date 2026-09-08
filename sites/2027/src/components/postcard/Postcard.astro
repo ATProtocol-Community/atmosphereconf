@@ -1,0 +1,433 @@
+---
+import goose from "./back-at-it.png";
+import StampCollection from "./stamps/StampCollection.astro";
+---
+
+<article class="mail" id="postcard" aria-label="A postcard from AtmosphereConf">
+	<section class="picture" aria-labelledby="headline">
+		<p class="air-label">
+			Join the 100% unofficial gathering of atmospherizens
+		</p>
+		<div class="cloud cloud-one" aria-hidden="true"></div>
+		<div class="cloud cloud-two" aria-hidden="true"></div>
+		<div class="goose-route" aria-hidden="true">
+			<img class="goose" src={goose.src} alt="" width="725" height="681" />
+		</div>
+		<h1 id="headline">
+			<span class="headline-word">Back</span>
+			<span class="last-line"
+				><span class="headline-word">At</span>
+				<span class="headline-word">It<span class="period">.</span></span></span
+			>
+		</h1>
+		<div class="destination">
+			<span>Next stop</span>
+			<strong
+				>Somewhere<br />in Europe <span class="online">(and online)</span
+				></strong
+			>
+			<span class="destination-arrow" aria-hidden="true">↗</span>
+		</div>
+	</section>
+
+	<section class="address" aria-labelledby="signup-title">
+		<StampCollection />
+
+		<div class="message">
+			<p class="edition">AtmosphereConf #3 <span>Spring 2027</span></p>
+			<h2 id="signup-title">Want to know<br />where we land?</h2>
+			<form action="https://leaflet.pub/api/auth/email-login" method="get">
+				<label for="airmail-email">Your email address</label>
+				<input
+					id="airmail-email"
+					name="email"
+					type="email"
+					placeholder="you@example.com"
+					autocomplete="email"
+					required
+				/>
+				<button class="subscribe" type="submit"
+					>Keep me posted <span aria-hidden="true">↗</span></button
+				>
+				<input
+					type="hidden"
+					name="action"
+					value="%7B%22action%22%3A%22subscribe%22%2C%22publication%22%3A%22at%3A%2F%2Fdid%3Aplc%3Alehcqqkwzcwvjvw66uthu5oq%2Fsite.standard.publication%2F3m367bemk3c2i%22%7D"
+				/>
+				<input
+					type="hidden"
+					name="redirect"
+					value="https://news.atmosphereconf.org"
+				/>
+			</form>
+		</div>
+		<p class="signoff">See you out there. <span aria-hidden="true">♡</span></p>
+	</section>
+</article>
+
+<style>
+	.mail {
+		display: grid;
+		grid-template-columns: 1.35fr 1fr;
+		width: min(1360px, 100%);
+		margin: auto;
+		border: 12px solid var(--paper);
+		border-radius: 3px;
+		background: var(--paper);
+		box-shadow: 0 18px 0 -10px color-mix(in srgb, var(--ink) 40%, transparent);
+	}
+
+	.picture {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		min-height: 650px;
+		padding: 36px;
+		color: var(--strong);
+		background: var(--sky);
+	}
+
+	.picture::after {
+		position: absolute;
+		bottom: -40px;
+		left: -20%;
+		z-index: -2;
+		width: 140%;
+		height: 235px;
+		content: "";
+		background: var(--mint);
+		border-radius: 50% 50% 0 0;
+	}
+
+	.air-label {
+		position: relative;
+		z-index: 2;
+		margin: 0;
+		font-family: "Courier New", monospace;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		position: relative;
+		z-index: 2;
+		margin: 38px 0 120px -7px;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(72px, 10.2vw, 148px);
+		font-weight: 400;
+		letter-spacing: -0.075em;
+		line-height: 0.98;
+	}
+
+	h1 > span {
+		display: block;
+	}
+
+	.headline-word {
+		margin-right: 15px;
+	}
+
+	.destination {
+		position: absolute;
+		bottom: clamp(25px, 3vw, 75px);
+		left: clamp(20px, 3.3vw, 36px);
+		z-index: 2;
+		display: grid;
+		grid-template-columns: 1fr auto;
+		width: max-content;
+		max-width: calc(100% - 40px);
+		gap: 6px 24px;
+		padding: 10px 12px;
+		margin: 0;
+		background: var(--mint);
+		border-radius: 8px;
+	}
+
+	.destination > span:first-child {
+		grid-column: 1 / -1;
+		font-family: "Courier New", monospace;
+		font-size: 11px;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+
+	.destination strong {
+		color: var(--ink);
+		font-size: 25px;
+		line-height: 1.1;
+		letter-spacing: -1px;
+	}
+
+	.destination .online {
+		font-size: 0.72em;
+		letter-spacing: -0.4px;
+	}
+
+	.destination-arrow {
+		color: var(--ink);
+		font-size: 45px;
+		line-height: 1;
+	}
+
+	.cloud {
+		position: absolute;
+		z-index: -2;
+		width: 180px;
+		height: 43px;
+		border-radius: 99px;
+		background: var(--paper);
+		opacity: 0.55;
+	}
+
+	.cloud::before {
+		position: absolute;
+		bottom: 0;
+		left: 32px;
+		width: 85px;
+		height: 80px;
+		content: "";
+		border-radius: 50%;
+		background: inherit;
+	}
+
+	.cloud-one {
+		top: 145px;
+		left: 0;
+		animation: drift 38s linear -16s infinite;
+	}
+
+	.cloud-two {
+		bottom: 245px;
+		left: 0;
+		width: 125px;
+		height: 30px;
+		animation: drift 49s linear -37s infinite;
+	}
+
+	.goose-route {
+		position: absolute;
+		right: 5%;
+		bottom: 130px;
+		z-index: -1;
+		width: 235px;
+	}
+
+	.goose {
+		display: block;
+		width: 100%;
+		height: auto;
+		transform-origin: 50% 90%;
+		animation: stride 0.65s ease-in-out infinite alternate;
+	}
+
+	@keyframes drift {
+		from {
+			left: 0;
+			transform: translateX(-100%);
+		}
+		to {
+			left: 100%;
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes stride {
+		from {
+			transform: rotate(-5deg) translateY(0);
+		}
+		to {
+			transform: rotate(4deg) translateY(-9px);
+		}
+	}
+
+	.address {
+		display: flex;
+		min-width: 0;
+		flex-direction: column;
+		padding: 30px clamp(24px, 3.3vw, 48px) 24px;
+	}
+
+	.message {
+		margin-top: auto;
+		padding-top: 38px;
+	}
+
+	.edition {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 12px;
+		margin: 0 0 14px;
+		font-size: 11px;
+		font-weight: 800;
+	}
+
+	.edition span {
+		font-weight: 500;
+	}
+
+	h2 {
+		margin: 0 0 26px;
+		font-family: Georgia, "Times New Roman", serif;
+		font-size: clamp(28px, 2.8vw, 39px);
+		font-weight: 400;
+		line-height: 1.05;
+		letter-spacing: -1.2px;
+	}
+
+	form {
+		display: grid;
+		gap: 9px;
+	}
+
+	label {
+		font-size: 11px;
+		font-weight: 700;
+	}
+
+	input[type="email"] {
+		width: 100%;
+		min-width: 0;
+		min-height: 50px;
+		padding: 12px;
+		border: 1px solid var(--ink);
+		border-radius: 3px;
+		background: transparent;
+		color: var(--ink);
+		font-size: 16px;
+	}
+
+	input::placeholder {
+		color: var(--ink);
+		opacity: 0.65;
+	}
+
+	.subscribe {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 50px;
+		padding: 12px 16px;
+		border: 0;
+		border-radius: 3px;
+		background: var(--strong);
+		color: var(--paper);
+		font-size: 14px;
+		font-weight: 750;
+	}
+
+	.subscribe span {
+		font-size: 24px;
+	}
+
+	.signoff {
+		display: flex;
+		justify-content: space-between;
+		margin: 24px 0 0;
+		font-size: 11px;
+	}
+
+	@media (min-width: 1500px) {
+		.picture {
+			min-height: 740px;
+		}
+
+		h1 {
+			margin-bottom: 160px;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.mail {
+			grid-template-columns: 1fr 1fr;
+			border-width: 8px;
+		}
+
+		.picture {
+			min-height: 600px;
+			padding: 28px 20px;
+		}
+
+		h1 {
+			margin-top: 64px;
+			margin-bottom: 155px;
+			font-size: 9.6vw;
+		}
+
+		.address {
+			padding-inline: 22px;
+		}
+
+		.goose-route {
+			right: 8%;
+			bottom: 185px;
+			width: 150px;
+		}
+	}
+
+	@media (max-width: 650px) {
+		.mail {
+			grid-template-columns: 1fr;
+		}
+
+		.picture {
+			min-height: 600px;
+			padding: 28px 24px;
+		}
+
+		.air-label {
+			font-size: 10px;
+			letter-spacing: 1.5px;
+		}
+
+		h1 {
+			margin: 39px 0 115px -5px;
+			font-size: clamp(76px, 18vw, 114px);
+		}
+
+		.goose-route {
+			right: 8%;
+			bottom: 185px;
+			width: 150px;
+		}
+
+		.destination strong {
+			font-size: 22px;
+		}
+
+		.destination .online {
+			display: block;
+		}
+
+		.address {
+			padding: 28px 24px;
+		}
+
+		.message {
+			padding-top: 30px;
+		}
+
+		h2 {
+			font-size: 34px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cloud {
+			animation: none;
+		}
+
+		.cloud-one {
+			left: 70%;
+		}
+
+		.cloud-two {
+			left: 5%;
+		}
+
+		.goose {
+			animation: none;
+		}
+	}
+</style>

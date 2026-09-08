@@ -1,7 +1,7 @@
 import {
   isAtBlob,
   toHostedBlob,
-} from "node_modules/@fujocoded/astro-atproto-loader/dist/blobs";
+} from "@fujocoded/astro-atproto-loader";
 
 export type Speaker = { name: string; id?: string };
 
