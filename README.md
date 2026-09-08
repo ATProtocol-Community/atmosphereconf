@@ -15,7 +15,7 @@ Suggestions, code, and design contributions welcome! Join the [ATProto Touchers 
 
 ### Transcripts Pipeline
 
-- [`docs/transcript-pipeline/`](docs/transcript-pipeline/) — end-to-end write-up of how the interactive event transcripts under [`src/content/transcripts/`](src/content/transcripts/) were produced (HLS→Parakeet chain, correction sweeps, review UI). Scripts live at [`tools/transcript-pipeline/`](tools/transcript-pipeline/).
+- [`sites/2026/docs/transcript-pipeline/`](sites/2026/docs/transcript-pipeline/) — end-to-end write-up of how the interactive event transcripts under [`sites/2026/src/content/transcripts/`](sites/2026/src/content/transcripts/) were produced (HLS→Parakeet chain, correction sweeps, review UI). Scripts live at [`sites/2026/tools/transcript-pipeline/`](sites/2026/tools/transcript-pipeline/).
 
 ## License
 
@@ -37,44 +37,38 @@ The site supports multiple themes (blacksky, germ, reddwarf, pckt, bluesky, and 
 6. **Add to the valid themes list** — add `"<name>"` to the `VALID` array in `src/layouts/Layout.astro` (this is the inline script that applies the saved theme before paint)
 7. **Add event-type colors** — if it's a dark theme, add `--event-*` overrides in your theme CSS (see `_template.css` for the full list)
 
-# Astro Starter Kit: Basics
+# Repository structure
 
-> 🧑‍🚀 **Seasoned astronaut?** this will seem familiar!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+Each conference year is an independent Astro site in the npm workspace:
 
 ```text
 /
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+├── sites/
+│   ├── 2026/            # archived conference site
+│   └── 2027/            # current conference site
+│       ├── public/
+│       ├── src/
+│       ├── astro.config.mjs
+│       └── package.json
+├── package.json
+└── package-lock.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
+## Commands
 
 All commands are run from the root of the project, from a terminal:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm run dev`             | Starts the new 2027 development server              |
+| `npm run build`           | Builds the preserved 2026 site for the current deployment |
+| `npm run start`           | Starts the preserved 2026 production build         |
+| `npm run dev:2027`        | Starts the new 2027 development server              |
+| `npm run build:2027`      | Builds the new 2027 site                            |
+| `npm run build:all`       | Builds every site in the workspace                  |
+| `npm test`                | Runs the preserved 2026 unit tests                  |
+| `npm run test:visual`     | Runs the preserved 2026 Playwright visual tests     |
 
 ## 👀 Want to learn more?
 

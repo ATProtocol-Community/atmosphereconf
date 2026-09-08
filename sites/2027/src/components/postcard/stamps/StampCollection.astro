@@ -1,0 +1,168 @@
+---
+import Stamp from "./Stamp.astro";
+import { stamps } from "./stamps";
+
+const featuredStamp = stamps[0];
+---
+
+<div class="postage-row">
+	<div class="postmark-group" aria-hidden="true">
+		<span class="postmark-art">
+			<svg class="postmark" viewBox="7 28 164 94" aria-hidden="true">
+				<g fill="none" stroke="currentColor" stroke-width="1.8">
+					<rect x="10" y="31" width="158" height="88" />
+					<rect x="15" y="36" width="148" height="78" stroke-width=".8" />
+					<path d="M15 61h148M87 61v53M87 88h76" />
+				</g>
+				<g fill="currentColor" text-anchor="middle" font-family="Courier New, monospace" font-weight="700">
+					<text x="89" y="52" font-size="12" letter-spacing="1">ATMOSPHERE</text>
+					<text x="125" y="80" font-size="13">SPRING</text>
+					<text x="125" y="105" font-size="12">2027</text>
+				</g>
+				<text x="51" y="101" fill="currentColor" text-anchor="middle" font-family="Avenir Next, sans-serif" font-size="38" font-weight="700">@</text>
+			</svg>
+		</span>
+		<span class="postmark-waves-art">
+			<svg class="postmark-waves" viewBox="-2 0 136 50" preserveAspectRatio="none" aria-hidden="true">
+				<g class="cancellation-waves" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+					<path d="M0 10c11-10 22-10 33 0s22 10 33 0 22-10 33 0 22 10 33 0" />
+					<path d="M0 25c11-10 22-10 33 0s22 10 33 0 22-10 33 0 22 10 33 0" />
+					<path d="M0 40c11-10 22-10 33 0s22 10 33 0 22-10 33 0 22 10 33 0" />
+				</g>
+			</svg>
+		</span>
+	</div>
+	<div class="current-stamp-wrap">
+		<button
+			id="current-stamp"
+			class="current-stamp"
+			type="button"
+			aria-label={`Stamp design: ${featuredStamp.name}; click to cycle`}
+			data-stamps={JSON.stringify(stamps)}
+		>
+			<Stamp stamp={featuredStamp} />
+		</button>
+	</div>
+</div>
+<p class="sr-only" data-stamp-announcement aria-live="polite"></p>
+
+<script>
+	const current = document.querySelector<HTMLButtonElement>("#current-stamp");
+	const selected = current?.querySelector<HTMLElement>("#selected-stamp");
+	const announcement = document.querySelector<HTMLElement>("[data-stamp-announcement]");
+	const stampDesigns: { id: string; name: string; year: string }[] = JSON.parse(current?.dataset.stamps ?? "[]");
+	let stampIndex = 0;
+
+	current?.addEventListener("click", () => {
+		if (!selected || !stampDesigns.length) return;
+
+		stampIndex = (stampIndex + 1) % stampDesigns.length;
+		const stamp = stampDesigns[stampIndex];
+		selected.className = `stamp ${stamp.id}`;
+		const year = selected.querySelector<HTMLElement>(".stamp-year");
+		if (year) year.textContent = stamp.year;
+		current.setAttribute("aria-label", `Stamp design: ${stamp.name}; click to cycle`);
+		if (announcement) announcement.textContent = `${stamp.name} stamp selected`;
+	});
+</script>
+
+<style>
+	.postage-row {
+		--stamp-size: 118px;
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		width: min(100%, 320px);
+		margin-left: auto;
+	}
+
+	.postmark-group {
+		--postmark-width: min(130px, 100%);
+		position: relative;
+		display: flex;
+		flex: 1 1 auto;
+		align-items: center;
+		justify-content: flex-start;
+		width: calc(100% - var(--stamp-size) - 12px);
+		min-width: 0;
+		aspect-ratio: 164 / 94;
+		color: var(--ink);
+	}
+
+	.postmark-art {
+		display: block;
+		flex: 0 0 min(var(--postmark-width), 100%);
+		width: min(var(--postmark-width), 100%);
+		aspect-ratio: 164 / 94;
+		color: inherit;
+	}
+
+	.postmark {
+		display: block;
+		width: 100%;
+		height: auto;
+		color: inherit;
+	}
+
+	.postmark-waves-art {
+		position: absolute;
+		top: 50%;
+		left: calc(var(--postmark-width) - -4px);
+		z-index: 2;
+		width: calc(100% - var(--postmark-width) + 19px);
+		height: min(42px, 56.25%);
+		color: inherit;
+		pointer-events: none;
+		transform: translateY(-50%);
+	}
+
+	.postmark-waves {
+		display: block;
+		width: 100%;
+		height: 100%;
+		color: inherit;
+	}
+
+	.current-stamp-wrap {
+		flex-shrink: 0;
+		margin-left: 0;
+		text-align: center;
+	}
+
+	.current-stamp {
+		display: block;
+		width: var(--stamp-size);
+		padding: 0;
+		margin: auto;
+		border: 0;
+		background: transparent;
+		cursor: pointer;
+		transform: rotate(7deg);
+		transition: transform 0.15s;
+	}
+
+	.current-stamp:hover {
+		transform: rotate(0deg);
+	}
+
+	@media (max-width: 900px) {
+		.postage-row {
+			--stamp-size: 90px;
+		}
+	}
+
+	@media (max-width: 650px) {
+		.postage-row {
+			--stamp-size: 105px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.current-stamp {
+			transition: none;
+		}
+	}
+</style>

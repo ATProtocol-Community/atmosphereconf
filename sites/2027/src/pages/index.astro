@@ -1,0 +1,33 @@
+---
+import Postcard from "../components/postcard/Postcard.astro";
+import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import "../styles/airmail.css";
+
+const title = "Back At It — AtmosphereConf #3";
+const description = "AtmosphereConf #3. Spring 2027. Somewhere in Europe (and online).";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body data-palette="dusk" data-direction="editorial">
+		<a class="skip-link" href="#postcard">Skip to postcard</a>
+		<header class="masthead">
+			<a class="wordmark" href="/" aria-label="AtmosphereConf home">
+				<span aria-hidden="true">@</span> AtmosphereConf <small>#3</small>
+			</a>
+			<ThemeSwitcher />
+		</header>
+		<main>
+			<Postcard />
+		</main>
+	</body>
+</html>
