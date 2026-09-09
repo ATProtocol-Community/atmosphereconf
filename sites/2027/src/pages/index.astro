@@ -4,7 +4,25 @@ import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import "../styles/airmail.css";
 
 const title = "Back At It — AtmosphereConf #3";
-const description = "AtmosphereConf #3. Spring 2027. Somewhere in Europe (and online).";
+const description =
+	"AtmosphereConf #3. Spring 2027. Somewhere in Europe (and online).";
+const cloudShapes = [
+	"M30 88C12 88 4 77 4 64C4 49 15 39 30 39C33 22 46 13 62 17C73 -1 105 0 116 22C135 16 151 28 152 42C172 42 185 52 185 67C185 81 174 90 159 90Z",
+	"M31 83C12 84 3 72 5 58C6 44 18 36 32 37C34 21 49 14 64 20C71 5 92 1 107 11C115 16 120 24 122 33C140 25 158 35 160 49C177 48 187 59 184 72C182 87 165 93 150 86C140 99 121 101 107 89C92 103 70 99 61 87C48 96 36 91 31 83Z",
+	"M27 87C12 87 4 77 4 64C4 50 16 39 32 40C29 24 42 13 58 18C67 0 94 0 108 12C115 18 119 25 120 32C138 29 154 40 154 54C171 53 183 63 182 76C181 90 167 95 152 88C141 103 123 99 115 88Z",
+];
+const clouds = [
+	{ shape: 0, width: 140, top: "7%", duration: 67, delay: 12, rest: 12 },
+	{ shape: 1, width: 160, top: "88%", duration: 73, delay: 48, rest: 65 },
+	...Array.from({ length: 6 }, (_, index) => ({
+		shape: index % cloudShapes.length,
+		width: [150, 185, 125, 165, 140, 180][index],
+		top: `calc(var(--picture-top, 180px) + var(--picture-height, 600px) * ${[0.12, 0.32, 0.48, 0.23, 0.42, 0.16][index]})`,
+		duration: 60,
+		delay: index * 10,
+		rest: [12, 28, 42, 58, 72, 85][index],
+	})),
+];
 ---
 
 <!doctype html>
@@ -16,13 +34,33 @@ const description = "AtmosphereConf #3. Spring 2027. Somewhere in Europe (and on
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@10..48,75..100,400..800&family=DM+Sans:opsz,wght@9..40,400..800&family=Outfit:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
 		<title>{title}</title>
 	</head>
-	<body data-palette="dusk" data-direction="editorial">
+	<body data-palette="sky" data-direction="editorial">
+		<div class="page-sky" aria-hidden="true">
+			{
+				clouds.map((cloud) => (
+					<svg
+						class="cloud"
+						viewBox="0 0 190 105"
+						style={`--cloud-top: ${cloud.top}; --cloud-width: ${cloud.width}px; --cloud-duration: ${cloud.duration}s; --cloud-delay: -${cloud.delay}s; --cloud-rest: ${cloud.rest}%;`}
+					>
+						<path d={cloudShapes[cloud.shape]} />
+					</svg>
+				))
+			}
+		</div>
+
 		<a class="skip-link" href="#postcard">Skip to postcard</a>
 		<header class="masthead">
 			<a class="wordmark" href="/" aria-label="AtmosphereConf home">
-				<span aria-hidden="true">@</span> AtmosphereConf <small>#3</small>
+				AtmosphereConf <small>2027</small>
 			</a>
 			<ThemeSwitcher />
 		</header>
@@ -31,3 +69,84 @@ const description = "AtmosphereConf #3. Spring 2027. Somewhere in Europe (and on
 		</main>
 	</body>
 </html>
+
+<script>
+	const picture = document.querySelector<HTMLElement>(".picture");
+	const sky = document.querySelector<HTMLElement>(".page-sky");
+	if (picture && sky) {
+		const alignClouds = () => {
+			const frame = picture.getBoundingClientRect();
+			const field = sky.getBoundingClientRect();
+			sky.style.setProperty("--picture-top", `${frame.top - field.top}px`);
+			sky.style.setProperty("--picture-height", `${frame.height}px`);
+		};
+		const cloudLayout = new ResizeObserver(alignClouds);
+		cloudLayout.observe(document.body);
+		cloudLayout.observe(picture);
+		const header = document.querySelector(".masthead");
+		if (header) cloudLayout.observe(header);
+		alignClouds();
+	}
+</script>
+
+<style>
+	:global(body) {
+		position: relative;
+	}
+
+	.page-sky {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.cloud {
+		position: absolute;
+		top: var(--cloud-top);
+		left: 0;
+		width: var(--cloud-width);
+		height: auto;
+		fill: var(--paper);
+		opacity: 0.55;
+		animation: drift var(--cloud-duration) linear var(--cloud-delay) infinite;
+	}
+
+	@keyframes drift {
+		from {
+			left: 0;
+			transform: translateX(-100%);
+		}
+		to {
+			left: 100%;
+			transform: translateX(0);
+		}
+	}
+
+	@media (max-width: 650px) {
+		.cloud:nth-child(4),
+		.cloud:nth-child(6),
+		.cloud:nth-child(8) {
+			display: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cloud {
+			animation: none;
+			left: var(--cloud-rest);
+		}
+	}
+
+	:global(.masthead) {
+		position: relative;
+		z-index: 1;
+		flex-wrap: wrap;
+	}
+
+	:global(main) {
+		position: relative;
+		z-index: 1;
+	}
+</style>

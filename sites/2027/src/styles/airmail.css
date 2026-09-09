@@ -1,5 +1,5 @@
 :root {
-	font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
+	font-family: "DM Sans", "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 }
@@ -15,20 +15,25 @@ html {
 }
 
 body {
-	--ink: #423365;
-	--strong: #6548a4;
-	--sky: #c8b5ed;
-	--butter: #ffd6aa;
-	--mint: #a292c9;
-	--paper: #fff3ec;
-	--ground: #6548a4;
-	--outside: #fff3ec;
+	--heading-font: "Bricolage Grotesque";
+	--body-font: "DM Sans";
+	--label-font: "Outfit";
+	--ink: #173766;
+	--strong: #254ac7;
+	--sky: #9dd8f2;
+	--butter: #ffe69c;
+	--mint: #b4dfc5;
+	--paper: #fff9e8;
+	--ground: #173766;
+	--outside: #fff9e8;
+	--glow-one: #4e8ee4;
+	--glow-two: #f7bc5e;
 	min-width: 320px;
 	min-height: 100vh;
 	margin: 0;
-	background: var(--ground);
+	background: var(--sky);
 	color: var(--ink);
-	font-family: "Avenir Next", Avenir, system-ui, sans-serif;
+	font-family: var(--body-font), "Avenir Next", Avenir, system-ui, sans-serif;
 }
 
 body[data-palette="sky"] {
@@ -40,6 +45,8 @@ body[data-palette="sky"] {
 	--paper: #fff9e8;
 	--ground: #254ac7;
 	--outside: #fff9e8;
+	--glow-one: #9dd8f2;
+	--glow-two: #ffe69c;
 }
 
 body[data-palette="garden"] {
@@ -51,17 +58,21 @@ body[data-palette="garden"] {
 	--paper: #fff9e8;
 	--ground: #326748;
 	--outside: #fff9e8;
+	--glow-one: #b4dfc5;
+	--glow-two: #ffe69c;
 }
 
 body[data-palette="dusk"] {
-	--ink: #423365;
-	--strong: #6548a4;
-	--sky: #c8b5ed;
+	--ink: #302052;
+	--strong: #49257d;
+	--sky: #a78afa;
 	--butter: #ffd6aa;
-	--mint: #a292c9;
+	--mint: #9270df;
 	--paper: #fff3ec;
-	--ground: #6548a4;
+	--ground: #5426a0;
 	--outside: #fff3ec;
+	--glow-one: #a78afa;
+	--glow-two: #ffd6aa;
 }
 
 button,
@@ -105,15 +116,11 @@ a {
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	font-size: 16px;
-	font-weight: 800;
-	letter-spacing: -0.5px;
+	font-family: var(--heading-font), "Avenir Next", sans-serif;
+	font-size: 30px;
+	font-weight: 600;
+	letter-spacing: -0.025em;
 	text-decoration: none;
-}
-
-.wordmark > span {
-	font-size: 32px;
-	line-height: 1;
 }
 
 .wordmark small {
@@ -125,7 +132,10 @@ a {
 }
 
 main {
-	padding: 14px 40px 0;
+	display: grid;
+	min-height: calc(100vh - 92px);
+	place-items: center;
+	padding: 42px 40px 16px;
 }
 
 .skip-link {
@@ -138,6 +148,17 @@ main {
 	color: var(--ink);
 	font-weight: 700;
 	transform: translateY(-200%);
+}
+
+::selection {
+	background: var(--butter);
+	color: var(--ink);
+}
+
+@media (max-width: 760px) {
+	body {
+		background-attachment: scroll;
+	}
 }
 
 .skip-link:focus {
@@ -175,11 +196,6 @@ main {
 
 	.wordmark {
 		gap: 5px;
-		font-size: 13px;
-	}
-
-	.wordmark > span {
-		font-size: 28px;
 	}
 
 	.wordmark small {
