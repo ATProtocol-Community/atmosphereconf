@@ -1,5 +1,6 @@
 ---
 import goose from "./goose.png";
+import GooseSvg from "./goose.svg";
 import hummingbird from "./hummingbird.png";
 import StampCollection from "./stamps/StampCollection.astro";
 import PostcardForm from "./PostcardForm.astro";
@@ -9,6 +10,7 @@ import PostcardForm from "./PostcardForm.astro";
 	<section class="picture" aria-labelledby="headline">
 		<p class="air-label">The 100% unofficial gathering of atmospherizens</p>
 		<div class="goose-route" aria-hidden="true">
+			<!-- Old goose (png) is included here -->
 			<img
 				class="goose"
 				id="goose-img"
@@ -21,6 +23,8 @@ import PostcardForm from "./PostcardForm.astro";
 				width="725"
 				height="681"
 			/>
+
+			<GooseSvg />
 		</div>
 		<div class="grass">
 			{
@@ -183,6 +187,7 @@ import PostcardForm from "./PostcardForm.astro";
 
 	startGrass();
 </script>
+<script src="./goose-anim.ts"></script>
 <style>
 	.mail {
 		display: grid;
@@ -195,6 +200,10 @@ import PostcardForm from "./PostcardForm.astro";
 		background: transparent;
 		box-shadow: 12px 14px 6px color-mix(in srgb, var(--ink) 25%, transparent);
 		position: relative;
+	}
+
+	#goose-svg {
+		rotate: 10deg;
 	}
 
 	.mail::after {
