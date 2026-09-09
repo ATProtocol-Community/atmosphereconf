@@ -5,6 +5,7 @@ interface Props {
 	label: string;
 	placeholder?: string;
 	inputClass?: string;
+	disabled?: boolean;
 	required?: boolean;
 	minLength?: number;
 	autocomplete?: string;
@@ -25,11 +26,13 @@ const {
 	label,
 	placeholder,
 	inputClass,
+	disabled = false,
 	required,
 	minLength = 1,
 	autocomplete = "off",
 	inputmode,
 } = Astro.props;
+const disabledAttr = disabled ? "disabled" : undefined;
 
 const popoverId = `${id}-popover`;
 const listboxId = `${id}-listbox`;
@@ -37,7 +40,7 @@ const statusId = `${id}-status`;
 const hintId = `${id}-hint`;
 ---
 
-<cmb-combobox class="cmb" data-min-length={minLength}>
+<cmb-combobox class="cmb" data-min-length={minLength} disabled={disabledAttr}>
 	<!-- <label class="visually-hidden" for={id}>{label}</label> -->
 	<div class="cmb-input-wrap">
 		<span class="cmb-leading" aria-hidden="true"
@@ -48,6 +51,7 @@ const hintId = `${id}-hint`;
 			name={name}
 			type="text"
 			class:list={["cmb-input", inputClass]}
+			disabled={disabledAttr}
 			placeholder={placeholder}
 			role="combobox"
 			aria-autocomplete="list"
@@ -122,6 +126,24 @@ const hintId = `${id}-hint`;
 		private debounceMs = 150;
 		private minLength = 1;
 		private isIos = false;
+		private isDisabled = false;
+		private suggestionsDisabled = false;
+
+		static get observedAttributes() {
+			return ["disabled", "disable-suggestions"];
+		}
+
+		private setDisabled(disabled: boolean) {
+			if (!this.input) return;
+			this.isDisabled = disabled;
+			this.input.disabled = disabled;
+			if (disabled) this.close();
+		}
+
+		private setSuggestionsDisabled(disabled: boolean) {
+			this.suggestionsDisabled = disabled;
+			if (disabled) this.close();
+		}
 
 		connectedCallback() {
 			this.input = this.querySelector<HTMLInputElement>(
@@ -134,6 +156,8 @@ const hintId = `${id}-hint`;
 			this.hintId = this.input.getAttribute("aria-describedby") ?? "";
 			this.minLength = Number(this.dataset.minLength ?? 1);
 			this.isIos = isIosDevice();
+			this.setSuggestionsDisabled(this.hasAttribute("disable-suggestions"));
+			this.setDisabled(this.hasAttribute("disabled"));
 
 			this.input.addEventListener("input", this.onInput);
 			this.input.addEventListener("keydown", this.onKeyDown);
@@ -141,6 +165,21 @@ const hintId = `${id}-hint`;
 			this.listbox.addEventListener("click", this.onListboxClick);
 			this.listbox.addEventListener("mousemove", this.onListboxMouseMove);
 			document.addEventListener("pointerdown", this.onDocumentPointerDown);
+		}
+
+		attributeChangedCallback(
+			name: string,
+			_oldValue: string | null,
+			newValue: string | null,
+		) {
+			switch (name) {
+				case "disabled":
+					this.setDisabled(newValue !== null);
+					break;
+				case "disable-suggestions":
+					this.setSuggestionsDisabled(newValue !== null);
+					break;
+			}
 		}
 
 		disconnectedCallback() {
@@ -154,9 +193,14 @@ const hintId = `${id}-hint`;
 		}
 
 		private onInput = () => {
+			if (this.isDisabled) return;
 			const q = this.input.value.trim();
 			this.toggleHint(q.length === 0);
 			if (this.debounceTimer) clearTimeout(this.debounceTimer);
+			if (this.suggestionsDisabled) {
+				this.close();
+				return;
+			}
 			if (q.length < this.minLength) {
 				this.requestSeq += 1;
 				this.close();
@@ -181,6 +225,11 @@ const hintId = `${id}-hint`;
 		};
 
 		private async fetchSuggestions(q: string) {
+			if (this.suggestionsDisabled) {
+				this.close();
+				return;
+			}
+			if (this.isDisabled) return;
 			const detail: SearchDetail = { query: q, results: null };
 			this.dispatchEvent(
 				new CustomEvent<SearchDetail>("combobox-search", {
@@ -195,6 +244,8 @@ const hintId = `${id}-hint`;
 			try {
 				const items = await detail.results;
 				if (seq !== this.requestSeq) return;
+				if (this.suggestionsDisabled) return;
+				if (this.isDisabled) return;
 				this.suggestions = items.slice(0, 10);
 				this.activeIndex = this.suggestions.length > 0 ? 0 : -1;
 				this.renderResults();
@@ -207,6 +258,10 @@ const hintId = `${id}-hint`;
 		}
 
 		private renderResults() {
+			if (this.isDisabled) {
+				this.close();
+				return;
+			}
 			this.input.removeAttribute("aria-busy");
 			if (this.suggestions.length === 0) {
 				const li = document.createElement("li");
@@ -286,6 +341,10 @@ const hintId = `${id}-hint`;
 		}
 
 		private renderError() {
+			if (this.isDisabled) {
+				this.close();
+				return;
+			}
 			this.input.removeAttribute("aria-busy");
 			this.suggestions = [];
 			this.activeIndex = -1;
@@ -299,6 +358,7 @@ const hintId = `${id}-hint`;
 		}
 
 		private onKeyDown = (e: KeyboardEvent) => {
+			if (this.isDisabled) return;
 			const open = !this.popoverEl.hidden && this.suggestions.length > 0;
 			switch (e.key) {
 				case "ArrowDown":
@@ -485,6 +545,11 @@ const hintId = `${id}-hint`;
 	}
 	.cmb-input-wrap:has(.cmb-leading:not(:empty)) .cmb-input {
 		padding-left: 36px;
+	}
+
+	.cmb-input:disabled {
+		cursor: not-allowed;
+		opacity: 0.72;
 	}
 
 	/* Popover surface */
