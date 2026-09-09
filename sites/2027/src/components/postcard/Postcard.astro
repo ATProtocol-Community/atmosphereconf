@@ -1,5 +1,6 @@
 ---
-import goose from "./back-at-it.png";
+import goose from "./goose.png";
+import hummingbird from "./hummingbird.png";
 import StampCollection from "./stamps/StampCollection.astro";
 ---
 
@@ -7,7 +8,25 @@ import StampCollection from "./stamps/StampCollection.astro";
 	<section class="picture" aria-labelledby="headline">
 		<p class="air-label">The 100% unofficial gathering of atmospherizens</p>
 		<div class="goose-route" aria-hidden="true">
-			<img class="goose" src={goose.src} alt="" width="725" height="681" />
+			<img
+				class="goose"
+				id="goose-img"
+				data-images={JSON.stringify({
+					default: goose.src,
+					colibri: hummingbird.src,
+				})}
+				src={goose.src}
+				alt=""
+				width="725"
+				height="681"
+			/>
+		</div>
+		<div class="grass">
+			{
+				Array.from({ length: 36 }, () => (
+					<div class="grass-blade" aria-hidden="true" />
+				))
+			}
 		</div>
 		<h1 id="headline">
 			<span class="headline-word">Back</span>
@@ -57,22 +76,159 @@ import StampCollection from "./stamps/StampCollection.astro";
 				/>
 			</form>
 		</div>
-		<p class="signoff">See you out there. <span aria-hidden="true">♡</span></p>
+		<p class="signoff">
+			See you out there. <span aria-hidden="true">♡</span>
+		</p>
 	</section>
 </article>
 
+<script>
+	// Sample size for non-perfect-circle moments
+	const ARC_SAMPLES = 720;
+
+	function buildArcTable(rx: number, ry: number) {
+		const lengths = new Float64Array(ARC_SAMPLES + 1);
+		const dt = (Math.PI * 2) / ARC_SAMPLES;
+		let prevX = 0;
+		let prevY = ry;
+
+		for (let i = 1; i <= ARC_SAMPLES; i++) {
+			const t = i * dt;
+			const x = rx * Math.sin(t);
+			const y = ry * Math.cos(t);
+			lengths[i] = lengths[i - 1] + Math.hypot(x - prevX, y - prevY);
+			prevX = x;
+			prevY = y;
+		}
+
+		return lengths;
+	}
+
+	function tAtLength(lengths: Float64Array, target: number) {
+		let lo = 0;
+		let hi = lengths.length - 1;
+
+		while (lo < hi) {
+			const mid = (lo + hi) >> 1;
+			if (lengths[mid] < target) lo = mid + 1;
+			else hi = mid;
+		}
+
+		if (lo === 0) return 0;
+
+		const a = lengths[lo - 1];
+		const b = lengths[lo];
+		const frac = b > a ? (target - a) / (b - a) : 0;
+
+		return ((lo - 1 + frac) * Math.PI * 2) / ARC_SAMPLES;
+	}
+
+	function initGrassBlades() {
+		const earth = document.querySelector<HTMLDivElement>(".grass")!;
+		if (!earth) return;
+
+		const blades = Array.from(
+			earth.querySelectorAll<HTMLDivElement>(".grass-blade"),
+		);
+		if (blades.length === 0) return;
+
+		function layout() {
+			// Reset
+			for (const blade of blades) {
+				blade.style.left = "";
+				blade.style.top = "";
+				blade.style.transform = "";
+			}
+
+			// Recalc
+			const cx = earth.clientWidth / 2;
+			const cy = earth.clientHeight / 2;
+			const rx = cx;
+			const ry = cy;
+
+			if (rx === 0 || ry === 0) return;
+
+			const natural = blades.map((blade) => ({
+				x: blade.offsetLeft,
+				y: blade.offsetTop,
+				w: blade.offsetWidth,
+				h: blade.offsetHeight,
+			}));
+
+			const arc = buildArcTable(rx, ry);
+			const perimeter = arc[ARC_SAMPLES];
+
+			// Recycle (how'd that comment joke even work lmao)
+			blades.forEach((blade, idx) => {
+				const t = tAtLength(arc, (idx / blades.length) * perimeter);
+				const { x, y, w, h } = natural[idx];
+
+				const px = cx + rx * Math.sin(t) - w / 2;
+				const py = cy + ry * Math.cos(t) - h / 2;
+
+				const deg =
+					(Math.atan2(-Math.sin(t) / rx, Math.cos(t) / ry) * 180) / Math.PI;
+
+				blade.style.left = `${px - x}px`;
+				blade.style.top = `${py - y}px`;
+				blade.style.transform = `rotate(${deg}deg)`;
+				blade.style.opacity = "1";
+			});
+		}
+
+		// Please no spam browser ty :D
+		let frame = 0;
+		const observer = new ResizeObserver(() => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(layout);
+		});
+
+		observer.observe(earth);
+
+		return () => {
+			cancelAnimationFrame(frame);
+			observer.disconnect();
+		};
+	}
+
+	let teardownGrass: (() => void) | void;
+
+	function startGrass() {
+		teardownGrass?.();
+		teardownGrass = initGrassBlades();
+	}
+
+	function stopGrass() {
+		teardownGrass?.();
+		teardownGrass = undefined;
+	}
+
+	startGrass();
+</script>
 <style>
 	.mail {
 		display: grid;
 		grid-template-columns: 1.35fr 1fr;
 		aspect-ratio: 3 / 2;
 		width: min(1080px, 100%);
-		margin: auto;
 		border: 12px solid var(--paper);
 		border-radius: 3px;
 		margin-bottom: 4rem;
 		background: transparent;
 		box-shadow: 12px 14px 6px color-mix(in srgb, var(--ink) 25%, transparent);
+		position: relative;
+	}
+
+	.mail::after {
+		content: "";
+		position: absolute;
+		inset: -12px;
+		z-index: 1;
+		border-radius: 3px;
+		background: url("/noise.svg") repeat;
+		background-size: 180px 180px;
+		pointer-events: none;
+		opacity: 0.35;
 	}
 
 	.picture {
@@ -84,16 +240,48 @@ import StampCollection from "./stamps/StampCollection.astro";
 		color: var(--strong);
 	}
 
-	.picture::after {
+	.grass {
 		position: absolute;
-		bottom: -40px;
-		left: -20%;
+		top: 75%;
+		left: -50%;
 		z-index: -2;
-		width: 140%;
-		height: 235px;
-		content: "";
+		width: 200%;
+		aspect-ratio: 1 / 1;
 		background: var(--mint);
-		border-radius: 50% 50% 0 0;
+		border-radius: 50%;
+		animation: revolve 70s linear infinite;
+	}
+
+	@keyframes revolve {
+		from {
+			rotate: 0deg;
+		}
+		to {
+			rotate: 360deg;
+		}
+	}
+
+	.grass-blade {
+		width: 4px;
+		height: 24px;
+		border-radius: 9px;
+		background: color-mix(in srgb, var(--mint) 75%, black);
+		position: relative;
+		opacity: 0;
+		transform-origin: center center;
+	}
+
+	.grass-blade::after {
+		content: "";
+		position: absolute;
+		width: 4px;
+		height: 12px;
+		border-radius: 9px;
+		background: color-mix(in srgb, var(--mint) 75%, black);
+		transform-origin: center center;
+		rotate: 45deg;
+		top: 8px;
+		right: 4px;
 	}
 
 	.air-label {
@@ -201,7 +389,7 @@ import StampCollection from "./stamps/StampCollection.astro";
 	.goose-route {
 		position: absolute;
 		right: 5%;
-		bottom: 130px;
+		bottom: 15%;
 		z-index: -1;
 		width: 170px;
 	}
@@ -341,9 +529,13 @@ import StampCollection from "./stamps/StampCollection.astro";
 			padding-inline: 22px;
 		}
 
+		.grass {
+			top: 55%;
+		}
+
 		.goose-route {
 			right: 8%;
-			bottom: 185px;
+			top: 45%;
 		}
 	}
 

@@ -1,5 +1,6 @@
 :root {
-	font-family: "DM Sans", "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
+	font-family:
+		"DM Sans", "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 }
@@ -62,17 +63,17 @@ body[data-palette="garden"] {
 	--glow-two: #ffe69c;
 }
 
-body[data-palette="dusk"] {
-	--ink: #302052;
-	--strong: #49257d;
-	--sky: #a78afa;
-	--butter: #ffd6aa;
-	--mint: #9270df;
-	--paper: #fff3ec;
-	--ground: #5426a0;
-	--outside: #fff3ec;
-	--glow-one: #a78afa;
-	--glow-two: #ffd6aa;
+body[data-palette="colibri"] {
+	--ink: #2f0d68;
+	--strong: #6d28d9;
+	--sky: #c4b4ff;
+	--butter: #ffd9a8;
+	--mint: #7fd6d2;
+	--paper: #f9f5ff;
+	--ground: #8e51ff;
+	--outside: #f9f5ff;
+	--glow-one: #c4b4ff;
+	--glow-two: #ffd9a8;
 }
 
 button,
