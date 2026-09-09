@@ -35,96 +35,102 @@
 	}
 </style>
 <script is:inline>
-	const themes = {
-		sky: {
-			label: "Sky",
-			image: "goose",
-		},
-		garden: {
-			label: "Garden",
-			image: "goose",
-		},
-		colibri: {
-			label: "Colibri",
-			image: "colibri",
-		},
-		blacksky: {
-			label: "Blacksky",
-			image: "goose",
-		},
-		semble: {
-			label: "Semble",
-			image: "goose",
-		},
-		fujocoded: {
-			label: "Fujocoded",
-			image: "goose",
-		},
-	};
-	const themeStorageKey = "2027:page-theme";
+	(() => {
+		const themes = {
+			sky: { label: "Sky", image: "goose" },
+			garden: { label: "Garden", image: "goose" },
+			colibri: { label: "Colibri", image: "colibri" },
+			blacksky: { label: "Blacksky", image: "goose" },
+			semble: { label: "Semble", image: "goose" },
+			fujocoded: { label: "Fujocoded", image: "goose" },
+		};
 
-	// Theme toggle
-	const themeLabel = document.getElementById("theme-next-label");
+		const themeKeys = Object.keys(themes);
+		const DEFAULT_THEME = "sky";
+		const themeStorageKey = "2027:page-theme";
 
-	const getCurrentTheme = () =>
-		document.documentElement.dataset.theme ||
-		localStorage.getItem(themeStorageKey) ||
-		"sky";
+		const readStored = () => {
+			try {
+				return localStorage.getItem(themeStorageKey);
+			} catch {
+				return null;
+			}
+		};
 
-	const syncThemeGoose = () => {
-		const gooseImage = document.getElementById("goose-img");
-		const gooseSvg = document.getElementById("goose-svg");
-		const imageData = JSON.parse(gooseImage.dataset.images);
+		const writeStored = (value) => {
+			try {
+				localStorage.setItem(themeStorageKey, value);
+			} catch {
+				// swallow
+			}
+		};
 
-		let current = getCurrentTheme();
+		const normalize = (theme) => (themes[theme] ? theme : DEFAULT_THEME);
 
-		if (!themes[current]) current = "sky";
-		if (imageData[current]) {
-			if (gooseSvg) gooseSvg.style.display = "none";
+		const getCurrentTheme = () =>
+			normalize(document.documentElement.dataset.theme || readStored());
 
-			gooseImage.style.display = "block";
-			gooseImage.src = imageData[current];
-		} else {
-			if (gooseSvg) {
+		const getNextTheme = (theme) =>
+			themeKeys[(themeKeys.indexOf(theme) + 1) % themeKeys.length];
+
+		const syncGoose = (theme) => {
+			const gooseImage = document.getElementById("goose-img");
+			if (!gooseImage) return;
+
+			const gooseSvg = document.getElementById("goose-svg");
+
+			let imageData;
+			try {
+				imageData = JSON.parse(gooseImage.dataset.images || "{}");
+			} catch {
+				imageData = {};
+			}
+
+			const src = imageData[themes[theme].image];
+
+			if (src) {
+				if (gooseSvg) gooseSvg.style.display = "none";
+				gooseImage.style.display = "block";
+				gooseImage.src = src;
+			} else if (gooseSvg) {
 				gooseImage.style.display = "none";
 				gooseSvg.style.display = "block";
-			} else {
+			} else if (imageData.default) {
+				gooseImage.style.display = "block";
 				gooseImage.src = imageData.default;
 			}
+		};
+
+		const applyTheme = (theme) => {
+			const current = normalize(theme);
+
+			document.documentElement.dataset.theme = current;
+			document.body.dataset.palette = current;
+			writeStored(current);
+
+			const label = document.getElementById("theme-next-label");
+			if (label) label.textContent = themes[getCurrentTheme()].label;
+
+			syncGoose(current);
+		};
+
+		const cycleTheme = () => applyTheme(getNextTheme(getCurrentTheme()));
+
+		const init = () => {
+			document
+				.getElementById("theme-toggle")
+				?.addEventListener("click", cycleTheme);
+			document
+				.getElementById("theme-toggle-mobile")
+				?.addEventListener("click", cycleTheme);
+
+			applyTheme(getCurrentTheme());
+		};
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", init);
+		} else {
+			init();
 		}
-	};
-
-	const syncThemeLabel = () => {
-		let current = getCurrentTheme();
-
-		if (!themes[current]) current = "sky";
-
-		if (themeLabel) themeLabel.textContent = themes[current].label;
-		document.body.dataset.palette = current;
-
-		syncThemeGoose();
-	};
-
-	const cycleTheme = () => {
-		let current = getCurrentTheme();
-
-		if (!themes[current]) current = "sky";
-
-		const configKeys = Object.keys(themes);
-		const currentIndex = configKeys.indexOf(current);
-		const next = configKeys[(currentIndex + 1) % configKeys.length];
-
-		localStorage.setItem(themeStorageKey, next);
-		document.body.dataset.palette = next;
-		syncThemeLabel();
-	};
-
-	document
-		.getElementById("theme-toggle")
-		?.addEventListener("click", cycleTheme);
-	document
-		.getElementById("theme-toggle-mobile")
-		?.addEventListener("click", cycleTheme);
-
-	document.addEventListener("DOMContentLoaded", syncThemeLabel);
+	})();
 </script>
