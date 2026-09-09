@@ -25,11 +25,8 @@ body {
 	--butter: #ffe69c;
 	--mint: #b4dfc5;
 	--paper: #fff9e8;
-	--ground: #173766;
-	--outside: #fff9e8;
-	--glow-one: #4e8ee4;
-	--glow-two: #f7bc5e;
 	--cancel-stamp: #a62b2b;
+	--goose: #000;
 	min-width: 320px;
 	min-height: 100vh;
 	margin: 0;
@@ -45,10 +42,6 @@ body[data-palette="sky"] {
 	--butter: #ffe69c;
 	--mint: #b4dfc5;
 	--paper: #fff9e8;
-	--ground: #254ac7;
-	--outside: #fff9e8;
-	--glow-one: #9dd8f2;
-	--glow-two: #ffe69c;
 }
 
 body[data-palette="garden"] {
@@ -58,10 +51,6 @@ body[data-palette="garden"] {
 	--butter: #ffe69c;
 	--mint: #8cbca3;
 	--paper: #fff9e8;
-	--ground: #326748;
-	--outside: #fff9e8;
-	--glow-one: #b4dfc5;
-	--glow-two: #ffe69c;
 }
 
 body[data-palette="colibri"] {
@@ -71,10 +60,27 @@ body[data-palette="colibri"] {
 	--butter: #ffd9a8;
 	--mint: #7fd6d2;
 	--paper: #f9f5ff;
-	--ground: #8e51ff;
-	--outside: #f9f5ff;
-	--glow-one: #c4b4ff;
-	--glow-two: #ffd9a8;
+}
+
+body[data-palette="blacksky"] {
+	--ink: #6b7bf5;
+	--strong: #5b5bf5;
+	--sky: #182040;
+	--butter: #fff;
+	--mint: #d2fc51;
+	--paper: #0f1729;
+	--goose: var(--strong);
+	--cancel-stamp: #6b7bf5;
+}
+
+body[data-palette="semble"] {
+	--ink: oklch(0.69 0.21 42.88);
+	--strong: oklch(0.69 0.21 42.88);
+	--sky: #ffdac2;
+	--butter: #ffe69c;
+	--mint: #a6e7ff;
+	--paper: #fff9e8;
+	--cancel-stamp: black;
 }
 
 button,
