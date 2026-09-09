@@ -83,6 +83,18 @@ body[data-palette="semble"] {
 	--cancel-stamp: black;
 }
 
+body[data-palette="fujocoded"] {
+	--ink: #ff38eb;
+	--strong: #ff38eb;
+	--sky:
+		linear-gradient(#1a0a3d, #3a1f78),
+		linear-gradient(135deg, #ff38eb, #4360f7, #ff38eb) !important;
+	--butter: #fbb8fe;
+	--mint: radial-gradient(circle at center, #4360f7, #fbb8fe, #9687fa);
+	--paper: #fff9e8;
+	--cancel-stamp: #4360f7;
+}
+
 button,
 input {
 	font: inherit;
