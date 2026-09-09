@@ -15,8 +15,8 @@ const featuredStamp = stamps[0];
 					<path d="M15 61h148M87 61v53M87 88h76" />
 				</g>
 				<g fill="currentColor" text-anchor="middle" font-family="Courier New, monospace" font-weight="700">
-					<text x="89" y="52" font-size="12" letter-spacing="1">ATMOSPHERE</text>
-					<text x="125" y="80" font-size="13">SPRING</text>
+					<text x="89" y="52" font-size="12" letter-spacing="1">atmosphereconf</text>
+					<text x="125" y="80" font-size="13">COMING</text>
 					<text x="125" y="105" font-size="12">2027</text>
 				</g>
 				<text x="51" y="101" fill="currentColor" text-anchor="middle" font-family="Avenir Next, sans-serif" font-size="38" font-weight="700">@</text>
@@ -47,10 +47,12 @@ const featuredStamp = stamps[0];
 <p class="sr-only" data-stamp-announcement aria-live="polite"></p>
 
 <script>
+	import type { StampDefinition } from "./stamps";
+
 	const current = document.querySelector<HTMLButtonElement>("#current-stamp");
 	const selected = current?.querySelector<HTMLElement>("#selected-stamp");
 	const announcement = document.querySelector<HTMLElement>("[data-stamp-announcement]");
-	const stampDesigns: { id: string; name: string; year: string }[] = JSON.parse(current?.dataset.stamps ?? "[]");
+	const stampDesigns: StampDefinition[] = JSON.parse(current?.dataset.stamps ?? "[]");
 	let stampIndex = 0;
 
 	current?.addEventListener("click", () => {
@@ -58,7 +60,7 @@ const featuredStamp = stamps[0];
 
 		stampIndex = (stampIndex + 1) % stampDesigns.length;
 		const stamp = stampDesigns[stampIndex];
-		selected.className = `stamp ${stamp.id}`;
+		selected.className = ["stamp", stamp.id, stamp.character].filter(Boolean).join(" ");
 		const year = selected.querySelector<HTMLElement>(".stamp-year");
 		if (year) year.textContent = stamp.year;
 		current.setAttribute("aria-label", `Stamp design: ${stamp.name}; click to cycle`);
@@ -68,7 +70,7 @@ const featuredStamp = stamps[0];
 
 <style>
 	.postage-row {
-		--stamp-size: 118px;
+		--stamp-size: 150px;
 		position: relative;
 		isolation: isolate;
 		display: flex;
@@ -89,7 +91,9 @@ const featuredStamp = stamps[0];
 		width: calc(100% - var(--stamp-size) - 12px);
 		min-width: 0;
 		aspect-ratio: 164 / 94;
-		color: var(--ink);
+		transform: translate(57px, 71px) rotate(357deg);
+		color: #851d1d;
+		z-index: 100;
 	}
 
 	.postmark-art {
@@ -150,13 +154,13 @@ const featuredStamp = stamps[0];
 
 	@media (max-width: 900px) {
 		.postage-row {
-			--stamp-size: 90px;
+			--stamp-size: 112px;
 		}
 	}
 
 	@media (max-width: 650px) {
 		.postage-row {
-			--stamp-size: 105px;
+			--stamp-size: 130px;
 		}
 	}
 

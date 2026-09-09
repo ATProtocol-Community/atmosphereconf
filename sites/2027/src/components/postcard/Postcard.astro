@@ -5,18 +5,14 @@ import StampCollection from "./stamps/StampCollection.astro";
 
 <article class="mail" id="postcard" aria-label="A postcard from AtmosphereConf">
 	<section class="picture" aria-labelledby="headline">
-		<p class="air-label">
-			Join the 100% unofficial gathering of atmospherizens
-		</p>
-		<div class="cloud cloud-one" aria-hidden="true"></div>
-		<div class="cloud cloud-two" aria-hidden="true"></div>
+		<p class="air-label">The 100% unofficial gathering of atmospherizens</p>
 		<div class="goose-route" aria-hidden="true">
 			<img class="goose" src={goose.src} alt="" width="725" height="681" />
 		</div>
 		<h1 id="headline">
 			<span class="headline-word">Back</span>
 			<span class="last-line"
-				><span class="headline-word">At</span>
+				><span class="headline-word headline-at">At</span>
 				<span class="headline-word">It<span class="period">.</span></span></span
 			>
 		</h1>
@@ -35,7 +31,7 @@ import StampCollection from "./stamps/StampCollection.astro";
 
 		<div class="message">
 			<p class="edition">AtmosphereConf #3 <span>Spring 2027</span></p>
-			<h2 id="signup-title">Want to know<br />where we land?</h2>
+			<h2 id="signup-title">Where will <span>we</span> land?</h2>
 			<form action="https://leaflet.pub/api/auth/email-login" method="get">
 				<label for="airmail-email">Your email address</label>
 				<input
@@ -69,13 +65,14 @@ import StampCollection from "./stamps/StampCollection.astro";
 	.mail {
 		display: grid;
 		grid-template-columns: 1.35fr 1fr;
-		width: min(1360px, 100%);
+		aspect-ratio: 3 / 2;
+		width: min(1080px, 100%);
 		margin: auto;
 		border: 12px solid var(--paper);
 		border-radius: 3px;
-		background: var(--paper);
-		box-shadow: 0 18px 0 -10px color-mix(in srgb, var(--ink) 40%, transparent);
-		margin-bottom: 4rem !important;
+		margin-bottom: 4rem;
+		background: transparent;
+		box-shadow: 12px 14px 6px color-mix(in srgb, var(--ink) 25%, transparent);
 	}
 
 	.picture {
@@ -85,7 +82,6 @@ import StampCollection from "./stamps/StampCollection.astro";
 		min-height: 650px;
 		padding: 36px;
 		color: var(--strong);
-		background: var(--sky);
 	}
 
 	.picture::after {
@@ -104,10 +100,10 @@ import StampCollection from "./stamps/StampCollection.astro";
 		position: relative;
 		z-index: 2;
 		margin: 0;
-		font-family: "Courier New", monospace;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
 		font-size: 12px;
 		font-weight: 700;
-		letter-spacing: 2px;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 	}
 
@@ -115,10 +111,10 @@ import StampCollection from "./stamps/StampCollection.astro";
 		position: relative;
 		z-index: 2;
 		margin: 38px 0 120px -7px;
-		font-family: Georgia, "Times New Roman", serif;
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
 		font-size: clamp(72px, 10.2vw, 148px);
-		font-weight: 400;
-		letter-spacing: -0.075em;
+		font-weight: 750;
+		letter-spacing: -0.04em;
 		line-height: 0.98;
 	}
 
@@ -128,6 +124,28 @@ import StampCollection from "./stamps/StampCollection.astro";
 
 	.headline-word {
 		margin-right: 15px;
+	}
+
+	.headline-at {
+		display: inline-block;
+		padding: 0.03em 0.14em 0.1em;
+		margin: -0.03em -0.02em 0 0;
+		border-radius: 0.15em 0.42em 0.2em 0.32em;
+		color: var(--butter);
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-weight: 800;
+		letter-spacing: -0.04em;
+		line-height: 0.88;
+		/* text-shadow:
+			-2px -2px 1px var(--strong),
+			2px -2px 1px var(--strong),
+			-2px 2px 1px var(--strong),
+			2px 2px 1px var(--strong),
+			0 -2px 1px var(--strong),
+			0 2px 1px var(--strong),
+			-2px 0 1px var(--strong),
+			2px 0 1px var(--strong); */
+		transform: rotate(-3deg);
 	}
 
 	.destination {
@@ -148,10 +166,18 @@ import StampCollection from "./stamps/StampCollection.astro";
 
 	.destination > span:first-child {
 		grid-column: 1 / -1;
-		font-family: "Courier New", monospace;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
 		font-size: 11px;
-		letter-spacing: 1px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
+	}
+
+	#signup-title {
+		text-wrap: pretty;
+	}
+	#signup-title span {
+		/* color: var(--butter); */
 	}
 
 	.destination strong {
@@ -172,47 +198,12 @@ import StampCollection from "./stamps/StampCollection.astro";
 		line-height: 1;
 	}
 
-	.cloud {
-		position: absolute;
-		z-index: -2;
-		width: 180px;
-		height: 43px;
-		border-radius: 99px;
-		background: var(--paper);
-		opacity: 0.55;
-	}
-
-	.cloud::before {
-		position: absolute;
-		bottom: 0;
-		left: 32px;
-		width: 85px;
-		height: 80px;
-		content: "";
-		border-radius: 50%;
-		background: inherit;
-	}
-
-	.cloud-one {
-		top: 145px;
-		left: 0;
-		animation: drift 38s linear -16s infinite;
-	}
-
-	.cloud-two {
-		bottom: 245px;
-		left: 0;
-		width: 125px;
-		height: 30px;
-		animation: drift 49s linear -37s infinite;
-	}
-
 	.goose-route {
 		position: absolute;
 		right: 5%;
 		bottom: 130px;
 		z-index: -1;
-		width: 235px;
+		width: 170px;
 	}
 
 	.goose {
@@ -221,17 +212,6 @@ import StampCollection from "./stamps/StampCollection.astro";
 		height: auto;
 		transform-origin: 50% 90%;
 		animation: stride 0.65s ease-in-out infinite alternate;
-	}
-
-	@keyframes drift {
-		from {
-			left: 0;
-			transform: translateX(-100%);
-		}
-		to {
-			left: 100%;
-			transform: translateX(0);
-		}
 	}
 
 	@keyframes stride {
@@ -244,6 +224,7 @@ import StampCollection from "./stamps/StampCollection.astro";
 	}
 
 	.address {
+		background: var(--paper);
 		display: flex;
 		min-width: 0;
 		flex-direction: column;
@@ -270,11 +251,11 @@ import StampCollection from "./stamps/StampCollection.astro";
 
 	h2 {
 		margin: 0 0 26px;
-		font-family: Georgia, "Times New Roman", serif;
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
 		font-size: clamp(28px, 2.8vw, 39px);
-		font-weight: 400;
+		font-weight: 700;
 		line-height: 1.05;
-		letter-spacing: -1.2px;
+		letter-spacing: -0.035em;
 	}
 
 	form {
@@ -363,7 +344,6 @@ import StampCollection from "./stamps/StampCollection.astro";
 		.goose-route {
 			right: 8%;
 			bottom: 185px;
-			width: 150px;
 		}
 	}
 
@@ -390,7 +370,6 @@ import StampCollection from "./stamps/StampCollection.astro";
 		.goose-route {
 			right: 8%;
 			bottom: 185px;
-			width: 150px;
 		}
 
 		.destination strong {
@@ -415,18 +394,6 @@ import StampCollection from "./stamps/StampCollection.astro";
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.cloud {
-			animation: none;
-		}
-
-		.cloud-one {
-			left: 70%;
-		}
-
-		.cloud-two {
-			left: 5%;
-		}
-
 		.goose {
 			animation: none;
 		}
