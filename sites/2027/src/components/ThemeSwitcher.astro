@@ -1,4 +1,107 @@
----
-// TODO: Add the theme switcher when the 2027 theme system is ready.
-// Future source: sites/2026/src/styles/themes. Do not import or duplicate it yet.
----
+<button id="theme-toggle" aria-label="Toggle theme">
+	<svg
+		class="h-3.5 w-3.5"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		viewBox="0 0 24 24"
+	>
+		<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+		<circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+		<circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+		<circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+		<path
+			d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"
+		></path>
+	</svg>
+	<span id="theme-next-label" class="hidden w-16 truncate min-[880px]:block"
+		>Sky</span
+	>
+</button>
+<style>
+	button {
+		/*hidden h-7 items-center gap-0 rounded-full px-1.5 text-xs transition-colors min-[480px]:flex min-[880px]:gap-1.5 min-[880px]:border min-[880px]:px-2.5*/
+		height: 28px;
+		display: flex;
+		align-items: center;
+		border-radius: 999px;
+		gap: 0;
+		padding-inline: 6px;
+		transition: colors;
+		border: 1px solid var(--ink);
+		color: var(--ink);
+		background-color: transparent;
+	}
+</style>
+<script is:inline>
+	const themes = {
+		sky: {
+			label: "Sky",
+			image: "goose",
+		},
+		garden: {
+			label: "Garden",
+			image: "goose",
+		},
+		colibri: {
+			label: "Colibri",
+			image: "colibri",
+		},
+	};
+	const themeStorageKey = "2027:page-theme";
+
+	// Theme toggle
+	const themeLabel = document.getElementById("theme-next-label");
+
+	const getCurrentTheme = () =>
+		document.documentElement.dataset.theme ||
+		localStorage.getItem(themeStorageKey) ||
+		"sky";
+
+	const syncThemeGoose = () => {
+		const gooseImage = document.getElementById("goose-img");
+		const imageData = JSON.parse(gooseImage.dataset.images);
+
+		let current = getCurrentTheme();
+
+		if (!themes[current]) current = "sky";
+		if (imageData[current]) gooseImage.src = imageData[current];
+		else gooseImage.src = imageData.default;
+	};
+
+	const syncThemeLabel = () => {
+		let current = getCurrentTheme();
+
+		if (!themes[current]) current = "sky";
+
+		if (themeLabel) themeLabel.textContent = themes[current].label;
+		document.body.dataset.palette = current;
+
+		syncThemeGoose();
+	};
+
+	const cycleTheme = () => {
+		let current = getCurrentTheme();
+
+		if (!themes[current]) current = "sky";
+
+		const configKeys = Object.keys(themes);
+		const currentIndex = configKeys.indexOf(current);
+		const next = configKeys[(currentIndex + 1) % configKeys.length];
+
+		localStorage.setItem(themeStorageKey, next);
+		document.body.dataset.palette = next;
+		syncThemeLabel();
+	};
+
+	document
+		.getElementById("theme-toggle")
+		?.addEventListener("click", cycleTheme);
+	document
+		.getElementById("theme-toggle-mobile")
+		?.addEventListener("click", cycleTheme);
+
+	document.addEventListener("DOMContentLoaded", syncThemeLabel);
+</script>
