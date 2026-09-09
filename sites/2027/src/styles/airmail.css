@@ -29,6 +29,7 @@ body {
 	--outside: #fff9e8;
 	--glow-one: #4e8ee4;
 	--glow-two: #f7bc5e;
+	--cancel-stamp: #a62b2b;
 	min-width: 320px;
 	min-height: 100vh;
 	margin: 0;
@@ -97,8 +98,8 @@ a {
 }
 
 :is(a, button, input, summary):focus-visible {
-	outline: 3px solid var(--ink);
-	outline-offset: 5px;
+	outline: 1px solid var(--ink);
+	/* outline-offset: 2px; */
 }
 
 .masthead {
@@ -110,7 +111,7 @@ a {
 	gap: 20px;
 	margin: auto;
 	padding: 24px 40px;
-	color: var(--outside);
+	color: var(--ink);
 }
 
 .wordmark {
