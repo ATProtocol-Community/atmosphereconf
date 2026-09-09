@@ -4,6 +4,7 @@
 	role="img"
 	id="goose-svg"
 	aria-label="A walking goose wearing wooden clogs"
+	fill="var(--goose)"
 >
 	<defs>
 		<path
