@@ -62,13 +62,25 @@
 
 	const syncThemeGoose = () => {
 		const gooseImage = document.getElementById("goose-img");
+		const gooseSvg = document.getElementById("goose-svg");
 		const imageData = JSON.parse(gooseImage.dataset.images);
 
 		let current = getCurrentTheme();
 
 		if (!themes[current]) current = "sky";
-		if (imageData[current]) gooseImage.src = imageData[current];
-		else gooseImage.src = imageData.default;
+		if (imageData[current]) {
+			if (gooseSvg) gooseSvg.style.display = "none";
+
+			gooseImage.style.display = "block";
+			gooseImage.src = imageData[current];
+		} else {
+			if (gooseSvg) {
+				gooseImage.style.display = "none";
+				gooseSvg.style.display = "block";
+			} else {
+				gooseImage.src = imageData.default;
+			}
+		}
 	};
 
 	const syncThemeLabel = () => {
