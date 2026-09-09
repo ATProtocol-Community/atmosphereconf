@@ -1,5 +1,14 @@
 ---
 import ComboBox from "../ComboBox.astro";
+import { takeSubscriptionResult, doSubscription } from "../lib/subscribe";
+if (Astro.locals.loggedInUser) {
+	await doSubscription(Astro.session, Astro.locals);
+}
+const subscriptionResult = await takeSubscriptionResult(
+	Astro.session,
+	Astro.locals.authproto,
+);
+console.dir(subscriptionResult);
 ---
 
 <form action="https://leaflet.pub/api/auth/email-login" method="get">
@@ -69,6 +78,18 @@ import ComboBox from "../ComboBox.astro";
 	<button class="subscribe" type="submit"
 		>Keep me posted <span aria-hidden="true">↗</span></button
 	>
+	{
+		subscriptionResult && (
+			<p
+				id="postcard-subscription-result"
+				class="subscription-result"
+				role={subscriptionResult.kind === "success" ? "status" : "alert"}
+				tabindex="-1"
+			>
+				{subscriptionResult.message}
+			</p>
+		)
+	}
 	<input
 		type="hidden"
 		name="action"
@@ -152,7 +173,7 @@ import ComboBox from "../ComboBox.astro";
 		if (!value) return "email";
 		if (didPattern.test(value)) return "handle";
 		if (value.startsWith("@")) return "handle";
-		if (emailPattern.test(value)) return "email";
+		if (value.includes("@")) return "email";
 		if (handleLikePattern.test(value)) return "handle";
 		return "email";
 	};
@@ -166,6 +187,13 @@ import ComboBox from "../ComboBox.astro";
 			methodEmailInput.checked = true;
 		}
 		setSuffixFromMethod(method === "handle");
+		setSuggestionsEnabledByMethod();
+	};
+
+	const setSuggestionsEnabledByMethod = () => {
+		if (!combobox) return;
+		const disableSuggestions = methodEmailInput?.checked ?? false;
+		combobox.toggleAttribute("disable-suggestions", disableSuggestions);
 	};
 
 	const searchBskyActors = async (q: string): Promise<Suggestion[]> => {
@@ -184,16 +212,22 @@ import ComboBox from "../ComboBox.astro";
 	};
 
 	const combobox = emailInput?.closest("cmb-combobox");
-	emailInput?.addEventListener("input", setMethodFromInput);
-	methodEmailInput?.addEventListener("click", () => setSuffixFromMethod(false));
-	methodEmailInput?.addEventListener("change", () =>
-		setSuffixFromMethod(false),
-	);
-	methodHandleInput?.addEventListener("click", () => setSuffixFromMethod(true));
-	methodHandleInput?.addEventListener("change", () =>
-		setSuffixFromMethod(true),
-	);
-	setMethodFromInput();
+	// emailInput?.addEventListener("input", setMethodFromInput);
+	const handleEmailSelection = () => {
+		setSuffixFromMethod(false);
+		setSuggestionsEnabledByMethod();
+	};
+	const handleHandleSelection = () => {
+		setSuffixFromMethod(true);
+		setSuggestionsEnabledByMethod();
+	};
+
+	methodEmailInput?.addEventListener("click", handleEmailSelection);
+	methodEmailInput?.addEventListener("change", handleEmailSelection);
+	methodHandleInput?.addEventListener("click", handleHandleSelection);
+	methodHandleInput?.addEventListener("change", handleHandleSelection);
+	// setMethodFromInput();
+	setSuggestionsEnabledByMethod();
 	setSuffixFromMethod(false);
 	combobox?.addEventListener("combobox-search", (e) => {
 		const detail = (
@@ -212,6 +246,28 @@ import ComboBox from "../ComboBox.astro";
 		// 	methodEmailInput.checked = true;
 		// }
 	});
+	const form = emailInput?.closest("form");
+	const redirectInput = form?.querySelector('input[name="redirect"]');
+	const actionInput = form?.querySelector('input[name="action"]');
+	form?.addEventListener("submit", () => {
+		if (!emailInput) return;
+		const identifier = emailInput.value.trim();
+		const isHandle = detectMethod(identifier) === "handle";
+		// Reset every field even when returning with Back or changing methods.
+		form.setAttribute("method", isHandle ? "post" : "get");
+		form.setAttribute(
+			"action",
+			isHandle ? "/oauth/login" : "https://leaflet.pub/api/auth/email-login",
+		);
+		emailInput.name = isHandle ? "atproto-id" : "email";
+		emailInput.value = isHandle ? identifier.replace(/^@/, "") : identifier;
+		if (redirectInput instanceof HTMLInputElement) {
+			redirectInput.value = isHandle ? "/" : "https://news.atmosphereconf.org";
+		}
+		if (actionInput instanceof HTMLInputElement)
+			actionInput.disabled = isHandle;
+	});
+	document.getElementById("postcard-subscription-result")?.focus();
 </script>
 <style>
 	form {
@@ -426,6 +482,13 @@ import ComboBox from "../ComboBox.astro";
 
 	.tip {
 		font-weight: normal;
+	}
+
+	.subscription-result {
+		margin: 4px 0 0;
+		font-size: 13px;
+		line-height: 1.4;
+		overflow-wrap: anywhere;
 	}
 
 	.subscribe {
