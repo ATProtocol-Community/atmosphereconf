@@ -1,14 +1,10 @@
 ---
 import ComboBox from "../ComboBox.astro";
-import { takeSubscriptionResult, doSubscription } from "../lib/subscribe";
-if (Astro.locals.loggedInUser) {
-	await doSubscription(Astro.session, Astro.locals);
-}
+import { takeSubscriptionResult } from "../lib/subscribe";
 const subscriptionResult = await takeSubscriptionResult(
 	Astro.session,
 	Astro.locals.authproto,
 );
-console.dir(subscriptionResult);
 ---
 
 <form action="https://leaflet.pub/api/auth/email-login" method="get">
@@ -262,7 +258,7 @@ console.dir(subscriptionResult);
 		emailInput.name = isHandle ? "atproto-id" : "email";
 		emailInput.value = isHandle ? identifier.replace(/^@/, "") : identifier;
 		if (redirectInput instanceof HTMLInputElement) {
-			redirectInput.value = isHandle ? "/" : "https://news.atmosphereconf.org";
+			redirectInput.value = isHandle ? "/subscribe" : "https://news.atmosphereconf.org";
 		}
 		if (actionInput instanceof HTMLInputElement)
 			actionInput.disabled = isHandle;

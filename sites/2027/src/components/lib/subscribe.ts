@@ -1,5 +1,4 @@
-import type { APIContext, APIRoute } from "astro";
-import { TID } from "@atproto/common-web"
+import type { APIContext } from "astro";
 import { getPdsAgent } from "@fujocoded/authproto/helpers";
 
 const COLLECTION = "site.standard.graph.subscription";
@@ -11,14 +10,10 @@ const LOGIN_ERROR = "Sign-in could not be completed. Try your handle again.";
 type SubscriptionResult =
 	| { kind: "success"; message: string; recordUri: string }
 	| { kind: "error"; message: string };
-type SubscriptionState =
-	| { kind: "pending"; identifier: string; expiresAt: number }
-	| SubscriptionResult;
-
 declare global {
 	namespace App {
 		interface SessionData {
-			postcardSubscription: SubscriptionState;
+			postcardSubscription: SubscriptionResult;
 		}
 	}
 }
@@ -37,34 +32,26 @@ export async function takeSubscriptionResult(
 	session: APIContext["session"],
 	authproto: App.Locals["authproto"],
 ): Promise<SubscriptionResult | undefined> {
-	const state = await session?.get(SESSION_KEY);
-	if (!state) return;
-	if (state.kind === "pending") {
-		if (!authproto?.errorCode && !authproto?.errorDescription) return;
+	if (authproto?.errorCode || authproto?.errorDescription) {
 		session?.delete(SESSION_KEY);
 		return { kind: "error", message: LOGIN_ERROR };
 	}
+	const state = await session?.get(SESSION_KEY);
+	if (!state) return;
 	session?.delete(SESSION_KEY);
 	return state;
 }
 
-export const doSubscription = async (session: APIContext["session"],
-	authproto: App.Locals) => {
-	if (!authproto.loggedInUser?.did) {
-		return;
-	}
+export const doSubscription = async (
+	session: APIContext["session"],
+	locals: App.Locals,
+) => {
 	if (!session) {
 		return new Response("Subscriptions are temporarily unavailable. Please try again.", {
 			status: 503,
 			headers: { "Cache-Control": "no-store" },
 		});
 	}
-	session.set(SESSION_KEY, {
-		kind: "pending",
-		identifier: authproto.loggedInUser?.did,
-		expiresAt: Date.now() + 10 * 60 * 1000,
-	});
-
 
 	const matchesPublication = (value: unknown): boolean =>
 		typeof value === "object" &&
@@ -75,17 +62,21 @@ export const doSubscription = async (session: APIContext["session"],
 		value.publication === PUBLICATION;
 
 	const fail = (message: string) => {
-		session.set(SESSION_KEY, { kind: "error", message });
+		session.set(SESSION_KEY, { kind: "error", message }, { ttl: 600 });
 		return returnToPostcard();
 	};
 	const succeed = (recordUri: string, existing: boolean) => {
-		session.set(SESSION_KEY, {
-			kind: "success",
-			message: existing
-				? "Your Atmosphere account is already subscribed."
-				: "Subscribed with your Atmosphere account.",
-			recordUri,
-		});
+		session.set(
+			SESSION_KEY,
+			{
+				kind: "success",
+				message: existing
+					? "Your Atmosphere account is already subscribed."
+					: "Subscribed with your Atmosphere account.",
+				recordUri,
+			},
+			{ ttl: 600 },
+		);
 		return returnToPostcard();
 	};
 	const user = locals.loggedInUser;
@@ -120,7 +111,6 @@ export const doSubscription = async (session: APIContext["session"],
 		const { data } = await agent.com.atproto.repo.createRecord({
 			repo,
 			collection: COLLECTION,
-			rkey: TID.nextStr(),
 			record: {
 				$type: COLLECTION,
 				publication: PUBLICATION,
