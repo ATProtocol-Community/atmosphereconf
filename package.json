@@ -7,10 +7,10 @@
   ],
   "scripts": {
     "dev": "npm run dev:2027 --",
-    "build": "npm run build:2026 --",
-    "start": "npm run start:2026 --",
+    "build": "npm run build:2027 --",
+    "start": "npm run start:2027 --",
     "preview": "npm run preview:2026 --",
-    "astro": "npm run astro:2026 --",
+    "astro": "npm run astro:2027 --",
     "format": "npm run format:2026 --",
     "sync-schedule": "npm run sync-schedule:2026 --",
     "test": "npm run test:2026 --",
