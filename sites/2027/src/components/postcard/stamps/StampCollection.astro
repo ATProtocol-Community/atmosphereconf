@@ -86,13 +86,26 @@ const featuredStamp = stamps[0];
 	const stampDesigns: StampDefinition[] = JSON.parse(
 		current?.dataset.stamps ?? "[]",
 	);
-	let stampIndex = 0;
+	const stampStorageKey = "2027:postcard-stamp";
+	const getStampStorageId = (stamp: StampDefinition) =>
+		`${stamp.id}:${stamp.character ?? "mascot"}`;
+	const readStoredStamp = () => {
+		try {
+			return localStorage.getItem(stampStorageKey);
+		} catch {
+			return null;
+		}
+	};
+	const writeStoredStamp = (stamp: StampDefinition) => {
+		try {
+			localStorage.setItem(stampStorageKey, getStampStorageId(stamp));
+		} catch {
+			// Storage can be unavailable without preventing stamp selection.
+		}
+	};
+	const applyStamp = (stamp: StampDefinition, announce = false) => {
+		if (!current || !selected) return;
 
-	current?.addEventListener("click", () => {
-		if (!selected || !stampDesigns.length) return;
-
-		stampIndex = (stampIndex + 1) % stampDesigns.length;
-		const stamp = stampDesigns[stampIndex];
 		selected.className = ["stamp", stamp.id, stamp.character]
 			.filter(Boolean)
 			.join(" ");
@@ -102,7 +115,26 @@ const featuredStamp = stamps[0];
 			"aria-label",
 			`Stamp design: ${stamp.name}; click to cycle`,
 		);
-		if (announcement) announcement.textContent = `${stamp.name} stamp selected`;
+		if (announce && announcement) {
+			announcement.textContent = `${stamp.name} stamp selected`;
+		}
+	};
+
+	const storedStampId = readStoredStamp();
+	const storedStampIndex = stampDesigns.findIndex(
+		(stamp) => getStampStorageId(stamp) === storedStampId,
+	);
+	let stampIndex = storedStampIndex >= 0 ? storedStampIndex : 0;
+	const initialStamp = stampDesigns[stampIndex];
+	if (initialStamp) applyStamp(initialStamp);
+
+	current?.addEventListener("click", () => {
+		if (!selected || !stampDesigns.length) return;
+
+		stampIndex = (stampIndex + 1) % stampDesigns.length;
+		const stamp = stampDesigns[stampIndex];
+		applyStamp(stamp, true);
+		writeStoredStamp(stamp);
 	});
 </script>
 
