@@ -95,6 +95,15 @@ body[data-palette="fujocoded"] {
 	--cancel-stamp: #4360f7;
 }
 
+body[data-palette="sifa"] {
+	--ink: #143a5e;
+	--strong: #205ea6;
+	--sky: #a9d2ed;
+	--butter: #e4dcf6;
+	--mint: #c4b4e8;
+	--paper: #fffcf0;
+}
+
 button,
 input {
 	font: inherit;
