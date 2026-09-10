@@ -23,15 +23,30 @@
 <style>
 	button {
 		height: 28px;
+		width: min(130px, 100%);
 		display: flex;
 		align-items: center;
 		border-radius: 999px;
-		gap: 0;
+		gap: 4px;
 		padding-inline: 6px;
 		transition: colors;
 		border: 1px solid var(--ink);
 		color: var(--ink);
 		background-color: transparent;
+	}
+
+	svg {
+		width: 14px;
+		height: 14px;
+		flex: 0 0 14px;
+	}
+
+	#theme-next-label {
+		min-width: 0;
+		flex: 1;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 </style>
 <script is:inline>

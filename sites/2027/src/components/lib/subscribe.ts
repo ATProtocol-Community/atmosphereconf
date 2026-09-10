@@ -77,7 +77,7 @@ export const doSubscription = async (
 				kind: "success",
 				message: existing
 					? "Your Atmosphere account is already subscribed."
-					: "Subscribed with your Atmosphere account.",
+					: "Subscribed with your Atmosphere account. The next postcard knows where to find you.",
 				recordUri,
 			},
 			{ ttl: 600 },
