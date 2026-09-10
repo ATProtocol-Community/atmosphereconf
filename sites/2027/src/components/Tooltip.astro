@@ -1,0 +1,172 @@
+---
+interface Props {
+	/** Unique id for the tooltip. Also seeds its CSS anchor name. */
+	id: string;
+	/** Visible text of the trigger. */
+	label: string;
+	/** Extra classes for the trigger button. */
+	class?: string;
+	/**
+	 * Dashed-ident of an element the tooltip stretches across on narrow screens,
+	 * where sitting beside the trigger would leave no room. Give that element an
+	 * `anchor-name` of the same value. Defaults to the trigger itself.
+	 */
+	blockAnchor?: string;
+}
+
+const { id, label, class: className, blockAnchor } = Astro.props;
+const anchor = `--tt-${id}`;
+const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor ?? anchor}`;
+---
+
+{/* No wrapper element: both parts sit directly in the surrounding text flow. */}<button
+	class:list={["tooltip-button", className]}
+	type="button"
+	interestfor={id}
+	aria-describedby={id}
+	style={vars}
+>{label}</button><span
+	class="tooltip"
+	id={id}
+	popover="hint"
+	role="tooltip"
+	style={vars}
+><slot /></span>
+
+<script>
+	// `interestfor` handles hover / focus / long-press, Escape and light-dismiss
+	// natively. It shipped in Chromium 142; Firefox and WebKit still have open
+	// standards positions, so pull in the polyfill only where it is missing.
+	if (!Object.hasOwn(HTMLButtonElement.prototype, "interestForElement")) {
+		import("interestfor");
+	}
+</script>
+
+<style>
+	.tooltip-button {
+		display: inline;
+		margin: 0;
+		padding: 1px 2px;
+		border: 0;
+		border-radius: 3px;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		line-height: inherit;
+		text-align: inherit;
+		text-decoration-line: underline;
+		text-decoration-style: dotted;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
+		cursor: help;
+		anchor-name: var(--tooltip-anchor);
+		/* Open instantly on hover, linger briefly so the pointer can reach the
+		   tooltip. Duplicated as a custom property for the polyfill. */
+		interest-delay: 0s 120ms;
+		--interest-delay: 0s 120ms;
+	}
+
+	.tooltip-button:focus-visible {
+		outline: 2px solid var(--strong);
+		outline-offset: 3px;
+	}
+
+	.tooltip {
+		/* Undo the UA popover defaults (centred via inset: 0 + margin: auto). */
+		inset: auto;
+		margin: 0;
+		overflow: visible;
+		width: max-content;
+		max-width: min(280px, calc(100vw - 64px));
+		padding: 9px 11px;
+		border: 1px solid var(--ink);
+		border-radius: 10px;
+		background: var(--butter);
+		box-shadow: 4px 5px 0 color-mix(in srgb, var(--ink) 20%, transparent);
+		color: var(--ink);
+		font-size: 12px;
+		font-weight: 600;
+		line-height: 1.3;
+		text-align: left;
+		text-decoration: none;
+		white-space: normal;
+		opacity: 0;
+		transform: translateY(4px) scale(0.97);
+		/* Grow out of the trigger, which sits just below the bottom edge. */
+		transform-origin: bottom center;
+		/* `allow-discrete` lets display and overlay animate too, so the popover
+		   stays painted long enough to fade back out instead of snapping away. */
+		transition:
+			opacity 180ms cubic-bezier(0.22, 1, 0.36, 1),
+			transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+			display 180ms allow-discrete,
+			overlay 180ms allow-discrete;
+	}
+
+	.tooltip:popover-open {
+		opacity: 1;
+		transform: none;
+	}
+
+	/* The entry side of the transition: where it animates *from* on open. */
+	@starting-style {
+		.tooltip:popover-open {
+			opacity: 0;
+			transform: translateY(4px) scale(0.97);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		/* Keep the fade, drop the movement. */
+		.tooltip {
+			transform: none;
+		}
+
+		@starting-style {
+			.tooltip:popover-open {
+				transform: none;
+			}
+		}
+	}
+
+	@supports (anchor-name: --a) {
+		/* Desktop: directly above its own trigger, centred on it. */
+		@media (min-width: 651px) {
+			.tooltip {
+				position-anchor: var(--tooltip-anchor);
+				bottom: calc(anchor(top) + 8px);
+				/* Needs both inline insets left as auto to take effect. */
+				justify-self: anchor-center;
+				/* Only rescues actual viewport overflow; spilling past a card or
+				   other inner container is fine and expected here. */
+				position-try-fallbacks: flip-block;
+			}
+		}
+
+		/*
+		 * Narrow: a full-width block across the block anchor. It sits above
+		 * rather than below because a popover is in the top layer and no longer
+		 * pushes content down — below would cover whatever CTA follows.
+		 */
+		@media (max-width: 650px) {
+			.tooltip {
+				position-anchor: var(--tooltip-block-anchor);
+				width: auto;
+				max-width: none;
+				bottom: calc(anchor(top) + 8px);
+				left: anchor(left);
+				right: anchor(right);
+			}
+		}
+	}
+
+	/* Without anchor positioning there is nothing to attach to, so pin the
+	   tooltip to the bottom of the viewport rather than let it land at 0,0. */
+	@supports not (anchor-name: --a) {
+		.tooltip {
+			width: auto;
+			max-width: none;
+			inset: auto 16px 16px 16px;
+		}
+	}
+</style>

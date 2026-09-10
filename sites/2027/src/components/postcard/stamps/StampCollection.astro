@@ -140,18 +140,21 @@ const featuredStamp = stamps[0];
 
 <style>
 	.postage-row {
-		--stamp-size: 150px;
 		position: relative;
 		isolation: isolate;
 		position: relative;
+		display: flex;
+		flex-direction: row-reverse;
+		container-type: inline-size;
 		gap: 12px;
+		width: 100%;
 		margin-left: auto;
 		margin-top: -17px;
 		margin-right: -22px;
 	}
 
 	.postmark-group {
-		--postmark-width: min(142px, 100%);
+		--postmark-width: clamp(120px, 18vw, 165px);
 		position: relative;
 		display: flex;
 		flex: 1 1 auto;
@@ -210,6 +213,7 @@ const featuredStamp = stamps[0];
 	}
 
 	.current-stamp {
+		--stamp-size: clamp(100px, 15vw, 150px);
 		display: block;
 		width: var(--stamp-size);
 		padding: 0;
@@ -223,18 +227,6 @@ const featuredStamp = stamps[0];
 
 	.current-stamp:hover {
 		transform: rotate(0deg);
-	}
-
-	@media (max-width: 900px) {
-		.postage-row {
-			--stamp-size: 112px;
-		}
-	}
-
-	@media (max-width: 650px) {
-		.postage-row {
-			--stamp-size: 130px;
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

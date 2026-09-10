@@ -13,8 +13,9 @@
     "start": "node ./dist/server/entry.mjs"
   },
   "dependencies": {
-    "astro": "^7.3.1",
     "@astrojs/node": "^11.1.5",
-    "@fujocoded/authproto": "^0.4.0"
+    "@fujocoded/authproto": "^0.4.0",
+    "astro": "^7.3.1",
+    "interestfor": "^1.0.8"
   }
 }

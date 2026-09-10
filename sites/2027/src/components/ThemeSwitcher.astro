@@ -1,31 +1,38 @@
-<button id="theme-toggle" aria-label="Toggle theme">
-	<svg
-		class="h-3.5 w-3.5"
-		fill="none"
-		stroke="currentColor"
-		stroke-width="2"
-		stroke-linecap="round"
-		stroke-linejoin="round"
-		viewBox="0 0 24 24"
-	>
-		<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
-		<circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
-		<circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
-		<circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
-		<path
-			d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"
-		></path>
-	</svg>
-	<span id="theme-next-label" class="hidden w-16 truncate min-[880px]:block"
-		>Sky</span
-	>
-</button>
+<div class="theme-switcher">
+	<button id="theme-toggle" aria-label="Toggle theme">
+		<svg
+			class="h-3.5 w-3.5"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			viewBox="0 0 24 24"
+		>
+			<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+			<circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+			<circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+			<circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+			<path
+				d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"
+			></path>
+		</svg>
+		<span id="theme-next-label">Sky</span>
+	</button>
+</div>
 <style>
+	.theme-switcher {
+		display: flex;
+		justify-content: flex-end;
+		flex: 0 1 130px;
+		min-width: 28px;
+	}
+
 	button {
 		height: 28px;
-		width: min(130px, 100%);
+		width: 100%;
 		min-width: 28px;
-		flex: 0 1 130px;
+		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
 		border-radius: 999px;
@@ -52,7 +59,7 @@
 	}
 
 	@container (max-width: 480px) {
-		button {
+		.theme-switcher {
 			width: 28px;
 			flex-basis: 28px;
 		}
