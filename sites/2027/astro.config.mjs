@@ -8,7 +8,14 @@ export default defineConfig({
   output: "server",
   adapter: node({
     mode: "standalone",
-  }), session: {
+  }),
+  security: {
+    allowedDomains: [
+      { hostname: "atmosphereconf.org", protocol: "https" },
+      { hostname: "*.up.railway.app", protocol: "https" },
+    ],
+  },
+  session: {
     driver: sessionDrivers.lruCache({
       max: 800,
     }),
