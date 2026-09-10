@@ -24,6 +24,8 @@
 	button {
 		height: 28px;
 		width: min(130px, 100%);
+		min-width: 28px;
+		flex: 0 1 130px;
 		display: flex;
 		align-items: center;
 		border-radius: 999px;
@@ -47,6 +49,17 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	@container (max-width: 480px) {
+		button {
+			width: 28px;
+			flex-basis: 28px;
+		}
+
+		#theme-next-label {
+			display: none;
+		}
 	}
 </style>
 <script is:inline>
