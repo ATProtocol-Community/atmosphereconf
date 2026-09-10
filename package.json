@@ -32,7 +32,7 @@
     "test:visual:report:2026": "npm --workspace @atmosphereconf/2026 run test:visual:report --",
     "dev:2027": "npm --workspace @atmosphereconf/2027 run dev --",
     "build:2027": "npm --workspace @atmosphereconf/2027 run build --",
-    "start:2027": "npm --workspace @atmosphereconf/2026 run start --",
+    "start:2027": "npm --workspace @atmosphereconf/2027 run start --",
     "preview:2027": "npm --workspace @atmosphereconf/2027 run preview --",
     "astro:2027": "npm --workspace @atmosphereconf/2027 run astro --",
     "build:all": "npm run build --workspaces --if-present"
