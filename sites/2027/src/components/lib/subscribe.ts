@@ -34,7 +34,10 @@ export async function takeSubscriptionResult(
 ): Promise<SubscriptionResult | undefined> {
 	if (authproto?.errorCode || authproto?.errorDescription) {
 		session?.delete(SESSION_KEY);
-		return { kind: "error", message: LOGIN_ERROR };
+		return {
+			kind: "error",
+			message: authproto.errorDescription ?? LOGIN_ERROR,
+		};
 	}
 	const state = await session?.get(SESSION_KEY);
 	if (!state) return;
@@ -53,13 +56,15 @@ export const doSubscription = async (
 		});
 	}
 
-	const matchesPublication = (value: unknown): boolean =>
-		typeof value === "object" &&
-		value !== null &&
-		"$type" in value &&
-		value.$type === COLLECTION &&
-		"publication" in value &&
-		value.publication === PUBLICATION;
+	const matchesPublication = (value: unknown): boolean => {
+		console.log(value)
+		return typeof value === "object" &&
+			value !== null &&
+			"$type" in value &&
+			value.$type === COLLECTION &&
+			"publication" in value &&
+			value.publication === PUBLICATION;
+	}
 
 	const fail = (message: string) => {
 		session.set(SESSION_KEY, { kind: "error", message }, { ttl: 600 });
