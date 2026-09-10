@@ -68,9 +68,13 @@ import PostcardForm from "./PostcardForm.astro";
 			<h2 id="signup-title">Where will <span>we</span> land?</h2>
 			<PostcardForm />
 		</div>
-		<p class="signoff">
-			See you out there. <span aria-hidden="true">♡</span>
-		</p>
+		<footer class="signoff">
+			<span>See you out there. <span aria-hidden="true">♡</span></span>
+			<nav aria-label="AtmosphereConf links">
+				<a href="https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw">Bluesky</a>
+				<a href="https://news.atmosphereconf.org/">Leaflet</a>
+			</nav>
+		</footer>
 	</section>
 </article>
 
@@ -450,6 +454,11 @@ import PostcardForm from "./PostcardForm.astro";
 		justify-content: space-between;
 		margin: 24px 0 0;
 		font-size: 11px;
+	}
+
+	.signoff nav {
+		display: flex;
+		gap: 12px;
 	}
 
 	@media (min-width: 1500px) {
