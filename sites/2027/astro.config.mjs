@@ -15,12 +15,12 @@ export default defineConfig({
   },
   integrations: [
     authproto({
-      applicationName: "ATmosphere Conference 2026",
-      applicationDomain: "https://2026.atmosphereconf.org",
+      applicationName: "ATmosphere Conference 2027",
+      applicationDomain: "https://atmosphereconf.org",
       externalDomain:
         process.env.NODE_ENV === "development"
           ? "http://localhost:4321"
-          : "https://2026.atmosphereconf.org",
+          : "https://atmosphereconf.org",
       driver: {
         name: "memory",
       },
