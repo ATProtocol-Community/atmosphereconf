@@ -90,8 +90,18 @@ const clouds = [
 </script>
 
 <style>
+	:global(html) {
+		height: 100%;
+	}
+
 	:global(body) {
 		position: relative;
+		display: grid;
+		height: 100vh;
+		min-height: 100vh;
+		height: 100dvh;
+		min-height: 100dvh;
+		grid-template-rows: 92px minmax(0, 1fr);
 	}
 
 	.page-sky {
@@ -124,7 +134,7 @@ const clouds = [
 		}
 	}
 
-	@media (max-width: 650px) {
+	@media (max-width: 660px) {
 		.cloud:nth-child(4),
 		.cloud:nth-child(6),
 		.cloud:nth-child(8) {
@@ -141,18 +151,45 @@ const clouds = [
 
 	:global(.masthead) {
 		position: relative;
-		z-index: 1;
-		flex-wrap: wrap;
+		grid-column: 1;
+		grid-row: 1;
+		z-index: 2;
+		height: 92px;
+		min-height: 92px;
 		container-type: inline-size;
 	}
 
 	:global(main) {
 		position: relative;
-		display: flex;
-		justify-content: center;
+		grid-column: 1;
+		grid-row: 1 / -1;
+		display: grid;
+		min-height: 0;
+		place-items: center;
+		padding-block: 0;
 		z-index: 1;
 	}
 	:global(.visually-hidden) {
 		display: none;
+	}
+
+	@media (max-width: 660px) {
+		:global(body) {
+			height: auto;
+			grid-template-rows: 80px auto;
+		}
+
+		:global(main) {
+			grid-row: unset;
+			min-height: calc(100vh - 80px);
+			min-height: calc(100dvh - 80px);
+			align-items: safe center;
+			padding-bottom: 15px;
+		}
+
+		:global(.masthead) {
+			height: 80px;
+			min-height: 80px;
+		}
 	}
 </style>

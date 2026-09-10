@@ -1,0 +1,454 @@
+---
+import goose from "./goose.png";
+import GooseSvg from "./goose.svg";
+import hummingbird from "./hummingbird.png";
+---
+
+<section class="picture" aria-labelledby="headline">
+	<div class="picture-layout">
+		<p class="air-label">The 100% unofficial gathering of atmospherizens</p>
+		<div class="goose-route" aria-hidden="true">
+			<!-- Old goose (png) is included here -->
+			<img
+				class="goose"
+				id="goose-img"
+				data-images={JSON.stringify({
+					default: goose.src,
+					colibri: hummingbird.src,
+				})}
+				src={goose.src}
+				alt=""
+				width="725"
+				height="681"
+			/>
+
+			<GooseSvg />
+		</div>
+		<div class="grass">
+			{
+				Array.from({ length: 36 }, () => (
+					<div class="grass-blade" aria-hidden="true" />
+				))
+			}
+		</div>
+		<h1 id="headline">
+			<span class="headline-word">Back</span>
+			<span class="last-line"
+				><span class="headline-word headline-at">At</span>
+				<span class="headline-word">It<span class="period">.</span></span></span
+			>
+		</h1>
+		<div class="destination">
+			<span>Arriving soon</span>
+			<div>
+				Somewhere<br />in Europe <span class="online">(and online)</span>
+				<span class="destination-arrow" aria-hidden="true">
+					<svg
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						><path
+							fill="currentColor"
+							d="m10.775 10.4l-6.25-2.7q-.6-.275-.737-.888t.337-1.087l.4-.4q.2-.2.488-.3t.587-.05l9 1.6l3.1-3.125q.575-.575 1.413-.575t1.412.575t.575 1.413t-.575 1.412l-3.1 3.125L19 18.375q.05.3-.038.6t-.287.5l-.4.375q-.475.475-1.1.35t-.9-.725l-2.675-6.25l-2.55 2.525l.55 3.1q.05.25-.025.488t-.25.412l-.425.425q-.35.35-.862.275t-.763-.525L7.45 16.55l-3.375-1.825q-.45-.25-.525-.762t.275-.863l.425-.425q.175-.175.413-.25t.487-.025l3.075.525z"
+						></path></svg
+					>
+				</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	// Sample size for non-perfect-circle moments
+	const ARC_SAMPLES = 720;
+
+	function buildArcTable(rx: number, ry: number) {
+		const lengths = new Float64Array(ARC_SAMPLES + 1);
+		const dt = (Math.PI * 2) / ARC_SAMPLES;
+		let prevX = 0;
+		let prevY = ry;
+
+		for (let i = 1; i <= ARC_SAMPLES; i++) {
+			const t = i * dt;
+			const x = rx * Math.sin(t);
+			const y = ry * Math.cos(t);
+			lengths[i] = lengths[i - 1] + Math.hypot(x - prevX, y - prevY);
+			prevX = x;
+			prevY = y;
+		}
+
+		return lengths;
+	}
+
+	function tAtLength(lengths: Float64Array, target: number) {
+		let lo = 0;
+		let hi = lengths.length - 1;
+
+		while (lo < hi) {
+			const mid = (lo + hi) >> 1;
+			if (lengths[mid] < target) lo = mid + 1;
+			else hi = mid;
+		}
+
+		if (lo === 0) return 0;
+
+		const a = lengths[lo - 1];
+		const b = lengths[lo];
+		const frac = b > a ? (target - a) / (b - a) : 0;
+
+		return ((lo - 1 + frac) * Math.PI * 2) / ARC_SAMPLES;
+	}
+
+	function initGrassBlades() {
+		const earth = document.querySelector<HTMLDivElement>(".grass")!;
+		if (!earth) return;
+
+		const blades = Array.from(
+			earth.querySelectorAll<HTMLDivElement>(".grass-blade"),
+		);
+		if (blades.length === 0) return;
+
+		function layout() {
+			// Reset
+			for (const blade of blades) {
+				blade.style.left = "";
+				blade.style.top = "";
+				blade.style.transform = "";
+			}
+
+			// Recalc
+			const cx = earth.clientWidth / 2;
+			const cy = earth.clientHeight / 2;
+			const rx = cx;
+			const ry = cy;
+
+			if (rx === 0 || ry === 0) return;
+
+			const natural = blades.map((blade) => ({
+				x: blade.offsetLeft,
+				y: blade.offsetTop,
+				w: blade.offsetWidth,
+				h: blade.offsetHeight,
+			}));
+
+			const arc = buildArcTable(rx, ry);
+			const perimeter = arc[ARC_SAMPLES];
+
+			// Recycle (how'd that comment joke even work lmao)
+			blades.forEach((blade, idx) => {
+				const t = tAtLength(arc, (idx / blades.length) * perimeter);
+				const { x, y, w, h } = natural[idx];
+
+				const px = cx + rx * Math.sin(t) - w / 2;
+				const py = cy + ry * Math.cos(t) - h / 2;
+
+				const deg =
+					(Math.atan2(-Math.sin(t) / rx, Math.cos(t) / ry) * 180) / Math.PI;
+
+				blade.style.left = `${px - x}px`;
+				blade.style.top = `${py - y}px`;
+				blade.style.transform = `rotate(${deg}deg)`;
+				blade.style.opacity = "1";
+			});
+		}
+
+		// Please no spam browser ty :D
+		let frame = 0;
+		const observer = new ResizeObserver(() => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(layout);
+		});
+
+		observer.observe(earth);
+
+		return () => {
+			cancelAnimationFrame(frame);
+			observer.disconnect();
+		};
+	}
+
+	let teardownGrass: (() => void) | void;
+
+	function startGrass() {
+		teardownGrass?.();
+		teardownGrass = initGrassBlades();
+	}
+
+	function stopGrass() {
+		teardownGrass?.();
+		teardownGrass = undefined;
+	}
+
+	startGrass();
+</script>
+<script src="./goose-anim.ts"></script>
+
+<style>
+	#goose-svg {
+		width: 100%;
+		height: 100%;
+		rotate: 10deg;
+	}
+
+	.picture {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		container-type: inline-size;
+		color: var(--strong);
+	}
+
+	.picture-layout {
+		--picture-pad-block: 36px;
+		--picture-pad-inline: 36px;
+		display: grid;
+		grid-template:
+			"label" auto
+			"headline" auto
+			"art" minmax(72px, 1fr)
+			"destination" auto
+			/ minmax(0, 1fr);
+		min-height: 100%;
+		padding: var(--picture-pad-block) var(--picture-pad-inline);
+	}
+
+	.grass {
+		position: absolute;
+		top: 73%;
+		left: -50%;
+		z-index: -2;
+		width: 200%;
+		aspect-ratio: 1 / 1;
+		background: var(--mint);
+		border-radius: 50%;
+		animation: revolve 70s linear infinite;
+	}
+
+	@keyframes revolve {
+		from {
+			rotate: 0deg;
+		}
+		to {
+			rotate: 360deg;
+		}
+	}
+
+	.grass-blade {
+		display: none;
+		width: 4px;
+		height: 24px;
+		border-radius: 9px;
+		background: color-mix(in srgb, var(--mint) 75%, black);
+		position: relative;
+		opacity: 0;
+		transform-origin: center center;
+	}
+
+	.grass-blade::after {
+		content: "";
+		position: absolute;
+		width: 4px;
+		height: 12px;
+		border-radius: 9px;
+		background: color-mix(in srgb, var(--mint) 75%, black);
+		transform-origin: center center;
+		rotate: 45deg;
+		top: 8px;
+		right: 4px;
+	}
+
+	.air-label {
+		position: relative;
+		z-index: 2;
+		grid-area: label;
+		margin: 0;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		position: relative;
+		z-index: 2;
+		grid-area: headline;
+		align-self: start;
+		margin: 25px 0 0 -7px;
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-size: clamp(76px, calc(28cqw - 4px), 148px);
+		font-weight: 750;
+		letter-spacing: -0.04em;
+		line-height: 0.98;
+	}
+
+	h1 > span {
+		display: block;
+	}
+
+	.headline-word {
+		margin-right: 15px;
+	}
+
+	.headline-at {
+		display: inline-block;
+		padding: 0.03em 0.14em 0.1em;
+		margin: -0.03em -0.02em 0 0;
+		border-radius: 0.15em 0.42em 0.2em 0.32em;
+		color: var(--butter);
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-weight: 800;
+		letter-spacing: -0.04em;
+		line-height: 0.88;
+		-webkit-text-stroke: 5px var(--strong);
+		paint-order: stroke fill;
+		transform: rotate(-3deg);
+	}
+
+	.destination {
+		position: relative;
+		z-index: 2;
+		grid-area: destination;
+		justify-self: start;
+		display: flex;
+		flex-direction: column;
+		width: max-content;
+		max-width: 100%;
+		padding: 12px 12px;
+		margin: 0 0 calc(5px - var(--picture-pad-block))
+			calc(20px - var(--picture-pad-inline));
+		/* background: var(--mint); */
+		border-radius: 8px;
+		font-size: 45px;
+	}
+
+	.destination > span:first-child {
+		grid-column: 1 / -1;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		margin-bottom: 2px;
+	}
+
+	.destination div {
+		color: var(--ink);
+		letter-spacing: -1px;
+		position: relative;
+		font-weight: 700;
+		line-height: 0.9;
+	}
+
+	.destination .online {
+		font-size: 0.84rem;
+		letter-spacing: -0.4px;
+	}
+
+	.destination-arrow {
+		color: var(--ink);
+		padding-top: 3px;
+		line-height: 1;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	.goose-route {
+		position: relative;
+		z-index: 1;
+		grid-area: art;
+		align-self: end;
+		justify-self: end;
+		width: clamp(120px, calc(55cqw - 145px), 170px);
+		aspect-ratio: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.goose {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		transform-origin: 50% 90%;
+		animation: stride 0.65s ease-in-out infinite alternate;
+	}
+
+	@keyframes stride {
+		from {
+			transform: rotate(-5deg) translateY(0);
+		}
+		to {
+			transform: rotate(4deg) translateY(-9px);
+		}
+	}
+
+	@container (max-width: 360px) {
+		.destination .online {
+			display: block;
+		}
+	}
+
+	@media (max-width: 900px) {
+		.picture-layout {
+			--picture-pad-block: 28px;
+			--picture-pad-inline: 20px;
+		}
+
+		h1 {
+			margin-top: clamp(32px, 5vw, 45px);
+		}
+
+		.grass {
+			top: 55%;
+		}
+
+	}
+
+	@media (max-width: 660px) {
+		.picture {
+			min-height: 400px;
+		}
+
+		.picture-layout {
+			--picture-pad-inline: 24px;
+			min-height: auto;
+		}
+
+		.air-label {
+			font-size: 10px;
+			letter-spacing: 1.5px;
+		}
+
+		h1 {
+			margin: 39px 0 0 -5px;
+			font-size: clamp(76px, 18vw, 114px);
+		}
+
+		.goose-route {
+			width: clamp(120px, 24cqw, 145px);
+		}
+
+		.destination strong {
+			font-size: 22px;
+		}
+
+		.destination .online {
+			display: block;
+		}
+
+		.destination-arrow {
+			left: calc(100% + 4px);
+			right: auto;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.goose {
+			animation: none;
+		}
+	}
+</style>

@@ -216,7 +216,7 @@ main {
 	}
 }
 
-@media (max-width: 650px) {
+@media (max-width: 660px) {
 	.masthead {
 		gap: 10px;
 		min-height: 80px;
