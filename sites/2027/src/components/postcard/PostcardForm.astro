@@ -258,7 +258,9 @@ const subscriptionResult = await takeSubscriptionResult(
 		emailInput.name = isHandle ? "atproto-id" : "email";
 		emailInput.value = isHandle ? identifier.replace(/^@/, "") : identifier;
 		if (redirectInput instanceof HTMLInputElement) {
-			redirectInput.value = isHandle ? "/subscribe" : "https://news.atmosphereconf.org";
+			redirectInput.value = isHandle
+				? "/subscribe"
+				: "https://news.atmosphereconf.org";
 		}
 		if (actionInput instanceof HTMLInputElement)
 			actionInput.disabled = isHandle;
