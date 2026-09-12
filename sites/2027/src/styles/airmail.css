@@ -104,6 +104,20 @@ body[data-palette="sifa"] {
 	--paper: #fffcf0;
 }
 
+/* Kimbia: newsprint paper, ink, crimson accent, cinder track underfoot */
+body[data-palette="kimbia"] {
+	--ink: #0d0d0b;
+	--strong: #bb2429;
+	--sky: #ede4d0;
+	--butter: #d9a23f;
+	--mint: #b8832a;
+	--paper: #f4ecd9;
+	--cancel-stamp: #bb2429;
+	--goose: #0d0d0b;
+	--goose-bib: #f4ecd9;
+	--goose-bib-ink: #bb2429;
+}
+
 button,
 input {
 	font: inherit;
