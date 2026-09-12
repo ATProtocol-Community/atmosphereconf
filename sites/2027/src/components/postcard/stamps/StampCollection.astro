@@ -3,9 +3,15 @@ import Stamp from "./Stamp.astro";
 import { stamps } from "./stamps";
 
 const featuredStamp = stamps[0];
+
+type Props = {
+	compact?: boolean;
+};
+
+const { compact } = Astro.props;
 ---
 
-<div class="postage-row">
+<div class="postage-row" class:list={{ compact }}>
 	<div class="postmark-group" aria-hidden="true">
 		<span class="postmark-art">
 			<svg class="postmark" viewBox="7 28 164 94" aria-hidden="true">
@@ -153,6 +159,14 @@ const featuredStamp = stamps[0];
 		margin-right: -22px;
 	}
 
+	.postage-row.compact {
+		flex-direction: column-reverse;
+		margin: 0;
+		align-items: center;
+		max-height: 320px;
+		height: 100%;
+	}
+
 	.postmark-group {
 		--postmark-width: clamp(120px, 18vw, 165px);
 		position: relative;
@@ -170,6 +184,13 @@ const featuredStamp = stamps[0];
 		right: 60px;
 		bottom: -32px;
 		pointer-events: none;
+	}
+
+	.compact .postmark-group {
+		left: 50%;
+		bottom: 50%;
+		transform: translate(-50%, 110%);
+		--postmark-width: 165px;
 	}
 
 	.postmark-art {
@@ -212,6 +233,13 @@ const featuredStamp = stamps[0];
 		text-align: center;
 	}
 
+	.compact .current-stamp-wrap {
+		position: absolute;
+		left: 50%;
+		bottom: 50%;
+		transform: translate(-50%, 30%);
+	}
+
 	.current-stamp {
 		--stamp-size: clamp(100px, 15vw, 150px);
 		display: block;
@@ -225,6 +253,10 @@ const featuredStamp = stamps[0];
 		transition: transform 0.15s;
 	}
 
+	.compact .current-stamp {
+		--stamp-size: 150px;
+	}
+
 	.current-stamp:hover {
 		transform: rotate(0deg);
 	}
@@ -232,6 +264,27 @@ const featuredStamp = stamps[0];
 	@media (prefers-reduced-motion: reduce) {
 		.current-stamp {
 			transition: none;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.postage-row.compact {
+			width: 100%;
+			max-width: none;
+			flex-direction: row;
+			position: relative;
+		}
+
+		.compact .current-stamp-wrap {
+			position: relative;
+			left: 100%;
+			bottom: unset;
+			transform: translate(calc(-100% - 1.5rem));
+			top: 1.5rem;
+		}
+
+		.compact .postmark-group {
+			transform: translate(-65%, 85%);
 		}
 	}
 </style>

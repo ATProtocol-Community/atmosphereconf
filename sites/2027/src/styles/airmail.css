@@ -211,7 +211,7 @@ main {
 		padding-inline: 24px;
 	}
 
-	main {
+	main:not(:has(.compact)) {
 		padding-inline: 24px;
 	}
 }

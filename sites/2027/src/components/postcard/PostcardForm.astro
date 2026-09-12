@@ -2,10 +2,17 @@
 import ComboBox from "../ComboBox.astro";
 import Tooltip from "../Tooltip.astro";
 import { takeSubscriptionResult } from "../lib/subscribe";
+import PostcardFormExplainer from "./PostcardFormExplainer.astro";
 const subscriptionResult = await takeSubscriptionResult(
 	Astro.session,
 	Astro.locals.authproto,
 );
+
+type Props = {
+	hideExplainer?: boolean;
+};
+
+const { hideExplainer } = Astro.props;
 ---
 
 <form action="https://leaflet.pub/api/auth/email-login" method="get">
@@ -68,23 +75,7 @@ const subscriptionResult = await takeSubscriptionResult(
 			</div>
 		</div>
 	</div>
-	<p class="tip">
-		Whether via{" "}
-		<Tooltip
-			id="postcard-email-tooltip"
-			label="email"
-			class="email"
-			blockAnchor="--tip">You know what this is.</Tooltip
-		>{" "}or{" "}
-		<Tooltip
-			id="postcard-atmosphere-tooltip"
-			label="Atmosphere handle"
-			class="handle"
-			blockAnchor="--tip"
-			>From Blacksky to Pckt, from Bluesky to Offprint, the same username
-			unlocks countless apps and website—no matter which got you first.</Tooltip
-		>, our news reaches you all across the web.
-	</p>
+	{!hideExplainer && <PostcardFormExplainer />}
 	<button class="subscribe" type="submit"
 		>Keep me posted <span aria-hidden="true">↗</span></button
 	>

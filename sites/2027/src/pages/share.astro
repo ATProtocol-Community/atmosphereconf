@@ -1,0 +1,194 @@
+---
+import Postcard from "../components/postcard/Postcard.astro";
+import PostcardForm from "../components/postcard/PostcardForm.astro";
+import PostcardPicture from "../components/postcard/PostcardPicture.astro";
+import StampCollection from "../components/postcard/stamps/StampCollection.astro";
+import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import "../styles/airmail.css";
+
+const title = "Back At It — AtmosphereConf #3";
+const description =
+	"AtmosphereConf #3. Spring 2027. Somewhere in Europe (and online).";
+const cloudShapes = [
+	"M30 88C12 88 4 77 4 64C4 49 15 39 30 39C33 22 46 13 62 17C73 -1 105 0 116 22C135 16 151 28 152 42C172 42 185 52 185 67C185 81 174 90 159 90Z",
+	"M31 83C12 84 3 72 5 58C6 44 18 36 32 37C34 21 49 14 64 20C71 5 92 1 107 11C115 16 120 24 122 33C140 25 158 35 160 49C177 48 187 59 184 72C182 87 165 93 150 86C140 99 121 101 107 89C92 103 70 99 61 87C48 96 36 91 31 83Z",
+	"M27 87C12 87 4 77 4 64C4 50 16 39 32 40C29 24 42 13 58 18C67 0 94 0 108 12C115 18 119 25 120 32C138 29 154 40 154 54C171 53 183 63 182 76C181 90 167 95 152 88C141 103 123 99 115 88Z",
+];
+const clouds = [
+	{ shape: 0, width: 140, top: "7%", duration: 67, delay: 12, rest: 12 },
+	{ shape: 1, width: 160, top: "88%", duration: 73, delay: 48, rest: 65 },
+	...Array.from({ length: 6 }, (_, index) => ({
+		shape: index % cloudShapes.length,
+		width: [150, 185, 125, 165, 140, 180][index],
+		top: `calc(var(--picture-top, 180px) + var(--picture-height, 600px) * ${[0.12, 0.32, 0.48, 0.23, 0.42, 0.16][index]})`,
+		duration: 60,
+		delay: index * 10,
+		rest: [12, 28, 42, 58, 72, 85][index],
+	})),
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
+		<link rel="icon" href="/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@10..48,75..100,400..800&family=DM+Sans:opsz,wght@9..40,400..800&family=Outfit:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+		<title>{title}</title>
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="/og.png" />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="en" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+	</head>
+	<body data-palette="sky" data-direction="editorial">
+		<main>
+			<article
+				class="mail"
+				id="postcard"
+				aria-label="A postcard from AtmosphereConf"
+			>
+				<section class="address" aria-labelledby="signup-title">
+					<div class="message">
+						<p class="edition">AtmosphereConf #3 <span>Spring 2027</span></p>
+						<h2 id="signup-title">Where will <span>we</span> land?</h2>
+						<PostcardForm hideExplainer />
+					</div>
+				</section>
+				<section class="stamps" aria-labelledby="signup-title">
+					<StampCollection compact />
+				</section>
+			</article>
+		</main>
+	</body>
+</html>
+
+<style>
+	.mail {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		border-radius: 5px;
+		overflow: hidden;
+		background: transparent;
+		box-shadow: 12px 14px 6px color-mix(in srgb, var(--ink) 25%, transparent);
+		position: relative;
+		mask:
+			radial-gradient(circle at 50% 0, #0000 3px, #000 3.5px) 0 0 / 12px 100%,
+			radial-gradient(circle at 50% 100%, #0000 3px, #000 3.5px) 0 0 / 12px 100%,
+			radial-gradient(circle at 0, #0000 3px, #000 3.5px) 0 0 / 100% 12px,
+			radial-gradient(circle at 100%, #0000 3px, #000 3.5px) 0 0 / 100% 12px;
+		mask-composite: intersect;
+		margin: auto;
+		max-width: 60ch;
+	}
+
+	.mail::after {
+		content: "";
+		position: absolute;
+		inset: -12px;
+		z-index: 1;
+		border-radius: 3px;
+		background: url("/noise.svg") repeat;
+		background-size: 180px 180px;
+		pointer-events: none;
+		opacity: 0.35;
+	}
+
+	#signup-title {
+		text-wrap: pretty;
+	}
+
+	.address {
+		background: var(--paper);
+		box-shadow: 1px 0 0 var(--paper);
+		display: flex;
+		min-width: 0;
+		flex-direction: column;
+		padding: 1.5rem;
+		width: 50%;
+	}
+
+	.stamps {
+		background: var(--paper);
+		box-shadow: 1px 0 0 var(--paper);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 50%;
+	}
+
+	.edition {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 12px;
+		margin: 0 0 14px;
+		font-size: 11px;
+		font-weight: 800;
+	}
+
+	.edition span {
+		font-weight: 500;
+	}
+
+	h2 {
+		margin: 0 0 26px;
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 1.05;
+		letter-spacing: -0.035em;
+	}
+
+	.signoff {
+		display: flex;
+		justify-content: space-between;
+		margin: 24px 0 0;
+		font-size: 11px;
+	}
+
+	.signoff nav {
+		display: flex;
+		gap: 12px;
+	}
+
+	:global(html) {
+		height: 100%;
+	}
+
+	:global(body) {
+		position: relative;
+		display: grid;
+		height: 100vh;
+		min-height: 100vh;
+		height: 100dvh;
+		min-height: 100dvh;
+		grid-template-rows: 92px minmax(0, 1fr);
+	}
+
+	:global(.visually-hidden) {
+		display: none;
+	}
+
+	@media (max-width: 600px) {
+		.mail {
+			flex-direction: column-reverse;
+		}
+
+		.stamps,
+		.address {
+			width: 100%;
+		}
+	}
+</style>
