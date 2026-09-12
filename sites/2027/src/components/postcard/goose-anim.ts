@@ -28,10 +28,14 @@ const gooseAnim = () => {
 		}
 	>;
 	const BODY_PIVOT = [400, 360];
+	const SHOULDER = [250, 315];
+	const HAND_SWING = 26;
 	const TAIL_PIVOT = [604, 420];
 
 	// Gait parameters
-	const P = {
+	const WALK = {
+		PERIOD: 1.1,
+		LEAN: 0,
 		STANCE: 0.6,
 		A: 13,
 		H: 16,
@@ -44,6 +48,25 @@ const gooseAnim = () => {
 		SWAY: 5,
 		ROLL: 2,
 	};
+
+	// Kimbia theme: short stance, high knees, forward lean
+	const RUN = {
+		...WALK,
+		PERIOD: 0.5,
+		LEAN: -9,
+		STANCE: 0.4,
+		A: 24,
+		H: 34,
+		HEEL_UP: 18,
+		BOB: 7,
+		JOLT: 4,
+		SWAY: 3,
+		ROLL: 3,
+	};
+
+	let P = WALK;
+	const gaitFor = () =>
+		document.body.dataset.palette === "kimbia" ? RUN : WALK;
 
 	// Googly eye physics for Fujocoded theme
 	const EYE = {
@@ -121,6 +144,7 @@ const gooseAnim = () => {
 		document.getElementById(id) as T;
 	const bodyEl = $("body")!;
 	const tailEl = $("tail");
+	const armEl = $("armK");
 
 	for (const leg of Object.values(LEGS)) {
 		leg.gEl = $(leg.g)!;
@@ -161,7 +185,6 @@ const gooseAnim = () => {
 	});
 
 	// Animation loop
-	let period = 1.1;
 	let running = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 	let t = 0.3;
 	let last: number | null = null;
@@ -173,18 +196,25 @@ const gooseAnim = () => {
 		if (last === null) last = now;
 		const dt = Math.min(0.05, (now - last) / 1000);
 		last = now;
-		if (running) t = (t + dt / period) % 1;
+		P = gaitFor();
+		if (running) t = (t + dt / P.PERIOD) % 1;
 
 		const bob = (P.BOB * (1 - Math.cos(4 * Math.PI * (t - 0.3)))) / 2;
 		const u = t % 0.5;
 		const jolt = u < 0.1 ? P.JOLT * Math.sin((Math.PI * u) / 0.1) : 0;
 		const sway = P.SWAY * Math.sin(2 * Math.PI * t);
-		const roll = P.ROLL * Math.sin(2 * Math.PI * t + 0.4);
+		const roll = P.LEAN + P.ROLL * Math.sin(2 * Math.PI * t + 0.4);
 		const bodyDy = bob + jolt;
 
 		bodyEl.setAttribute(
 			"transform",
 			`translate(${sway.toFixed(2)} ${bodyDy.toFixed(2)}) rotate(${roll.toFixed(2)} ${BODY_PIVOT[0]} ${BODY_PIVOT[1]})`,
+		);
+
+		// Hand swings in an arc from the shoulder, opposite the front leg
+		armEl?.setAttribute(
+			"transform",
+			`rotate(${(HAND_SWING * Math.sin(2 * Math.PI * t)).toFixed(2)} ${SHOULDER[0]} ${SHOULDER[1]})`,
 		);
 
 		for (const leg of Object.values(LEGS)) {
