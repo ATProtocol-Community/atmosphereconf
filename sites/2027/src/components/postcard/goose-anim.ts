@@ -28,7 +28,7 @@ const gooseAnim = () => {
 		}
 	>;
 	const BODY_PIVOT = [400, 360];
-	const SHOULDER = [250, 315];
+	const SHOULDER = [290, 317.5];
 	const HAND_SWING = 26;
 	const TAIL_PIVOT = [604, 420];
 
