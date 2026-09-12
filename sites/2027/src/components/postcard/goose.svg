@@ -116,9 +116,12 @@
 			<circle id="pupilA" cx="86" cy="80" r="7" fill="var(--goose-pupil, #111)" />
 		</g>
 		<g class="kimbia">
-			<rect x="110" y="16" width="180" height="16" fill="var(--goose-bib-ink, #bb2429)" clip-path="url(#clipBody)" transform="rotate(-8 200 24)" />
-			<path d="M244 22 L300 -4 L290 28 Z" fill="var(--goose-bib-ink, #bb2429)" transform="rotate(-8 200 24)" />
-			<path d="M248 30 L312 34 L284 50 Z" fill="var(--goose-bib-ink, #bb2429)" transform="rotate(-8 200 24)" />
+			<g fill="var(--goose-bib-ink, #bb2429)">
+				<path d="M119 26 Q184 43 250 24 L256 41 Q185 61 113 43 Z" clip-path="url(#clipBody)" />
+				<path d="M246 29 C268 13 283 16 304 21 S337 23 355 9 C344 30 325 38 303 33 S271 24 252 39 Z" />
+				<path d="M249 35 C272 35 281 52 302 49 S331 40 350 47 C329 47 320 65 298 62 S271 44 249 45 Z" />
+				<path d="M239 27 Q247 23 254 29 L257 40 Q250 48 241 43 Z" />
+			</g>
 			<g transform="translate(40 0) rotate(-4 370 435)">
 				<rect x="300" y="385" width="140" height="100" rx="5" fill="var(--goose-bib, #f4ecd9)" stroke="var(--goose-bib-ink, #bb2429)" stroke-width="3" />
 				<circle cx="312" cy="397" r="4" fill="var(--goose-bib-ink, #bb2429)" />
@@ -126,9 +129,8 @@
 				<text x="370" y="416" text-anchor="middle" font-family="Georgia, serif" font-size="15" letter-spacing="4" fill="var(--goose-bib-ink, #bb2429)">KIMBIA</text>
 				<text x="370" y="470" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="58" fill="var(--goose-bib-ink, #bb2429)">7</text>
 			</g>
-			<g id="armK" class="kimbia" fill="var(--goose)" stroke="var(--goose)" stroke-width="18" stroke-linecap="round">
-				<circle cx="205" cy="400" r="20" stroke="none" />
-				<path d="M205 386 L138 372 M205 400 L126 402 M205 414 L142 432" />
+			<g id="armK" class="kimbia" fill="var(--goose)">
+				<path transform="translate(40 2.5) rotate(-12 250 315)" d="M250 308 C275 320 267 350 244 372 C229 389 218 411 197 432 Q181 449 163 449 Q165 433 180 414 C160 434 138 439 122 430 Q128 411 157 393 C131 410 108 411 94 398 Q106 379 138 367 C109 375 87 366 78 342 C110 341 139 331 168 326 C197 320 226 300 250 308 Z" />
 			</g>
 		</g>
 	</g>
