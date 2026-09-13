@@ -23,8 +23,8 @@ const gooseAnim = () => {
 			hip: [number, number];
 			ankle: [number, number];
 			phase: number;
-			gEl?: HTMLElement;
-			shoeEl?: HTMLElement;
+			gEl?: Element | null;
+			shoeEl?: Element | null;
 		}
 	>;
 	const BODY_PIVOT = [400, 360];
@@ -93,31 +93,35 @@ const gooseAnim = () => {
 	const easeInQuad = (t: number) => t * t;
 	const rad = (d: number) => (d * Math.PI) / 180;
 
-	function legPose(p: number) {
-		if (p < P.STANCE) {
-			const s = p / P.STANCE;
-			const theta = P.A * (1 - 2 * s);
+	function legPose(p: number, gait: typeof WALK) {
+		if (p < gait.STANCE) {
+			const s = p / gait.STANCE;
+			const theta = gait.A * (1 - 2 * s);
 
 			let phi;
 
-			if (s < P.SLAP) {
-				phi = P.TOE_UP * (1 - easeInQuad(s / P.SLAP));
+			if (s < gait.SLAP) {
+				phi = gait.TOE_UP * (1 - easeInQuad(s / gait.SLAP));
 			} else if (s < 0.72) {
 				phi = 0;
 			} else {
-				phi = -P.HEEL_UP * easeInQuad((s - 0.72) / 0.28);
+				phi = -gait.HEEL_UP * easeInQuad((s - 0.72) / 0.28);
 			}
 
 			return { theta, phi, lift: 0 };
 		}
 
-		const s = (p - P.STANCE) / (1 - P.STANCE);
-		const theta = lerp(-P.A, P.A, easeInOutSine(s));
-		const lift = P.H * Math.sin(Math.PI * s);
+		const s = (p - gait.STANCE) / (1 - gait.STANCE);
+		const theta = lerp(-gait.A, gait.A, easeInOutSine(s));
+		const lift = gait.H * Math.sin(Math.PI * s);
 		const phi =
 			s < 0.45
-				? lerp(-P.HEEL_UP, -P.DANGLE, easeInOutSine(s / 0.45))
-				: lerp(-P.DANGLE, P.TOE_UP, easeInOutSine((s - 0.45) / 0.55));
+				? lerp(-gait.HEEL_UP, -gait.DANGLE, easeInOutSine(s / 0.45))
+				: lerp(
+						-gait.DANGLE,
+						gait.TOE_UP,
+						easeInOutSine((s - 0.45) / 0.55),
+					);
 
 		return { theta, phi, lift };
 	}
@@ -139,21 +143,8 @@ const gooseAnim = () => {
 		];
 	}
 
-	// DOM
-	const $ = <T extends HTMLElement>(id: string) =>
-		document.getElementById(id) as T;
-	const bodyEl = $("body")!;
-	const tailEl = $("tail");
-	const armEl = $("armK");
-
-	for (const leg of Object.values(LEGS)) {
-		leg.gEl = $(leg.g)!;
-		leg.shoeEl = $(leg.shoe)!;
-	}
-
 	type Eye = {
-		el: HTMLElement;
-		pupil: HTMLElement;
+		pupil: Element;
 		cx: number;
 		cy: number;
 		limit: number;
@@ -164,139 +155,177 @@ const gooseAnim = () => {
 		prevWorld: [number, number] | null;
 		prevVel: [number, number] | null;
 	};
-	const eyes: Eye[] = Array.from(
-		document.querySelectorAll<HTMLElement>("#goose-svg .eye"),
-	).map((el) => {
-		const r = Number(el.dataset.r);
-		const pr = Number(el.dataset.pupil);
+
+	type GooseState = {
+		bodyEl: Element;
+		tailEl: Element | null;
+		armEl: Element | null;
+		legs: (typeof LEGS)[string][];
+		eyes: Eye[];
+		t: number;
+		last: number | null;
+		tailAngle: number;
+		tailVel: number;
+		prevBodyDy: number | null;
+	};
+
+	const roots = Array.from(
+		document.querySelectorAll<SVGSVGElement>("#goose-svg"),
+	);
+	const gooseStates: GooseState[] = roots.map((root, index) => {
+		const find = (selector: string) => root.querySelector(selector);
+		const legs = Object.values(LEGS).map((leg) => ({
+			...leg,
+			gEl: find(`#${leg.g}`),
+			shoeEl: find(`#${leg.shoe}`),
+		}));
+		const eyes = Array.from(root.querySelectorAll<HTMLElement>(".eye")).map(
+			(el) => {
+				const r = Number(el.dataset.r);
+				const pr = Number(el.dataset.pupil);
+				return {
+					pupil: el.querySelector("circle:last-of-type")!,
+					cx: Number(el.dataset.cx),
+					cy: Number(el.dataset.cy),
+					limit: r - pr - 1,
+					px: 0,
+					py: 0,
+					vx: 0,
+					vy: 0,
+					prevWorld: null,
+					prevVel: null,
+				};
+			},
+		);
+
 		return {
-			el,
-			pupil: el.querySelector<HTMLElement>("circle:last-of-type")!,
-			cx: Number(el.dataset.cx),
-			cy: Number(el.dataset.cy),
-			limit: r - pr - 1,
-			px: 0,
-			py: 0,
-			vx: 0,
-			vy: 0,
-			prevWorld: null,
-			prevVel: null,
+			bodyEl: find("#body")!,
+			tailEl: find("#tail"),
+			armEl: find("#armK"),
+			legs,
+			eyes,
+			t: (0.3 + index * 0.12) % 1,
+			last: null,
+			tailAngle: 0,
+			tailVel: 0,
+			prevBodyDy: null,
 		};
 	});
 
 	// Animation loop
 	let running = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-	let t = 0.3;
-	let last: number | null = null;
-	let tailAngle = 0;
-	let tailVel = 0;
-	let prevBodyDy: number | null = null;
 
 	function frame(now: number) {
-		if (last === null) last = now;
-		const dt = Math.min(0.05, (now - last) / 1000);
-		last = now;
 		P = gaitFor();
-		if (running) t = (t + dt / P.PERIOD) % 1;
+		for (const goose of gooseStates) {
+			if (goose.last === null) goose.last = now;
+			const dt = Math.min(0.05, (now - goose.last) / 1000);
+			goose.last = now;
+			if (running) goose.t = (goose.t + dt / P.PERIOD) % 1;
 
-		const bob = (P.BOB * (1 - Math.cos(4 * Math.PI * (t - 0.3)))) / 2;
-		const u = t % 0.5;
-		const jolt = u < 0.1 ? P.JOLT * Math.sin((Math.PI * u) / 0.1) : 0;
-		const sway = P.SWAY * Math.sin(2 * Math.PI * t);
-		const roll = P.LEAN + P.ROLL * Math.sin(2 * Math.PI * t + 0.4);
-		const bodyDy = bob + jolt;
+			const t = goose.t;
+			const bob = (P.BOB * (1 - Math.cos(4 * Math.PI * (t - 0.3)))) / 2;
+			const u = t % 0.5;
+			const jolt = u < 0.1 ? P.JOLT * Math.sin((Math.PI * u) / 0.1) : 0;
+			const sway = P.SWAY * Math.sin(2 * Math.PI * t);
+			const roll = P.LEAN + P.ROLL * Math.sin(2 * Math.PI * t + 0.4);
+			const bodyDy = bob + jolt;
 
-		bodyEl.setAttribute(
-			"transform",
-			`translate(${sway.toFixed(2)} ${bodyDy.toFixed(2)}) rotate(${roll.toFixed(2)} ${BODY_PIVOT[0]} ${BODY_PIVOT[1]})`,
-		);
-
-		// Hand swings in an arc from the shoulder, opposite the front leg
-		armEl?.setAttribute(
-			"transform",
-			`rotate(${(HAND_SWING * Math.sin(2 * Math.PI * t)).toFixed(2)} ${SHOULDER[0]} ${SHOULDER[1]})`,
-		);
-
-		for (const leg of Object.values(LEGS)) {
-			const { theta, phi, lift } = legPose((t + leg.phase) % 1);
-			const [hx, hy] = leg.hip,
-				[ax, ay] = leg.ankle;
-
-			leg.gEl?.setAttribute(
+			goose.bodyEl.setAttribute(
 				"transform",
-				`translate(0 ${(bob - lift).toFixed(2)}) rotate(${theta.toFixed(2)} ${hx} ${hy})`,
+				`translate(${sway.toFixed(2)} ${bodyDy.toFixed(2)}) rotate(${roll.toFixed(2)} ${BODY_PIVOT[0]} ${BODY_PIVOT[1]})`,
+			);
+			goose.armEl?.setAttribute(
+				"transform",
+				`rotate(${(HAND_SWING * Math.sin(2 * Math.PI * t)).toFixed(2)} ${SHOULDER[0]} ${SHOULDER[1]})`,
 			);
 
-			leg.shoeEl?.setAttribute(
-				"transform",
-				`rotate(${(phi - theta).toFixed(2)} ${ax} ${ay})`,
-			);
-		}
-
-		if (running && dt > 0) {
-			// Googly eyes
-			const tilt = rad(EYE.SVG_ROTATE_DEG + roll);
-			const gx = Math.sin(tilt) * EYE.GRAVITY;
-			const gy = Math.cos(tilt) * EYE.GRAVITY;
-
-			for (const eye of eyes) {
-				const world = bodyToWorld(eye.cx, eye.cy, sway, bodyDy, roll);
-				let ax = 0;
-				let ay = 0;
-				if (eye.prevWorld) {
-					const vel: [number, number] = [
-						(world[0] - eye.prevWorld[0]) / dt,
-						(world[1] - eye.prevWorld[1]) / dt,
-					];
-					if (eye.prevVel) {
-						ax = (vel[0] - eye.prevVel[0]) / dt;
-						ay = (vel[1] - eye.prevVel[1]) / dt;
-					}
-					eye.prevVel = vel;
-				}
-				eye.prevWorld = world;
-
-				eye.vx += (gx - ax * EYE.ACCEL_GAIN) * dt;
-				eye.vy += (gy - ay * EYE.ACCEL_GAIN) * dt;
-				const drag = Math.exp(-EYE.DAMPING * dt);
-				eye.vx *= drag;
-				eye.vy *= drag;
-				eye.px += eye.vx * dt;
-				eye.py += eye.vy * dt;
-
-				const d = Math.hypot(eye.px, eye.py);
-				if (d > eye.limit) {
-					const nx = eye.px / d;
-					const ny = eye.py / d;
-					eye.px = nx * eye.limit;
-					eye.py = ny * eye.limit;
-					const vn = eye.vx * nx + eye.vy * ny;
-					if (vn > 0) {
-						const tx = eye.vx - vn * nx;
-						const ty = eye.vy - vn * ny;
-						eye.vx = tx * EYE.RIM_FRICTION - vn * EYE.RESTITUTION * nx;
-						eye.vy = ty * EYE.RIM_FRICTION - vn * EYE.RESTITUTION * ny;
-					}
-				}
-
-				eye.pupil.setAttribute(
+			for (const leg of goose.legs) {
+				const { theta, phi, lift } = legPose((t + leg.phase) % 1, P);
+				const [hx, hy] = leg.hip;
+				const [ax, ay] = leg.ankle;
+				leg.gEl?.setAttribute(
 					"transform",
-					`translate(${eye.px.toFixed(2)} ${eye.py.toFixed(2)})`,
+					`translate(0 ${(bob - lift).toFixed(2)}) rotate(${theta.toFixed(2)} ${hx} ${hy})`,
+				);
+				leg.shoeEl?.setAttribute(
+					"transform",
+					`rotate(${(phi - theta).toFixed(2)} ${ax} ${ay})`,
 				);
 			}
 
-			if (tailEl) {
-				const bodyVy = prevBodyDy === null ? 0 : (bodyDy - prevBodyDy) / dt;
-				prevBodyDy = bodyDy;
+			if (running && dt > 0) {
+				const tilt = rad(EYE.SVG_ROTATE_DEG + roll);
+				const gx = Math.sin(tilt) * EYE.GRAVITY;
+				const gy = Math.cos(tilt) * EYE.GRAVITY;
+
+				for (const eye of goose.eyes) {
+					const world = bodyToWorld(eye.cx, eye.cy, sway, bodyDy, roll);
+					let ax = 0;
+					let ay = 0;
+					if (eye.prevWorld) {
+						const vel: [number, number] = [
+							(world[0] - eye.prevWorld[0]) / dt,
+							(world[1] - eye.prevWorld[1]) / dt,
+						];
+						if (eye.prevVel) {
+							ax = (vel[0] - eye.prevVel[0]) / dt;
+							ay = (vel[1] - eye.prevVel[1]) / dt;
+						}
+						eye.prevVel = vel;
+					}
+					eye.prevWorld = world;
+
+					eye.vx += (gx - ax * EYE.ACCEL_GAIN) * dt;
+					eye.vy += (gy - ay * EYE.ACCEL_GAIN) * dt;
+					const drag = Math.exp(-EYE.DAMPING * dt);
+					eye.vx *= drag;
+					eye.vy *= drag;
+					eye.px += eye.vx * dt;
+					eye.py += eye.vy * dt;
+
+					const d = Math.hypot(eye.px, eye.py);
+					if (d > eye.limit) {
+						const nx = eye.px / d;
+						const ny = eye.py / d;
+						eye.px = nx * eye.limit;
+						eye.py = ny * eye.limit;
+						const vn = eye.vx * nx + eye.vy * ny;
+						if (vn > 0) {
+							const tx = eye.vx - vn * nx;
+							const ty = eye.vy - vn * ny;
+							eye.vx =
+								tx * EYE.RIM_FRICTION - vn * EYE.RESTITUTION * nx;
+							eye.vy =
+								ty * EYE.RIM_FRICTION - vn * EYE.RESTITUTION * ny;
+						}
+					}
+
+					eye.pupil.setAttribute(
+						"transform",
+						`translate(${eye.px.toFixed(2)} ${eye.py.toFixed(2)})`,
+					);
+				}
+
+				const bodyVy =
+					goose.prevBodyDy === null
+						? 0
+						: (bodyDy - goose.prevBodyDy) / dt;
+				goose.prevBodyDy = bodyDy;
 				const target = roll * TAIL.ROLL_FOLLOW;
-				tailVel +=
-					(TAIL.STIFFNESS * (target - tailAngle) - TAIL.DAMPING * tailVel) * dt;
-				tailVel += TAIL.JOLT_KICK * bodyVy * dt;
-				tailAngle += tailVel * dt;
-				tailAngle = Math.max(-TAIL.MAX_DEG, Math.min(TAIL.MAX_DEG, tailAngle));
-				tailEl.setAttribute(
+				goose.tailVel +=
+					(TAIL.STIFFNESS * (target - goose.tailAngle) -
+						TAIL.DAMPING * goose.tailVel) *
+					dt;
+				goose.tailVel += TAIL.JOLT_KICK * bodyVy * dt;
+				goose.tailAngle += goose.tailVel * dt;
+				goose.tailAngle = Math.max(
+					-TAIL.MAX_DEG,
+					Math.min(TAIL.MAX_DEG, goose.tailAngle),
+				);
+				goose.tailEl?.setAttribute(
 					"transform",
-					`rotate(${tailAngle.toFixed(2)} ${TAIL_PIVOT[0]} ${TAIL_PIVOT[1]})`,
+					`rotate(${goose.tailAngle.toFixed(2)} ${TAIL_PIVOT[0]} ${TAIL_PIVOT[1]})`,
 				);
 			}
 		}

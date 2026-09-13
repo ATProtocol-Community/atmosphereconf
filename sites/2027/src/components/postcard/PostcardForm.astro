@@ -343,7 +343,10 @@ const subscriptionResult = await takeSubscriptionResult(
 		padding: 2px 12px;
 		border-radius: 999px;
 		cursor: pointer;
-		color: color-mix(in oklab, var(--ink) 70%, transparent);
+		color: var(
+			--tab-inactive-foreground,
+			color-mix(in oklab, var(--ink) 70%, transparent)
+		);
 		transition: color 220ms ease;
 	}
 
@@ -364,7 +367,7 @@ const subscriptionResult = await takeSubscriptionResult(
 	}
 
 	input[type="radio"]:checked + .segmented-option {
-		color: var(--ink);
+		color: var(--tab-active-foreground, var(--ink));
 	}
 
 	input[type="radio"]:checked + .segmented-option .segmented-text {
@@ -373,7 +376,7 @@ const subscriptionResult = await takeSubscriptionResult(
 	}
 
 	input[type="radio"] + .segmented-option .segmented-text {
-		opacity: 0.8;
+		opacity: var(--tab-text-opacity, 1);
 	}
 
 	.segmented-icon {
