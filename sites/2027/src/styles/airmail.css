@@ -118,6 +118,35 @@ body[data-palette="kimbia"] {
 	--goose-bib-ink: #bb2429;
 }
 
+/* Pronouns: Catppuccin-inspired dark palette with a flock of mascots */
+body[data-palette="pronouns"] {
+	color-scheme: dark;
+	--bg: #1e1e2e;
+	--surface: #313244;
+	--surface-strong: #45475a;
+	--text: #cdd6f4;
+	--muted: #bac2de;
+	--border: #585b70;
+	--accent: #f5c2e7;
+	--accent-contrast: #1e1e2e;
+	--tag-bg: #585b70;
+	--line: #585b7088;
+	--success: #a6e3a1;
+	--success-bg: #243626;
+	--danger: #f38ba8;
+	--danger-bg: #3a1f28;
+	--ink: var(--text);
+	--strong: var(--accent);
+	--sky: var(--bg);
+	--mint: var(--surface-strong);
+	--paper: var(--surface);
+	--cancel-stamp: var(--danger);
+	--goose: var(--accent);
+	--butter: #d98abf;
+	--tab-active-foreground: #1e1e2e;
+	--tab-inactive-foreground: #cdd6f4;
+}
+
 button,
 input {
 	font: inherit;

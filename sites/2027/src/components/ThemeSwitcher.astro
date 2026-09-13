@@ -80,6 +80,7 @@
 			fujocoded: { label: "Fujocoded", image: "goose" },
 			sifa: { label: "Sifa", image: "goose" },
 			kimbia: { label: "Kimbia", image: "goose" },
+			pronouns: { label: "Pronouns", image: "flock" },
 		};
 
 		const themeKeys = Object.keys(themes);
@@ -112,9 +113,21 @@
 
 		const syncGoose = (theme) => {
 			const gooseImage = document.getElementById("goose-img");
-			if (!gooseImage) return;
-
 			const gooseSvg = document.getElementById("goose-svg");
+			const pronounsFlock = document.getElementById("pronouns-flock");
+			const isFlock = themes[theme].image === "flock";
+
+			if (pronounsFlock) {
+				pronounsFlock.style.display = isFlock ? "block" : "none";
+			}
+
+			if (isFlock) {
+				if (gooseImage) gooseImage.style.display = "none";
+				if (gooseSvg) gooseSvg.style.display = "none";
+				return;
+			}
+
+			if (!gooseImage) return;
 
 			let imageData;
 			try {
