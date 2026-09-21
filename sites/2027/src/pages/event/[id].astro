@@ -1,0 +1,17 @@
+---
+import { archived2026TalkIds } from "../../data/archived-2026-talk-ids";
+
+const { id } = Astro.params;
+
+if (!id || !archived2026TalkIds.has(id)) {
+	return new Response(null, { status: 404, statusText: "Event not found" });
+}
+
+const archiveUrl = new URL(
+	`/event/${encodeURIComponent(id ?? "")}`,
+	"https://2026.atmosphereconf.org",
+);
+archiveUrl.search = Astro.url.search;
+
+return Astro.redirect(archiveUrl.toString(), 302);
+---

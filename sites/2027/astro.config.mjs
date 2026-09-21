@@ -26,7 +26,7 @@ export default defineConfig({
       applicationDomain: "https://atmosphereconf.org",
       externalDomain:
         process.env.NODE_ENV === "development"
-          ? "http://localhost:4321"
+          ? undefined
           : "https://atmosphereconf.org",
       driver: {
         name: "memory",
@@ -39,6 +39,6 @@ export default defineConfig({
     }),
   ],
   server: {
-    host: "0.0.0.0",
+    host: "127.0.0.1",
   },
 });
