@@ -39,6 +39,6 @@ export default defineConfig({
     }),
   ],
   server: {
-    host: "127.0.0.1",
+    host: process.env.NODE_ENV === "development" ? "127.0.0.1" : "0.0.0.0",
   },
 });
