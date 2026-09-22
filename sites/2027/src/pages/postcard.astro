@@ -1,0 +1,12 @@
+---
+import PostcardBuilder from "../components/postcard/PostcardBuilder.astro";
+import PostcardLayout from "../layouts/PostcardLayout.astro";
+
+const title = "Send a postcard — AtmosphereConf 2027";
+const description =
+	"Build a postcard and invite someone to AtmosphereConf 2027.";
+---
+
+<PostcardLayout title={title} description={description}>
+	<PostcardBuilder />
+</PostcardLayout>
