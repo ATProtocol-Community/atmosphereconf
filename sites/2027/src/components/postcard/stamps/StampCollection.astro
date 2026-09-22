@@ -5,7 +5,7 @@ import { stamps } from "./stamps";
 const featuredStamp = stamps[0];
 ---
 
-<div class="postage-row">
+<div class="postage-row" data-stamp-collection>
 	<div class="postmark-group" aria-hidden="true">
 		<span class="postmark-art">
 			<svg class="postmark" viewBox="7 28 164 94" aria-hidden="true">
@@ -63,7 +63,6 @@ const featuredStamp = stamps[0];
 	</div>
 	<div class="current-stamp-wrap">
 		<button
-			id="current-stamp"
 			class="current-stamp"
 			type="button"
 			aria-label={`Stamp design: ${featuredStamp.name}; click to cycle`}
@@ -72,20 +71,12 @@ const featuredStamp = stamps[0];
 			<Stamp stamp={featuredStamp} />
 		</button>
 	</div>
+	<p class="sr-only" data-stamp-announcement aria-live="polite"></p>
 </div>
-<p class="sr-only" data-stamp-announcement aria-live="polite"></p>
 
 <script>
-	import type { StampDefinition } from "./stamps";
+	import { applyStampAppearance, type StampDefinition } from "./stamps";
 
-	const current = document.querySelector<HTMLButtonElement>("#current-stamp");
-	const selected = current?.querySelector<HTMLElement>("#selected-stamp");
-	const announcement = document.querySelector<HTMLElement>(
-		"[data-stamp-announcement]",
-	);
-	const stampDesigns: StampDefinition[] = JSON.parse(
-		current?.dataset.stamps ?? "[]",
-	);
 	const stampStorageKey = "2027:postcard-stamp";
 	const getStampStorageId = (stamp: StampDefinition) =>
 		`${stamp.id}:${stamp.character ?? "mascot"}`;
@@ -103,39 +94,47 @@ const featuredStamp = stamps[0];
 			// Storage can be unavailable without preventing stamp selection.
 		}
 	};
-	const applyStamp = (stamp: StampDefinition, announce = false) => {
-		if (!current || !selected) return;
-
-		selected.className = ["stamp", stamp.id, stamp.character]
-			.filter(Boolean)
-			.join(" ");
-		const year = selected.querySelector<HTMLElement>(".stamp-year");
-		if (year) year.textContent = stamp.year;
-		current.setAttribute(
-			"aria-label",
-			`Stamp design: ${stamp.name}; click to cycle`,
+	for (const root of document.querySelectorAll<HTMLElement>(
+		"[data-stamp-collection]",
+	)) {
+		const current = root.querySelector<HTMLButtonElement>(".current-stamp");
+		const selected = current?.querySelector<HTMLElement>("[data-stamp]");
+		const announcement = root.querySelector<HTMLElement>(
+			"[data-stamp-announcement]",
 		);
-		if (announce && announcement) {
-			announcement.textContent = `${stamp.name} stamp selected`;
-		}
-	};
+		const stampDesigns: StampDefinition[] = JSON.parse(
+			current?.dataset.stamps ?? "[]",
+		);
+		const applyStamp = (stamp: StampDefinition, announce = false) => {
+			if (!current || !selected) return;
 
-	const storedStampId = readStoredStamp();
-	const storedStampIndex = stampDesigns.findIndex(
-		(stamp) => getStampStorageId(stamp) === storedStampId,
-	);
-	let stampIndex = storedStampIndex >= 0 ? storedStampIndex : 0;
-	const initialStamp = stampDesigns[stampIndex];
-	if (initialStamp) applyStamp(initialStamp);
+			applyStampAppearance(selected, stamp);
+			current.setAttribute(
+				"aria-label",
+				`Stamp design: ${stamp.name}; click to cycle`,
+			);
+			if (announce && announcement) {
+				announcement.textContent = `${stamp.name} stamp selected`;
+			}
+		};
 
-	current?.addEventListener("click", () => {
-		if (!selected || !stampDesigns.length) return;
+		const storedStampId = readStoredStamp();
+		const storedStampIndex = stampDesigns.findIndex(
+			(stamp) => getStampStorageId(stamp) === storedStampId,
+		);
+		let stampIndex = storedStampIndex >= 0 ? storedStampIndex : 0;
+		const initialStamp = stampDesigns[stampIndex];
+		if (initialStamp) applyStamp(initialStamp);
 
-		stampIndex = (stampIndex + 1) % stampDesigns.length;
-		const stamp = stampDesigns[stampIndex];
-		applyStamp(stamp, true);
-		writeStoredStamp(stamp);
-	});
+		current?.addEventListener("click", () => {
+			if (!selected || !stampDesigns.length) return;
+
+			stampIndex = (stampIndex + 1) % stampDesigns.length;
+			const stamp = stampDesigns[stampIndex];
+			applyStamp(stamp, true);
+			writeStoredStamp(stamp);
+		});
+	}
 </script>
 
 <style>

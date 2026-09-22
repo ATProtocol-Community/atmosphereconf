@@ -1,0 +1,55 @@
+---
+interface Props {
+	id: string;
+	title: string;
+	subtitle?: string;
+	as?: "h1" | "h2";
+}
+
+const { id, title, subtitle, as: Heading = "h1" } = Astro.props;
+---
+
+<header class="postcard-header">
+	<p class="edition">AtmosphereConf #3 <span>April/May 2027</span></p>
+	<Heading id={id} class="title">{title}</Heading>
+	{subtitle && <p class="subtitle">{subtitle}</p>}
+</header>
+
+<style>
+	.postcard-header {
+		min-width: 0;
+		margin-bottom: var(--header-space, 26px);
+	}
+	.edition {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 12px;
+		margin: 0 0 14px;
+		font-size: 11px;
+		font-weight: 800;
+	}
+	.edition span {
+		font-weight: 500;
+	}
+	.title {
+		margin: 0;
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-size: clamp(28px, 2.8vw, 39px);
+		font-weight: 700;
+		line-height: 1.05;
+		letter-spacing: -0.035em;
+		text-transform: none;
+		text-wrap: pretty;
+	}
+	.subtitle {
+		margin: 10px 0 0;
+		font-size: 14px;
+		line-height: 1.4;
+		text-wrap: pretty;
+	}
+	@media (max-width: 660px) {
+		.title {
+			font-size: 34px;
+		}
+	}
+</style>

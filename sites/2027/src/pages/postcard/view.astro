@@ -1,0 +1,18 @@
+---
+import SharedPostcard from "../../components/postcard/SharedPostcard.astro";
+import { stamps } from "../../components/postcard/stamps/stamps";
+import PostcardLayout from "../../layouts/PostcardLayout.astro";
+
+const stampIndex = Number(Astro.url.searchParams.get("stamp") ?? "0");
+const stamp =
+	stamps[Number.isInteger(stampIndex) && stamps[stampIndex] ? stampIndex : 0];
+const submittedMessage = Astro.url.searchParams.get("message")?.trim() ?? "";
+const message =
+	submittedMessage.slice(0, 180) || "Meet me at AtmosphereConf 2027!";
+const title = "A postcard for you — AtmosphereConf 2027";
+const description = message;
+---
+
+<PostcardLayout title={title} description={description}>
+	<SharedPostcard message={message} stamp={stamp} />
+</PostcardLayout>

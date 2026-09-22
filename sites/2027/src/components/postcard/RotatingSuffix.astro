@@ -1,0 +1,86 @@
+---
+interface Props {
+	/** The first word is repeated automatically to close the slide cycle. */
+	words: readonly string[];
+	/** Total time, in milliseconds, for the sequence to settle on its final word. */
+	duration?: number;
+}
+
+const { words, duration = 3000 } = Astro.props;
+---
+
+<div class="word-wrapper" data-rotating-suffix data-duration={duration}>
+	<div class="suffix-options">
+		{words.map((word) => <div>{word}</div>)}
+		<!-- repeat the first one to close the cycle -->
+		<div>{words[0]}</div>
+	</div>
+</div>
+
+<script>
+	const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+	for (const rotator of document.querySelectorAll<HTMLElement>(
+		"[data-rotating-suffix]",
+	)) {
+		if (reduceMotion.matches) continue;
+
+		const suffixes = rotator.querySelector(".suffix-options");
+		const firstSuffix = suffixes?.firstElementChild;
+		const count = suffixes?.children.length ?? 0;
+		if (!suffixes || !firstSuffix || count < 2) continue;
+
+		const wordHeight = firstSuffix.getBoundingClientRect().height;
+		const transitions = count - 1;
+		const segment = 0.6 / transitions;
+		const keyframes: Keyframe[] = [{ offset: 0, transform: "translateY(0)" }];
+
+		for (let index = 0; index < transitions; index += 1) {
+			keyframes.push(
+				{
+					offset: segment * (index + 0.75),
+					transform: `translateY(${-index * wordHeight}px)`,
+				},
+				{
+					offset: segment * (index + 1),
+					transform: `translateY(${-(index + 1) * wordHeight}px)`,
+				},
+			);
+		}
+
+		keyframes.push({
+			offset: 1,
+			transform: `translateY(${-transitions * wordHeight}px)`,
+		});
+
+		suffixes.animate(keyframes, {
+			duration: Number(rotator.dataset.duration) || 3000,
+			easing: "cubic-bezier(0.85, 0, 0.15, 1)",
+			fill: "forwards",
+		});
+	}
+</script>
+
+<style>
+	.word-wrapper {
+		/* One word tall. Callers may override with a fixed length. */
+		--word-height: 1lh;
+		display: inline-block;
+		height: var(--word-height);
+		overflow: hidden;
+		vertical-align: baseline;
+		margin-top: 1px;
+	}
+
+	.suffix-options {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.suffix-options > div {
+		height: var(--word-height);
+		line-height: var(--word-height);
+		color: var(--ink);
+	}
+
+</style>

@@ -1,0 +1,32 @@
+---
+import PostcardForm from "./PostcardForm.astro";
+import PostcardFrame from "./PostcardFrame.astro";
+import PostcardHeader from "./PostcardHeader.astro";
+---
+
+<PostcardFrame label="A postcard from AtmosphereConf" titleId="signup-title">
+	<PostcardHeader
+		id="signup-title"
+		as="h2"
+		title="Straight from the gaggle-vine"
+		subtitle="Get dates, tickets, news, and exclusive geese reveals!"
+	/>
+	<PostcardForm />
+
+	<Fragment slot="footer">
+		<span>See you out there. <span aria-hidden="true">♡</span></span>
+		<nav aria-label="AtmosphereConf links">
+			<a href="https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw"
+				>Bluesky</a
+			>
+			<a href="https://news.atmosphereconf.org/">Leaflet</a>
+		</nav>
+	</Fragment>
+</PostcardFrame>
+
+<style>
+	nav {
+		display: flex;
+		gap: 12px;
+	}
+</style>

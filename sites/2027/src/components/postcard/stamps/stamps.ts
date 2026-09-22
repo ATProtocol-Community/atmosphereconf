@@ -19,3 +19,14 @@ export const stamps: StampDefinition[] = [
 	{ id: "canal", name: "Goose cameo", year: "2025", character: "goose" },
 	{ id: "cancelled", name: "Goose postmarked", year: "2025", character: "goose" },
 ];
+
+export const applyStampAppearance = (
+	element: HTMLElement,
+	stamp: StampDefinition,
+) => {
+	element.className = ["stamp", stamp.id, stamp.character]
+		.filter(Boolean)
+		.join(" ");
+	const year = element.querySelector<HTMLElement>(".stamp-year");
+	if (year) year.textContent = stamp.year;
+};

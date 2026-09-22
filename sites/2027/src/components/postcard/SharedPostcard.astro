@@ -1,0 +1,68 @@
+---
+import PostcardFrame from "./PostcardFrame.astro";
+import PostcardHeader from "./PostcardHeader.astro";
+import Stamp from "./stamps/Stamp.astro";
+import type { StampDefinition } from "./stamps/stamps";
+
+interface Props {
+	message: string;
+	stamp: StampDefinition;
+}
+
+const { message, stamp } = Astro.props;
+---
+
+<PostcardFrame
+	label="A shared AtmosphereConf postcard"
+	titleId="shared-postcard-title"
+>
+	<div class="shared-postage" slot="postage" aria-hidden="true">
+		<Stamp stamp={stamp} />
+	</div>
+	<PostcardHeader
+		id="shared-postcard-title"
+		title="A postcard for you"
+	/>
+	<blockquote>{message}</blockquote>
+	<a class="rsvp-action" href="/rsvp">
+		RSVP with me <span aria-hidden="true">↗</span>
+	</a>
+
+	<Fragment slot="footer">
+		<a href="/postcard">Make your own</a>
+		<span>Postage paid in honks.</span>
+	</Fragment>
+</PostcardFrame>
+
+<style>
+	.shared-postage {
+		width: var(--postage-width);
+		margin: -12px 0 12px auto;
+		transform: rotate(5deg);
+	}
+	blockquote {
+		min-height: 92px;
+		padding: 13px 0 10px;
+		margin: 0;
+		border-block: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-size: clamp(20px, 2vw, 27px);
+		font-weight: 550;
+		line-height: 1.25;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+	}
+	.rsvp-action {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 48px;
+		padding: 11px 15px;
+		margin-top: 16px;
+		border-radius: 16px;
+		background: var(--strong);
+		color: var(--paper);
+		font-weight: 800;
+		text-decoration: none;
+	}
+</style>

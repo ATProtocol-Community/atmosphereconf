@@ -1,0 +1,320 @@
+---
+import PostcardFrame from "./PostcardFrame.astro";
+import PostcardHeader from "./PostcardHeader.astro";
+
+interface Props {
+	confirmed?: boolean;
+	handle?: string;
+	removedStandard?: boolean;
+	subscribedViaStandard?: boolean;
+}
+
+const {
+	confirmed = false,
+	handle = "",
+	removedStandard = false,
+	subscribedViaStandard = false,
+} = Astro.props;
+---
+
+<PostcardFrame
+	label="AtmosphereConf 2027 RSVP postcard"
+	titleId={confirmed ? "confirmation-title" : "rsvp-title"}
+>
+	<PostcardHeader
+		id={confirmed ? "confirmation-title" : "rsvp-title"}
+		title={confirmed ? "Tot dan!" : "Honk aboard!"}
+		subtitle="RSVP with your Atmosphere account and win an exclusive prize: friends!"
+	/>
+	{
+		confirmed ? (
+			<div class="confirmation" data-confirmation>
+				<p>We have your handle and are not afraid to use it.</p>
+				{removedStandard ? (
+					<p class="receipt-note" role="status">
+						Standard.site subscription removed.
+					</p>
+				) : subscribedViaStandard ? (
+					<>
+						<p>
+							We also subscribed you via <strong>Standard.site</strong>, as a
+							treat.
+						</p>
+						<form method="post" class="inline-action">
+							<input type="hidden" name="handle" value={handle} />
+							<input type="hidden" name="intent" value="unsubscribe" />
+							<button type="submit" class="text-action">
+								Remove that subscription
+							</button>
+						</form>
+					</>
+				) : (
+					<>
+						<p>Let us join your other Standard.site subscriptions?</p>
+						<form method="post" class="inline-action">
+							<input type="hidden" name="handle" value={handle} />
+							<input type="hidden" name="intent" value="confirm" />
+							<input type="hidden" name="subscribeNews" value="yes" />
+							<input type="hidden" name="standardOnly" value="yes" />
+							<button type="submit" class="small-action">
+								I’m in
+							</button>
+						</form>
+					</>
+				)}
+				<a class="primary-action invite" href="/postcard">
+					Invite others <span aria-hidden="true">↗</span>
+				</a>
+			</div>
+		) : (
+			<>
+				<form method="post" class="rsvp-form" data-rsvp-form>
+					<label class="sr-only" for="rsvp-handle">
+						Atmosphere handle
+					</label>
+					<div class="handle-field">
+						<span aria-hidden="true">@</span>
+						<input
+							id="rsvp-handle"
+							name="handle"
+							type="text"
+							value={handle}
+							placeholder="handle"
+							autocomplete="username"
+							required
+						/>
+					</div>
+					<label class="check-row" for="standard-only">
+						<input
+							id="standard-only"
+							name="standardOnly"
+							type="checkbox"
+							value="yes"
+						/>
+						<span>Subscribe via Standard.site</span>
+					</label>
+					<label class="check-row" for="subscribe-news">
+						<input
+							id="subscribe-news"
+							name="subscribeNews"
+							type="checkbox"
+							value="yes"
+						/>
+						<span>Email me news!</span>
+					</label>
+					<span class="news-note">
+						We’ll use the email associated with your Atmosphere account—that's
+						the one you signed up with!{" "}
+						<button
+							class="change-email"
+							type="button"
+							data-change-email
+							aria-controls="newsletter-options"
+							aria-expanded="false"
+						>
+							change me
+						</button>
+					</span>
+					<div id="newsletter-options" class="newsletter-options" hidden>
+						<label for="alternate-email">Send to this other email:</label>
+						<input
+							id="alternate-email"
+							name="alternateEmail"
+							type="email"
+							autocomplete="email"
+						/>
+					</div>
+					<input type="hidden" name="intent" value="confirm" />
+					<button class="primary-action" type="submit">
+						Count me in! <span aria-hidden="true">↗</span>
+					</button>
+				</form>
+			</>
+		)
+	}
+
+	<Fragment slot="footer">
+		<a href="/">← Back to the postcard</a>
+		<span>See you out there. <span aria-hidden="true">♡</span></span>
+	</Fragment>
+</PostcardFrame>
+
+<script>
+	for (const form of document.querySelectorAll<HTMLFormElement>("[data-rsvp-form]")) {
+		const newsCheckbox =
+			form.querySelector<HTMLInputElement>("#subscribe-news");
+		const changeEmailButton = form.querySelector<HTMLButtonElement>(
+			"[data-change-email]",
+		);
+		const newsletterOptions =
+			form.querySelector<HTMLElement>("#newsletter-options");
+		const alternateEmail =
+			form.querySelector<HTMLInputElement>("#alternate-email");
+		const newsletterFields = Array.from(
+			form.querySelectorAll<HTMLInputElement>(".newsletter-options input"),
+		);
+		const syncNewsletterFields = () => {
+			const wantsNews = newsCheckbox?.checked ?? false;
+			const changeRequested =
+				changeEmailButton?.getAttribute("aria-expanded") === "true";
+			const showNewsletterOptions = wantsNews && changeRequested;
+
+			if (newsletterOptions) newsletterOptions.hidden = !showNewsletterOptions;
+			for (const field of newsletterFields) {
+				field.disabled = !showNewsletterOptions;
+			}
+		};
+		newsCheckbox?.addEventListener("change", () => {
+			if (!newsCheckbox.checked && changeEmailButton) {
+				changeEmailButton.setAttribute("aria-expanded", "false");
+			}
+			syncNewsletterFields();
+		});
+		changeEmailButton?.addEventListener("click", () => {
+			if (newsCheckbox) newsCheckbox.checked = true;
+			changeEmailButton.setAttribute("aria-expanded", "true");
+			syncNewsletterFields();
+			alternateEmail?.focus();
+		});
+		syncNewsletterFields();
+	}
+</script>
+
+<style>
+	.rsvp-form {
+		display: grid;
+		gap: 10px;
+	}
+	.handle-field {
+		display: flex;
+		align-items: center;
+		min-height: 48px;
+		padding-inline: 14px;
+		border: 1px solid var(--ink);
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--paper) 78%, white);
+	}
+	.handle-field span {
+		font-weight: 700;
+	}
+	.handle-field input {
+		width: 100%;
+		min-width: 0;
+		padding: 10px 2px;
+		border: 0;
+		outline: 0;
+		background: transparent;
+		color: var(--ink);
+		font-size: 16px;
+	}
+	.check-row {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
+		font-size: 15px;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.check-row input {
+		width: 19px;
+		height: 19px;
+		margin: 0;
+		accent-color: var(--strong);
+	}
+	.news-note {
+		margin: -4px 0 0 28px;
+		font-size: 11px;
+		line-height: 1.35;
+	}
+	.change-email {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--strong);
+		font: inherit;
+		font-weight: 800;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		cursor: pointer;
+	}
+	.newsletter-options {
+		display: none;
+		gap: 6px;
+		padding: 12px;
+		border: 1px dashed color-mix(in srgb, var(--ink) 55%, transparent);
+		border-radius: 12px;
+		background: color-mix(in srgb, var(--mint) 25%, transparent);
+	}
+	.rsvp-form:has(#subscribe-news:checked) .newsletter-options:not([hidden]) {
+		display: grid;
+	}
+	.newsletter-options > label:first-child {
+		font-size: 11px;
+		font-weight: 700;
+	}
+	.newsletter-options > input {
+		min-height: 40px;
+		padding: 8px 10px;
+		border: 1px solid var(--ink);
+		border-radius: 10px;
+		background: var(--paper);
+		color: var(--ink);
+	}
+	.primary-action,
+	.small-action {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 48px;
+		padding: 11px 15px;
+		border: 0;
+		border-radius: 16px;
+		background: var(--strong);
+		color: var(--paper);
+		font-weight: 800;
+	}
+	.primary-action:hover,
+	.small-action:hover {
+		filter: brightness(1.08);
+	}
+	.confirmation {
+		display: grid;
+		gap: 10px;
+	}
+	.confirmation p {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.4;
+	}
+	.inline-action {
+		margin: 0;
+	}
+	.small-action {
+		display: inline-flex;
+		min-height: 38px;
+		padding-inline: 18px;
+		background: var(--mint);
+		color: var(--ink);
+	}
+	.text-action {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--strong);
+		font-size: 12px;
+		font-weight: 800;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.invite {
+		width: 100%;
+		margin-top: 16px;
+		text-decoration: none;
+	}
+	@media (max-width: 660px) {
+		.newsletter-options {
+			padding: 10px;
+		}
+	}
+</style>

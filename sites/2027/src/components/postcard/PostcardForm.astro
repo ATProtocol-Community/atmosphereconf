@@ -2,6 +2,7 @@
 import ComboBox from "../ComboBox.astro";
 import Tooltip from "../Tooltip.astro";
 import { takeSubscriptionResult } from "../lib/subscribe";
+import RotatingSuffix from "./RotatingSuffix.astro";
 const subscriptionResult = await takeSubscriptionResult(
 	Astro.session,
 	Astro.locals.authproto,
@@ -58,14 +59,9 @@ const subscriptionResult = await takeSubscriptionResult(
 			required
 		/>
 		<div class="airmail-email-placeholder">
-			<span class="airmail-prefix-text">you</span><div class="word-wrapper">
-				<div class="suffix-options">
-					<div>@example.com</div>
-					<div>.bsky.social</div>
-					<div>.blacksky.social</div>
-					<div>@example.com</div>
-				</div>
-			</div>
+			<span class="airmail-prefix-text">you</span><RotatingSuffix
+				words={["@example.com", ".bsky.social", ".blacksky.social"]}
+			/>
 		</div>
 	</div>
 	<p class="tip">
@@ -90,14 +86,23 @@ const subscriptionResult = await takeSubscriptionResult(
 	>
 	{
 		subscriptionResult && (
-			<p
-				id="postcard-subscription-result"
-				class="subscription-result"
-				role={subscriptionResult.kind === "success" ? "status" : "alert"}
-				tabindex="-1"
-			>
-				{subscriptionResult.message}
-			</p>
+			<div class="subscription-response">
+				<p
+					id="postcard-subscription-result"
+					class="subscription-result"
+					role={subscriptionResult.kind === "success" ? "status" : "alert"}
+					tabindex="-1"
+				>
+					{subscriptionResult.kind === "success"
+						? "You are in!"
+						: subscriptionResult.message}
+				</p>
+				{subscriptionResult.kind === "success" && (
+					<a class="rsvp-link" href="/rsvp">
+						RSVP here <span aria-hidden="true">→</span>
+					</a>
+				)}
+			</div>
 		)
 	}
 	<input
@@ -407,59 +412,8 @@ const subscriptionResult = await takeSubscriptionResult(
 		z-index: 0;
 		display: flex;
 		height: calc(100% - 20px);
-		--word-height: 18px;
 		height: 100%;
 		align-items: center;
-	}
-
-	.word-wrapper {
-		display: inline-block;
-		height: var(--word-height);
-		overflow: hidden;
-		vertical-align: baseline;
-		margin-top: 1px;
-	}
-
-	.suffix-options {
-		display: flex;
-		flex-direction: column;
-		animation: suffix-slide 3s normal cubic-bezier(0.85, 0, 0.15, 1);
-	}
-
-	.suffix-options > div {
-		height: var(--word-height);
-		line-height: var(--word-height);
-		color: var(--ink);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.suffix-options {
-			animation: none;
-			opacity: 1;
-			transform: none;
-		}
-	}
-
-	@keyframes suffix-slide {
-		0%,
-		15% {
-			transform: translateY(0);
-		}
-		20%,
-		35% {
-			transform: translateY(calc(-1 * var(--word-height)));
-		}
-		40%,
-		55% {
-			transform: translateY(calc(-2 * var(--word-height)));
-		}
-		60%,
-		75% {
-			transform: translateY(calc(-3 * var(--word-height)));
-		}
-		100% {
-			transform: translateY(calc(-3 * var(--word-height)));
-		}
 	}
 
 	:global(#airmail-email)::placeholder {
@@ -507,8 +461,24 @@ const subscriptionResult = await takeSubscriptionResult(
 	.subscription-result {
 		margin: 4px 0 0;
 		font-size: 13px;
+		font-weight: 800;
 		line-height: 1.4;
 		overflow-wrap: anywhere;
+	}
+
+	.subscription-response {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	.rsvp-link {
+		flex: 0 0 auto;
+		font-size: 13px;
+		font-weight: 800;
+		color: var(--strong);
+		text-underline-offset: 3px;
 	}
 
 	.subscribe {

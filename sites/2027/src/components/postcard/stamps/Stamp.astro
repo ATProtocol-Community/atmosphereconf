@@ -10,7 +10,7 @@ interface Props {
 const { stamp } = Astro.props;
 ---
 
-<span class:list={["stamp", stamp.id, stamp.character]} id="selected-stamp" aria-hidden="true">
+<span class:list={["stamp", stamp.id, stamp.character]} data-stamp aria-hidden="true">
 	<span class="stamp-year">{stamp.year}</span>
 	<span class="portrait">
 		<img class="mascot-art" src={mascot.src} alt="" width="792" height="990" />

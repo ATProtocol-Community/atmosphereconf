@@ -1,0 +1,283 @@
+---
+import PostcardFrame from "./PostcardFrame.astro";
+import PostcardHeader from "./PostcardHeader.astro";
+import Stamp from "./stamps/Stamp.astro";
+import { stamps } from "./stamps/stamps";
+
+const defaultMessage = "Meet me at AtmosphereConf 2027!";
+---
+
+<PostcardFrame
+	label="Build an AtmosphereConf postcard"
+	titleId="builder-title"
+>
+		<Fragment slot="postage" />
+
+	<form class="builder-form" data-postcard-builder>
+		<fieldset class="postage-area">
+			<legend class="sr-only">Choose a stamp</legend>
+			<div class="stamp-options">
+				{
+					stamps.map((stamp, index) => (
+						<label class="stamp-option">
+							<input
+								type="radio"
+								name="stamp"
+								value={index}
+								checked={index === 0}
+							/>
+							<span class="postage-slot" aria-hidden="true">
+								<Stamp stamp={stamp} />
+							</span>
+							<span class="stamp-option-art">
+								<Stamp stamp={stamp} />
+							</span>
+							<span class="sr-only">{stamp.name}</span>
+						</label>
+					))
+				}
+			</div>
+			<div class="postage-corner" aria-hidden="true"></div>
+		</fieldset>
+
+		<PostcardHeader id="builder-title" title="Send a postcard" />
+
+		<label class="write-label" for="postcard-message">
+			Write your message
+			<output for="postcard-message" data-message-count>33 / 180</output>
+		</label>
+		<textarea
+			id="postcard-message"
+			name="message"
+			maxlength="180"
+			rows="2"
+			required>{defaultMessage}</textarea
+		>
+
+		<button class="send-action" type="button" data-send-postcard>
+			Send this postcard <span aria-hidden="true">↗</span>
+		</button>
+		<p class="send-status" data-send-status aria-live="polite"></p>
+	</form>
+
+	<Fragment slot="footer">
+		<a href="/rsvp">← Back to RSVP</a>
+		<span>Postage paid in honks.</span>
+	</Fragment>
+</PostcardFrame>
+
+<script>
+	for (const form of document.querySelectorAll<HTMLFormElement>(
+		"[data-postcard-builder]",
+	)) {
+		const message = form.querySelector<HTMLTextAreaElement>("[name='message']");
+		const count = form.querySelector<HTMLOutputElement>("[data-message-count]");
+		const sendButton = form.querySelector<HTMLButtonElement>(
+			"[data-send-postcard]",
+		);
+		const sendStatus = form.querySelector<HTMLElement>("[data-send-status]");
+
+		const updateMessageCount = () => {
+			if (count && message) count.textContent = `${message.value.length} / 180`;
+		};
+		message?.addEventListener("input", updateMessageCount);
+		updateMessageCount();
+
+		sendButton?.addEventListener("click", async () => {
+			if (!message?.reportValidity()) return;
+			const stamp =
+				form.querySelector<HTMLInputElement>('input[name="stamp"]:checked')
+					?.value ?? "0";
+			const postcardUrl = new URL("/postcard/view", window.location.origin);
+			postcardUrl.searchParams.set("stamp", stamp);
+			postcardUrl.searchParams.set("message", message.value.trim());
+			const text = `A postcard for you from AtmosphereConf 2027:\n\n${postcardUrl.href}`;
+
+			try {
+				if (navigator.share) {
+					await navigator.share({ title: "AtmosphereConf 2027", text });
+					return;
+				}
+				await navigator.clipboard.writeText(text);
+				if (sendStatus) sendStatus.textContent = "Postcard link copied.";
+			} catch (error) {
+				if (error instanceof DOMException && error.name === "AbortError")
+					return;
+				if (sendStatus) {
+					sendStatus.textContent = `Copy this link: ${postcardUrl.href}`;
+				}
+			}
+		});
+	}
+</script>
+
+<style>
+	.builder-form {
+		display: flex;
+		min-width: 0;
+		flex-direction: column;
+		--header-space: 12px;
+	}
+
+	.postage-area {
+		position: relative;
+		display: flex;
+		min-width: 0;
+		align-items: start;
+		justify-content: end;
+		gap: 12px;
+		padding: 0;
+		margin: -12px 0 6px;
+		border: 0;
+	}
+	.postage-corner {
+		flex: 0 0 auto;
+		width: var(--postage-width);
+		aspect-ratio: 4 / 5;
+	}
+	.postage-slot {
+		position: absolute;
+		top: 0;
+		right: 0;
+		display: none;
+		width: var(--postage-width);
+		transform: rotate(5deg);
+	}
+	.stamp-option:has(input:checked) .postage-slot {
+		display: block;
+	}
+
+	.stamp-options {
+		display: grid;
+		min-width: 0;
+		flex: 0 1 auto;
+		gap: 5px;
+		grid-template-columns: repeat(5, minmax(0, 40px));
+		margin-top: 12px;
+	}
+	.stamp-option {
+		position: static;
+		min-width: 0;
+		cursor: pointer;
+	}
+	.stamp-option input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+	}
+	.stamp-option-art {
+		display: block;
+		padding: 2px;
+		border: 1px solid transparent;
+		border-radius: 7px;
+		transition: transform 0.15s;
+	}
+
+	.stamp-option-art :global(.stamp) {
+		border-width: 3px;
+		mask:
+			radial-gradient(circle at 50% 0, transparent 2px, #000 2.4px) 0 0 / 8px
+				100%,
+			radial-gradient(circle at 50% 100%, transparent 2px, #000 2.4px) 0 0 / 8px
+				100%,
+			radial-gradient(circle at 0 50%, transparent 2px, #000 2.4px) 0 0 / 100%
+				8px,
+			radial-gradient(circle at 100% 50%, transparent 2px, #000 2.4px) 0 0 /
+				100% 8px;
+		mask-composite: intersect;
+	}
+	.stamp-option-art :global(.stamp-year) {
+		display: none;
+	}
+	.stamp-option:hover .stamp-option-art {
+		transform: translateY(-2px);
+	}
+	.stamp-option input:checked + .postage-slot + .stamp-option-art {
+		border-color: var(--strong);
+		background: var(--butter);
+		box-shadow: inset 0 0 0 1px var(--strong);
+	}
+	.stamp-option input:focus-visible + .postage-slot + .stamp-option-art {
+		outline: 2px solid var(--ink);
+		outline-offset: 2px;
+	}
+
+	.write-label {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 10px;
+		margin-bottom: 5px;
+		font-size: 11px;
+		font-weight: 800;
+	}
+	.write-label output {
+		font-weight: 500;
+		opacity: 0.7;
+	}
+
+	textarea {
+		width: 100%;
+		padding: 11px 13px;
+		border: 1px dashed color-mix(in srgb, var(--ink) 45%, transparent);
+		border-radius: 12px;
+		background: color-mix(in srgb, var(--paper) 62%, white);
+		color: var(--ink);
+		caret-color: var(--strong);
+		cursor: text;
+		font-family: var(--heading-font), "Avenir Next", sans-serif;
+		font-size: clamp(19px, 1.8vw, 26px);
+		font-weight: 550;
+		line-height: 1.25;
+		resize: none;
+		field-sizing: content;
+		min-height: 92px;
+		transition:
+			border-color 0.15s,
+			background-color 0.15s;
+	}
+	textarea:hover {
+		border-color: color-mix(in srgb, var(--ink) 70%, transparent);
+	}
+	textarea:focus-visible {
+		border-style: solid;
+		border-color: var(--strong);
+		background: white;
+		outline: 2px solid var(--strong);
+		outline-offset: 1px;
+	}
+
+	.send-action {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 46px;
+		padding: 10px 15px;
+		margin-top: 12px;
+		border: 0;
+		border-radius: 14px;
+		background: var(--strong);
+		color: var(--paper);
+		font-weight: 800;
+		cursor: pointer;
+	}
+	.send-status {
+		min-height: 1em;
+		margin: 4px 0 0;
+		font-size: 10px;
+		overflow-wrap: anywhere;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.stamp-option-art,
+		textarea {
+			transition: none;
+		}
+	}
+	@media (max-width: 660px) {
+		.stamp-options {
+			grid-template-columns: repeat(5, minmax(0, 44px));
+			gap: 6px;
+		}
+	}
+</style>

@@ -1,0 +1,37 @@
+---
+import RsvpPostcard from "../components/postcard/RsvpPostcard.astro";
+import PostcardLayout from "../layouts/PostcardLayout.astro";
+
+const title = "RSVP — AtmosphereConf 2027";
+const description = "Count yourself in for AtmosphereConf 2027.";
+const loggedInHandle = Astro.locals.loggedInUser?.handle ?? "";
+
+let confirmed = false;
+let handle = loggedInHandle;
+let removedStandard = false;
+let subscribedViaStandard = false;
+
+if (Astro.request.method === "POST") {
+	const formData = await Astro.request.formData();
+	const submittedHandle = formData.get("handle");
+	const intent = formData.get("intent");
+	handle =
+		typeof submittedHandle === "string"
+			? submittedHandle.trim().replace(/^@/, "")
+			: loggedInHandle;
+	confirmed = intent === "confirm" || intent === "unsubscribe";
+	removedStandard = intent === "unsubscribe";
+	subscribedViaStandard =
+		intent === "confirm" &&
+		formData.get("standardOnly") === "yes";
+}
+---
+
+<PostcardLayout title={title} description={description}>
+	<RsvpPostcard
+		confirmed={confirmed}
+		handle={handle}
+		removedStandard={removedStandard}
+		subscribedViaStandard={subscribedViaStandard}
+	/>
+</PostcardLayout>

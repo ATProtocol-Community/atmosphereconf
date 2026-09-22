@@ -1,0 +1,106 @@
+---
+import StampCollection from "./stamps/StampCollection.astro";
+import PostcardPicture from "./PostcardPicture.astro";
+
+interface Props {
+	label: string;
+	titleId: string;
+	class?: string;
+}
+
+const { label, titleId, class: className } = Astro.props;
+---
+
+<article class:list={["mail", className]} id="postcard" aria-label={label}>
+	<PostcardPicture />
+
+	<section class="address" aria-labelledby={titleId}>
+		<slot name="postage">
+			<StampCollection />
+		</slot>
+		<div class="message"><slot /></div>
+		<footer class="signoff"><slot name="footer" /></footer>
+	</section>
+</article>
+
+<style>
+	.mail {
+		/* The stamp corner's geometry is shared with whatever fills the
+		   postage slot. */
+		--postage-width: clamp(78px, 9vw, 112px);
+		position: relative;
+		display: grid;
+		grid-template-columns: 1.15fr 1fr;
+		aspect-ratio: 3 / 2;
+		width: min(1080px, 100%, calc((100dvh - 116px) * 1.5));
+		border: 12px solid var(--paper);
+		border-radius: 3px;
+		background: transparent;
+		box-shadow: 12px 14px 6px color-mix(in srgb, var(--ink) 25%, transparent);
+	}
+
+	.mail::after {
+		position: absolute;
+		inset: -12px;
+		z-index: 1;
+		border-radius: 3px;
+		background: url("/noise.svg") repeat;
+		background-size: 180px 180px;
+		content: "";
+		opacity: 0.35;
+		pointer-events: none;
+	}
+
+	.address {
+		display: flex;
+		min-width: 0;
+		flex-direction: column;
+		padding: 30px clamp(24px, 3.3vw, 48px) 10px;
+		background: var(--paper);
+		box-shadow: 1px 0 0 var(--paper);
+	}
+
+	/* margin-top: auto parks the message against the footer, so the slot
+	   content brings its own breathing room above. */
+	.message {
+		margin-top: auto;
+	}
+
+	.signoff {
+		display: flex;
+		justify-content: space-between;
+		min-height: 14px;
+		margin: 12px 0 0;
+		font-size: 11px;
+	}
+
+	@media (max-width: 900px) {
+		.mail {
+			border-width: 8px;
+		}
+
+		.mail::after {
+			inset: -8px;
+		}
+	}
+
+	@media (max-width: 660px) {
+		.mail {
+			grid-template-columns: 1fr;
+			grid-template-rows: auto auto;
+			width: 100%;
+			height: auto;
+			margin-left: -5px;
+			aspect-ratio: auto;
+			box-shadow: 6px 9px 6px color-mix(in srgb, var(--ink) 25%, transparent);
+		}
+
+		.address {
+			padding: 28px 24px;
+		}
+
+		.mail {
+			--postage-width: 84px;
+		}
+	}
+</style>
