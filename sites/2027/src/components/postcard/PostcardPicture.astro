@@ -33,6 +33,23 @@ import hummingbird from "./hummingbird.png";
 				))
 			}
 		</div>
+		<svg
+			class="distant-windmill"
+			viewBox="0 0 80 100"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<path class="windmill-tower" d="M27 58h26l8 42H19z"></path>
+			<path class="windmill-roof" d="m23 60 17-18 17 18z"></path>
+			<g transform="translate(40 56)">
+				<g class="windmill-sails">
+					<path d="M0-37V37M-37 0h74"></path>
+					<path d="M0-37h8v23H0zm14 37v8h23V0zM0 14h-8v23h8zm-14-14v-8h-23v8z"
+					></path>
+				</g>
+			</g>
+			<circle class="windmill-detail" cx="40" cy="56" r="3"></circle>
+		</svg>
 		<h1 id="headline">
 			<span class="headline-word">Back</span>
 			<span class="last-line"
@@ -43,7 +60,7 @@ import hummingbird from "./hummingbird.png";
 		<div class="destination">
 			<span>Arriving soon</span>
 			<div>
-				Somewhere<br />in Europe <span class="online">(and online)</span>
+				Somewhere<br />in Amsterdam <span class="online">(and online)</span>
 				<span class="destination-arrow" aria-hidden="true">
 					<svg
 						width="24"
@@ -194,6 +211,7 @@ import hummingbird from "./hummingbird.png";
 	}
 
 	.picture {
+		--hill-top: 73%;
 		position: relative;
 		isolation: isolate;
 		overflow: hidden;
@@ -217,7 +235,7 @@ import hummingbird from "./hummingbird.png";
 
 	.grass {
 		position: absolute;
-		top: 73%;
+		top: var(--hill-top);
 		left: -50%;
 		z-index: -2;
 		width: 200%;
@@ -225,6 +243,48 @@ import hummingbird from "./hummingbird.png";
 		background: var(--mint);
 		border-radius: 50%;
 		animation: revolve 70s linear infinite;
+	}
+
+	.distant-windmill {
+		position: absolute;
+		z-index: -1;
+		top: calc(var(--hill-top) + 8cqw);
+		left: 10%;
+		width: clamp(18px, 13cqw, 36px);
+		height: auto;
+		transform: translate(-50%, -100%) rotate(-21deg);
+		pointer-events: none;
+		color: #7e2525;
+	}
+
+	.windmill-tower {
+		fill: #b4483f;
+	}
+
+	.windmill-roof,
+	.windmill-detail {
+		fill: currentColor;
+	}
+
+	.windmill-sails {
+		fill: var(--paper);
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+		transform-box: fill-box;
+		transform-origin: center;
+		transform: rotate(-35deg);
+		animation: windmill-turn 18s linear infinite;
+	}
+
+	@keyframes windmill-turn {
+		from {
+			transform: rotate(-35deg);
+		}
+		to {
+			transform: rotate(325deg);
+		}
 	}
 
 	@keyframes revolve {
@@ -404,10 +464,9 @@ import hummingbird from "./hummingbird.png";
 			margin-top: clamp(32px, 5vw, 45px);
 		}
 
-		.grass {
-			top: 55%;
+		.picture {
+			--hill-top: 55%;
 		}
-
 	}
 
 	@media (max-width: 660px) {
@@ -449,7 +508,8 @@ import hummingbird from "./hummingbird.png";
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.goose {
+		.goose,
+		.windmill-sails {
 			animation: none;
 		}
 	}

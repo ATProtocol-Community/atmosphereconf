@@ -1,19 +1,32 @@
 ---
-import GooseSvg from "./goose.svg";
+import gooseSvg from "./goose.svg?raw";
+
+// SVG fragment references must resolve inside this goose, even when another is hidden.
+function flockSvg(instance: string) {
+	let svg = gooseSvg;
+	for (const [, id] of gooseSvg.matchAll(/id="([^"]+)"/g)) {
+		if (id === "goose-svg") continue;
+		const scopedId = `${instance}-${id}`;
+		svg = svg
+			.replaceAll(`id="${id}"`, `id="${scopedId}"`)
+			.replaceAll(`url(#${id})`, `url(#${scopedId})`);
+	}
+	return svg;
+}
 ---
 
 <div id="pronouns-flock" aria-label="A diverse flock of geese">
 	<div class="flock-goose adult-one">
-		<GooseSvg />
+		<Fragment set:html={flockSvg("adult-one")} />
 	</div>
 	<div class="flock-goose adult-two">
-		<GooseSvg />
+		<Fragment set:html={flockSvg("adult-two")} />
 	</div>
 	<div class="flock-goose gosling-one">
-		<GooseSvg />
+		<Fragment set:html={flockSvg("gosling-one")} />
 	</div>
 	<div class="flock-goose gosling-two">
-		<GooseSvg />
+		<Fragment set:html={flockSvg("gosling-two")} />
 	</div>
 </div>
 
@@ -29,6 +42,7 @@ import GooseSvg from "./goose.svg";
 	}
 
 	.flock-goose {
+		--goose-body-color: var(--goose);
 		position: absolute;
 		bottom: 0;
 		transform-origin: 50% 90%;
