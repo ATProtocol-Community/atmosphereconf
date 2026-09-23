@@ -19,7 +19,19 @@ const { label, titleId, class: className } = Astro.props;
 			<StampCollection />
 		</slot>
 		<div class="message"><slot /></div>
-		<footer class="signoff"><slot name="footer" /></footer>
+		<footer class="signoff">
+			<slot name="footer">
+				<span>See you out there. <span aria-hidden="true">♡</span></span>
+			</slot>
+			<slot name="footer-end">
+				<nav aria-label="AtmosphereConf links">
+					<a href="https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw"
+						>Bluesky</a
+					>
+					<a href="https://news.atmosphereconf.org/">Leaflet</a>
+				</nav>
+			</slot>
+		</footer>
 	</section>
 </article>
 
@@ -77,6 +89,11 @@ const { label, titleId, class: className } = Astro.props;
 		min-height: 14px;
 		margin: 12px 0 0;
 		font-size: 11px;
+	}
+
+	.signoff nav {
+		display: flex;
+		gap: 20px;
 	}
 
 	@media (max-width: 900px) {

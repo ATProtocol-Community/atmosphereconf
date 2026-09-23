@@ -1,22 +1,31 @@
 import type { APIContext } from "astro";
 import { type Client, currentDatetimeString } from "@atproto/lex";
 import { site } from "../../lexicons/index.js";
-import { clientFor, rkeyOf } from "./records";
+import { clientFor } from "./records";
 import { isEmail, saveNewsSubscriber } from "./db";
 
 const subscription = site.standard.graph.subscription;
 export const PUBLICATION =
 	"at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i";
 const SESSION_KEY = "postcardSubscription";
-const LOGIN_ERROR = "Sign-in could not be completed. Try your handle again.";
+// Every failure sends the visitor back to the form to try again.
+export type SignupFailure =
+	| { kind: "sign-in"; detail?: string }
+	| { kind: "check" }
+	| { kind: "subscribe" }
+	| { kind: "bad-email" }
+	| { kind: "save-email" };
 
-type SubscriptionResult =
-	| { kind: "success"; message: string; recordUri?: string }
-	| { kind: "error"; message: string };
+/** What the signup postcard shows. */
+export type SignupCard =
+	| { kind: "form"; failure?: SignupFailure }
+	| { kind: "subscribed"; via: "email" }
+	| { kind: "subscribed"; via: "atmosphere"; already: boolean };
+
 declare global {
 	namespace App {
 		interface SessionData {
-			postcardSubscription: SubscriptionResult;
+			postcardSubscription: SignupCard;
 		}
 	}
 }
@@ -44,12 +53,6 @@ export const ensureSubscription = async (client: Client) => {
 	if (!existing) await createSubscription(client);
 };
 
-export const removeSubscriptions = async (client: Client) => {
-	for (const { uri } of await findSubscriptions(client)) {
-		await client.delete(subscription, { rkey: rkeyOf(uri) });
-	}
-};
-
 const returnToPostcard = () =>
 	new Response(null, {
 		status: 303,
@@ -60,22 +63,27 @@ const returnToPostcard = () =>
 		},
 	});
 
-export async function takeSubscriptionResult(
-	session: APIContext["session"],
-	authproto: App.Locals["authproto"],
-): Promise<SubscriptionResult | undefined> {
+/**
+ * The signup postcard's state: the outcome of a signup that just redirected
+ * back here, shown once, or the plain form.
+ */
+export const signupCard = async ({
+	session,
+	locals,
+}: Pick<APIContext, "session" | "locals">): Promise<SignupCard> => {
+	const { authproto } = locals;
 	if (authproto?.errorCode || authproto?.errorDescription) {
 		session?.delete(SESSION_KEY);
 		return {
-			kind: "error",
-			message: authproto.errorDescription ?? LOGIN_ERROR,
+			kind: "form",
+			failure: { kind: "sign-in", detail: authproto.errorDescription },
 		};
 	}
-	const state = await session?.get(SESSION_KEY);
-	if (!state) return;
+	const card = await session?.get(SESSION_KEY);
+	if (!card) return { kind: "form" };
 	session?.delete(SESSION_KEY);
-	return state;
-}
+	return card;
+};
 
 export const doSubscription = async (
 	session: APIContext["session"],
@@ -88,42 +96,31 @@ export const doSubscription = async (
 		});
 	}
 
-	const fail = (message: string) => {
-		session.set(SESSION_KEY, { kind: "error", message }, { ttl: 600 });
+	const finish = (card: SignupCard) => {
+		session.set(SESSION_KEY, card, { ttl: 600 });
 		return returnToPostcard();
 	};
-	const succeed = (recordUri: string, existing: boolean) => {
-		session.set(
-			SESSION_KEY,
-			{
-				kind: "success",
-				message: existing
-					? "Your Atmosphere account is already subscribed."
-					: "Subscribed with your Atmosphere account. The next postcard knows where to find you.",
-				recordUri,
-			},
-			{ ttl: 600 },
-		);
-		return returnToPostcard();
-	};
+	const fail = (failure: SignupFailure) => finish({ kind: "form", failure });
 	const user = locals.loggedInUser;
 	if (!user || locals.authproto?.errorCode || locals.authproto?.errorDescription) {
-		return fail(LOGIN_ERROR);
+		return fail({ kind: "sign-in" });
 	}
 	const client = clientFor(locals);
-	if (!client) return fail(LOGIN_ERROR);
+	if (!client) return fail({ kind: "sign-in" });
 	let existing: { uri: string } | undefined;
 	try {
 		[existing] = await findSubscriptions(client);
 	} catch {
-		return fail("We couldn't check your subscriptions. Try your handle again.");
+		return fail({ kind: "check" });
 	}
-	if (existing) return succeed(existing.uri, true);
-	try {
-		return succeed(await createSubscription(client), false);
-	} catch {
-		return fail("We couldn't confirm your subscription. Try your handle again.");
+	if (!existing) {
+		try {
+			await createSubscription(client);
+		} catch {
+			return fail({ kind: "subscribe" });
+		}
 	}
+	return finish({ kind: "subscribed", via: "atmosphere", already: !!existing });
 };
 
 /**
@@ -145,7 +142,7 @@ export const doEmailSubscription = async (
 	if (!isEmail(email)) {
 		session.set(
 			SESSION_KEY,
-			{ kind: "error", message: "That email address doesn't look right." },
+			{ kind: "form", failure: { kind: "bad-email" } },
 			{ ttl: 600 },
 		);
 		return returnToPostcard();
@@ -156,14 +153,14 @@ export const doEmailSubscription = async (
 		console.error("Saving news subscriber failed", error);
 		session.set(
 			SESSION_KEY,
-			{ kind: "error", message: "We couldn't save your email. Please try again." },
+			{ kind: "form", failure: { kind: "save-email" } },
 			{ ttl: 600 },
 		);
 		return returnToPostcard();
 	}
 	session.set(
 		SESSION_KEY,
-		{ kind: "success", message: "You're on the list." },
+		{ kind: "subscribed", via: "email" },
 		{ ttl: 600 },
 	);
 	return returnToPostcard();

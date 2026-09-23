@@ -10,8 +10,19 @@ const { id, title, subtitle, as: Heading = "h1" } = Astro.props;
 ---
 
 <header class="postcard-header">
-	<p class="edition">AtmosphereConf #3 <span>April/May 2027</span></p>
-	<Heading id={id} class="title">{title}</Heading>
+	<p class="edition">
+		AtmosphereConf #3 <span>April 29th–May 2nd, 2027 </span>
+	</p>
+	<div class="title-wrap">
+		{
+			Astro.slots.has("decoration") && (
+				<span class="decoration" aria-hidden="true">
+					<slot name="decoration" />
+				</span>
+			)
+		}
+		<Heading id={id} class="title">{title}</Heading>
+	</div>
 	{subtitle && <p class="subtitle">{subtitle}</p>}
 </header>
 
@@ -30,6 +41,34 @@ const { id, title, subtitle, as: Heading = "h1" } = Astro.props;
 	}
 	.edition span {
 		font-weight: 500;
+	}
+	.title-wrap {
+		--decoration-size: clamp(56px, 5.5vw, 76px);
+		position: relative;
+		isolation: isolate;
+	}
+	/* Reserve a lane on the right so the title wraps before the decoration
+	   instead of running under it. */
+	.title-wrap:has(.decoration) {
+		padding-inline-end: calc(var(--decoration-size) * 0.75);
+	}
+	/* Top-aligned so it never drops into the subtitle below. */
+	.decoration {
+		position: absolute;
+		z-index: -1;
+		inset-block-start: 6px;
+		inset-inline-end: 0;
+		rotate: 12deg;
+		/* Opacity, not a translucent color, so icons thickened with a stroke
+		   don't show darker seams where stroke and fill overlap. */
+		color: var(--cancel-stamp);
+		opacity: 0.4;
+		pointer-events: none;
+	}
+	.decoration :global(svg) {
+		display: block;
+		width: var(--decoration-size);
+		height: auto;
 	}
 	.title {
 		margin: 0;

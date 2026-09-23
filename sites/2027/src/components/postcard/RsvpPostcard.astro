@@ -3,29 +3,34 @@ import PostcardFrame from "./PostcardFrame.astro";
 import HandleInput from "./HandleInput.astro";
 import PostcardHeader from "./PostcardHeader.astro";
 import Tooltip from "../Tooltip.astro";
+import type { RsvpCard, RsvpFailure } from "../lib/rsvp";
 import { PUBLICATION } from "../lib/subscribe";
 
 interface Props {
-	confirmed?: boolean;
-	handle?: string;
-	removedStandard?: boolean;
-	subscribedViaStandard?: boolean;
-	newsEmail?: string;
-	newsVia?: "database" | "leaflet";
-	notice?: string;
-	error?: string;
+	card: RsvpCard;
 }
 
-const {
-	confirmed = false,
-	handle = "",
-	removedStandard = false,
-	subscribedViaStandard = false,
-	newsEmail,
-	newsVia,
-	notice,
-	error,
-} = Astro.props;
+const { card } = Astro.props;
+const rsvped = card.kind === "rsvped" ? card : undefined;
+const failure = card.kind === "form" ? card.failure : undefined;
+const failureMessages: Record<
+	Exclude<RsvpFailure["kind"], "sign-in">,
+	string
+> = {
+	"missing-handle": "Enter your Atmosphere handle to RSVP.",
+	save: "We couldn't save your RSVP. Try your handle again.",
+};
+const error =
+	failure?.kind === "sign-in"
+		? (failure.detail ??
+			"Sign-in could not be completed. Try your handle again.")
+		: failure && failureMessages[failure.kind];
+const newsFailures = {
+	"no-email":
+		"We couldn't read your account email, so email news isn't set up.",
+	"bad-email":
+		"That email address doesn't look right, so email news isn't set up.",
+};
 // Leaflet double-decodes this, matching the postcard's email form.
 const newsAction = encodeURIComponent(
 	JSON.stringify({ action: "subscribe", publication: PUBLICATION }),
@@ -34,28 +39,51 @@ const newsAction = encodeURIComponent(
 
 <PostcardFrame
 	label="AtmosphereConf 2027 RSVP postcard"
-	titleId={confirmed ? "confirmation-title" : "rsvp-title"}
+	titleId={rsvped ? "confirmation-title" : "rsvp-title"}
 >
 	<PostcardHeader
-		id={confirmed ? "confirmation-title" : "rsvp-title"}
-		title={confirmed ? "Tot dan!" : "Honk aboard!"}
-		subtitle="RSVP with your Atmosphere account and win an exclusive prize: friends!"
-	/>
+		id={rsvped ? "confirmation-title" : "rsvp-title"}
+		title={rsvped ? "Tot dan!" : "Save the Date, and Honk aboard!"}
+		subtitle="AtmosphereConf 2027 will be in Amsterdam! RSVP below and win an exclusive prize: friends!"
+	>
+		{
+			!rsvped && (
+				<svg
+					slot="decoration"
+					width="1024"
+					height="1024"
+					viewBox="0 0 1024 1024"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+						fill="currentColor"
+						d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32m-40 656H184V460h656zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136z"
+					/>
+				</svg>
+			)
+		}
+	</PostcardHeader>
 	{
-		confirmed ? (
+		rsvped ? (
 			<div class="confirmation" data-confirmation>
 				<p>We have your handle and are not afraid to use it.</p>
-				{notice && (
-					<p class="receipt-note" role="status">
-						{notice}
-					</p>
-				)}
-				{newsEmail && newsVia === "database" && (
+				{rsvped.standard === "subscribed" && (
 					<p>
-						We'll send email news to <strong>{newsEmail}</strong>.
+						We also subscribed you via <strong>Standard.site</strong>, as a
+						treat.
 					</p>
 				)}
-				{newsEmail && newsVia === "leaflet" && (
+				{rsvped.standard === "failed" && (
+					<p class="receipt-note" role="status">
+						We couldn't set up your Standard.site subscription.
+					</p>
+				)}
+				{rsvped.news?.kind === "stored" && (
+					<p>
+						We'll send email news to <strong>{rsvped.news.email}</strong>.
+					</p>
+				)}
+				{rsvped.news?.kind === "leaflet-step" && (
 					<form
 						class="inline-action news-step"
 						action="https://leaflet.pub/api/auth/email-login"
@@ -63,9 +91,9 @@ const newsAction = encodeURIComponent(
 					>
 						<p>
 							One more step for email news: we'll send a code to{" "}
-							<strong>{newsEmail}</strong>.
+							<strong>{rsvped.news.email}</strong>.
 						</p>
-						<input type="hidden" name="email" value={newsEmail} />
+						<input type="hidden" name="email" value={rsvped.news.email} />
 						<input type="hidden" name="action" value={newsAction} />
 						<input
 							type="hidden"
@@ -77,35 +105,10 @@ const newsAction = encodeURIComponent(
 						</button>
 					</form>
 				)}
-				{removedStandard ? (
+				{rsvped.news?.kind === "failed" && (
 					<p class="receipt-note" role="status">
-						Standard.site subscription removed.
+						{newsFailures[rsvped.news.reason]}
 					</p>
-				) : subscribedViaStandard ? (
-					<>
-						<p>
-							We also subscribed you via <strong>Standard.site</strong>, as a
-							treat.
-						</p>
-						<form method="post" class="inline-action">
-							<input type="hidden" name="handle" value={handle} />
-							<input type="hidden" name="intent" value="unsubscribe" />
-							<button type="submit" class="text-action">
-								Remove that subscription
-							</button>
-						</form>
-					</>
-				) : (
-					<>
-						<p>Let us join your other Standard.site subscriptions?</p>
-						<form method="post" class="inline-action">
-							<input type="hidden" name="handle" value={handle} />
-							<input type="hidden" name="intent" value="subscribe" />
-							<button type="submit" class="postcard-action small-action">
-								I’m in
-							</button>
-						</form>
-					</>
 				)}
 				<a class="postcard-action invite" href="/postcard">
 					Invite others <span aria-hidden="true">↗</span>
@@ -119,10 +122,17 @@ const newsAction = encodeURIComponent(
 							{error}
 						</p>
 					)}
-					<label class="sr-only" for="rsvp-handle">
-						Atmosphere handle
-					</label>
-					<HandleInput id="rsvp-handle" name="handle" value={handle} required />
+					<div class="handle-row">
+						<label class="handle-label" for="rsvp-handle">
+							RSVP as<span class="sr-only"> your Atmosphere handle</span>:
+						</label>
+						<HandleInput
+							id="rsvp-handle"
+							name="handle"
+							value={card.handle}
+							required
+						/>
+					</div>
 					{/* The tooltip trigger sits outside the <label> so clicking it
 					    doesn't toggle the checkbox; aria-label restores the full name. */}
 					<div class="check-row standard-row">
@@ -131,20 +141,21 @@ const newsAction = encodeURIComponent(
 							name="standardOnly"
 							type="checkbox"
 							value="yes"
-							aria-label="Subscribe via Standard.site"
+							aria-label="Also subscribe via Standard.site"
 						/>
 						<span>
-							<label for="standard-only">Subscribe via</label>{" "}
+							<label for="standard-only">Get updates via</label>{" "}
 							<Tooltip
 								id="rsvp-standard-tooltip"
 								label="Standard.site"
 								class="standard"
 								blockAnchor="--standard-row"
-								>An open format for publishing on the Atmosphere. Subscribe
-								once, and our posts show up in any reader that speaks it, like{" "}
-								<a href="https://leaflet.pub/reader">Leaflet</a> or{" "}
-								<a href="https://pckt.blog/read">pckt</a>.</Tooltip
 							>
+								An open format for publishing on the Atmosphere. Subscribe once,
+								and our posts show up in any reader that speaks it, like{" "}
+								<a href="https://leaflet.pub/reader">Leaflet</a> or{" "}
+								<a href="https://pckt.blog/read">pckt</a>.
+							</Tooltip>
 						</span>
 					</div>
 					<label class="check-row" for="subscribe-news">
@@ -157,8 +168,7 @@ const newsAction = encodeURIComponent(
 						<span>Email me news!</span>
 					</label>
 					<span class="news-note">
-						We’ll use the email associated with your Atmosphere account—that's
-						the one you signed up with!{" "}
+						We’ll use your Atmosphere email—the one you signed up with!{" "}
 						<button
 							class="change-email"
 							type="button"
@@ -181,33 +191,32 @@ const newsAction = encodeURIComponent(
 							autocomplete="email"
 						/>
 					</div>
-					<input type="hidden" name="intent" value="confirm" />
-					<button class="postcard-action" type="submit">
-						Count me in! <span aria-hidden="true">↗</span>
-					</button>
-					<a class="postcard-action secondary" href="/postcard">
-						Invite your friends <span aria-hidden="true">→</span>
-					</a>
+					<div class="form-actions">
+						<a class="form-actions-link" href="/">
+							Just the news, please! <span aria-hidden="true">→</span>
+						</a>
+						<button class="postcard-action small-action" type="submit">
+							I'll be there! <span aria-hidden="true">↗</span>
+						</button>
+					</div>
 				</form>
 			</>
 		)
 	}
-
-	<Fragment slot="footer">
-		<a href="/" data-no-flip>← Back to the postcard</a>
-		<span>See you out there. <span aria-hidden="true">♡</span></span>
-	</Fragment>
 </PostcardFrame>
 
 <script>
-	for (const form of document.querySelectorAll<HTMLFormElement>("[data-rsvp-form]")) {
+	for (const form of document.querySelectorAll<HTMLFormElement>(
+		"[data-rsvp-form]",
+	)) {
 		const newsCheckbox =
 			form.querySelector<HTMLInputElement>("#subscribe-news");
 		const changeEmailButton = form.querySelector<HTMLButtonElement>(
 			"[data-change-email]",
 		);
-		const newsletterOptions =
-			form.querySelector<HTMLElement>("#newsletter-options");
+		const newsletterOptions = form.querySelector<HTMLElement>(
+			"#newsletter-options",
+		);
 		const alternateEmail =
 			form.querySelector<HTMLInputElement>("#alternate-email");
 		const newsletterFields = Array.from(
@@ -241,6 +250,38 @@ const newsAction = encodeURIComponent(
 </script>
 
 <style>
+	/* The row wears the field's border so "RSVP as:" reads as a prefix
+	   inside it; the input itself goes borderless. */
+	.handle-row {
+		display: flex;
+		align-items: center;
+		padding-left: 15px;
+		border: 1px solid var(--ink);
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--paper) 78%, white);
+	}
+	.handle-row:has(input:focus-visible) {
+		outline: 1px solid var(--ink);
+	}
+	.handle-row > :global(.handle-input) {
+		flex: 1;
+		min-width: 0;
+	}
+	.handle-row :global(.postcard-field) {
+		min-height: 48px;
+		border-color: transparent;
+		background: transparent;
+	}
+	.handle-row :global(.postcard-field:focus-visible) {
+		outline: none;
+	}
+	.handle-label {
+		flex: none;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
+		font-size: 15px;
+		font-weight: 800;
+		cursor: text;
+	}
 	.check-row {
 		display: flex;
 		align-items: center;
@@ -250,7 +291,10 @@ const newsAction = encodeURIComponent(
 		font-weight: 700;
 		cursor: pointer;
 	}
+	/* The form's 10px gap spaces rows within a group; these add room
+	   between the handle, the extras, and the actions. */
 	.standard-row {
+		margin-top: 6px;
 		anchor-name: --standard-row;
 	}
 	/* The trigger is rendered by <Tooltip>, so it carries that component's
@@ -266,14 +310,39 @@ const newsAction = encodeURIComponent(
 		font-weight: 800;
 		text-underline-offset: 2px;
 	}
+	/* Drawn by hand so the box takes the palette's colors; the native
+	   checkbox stays a bright white square on every theme. */
 	.check-row input {
-		width: 19px;
-		height: 19px;
+		flex: none;
+		display: grid;
+		place-content: center;
+		width: 16px;
+		height: 16px;
 		margin: 0;
-		accent-color: var(--strong);
+		border: 1.5px solid color-mix(in srgb, var(--ink) 70%, transparent);
+		border-radius: 5px;
+		background: transparent;
+		appearance: none;
+		cursor: pointer;
+		transition:
+			background-color 140ms ease,
+			border-color 140ms ease;
+	}
+	.check-row input:hover {
+		border-color: var(--strong);
+	}
+	.check-row input:checked {
+		border-color: var(--strong);
+		background: var(--strong)
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+			center / 100% no-repeat;
+	}
+	.check-row input:focus-visible {
+		outline: 2px solid var(--strong);
+		outline-offset: 2px;
 	}
 	.news-note {
-		margin: -4px 0 0 28px;
+		margin: -4px 0 0 25px;
 		font-size: 11px;
 		line-height: 1.35;
 	}
@@ -325,24 +394,6 @@ const newsAction = encodeURIComponent(
 		font-size: 13px;
 		font-weight: 800;
 		line-height: 1.4;
-	}
-	.small-action {
-		display: inline-flex;
-		min-height: 40px;
-		padding-block: 8px;
-		padding-inline: 18px;
-		background: var(--mint);
-		color: var(--ink);
-	}
-	.text-action {
-		padding: 0;
-		border: 0;
-		background: transparent;
-		color: var(--strong);
-		font-size: 12px;
-		font-weight: 800;
-		text-decoration: underline;
-		text-underline-offset: 3px;
 	}
 	.invite {
 		margin-top: 16px;

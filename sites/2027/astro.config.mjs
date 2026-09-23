@@ -54,7 +54,6 @@ export default defineConfig({
       scopes: {
         additionalScopes: [
           "repo:site.standard.graph.subscription?action=create",
-          "repo:site.standard.graph.subscription?action=delete",
           "repo:community.lexicon.calendar.rsvp?action=create",
           "account:email",
         ],

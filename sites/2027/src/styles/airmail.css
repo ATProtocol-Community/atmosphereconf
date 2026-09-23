@@ -244,6 +244,34 @@ main {
 	gap: 10px;
 }
 
+/* A form's last row: the way to the other card on the left, the submit
+   button on the right. wrap-reverse keeps the button on top when the row
+   is too narrow for both. */
+.form-actions {
+	display: flex;
+	flex-wrap: wrap-reverse;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px 16px;
+	margin-top: 12px;
+}
+
+.form-actions > .postcard-action {
+	margin-inline-start: auto;
+}
+
+.form-actions-link {
+	color: var(--strong);
+	font-size: 14px;
+	font-weight: 800;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.form-actions-link:hover {
+	text-decoration-thickness: 2px;
+}
+
 .postcard-field {
 	width: 100%;
 	min-width: 0;
@@ -289,6 +317,43 @@ main {
 	border: 2px solid var(--strong);
 	background: transparent;
 	color: var(--strong);
+}
+
+/* Quieter action for secondary submits. The dashed inset frame nods to a
+   stamp or mailing label without shouting. */
+.postcard-action.small-action {
+	--fill: var(--mint);
+	display: inline-flex;
+	gap: 8px;
+	min-height: 40px;
+	padding-block: 8px;
+	padding-inline: 18px;
+	background: var(--fill);
+	color: var(--ink);
+	outline: 1.5px dashed color-mix(in srgb, currentColor 45%, transparent);
+	outline-offset: -5px;
+	transition: transform 160ms ease;
+}
+
+.postcard-action.small-action:focus-visible {
+	outline: 2px solid var(--strong);
+	outline-offset: 2px;
+}
+
+.postcard-action.small-action:hover {
+	transform: rotate(-1.5deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.postcard-action.small-action {
+		transition: none;
+	}
+}
+
+/* --mint is a gradient in this palette, which pink text can't sit on. */
+body[data-palette="fujocoded"] .postcard-action.small-action {
+	--fill: #4d2e91;
+	color: var(--paper);
 }
 
 .postcard-action > [aria-hidden="true"] {

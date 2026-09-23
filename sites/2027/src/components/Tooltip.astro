@@ -71,11 +71,11 @@ const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor
 		text-underline-offset: 3px;
 		cursor: help;
 		anchor-name: var(--tooltip-anchor);
-		/* Wait a second on hover so passing over the text doesn't pop it open,
+		/* Wait a beat on hover so passing over the text doesn't pop it open,
 		   then linger briefly so the pointer can reach the tooltip. Duplicated
 		   as a custom property for the polyfill. */
-		interest-delay: 1s 120ms;
-		--interest-delay: 1s 120ms;
+		interest-delay: 200ms 120ms;
+		--interest-delay: 200ms 120ms;
 	}
 
 	.tooltip-button:focus-visible {

@@ -1,39 +1,15 @@
 ---
 import RsvpPostcard from "../components/postcard/RsvpPostcard.astro";
-import {
-	readRsvpRequest,
-	startRsvp,
-	takeRsvpResult,
-} from "../components/lib/rsvp";
+import { rsvpPage } from "../components/lib/rsvp";
 import PostcardLayout from "../layouts/PostcardLayout.astro";
 
 const title = "RSVP — AtmosphereConf 2027";
 const description = "Count yourself in for AtmosphereConf 2027.";
-const loggedInHandle = Astro.locals.loggedInUser?.handle ?? "";
 
-let formError: string | undefined;
-if (Astro.request.method === "POST") {
-	const request = readRsvpRequest(
-		await Astro.request.formData(),
-		loggedInHandle,
-	);
-	if (request) return startRsvp(Astro, request);
-	formError = "Enter your Atmosphere handle to RSVP.";
-}
-
-const result = await takeRsvpResult(Astro);
-const confirmation = result?.kind === "confirmed" ? result : undefined;
+const card = await rsvpPage(Astro);
+if (card instanceof Response) return card;
 ---
 
 <PostcardLayout title={title} description={description}>
-	<RsvpPostcard
-		confirmed={!!confirmation}
-		handle={confirmation?.handle ?? loggedInHandle}
-		removedStandard={confirmation?.subscription === "removed"}
-		subscribedViaStandard={confirmation?.subscription === "subscribed"}
-		newsEmail={confirmation?.newsEmail}
-		newsVia={confirmation?.newsVia}
-		notice={confirmation?.notice}
-		error={result?.kind === "error" ? result.message : formError}
-	/>
+	<RsvpPostcard card={card} />
 </PostcardLayout>
