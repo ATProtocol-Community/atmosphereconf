@@ -211,7 +211,22 @@ const newsAction = encodeURIComponent(
 								id="alternate-email-error"
 								class="field-error"
 								aria-live="polite"
-							></p>
+								hidden
+							>
+								<span data-error-missing>
+									Add an email here, or{" "}
+									<button
+										class="change-email"
+										type="button"
+										data-use-account-email
+									>
+										use your account’s after all</button
+									>.
+								</span>
+								<span data-error-invalid>
+									That doesn’t look like an email address.
+								</span>
+							</p>
 						</div>
 					</div>
 					<div class="form-actions">
@@ -239,7 +254,8 @@ const newsAction = encodeURIComponent(
 		const changeEmailButton = form.querySelector<HTMLButtonElement>(
 			"[data-change-email]",
 		);
-		const useAccountButton = form.querySelector<HTMLButtonElement>(
+		// One in the note, one inside the "add an email" error.
+		const useAccountButtons = form.querySelectorAll<HTMLButtonElement>(
 			"[data-use-account-email]",
 		);
 		const newsletterOptions = form.querySelector<HTMLElement>(
@@ -250,28 +266,36 @@ const newsAction = encodeURIComponent(
 		const emailError = form.querySelector<HTMLElement>(
 			"#alternate-email-error",
 		);
+		const missingError = form.querySelector<HTMLElement>(
+			"[data-error-missing]",
+		);
+		const invalidError = form.querySelector<HTMLElement>(
+			"[data-error-invalid]",
+		);
 		if (
 			!newsCheckbox ||
 			!accountNote ||
 			!otherNote ||
 			!changeEmailButton ||
-			!useAccountButton ||
 			!newsletterOptions ||
 			!alternateEmail ||
-			!emailError
+			!emailError ||
+			!missingError ||
+			!invalidError
 		) {
 			continue;
 		}
 
 		let wantsOtherEmail = false;
 		const showError = () => {
-			emailError.textContent = alternateEmail.validity.valueMissing
-				? "Add an email here, or use your account’s after all."
-				: "That doesn’t look like an email address.";
+			const missing = alternateEmail.validity.valueMissing;
+			missingError.hidden = !missing;
+			invalidError.hidden = missing;
+			emailError.hidden = false;
 			alternateEmail.setAttribute("aria-invalid", "true");
 		};
 		const clearError = () => {
-			emailError.textContent = "";
+			emailError.hidden = true;
 			alternateEmail.removeAttribute("aria-invalid");
 		};
 		const syncNewsletterFields = () => {
@@ -297,13 +321,14 @@ const newsAction = encodeURIComponent(
 			syncNewsletterFields();
 			alternateEmail.focus();
 		});
-		useAccountButton.addEventListener("click", () => {
-			wantsOtherEmail = false;
-			alternateEmail.value = "";
-			syncNewsletterFields();
-			// The same spot now offers "change me", so focus lands where it was.
-			changeEmailButton.focus();
-		});
+		for (const button of useAccountButtons) {
+			button.addEventListener("click", () => {
+				wantsOtherEmail = false;
+				syncNewsletterFields();
+				// The note's spot now offers "change me", so focus lands there.
+				changeEmailButton.focus();
+			});
+		}
 		// Complain only once they've left the field, and stop as soon as they
 		// start fixing it.
 		alternateEmail.addEventListener("blur", () => {
@@ -375,6 +400,10 @@ const newsAction = encodeURIComponent(
 		padding: 14px 15px;
 		border-radius: 16px;
 		background: color-mix(in srgb, var(--mint) 30%, transparent);
+	}
+	/* --mint is a gradient in this palette, which color-mix() can't take. */
+	:global(body[data-palette="fujocoded"]) .extras {
+		background: color-mix(in srgb, #9687fa 20%, transparent);
 	}
 	.standard-row {
 		anchor-name: --standard-row;
@@ -462,10 +491,6 @@ const newsAction = encodeURIComponent(
 		font-size: 12px;
 		font-weight: 800;
 		line-height: 1.35;
-	}
-	/* Keeps the panel's gap from reserving a blank row while there's no error. */
-	.field-error:empty {
-		display: none;
 	}
 	.confirmation {
 		display: grid;
