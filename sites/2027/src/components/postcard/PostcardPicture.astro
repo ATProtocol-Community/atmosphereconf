@@ -2,6 +2,13 @@
 import GooseSvg from "./goose.svg";
 import PronounsGoose from "./PronounsGoose.astro";
 import hummingbird from "./hummingbird.png";
+
+interface Props {
+	/** The goose's waffle shines like the sun. */
+	sunny?: boolean;
+}
+
+const { sunny = false } = Astro.props;
 ---
 
 <section class="picture" aria-labelledby="headline">
@@ -19,7 +26,7 @@ import hummingbird from "./hummingbird.png";
 				height={hummingbird.height}
 			/>
 
-			<GooseSvg />
+			<GooseSvg data-shiny={sunny || undefined} />
 			<PronounsGoose />
 		</div>
 		<div class="grass">

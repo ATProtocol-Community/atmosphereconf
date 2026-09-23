@@ -1,0 +1,28 @@
+---
+import type { Words } from "../lib/outcomes";
+
+interface Props {
+	words: Words;
+}
+
+// Buttons re-send the RSVP with their extra ticked, so they only work inside
+// the RSVP postcard's follow-up form. Styling comes from that postcard.
+const fieldFor = { standard: "standardOnly", news: "subscribeNews" } as const;
+const { words } = Astro.props;
+---
+
+{
+	words.map((word) =>
+		typeof word === "string" ? (
+			word
+		) : "strong" in word ? (
+			<strong>{word.strong}</strong>
+		) : "link" in word ? (
+			<a href={word.href}>{word.link}</a>
+		) : (
+			<button class="change-email" name={fieldFor[word.add]} value="yes">
+				{word.label}
+			</button>
+		),
+	)
+}
