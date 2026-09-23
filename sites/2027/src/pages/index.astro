@@ -1,12 +1,14 @@
 ---
 import SignupPostcard from "../components/postcard/SignupPostcard.astro";
+import { signupCard } from "../components/lib/subscribe";
 import PostcardLayout from "../layouts/PostcardLayout.astro";
 
 const title = "Back At It — AtmosphereConf #3";
 const description =
 	"AtmosphereConf #3. Spring 2027. Somewhere in Amsterdam (and online).";
+const card = await signupCard(Astro);
 ---
 
 <PostcardLayout title={title} description={description}>
-	<SignupPostcard />
+	<SignupPostcard card={card} />
 </PostcardLayout>

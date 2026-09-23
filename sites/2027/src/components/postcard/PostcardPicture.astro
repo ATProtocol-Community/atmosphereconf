@@ -1,5 +1,4 @@
 ---
-import goose from "./goose.png";
 import GooseSvg from "./goose.svg";
 import PronounsGoose from "./PronounsGoose.astro";
 import hummingbird from "./hummingbird.png";
@@ -9,18 +8,15 @@ import hummingbird from "./hummingbird.png";
 	<div class="picture-layout">
 		<p class="air-label">The 100% unofficial gathering of atmospherizens</p>
 		<div class="goose-route" aria-hidden="true">
-			<!-- Old goose (png) is included here -->
+			<!-- Colibri's hummingbird has no SVG version, so it's a plain image. -->
 			<img
 				class="goose"
 				id="goose-img"
-				data-images={JSON.stringify({
-					default: goose.src,
-					colibri: hummingbird.src,
-				})}
-				src={goose.src}
+				data-images={JSON.stringify({ colibri: hummingbird.src })}
+				src={hummingbird.src}
 				alt=""
-				width="725"
-				height="681"
+				width={hummingbird.width}
+				height={hummingbird.height}
 			/>
 
 			<GooseSvg />
@@ -406,6 +402,7 @@ import hummingbird from "./hummingbird.png";
 	.destination .online {
 		font-size: 0.84rem;
 		letter-spacing: -0.4px;
+		white-space: nowrap;
 	}
 
 	.destination-arrow {
@@ -430,13 +427,25 @@ import hummingbird from "./hummingbird.png";
 		justify-content: center;
 	}
 
+	/* Pick the art from the palette, which is on <body> before the first
+	   frame. ThemeSwitcher's syncGoose only runs once the page has parsed,
+	   too late for the page flip's snapshot. */
 	.goose {
-		display: block;
+		display: none;
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
 		transform-origin: 50% 90%;
 		animation: stride 0.65s ease-in-out infinite alternate;
+	}
+
+	:global(body[data-palette="colibri"]) .goose {
+		display: block;
+	}
+
+	:global(body[data-palette="colibri"]) #goose-svg,
+	:global(body[data-palette="pronouns"]) #goose-svg {
+		display: none;
 	}
 
 	@keyframes stride {

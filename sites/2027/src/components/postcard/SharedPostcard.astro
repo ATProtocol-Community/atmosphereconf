@@ -30,8 +30,8 @@ const { message, stamp } = Astro.props;
 
 	<Fragment slot="footer">
 		<a href="/postcard">Make your own</a>
-		<span>Postage paid in honks.</span>
 	</Fragment>
+	<span slot="footer-end">Postage paid in honks.</span>
 </PostcardFrame>
 
 <style>
