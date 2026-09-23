@@ -40,7 +40,10 @@ const { id, name, value, required } = Astro.props;
 	)) {
 		combobox.addEventListener("combobox-search", (e) => {
 			const detail = (
-				e as CustomEvent<{ query: string; results: Promise<ActorSuggestion[]> | null }>
+				e as CustomEvent<{
+					query: string;
+					results: Promise<ActorSuggestion[]> | null;
+				}>
 			).detail;
 			detail.results = searchActors((detail.query ?? "").trim());
 		});
@@ -106,7 +109,7 @@ const { id, name, value, required } = Astro.props;
 		padding: 8px 10px;
 	}
 
-	.handle-input :global(.cmb-listbox li:hover) {
+	.handle-input :global(.cmb-listbox li[aria-selected="true"]) {
 		background: var(--butter);
 		border-radius: var(--rounding);
 	}
