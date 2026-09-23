@@ -148,12 +148,14 @@ const featuredStamp = stamps[0];
 		gap: 12px;
 		width: 100%;
 		margin-left: auto;
-		margin-top: -17px;
-		margin-right: -22px;
+		/* Keeps the rotated stamp's corners on the card and gives the header
+		   below some air. */
+		padding: 8px 8px 0 0;
+		margin-bottom: 20px;
 	}
 
 	.postmark-group {
-		--postmark-width: clamp(120px, 18vw, 165px);
+		--postmark-width: clamp(92px, 14vw, 127px);
 		position: relative;
 		display: flex;
 		flex: 1 1 auto;
@@ -167,7 +169,7 @@ const featuredStamp = stamps[0];
 		position: absolute;
 		z-index: 100;
 		right: 60px;
-		bottom: -32px;
+		bottom: -8px;
 		pointer-events: none;
 	}
 
@@ -208,11 +210,12 @@ const featuredStamp = stamps[0];
 	.current-stamp-wrap {
 		flex-shrink: 0;
 		margin-left: 0;
+		translate: 0 -12px;
 		text-align: center;
 	}
 
 	.current-stamp {
-		--stamp-size: clamp(100px, 15vw, 150px);
+		--stamp-size: clamp(80px, 11vw, 115px);
 		display: block;
 		width: var(--stamp-size);
 		padding: 0;

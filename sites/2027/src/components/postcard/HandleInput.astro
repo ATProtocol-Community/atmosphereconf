@@ -1,5 +1,6 @@
 ---
 import ComboBox from "../ComboBox.astro";
+import HandleIcon from "./HandleIcon.astro";
 import RotatingSuffix from "./RotatingSuffix.astro";
 
 interface Props {
@@ -22,7 +23,9 @@ const { id, name, value, required } = Astro.props;
 		placeholder="you.example.com"
 		label="Atmosphere handle"
 		required={required}
-	/>
+	>
+		<HandleIcon slot="leading-icon" />
+	</ComboBox>
 	<div class="handle-placeholder" aria-hidden="true">
 		<span>you</span><RotatingSuffix
 			words={[".example.com", ".bsky.social", ".blacksky.social"]}
@@ -53,9 +56,10 @@ const { id, name, value, required } = Astro.props;
 	}
 
 	/* Painted over the input so the suffix can rotate; clicks pass through. */
+	/* Lines up with the input text, which ComboBox pads past the leading icon. */
 	.handle-placeholder {
 		position: absolute;
-		left: 15px;
+		left: 37px;
 		top: 50%;
 		z-index: 2;
 		display: flex;
@@ -69,6 +73,18 @@ const { id, name, value, required } = Astro.props;
 
 	.handle-input:has(input:not(:placeholder-shown)) .handle-placeholder {
 		opacity: 0;
+	}
+
+	.handle-input :global(.cmb-leading) {
+		z-index: 2;
+		color: var(--ink);
+	}
+
+	/* The icon is a filled shape, so a matching stroke is what thickens it. */
+	.handle-input :global(.cmb-leading path) {
+		stroke: currentColor;
+		stroke-width: 1.5;
+		stroke-linejoin: round;
 	}
 
 	.handle-input :global(.cmb-input) {
