@@ -37,6 +37,9 @@ const { label, titleId, class: className } = Astro.props;
 		border-radius: 3px;
 		background: transparent;
 		box-shadow: 12px 14px 6px color-mix(in srgb, var(--ink) 25%, transparent);
+		/* Pairs this card with the next page's card so the page transition
+		   in airmail.css can flip one into the other. */
+		view-transition-name: postcard;
 	}
 
 	.mail::after {
@@ -55,7 +58,9 @@ const { label, titleId, class: className } = Astro.props;
 		display: flex;
 		min-width: 0;
 		flex-direction: column;
-		padding: 30px clamp(24px, 3.3vw, 48px) 10px;
+		/* The card's paper border already pads the right edge, so that side
+		   needs less of its own. */
+		padding: 30px clamp(14px, 1.8vw, 28px) 10px clamp(24px, 3.3vw, 48px);
 		background: var(--paper);
 		box-shadow: 1px 0 0 var(--paper);
 	}
@@ -81,6 +86,16 @@ const { label, titleId, class: className } = Astro.props;
 
 		.mail::after {
 			inset: -8px;
+		}
+	}
+
+	/* The card still shrinks with the viewport height, but its content
+	   needs ~660px of height whatever its width, so below a certain width it
+	   only gets narrow and tall. Stop shrinking there and let the page
+	   scroll instead. */
+	@media (min-width: 661px) and (max-height: 840px) {
+		.mail {
+			width: min(1080px, 100%, max(880px, calc((100dvh - 124px) * 1.5)));
 		}
 	}
 

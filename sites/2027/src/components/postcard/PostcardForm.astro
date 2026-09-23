@@ -2,14 +2,26 @@
 import ComboBox from "../ComboBox.astro";
 import Tooltip from "../Tooltip.astro";
 import { takeSubscriptionResult } from "../lib/subscribe";
+import { hasDatabase } from "../lib/db";
 import RotatingSuffix from "./RotatingSuffix.astro";
 const subscriptionResult = await takeSubscriptionResult(
 	Astro.session,
 	Astro.locals.authproto,
 );
+// With a database, emails stay here; otherwise Leaflet collects them.
+const emailAction = hasDatabase
+	? "/subscribe"
+	: "https://leaflet.pub/api/auth/email-login";
+const emailMethod = hasDatabase ? "post" : "get";
 ---
 
-<form action="https://leaflet.pub/api/auth/email-login" method="get">
+<form
+	class="postcard-form"
+	action={emailAction}
+	method={emailMethod}
+	data-email-action={emailAction}
+	data-email-method={emailMethod}
+>
 	<fieldset class="segmented">
 		<input id="method-email" name="method" type="radio" value="email" checked />
 		<label class="segmented-option" for="method-email">
@@ -53,6 +65,7 @@ const subscriptionResult = await takeSubscriptionResult(
 		<ComboBox
 			id="airmail-email"
 			name="email"
+			inputClass="postcard-field"
 			autocomplete="username webauthn email"
 			placeholder="you@example.com"
 			label="login text"
@@ -81,8 +94,11 @@ const subscriptionResult = await takeSubscriptionResult(
 			unlocks countless apps and website—no matter which got you first.</Tooltip
 		>, our news reaches you all across the web.
 	</p>
-	<button class="subscribe" type="submit"
+	<button class="postcard-action" type="submit"
 		>Keep me posted <span aria-hidden="true">↗</span></button
+	>
+	<a class="postcard-action secondary" href="/rsvp"
+		>RSVP now <span aria-hidden="true">→</span></a
 	>
 	{
 		subscriptionResult && (
@@ -117,20 +133,7 @@ const subscriptionResult = await takeSubscriptionResult(
 	/>
 </form>
 <script>
-	type Actor = {
-		handle: string;
-		displayName?: string;
-		avatar?: string;
-	};
-	type Suggestion = {
-		value: string;
-		label?: string;
-		sublabel?: string;
-		avatar?: string;
-	};
-
-	const SEARCH_ACTORS_URL =
-		"https://public.api.bsky.app/xrpc/app.bsky.actor.searchActorsTypeahead";
+	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
 
 	const emailInput = document.getElementById(
 		"airmail-email",
@@ -211,21 +214,6 @@ const subscriptionResult = await takeSubscriptionResult(
 		combobox.toggleAttribute("disable-suggestions", disableSuggestions);
 	};
 
-	const searchBskyActors = async (q: string): Promise<Suggestion[]> => {
-		const url = new URL(SEARCH_ACTORS_URL);
-		url.searchParams.set("q", q);
-		url.searchParams.set("limit", "8");
-		const res = await fetch(url, { headers: { accept: "application/json" } });
-		if (!res.ok) return [];
-		const data = (await res.json()) as { actors?: Actor[] };
-		return (data.actors ?? []).map((a) => ({
-			value: a.handle,
-			label: a.displayName || a.handle,
-			sublabel: `@${a.handle}`,
-			avatar: a.avatar,
-		}));
-	};
-
 	const combobox = emailInput?.closest("cmb-combobox");
 	// emailInput?.addEventListener("input", setMethodFromInput);
 	const handleEmailSelection = () => {
@@ -246,11 +234,11 @@ const subscriptionResult = await takeSubscriptionResult(
 	setSuffixFromMethod(false);
 	combobox?.addEventListener("combobox-search", (e) => {
 		const detail = (
-			e as CustomEvent<{ query: string; results: Promise<Suggestion[]> | null }>
+			e as CustomEvent<{ query: string; results: Promise<ActorSuggestion[]> | null }>
 		).detail;
 		const query = (detail?.query ?? "").trim();
 		try {
-			detail.results = searchBskyActors(query);
+			detail.results = searchActors(query);
 		} catch {
 			// Keep form usable if search event detail is immutable for this environment.
 		}
@@ -269,10 +257,10 @@ const subscriptionResult = await takeSubscriptionResult(
 		const identifier = emailInput.value.trim();
 		const isHandle = detectMethod(identifier) === "handle";
 		// Reset every field even when returning with Back or changing methods.
-		form.setAttribute("method", isHandle ? "post" : "get");
+		form.setAttribute("method", isHandle ? "post" : form.dataset.emailMethod!);
 		form.setAttribute(
 			"action",
-			isHandle ? "/oauth/login" : "https://leaflet.pub/api/auth/email-login",
+			isHandle ? "/oauth/login" : form.dataset.emailAction!,
 		);
 		emailInput.name = isHandle ? "atproto-id" : "email";
 		emailInput.value = isHandle ? identifier.replace(/^@/, "") : identifier;
@@ -288,8 +276,6 @@ const subscriptionResult = await takeSubscriptionResult(
 </script>
 <style>
 	form {
-		display: grid;
-		gap: 6px;
 		--rounding: 16px;
 	}
 
@@ -403,15 +389,15 @@ const subscriptionResult = await takeSubscriptionResult(
 
 	.airmail-email-placeholder {
 		position: absolute;
-		left: 12px;
+		left: 15px;
 		top: 50%;
 		transform: translateY(-50%);
 		color: var(--ink);
 		opacity: 0.65;
 		pointer-events: none;
-		z-index: 0;
+		/* Above the input, which now has its own fill; clicks pass through. */
+		z-index: 2;
 		display: flex;
-		height: calc(100% - 20px);
 		height: 100%;
 		align-items: center;
 	}
@@ -427,16 +413,8 @@ const subscriptionResult = await takeSubscriptionResult(
 	}
 
 	:global(#airmail-email) {
-		width: 100%;
-		min-width: 0;
-		min-height: 50px;
-		padding: 10px 12px;
-		border: 1px solid var(--ink);
-		background-color: transparent;
 		appearance: none;
 		-webkit-appearance: none;
-		color: var(--ink);
-		font-size: 16px;
 		position: relative;
 		z-index: 1;
 	}
@@ -453,13 +431,16 @@ const subscriptionResult = await takeSubscriptionResult(
 
 	.tip {
 		position: relative;
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.4;
 		font-weight: normal;
 		/* Narrow-screen anchor: tooltips span the paragraph, as they did in flow. */
 		anchor-name: --tip;
 	}
 
 	.subscription-result {
-		margin: 4px 0 0;
+		margin: 0;
 		font-size: 13px;
 		font-weight: 800;
 		line-height: 1.4;
@@ -479,23 +460,5 @@ const subscriptionResult = await takeSubscriptionResult(
 		font-weight: 800;
 		color: var(--strong);
 		text-underline-offset: 3px;
-	}
-
-	.subscribe {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		min-height: 50px;
-		padding: 12px 16px;
-		border: 0;
-		border-radius: var(--rounding);
-		background: var(--strong);
-		color: var(--paper);
-		font-size: 14px;
-		font-weight: 750;
-	}
-
-	.subscribe span {
-		font-size: 24px;
 	}
 </style>

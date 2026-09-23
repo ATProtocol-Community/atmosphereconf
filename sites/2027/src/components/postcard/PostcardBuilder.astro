@@ -13,7 +13,7 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 >
 		<Fragment slot="postage" />
 
-	<form class="builder-form" data-postcard-builder>
+	<form class="postcard-form builder-form" data-postcard-builder>
 		<fieldset class="postage-area">
 			<legend class="sr-only">Choose a stamp</legend>
 			<div class="stamp-options">
@@ -42,26 +42,27 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 
 		<PostcardHeader id="builder-title" title="Send a postcard" />
 
-		<label class="write-label" for="postcard-message">
+		<label class="postcard-label write-label" for="postcard-message">
 			Write your message
 			<output for="postcard-message" data-message-count>33 / 180</output>
 		</label>
 		<textarea
 			id="postcard-message"
+			class="postcard-field"
 			name="message"
 			maxlength="180"
 			rows="2"
 			required>{defaultMessage}</textarea
 		>
 
-		<button class="send-action" type="button" data-send-postcard>
+		<button class="postcard-action" type="button" data-send-postcard>
 			Send this postcard <span aria-hidden="true">↗</span>
 		</button>
 		<p class="send-status" data-send-status aria-live="polite"></p>
 	</form>
 
 	<Fragment slot="footer">
-		<a href="/rsvp">← Back to RSVP</a>
+		<a href="/rsvp" data-no-flip>← Back to RSVP</a>
 		<span>Postage paid in honks.</span>
 	</Fragment>
 </PostcardFrame>
@@ -113,10 +114,9 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 
 <style>
 	.builder-form {
-		display: flex;
 		min-width: 0;
-		flex-direction: column;
-		--header-space: 12px;
+		/* The form's own gap adds 10px, matching the other cards' 26px. */
+		--header-space: 16px;
 	}
 
 	.postage-area {
@@ -127,7 +127,7 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 		justify-content: end;
 		gap: 12px;
 		padding: 0;
-		margin: -12px 0 6px;
+		margin: -12px 0 -4px;
 		border: 0;
 	}
 	.postage-corner {
@@ -208,9 +208,6 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 		align-items: baseline;
 		justify-content: space-between;
 		gap: 10px;
-		margin-bottom: 5px;
-		font-size: 11px;
-		font-weight: 800;
 	}
 	.write-label output {
 		font-weight: 500;
@@ -218,12 +215,6 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 	}
 
 	textarea {
-		width: 100%;
-		padding: 11px 13px;
-		border: 1px dashed color-mix(in srgb, var(--ink) 45%, transparent);
-		border-radius: 12px;
-		background: color-mix(in srgb, var(--paper) 62%, white);
-		color: var(--ink);
 		caret-color: var(--strong);
 		cursor: text;
 		font-family: var(--heading-font), "Avenir Next", sans-serif;
@@ -233,44 +224,20 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 		resize: none;
 		field-sizing: content;
 		min-height: 92px;
-		transition:
-			border-color 0.15s,
-			background-color 0.15s;
-	}
-	textarea:hover {
-		border-color: color-mix(in srgb, var(--ink) 70%, transparent);
-	}
-	textarea:focus-visible {
-		border-style: solid;
-		border-color: var(--strong);
-		background: white;
-		outline: 2px solid var(--strong);
-		outline-offset: 1px;
 	}
 
-	.send-action {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		min-height: 46px;
-		padding: 10px 15px;
-		margin-top: 12px;
-		border: 0;
-		border-radius: 14px;
-		background: var(--strong);
-		color: var(--paper);
-		font-weight: 800;
-		cursor: pointer;
-	}
 	.send-status {
-		min-height: 1em;
-		margin: 4px 0 0;
-		font-size: 10px;
+		margin: 0;
+		font-size: 13px;
+		font-weight: 800;
 		overflow-wrap: anywhere;
 	}
+	/* Stays in the DOM for the live region, without claiming a gap. */
+	.send-status:empty {
+		margin-top: -10px;
+	}
 	@media (prefers-reduced-motion: reduce) {
-		.stamp-option-art,
-		textarea {
+		.stamp-option-art {
 			transition: none;
 		}
 	}
