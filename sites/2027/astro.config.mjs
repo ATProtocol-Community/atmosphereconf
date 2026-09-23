@@ -16,6 +16,7 @@ const { SESSION_DIR: sessionDir } = loadEnv(
 
 // https://astro.build/config
 export default defineConfig({
+	site: "https://atmosphereconf.org",
   output: "server",
   env: {
     schema: {

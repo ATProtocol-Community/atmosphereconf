@@ -11,6 +11,7 @@ import { envField } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
+	site: "https://2026.atmosphereconf.org",
   devToolbar: {
     enabled: process.env.PLAYWRIGHT !== "1",
   },
