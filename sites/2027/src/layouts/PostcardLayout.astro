@@ -95,6 +95,16 @@ const clouds = [
 				}
 			});
 		</script>
+		<slot name="head" />
+		<script is:inline>
+			// After the head slot, so a page can read the previous visit
+			// before this overwrites it with the current one.
+			try {
+				localStorage.setItem("2027:last-visit", new Date().toISOString());
+			} catch {
+				// no storage access, nothing to remember
+			}
+		</script>
 	</head>
 	<body data-palette="sky" data-direction="editorial">
 		<script is:inline>

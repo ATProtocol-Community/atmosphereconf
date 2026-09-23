@@ -10,5 +10,19 @@ const card = await signupCard(Astro);
 ---
 
 <PostcardLayout title={title} description={description}>
+	<Fragment slot="head">
+		<script is:inline>
+			// First-time visitors see the RSVP card before the homepage. It's
+			// done here rather than as a server redirect so link previews and
+			// crawlers (which never keep state) still get the homepage.
+			try {
+				if (!localStorage.getItem("2027:last-visit")) {
+					location.replace("/rsvp");
+				}
+			} catch {
+				// no storage access, so no way to do it only once: skip it
+			}
+		</script>
+	</Fragment>
 	<SignupPostcard card={card} />
 </PostcardLayout>

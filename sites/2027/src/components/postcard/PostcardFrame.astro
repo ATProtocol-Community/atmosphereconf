@@ -6,13 +6,15 @@ interface Props {
 	label: string;
 	titleId: string;
 	class?: string;
+	/** The goose's waffle shines like the sun. */
+	sunny?: boolean;
 }
 
-const { label, titleId, class: className } = Astro.props;
+const { label, titleId, class: className, sunny } = Astro.props;
 ---
 
 <article class:list={["mail", className]} id="postcard" aria-label={label}>
-	<PostcardPicture />
+	<PostcardPicture sunny={sunny} />
 
 	<section class="address" aria-labelledby={titleId}>
 		<slot name="postage">

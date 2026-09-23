@@ -2,8 +2,13 @@ import type { APIContext } from "astro";
 import type { Client } from "@atproto/lex";
 import { com, community } from "../../lexicons/index.js";
 import { clientFor } from "./records";
-import { ensureSubscription } from "./subscribe";
-import { hasDatabase, isEmail, saveNewsSubscriber } from "./db";
+import {
+	ensureSubscription,
+	type NewsOutcome,
+	returnTo,
+	signUpForNews,
+	unavailable,
+} from "./subscribe";
 
 const rsvp = community.lexicon.calendar.rsvp;
 // Placeholder until the AtmosphereConf 2027 event record is published. Swap
@@ -20,6 +25,7 @@ const RSVP_SCOPES = {
 	email: "account:email",
 };
 const REQUEST_KEY = "rsvpRequest";
+const CARD_KEY = "rsvpCard";
 
 type RsvpRequest = {
 	handle: string;
@@ -34,30 +40,27 @@ export type RsvpFailure =
 	| { kind: "sign-in"; detail?: string }
 	| { kind: "save" };
 
-export type NewsOutcome =
-	| { kind: "stored"; email: string }
-	// The visitor still has to confirm through Leaflet.
-	| { kind: "leaflet-step"; email: string }
-	| { kind: "failed"; reason: "no-email" | "bad-email" };
-
 /**
  * What the RSVP postcard shows. Once the RSVP is saved, the extras the
  * visitor asked for report their own outcomes; a failed extra doesn't undo
  * the RSVP.
  */
+export type RsvpReceipt = {
+	kind: "rsvped";
+	handle: string;
+	standard?: "subscribed" | "failed";
+	news?: NewsOutcome;
+};
+
 export type RsvpCard =
 	| { kind: "form"; handle: string; failure?: RsvpFailure }
-	| {
-			kind: "rsvped";
-			handle: string;
-			standard?: "subscribed" | "failed";
-			news?: NewsOutcome;
-	  };
+	| RsvpReceipt;
 
 declare global {
 	namespace App {
 		interface SessionData {
 			rsvpRequest: RsvpRequest;
+			rsvpCard: RsvpCard;
 		}
 	}
 }
@@ -104,12 +107,7 @@ const scopesFor = (request: RsvpRequest) => [
  */
 const startRsvp = async (context: RsvpContext, request: RsvpRequest) => {
 	const { session, locals } = context;
-	if (!session) {
-		return new Response("RSVPs are temporarily unavailable. Please try again.", {
-			status: 503,
-			headers: { "Cache-Control": "no-store" },
-		});
-	}
+	if (!session) return unavailable("RSVPs");
 	session.set(REQUEST_KEY, request, { ttl: 600 });
 	const scopes = scopesFor(request);
 	const user = locals.loggedInUser;
@@ -162,17 +160,7 @@ const setUpNews = async (
 ): Promise<NewsOutcome> => {
 	const email = request.alternateEmail ?? (await readAccountEmail(client));
 	if (!email) return { kind: "failed", reason: "no-email" };
-	if (!isEmail(email)) return { kind: "failed", reason: "bad-email" };
-	if (hasDatabase) {
-		try {
-			await saveNewsSubscriber({ email, did: user.did, handle: user.handle });
-			return { kind: "stored", email };
-		} catch (error) {
-			// Leaflet's step still gets them on a list.
-			console.error("Saving news subscriber failed", error);
-		}
-	}
-	return { kind: "leaflet-step", email };
+	return signUpForNews({ email, did: user.did, handle: user.handle });
 };
 
 const completeRsvp = async (
@@ -190,7 +178,7 @@ const completeRsvp = async (
 		return { kind: "form", handle: request.handle, failure: { kind: "save" } };
 	}
 
-	const card: RsvpCard = { kind: "rsvped", handle: user.handle };
+	const card: RsvpReceipt = { kind: "rsvped", handle: user.handle };
 	if (request.standard) {
 		try {
 			await ensureSubscription(client);
@@ -204,8 +192,9 @@ const completeRsvp = async (
 };
 
 /**
- * Runs the RSVP page: a submitted form starts sign-in (returning the
- * Response to send), and the return trip from sign-in finishes the RSVP.
+ * Runs the RSVP page: a submitted form starts sign-in, and the return trip
+ * from sign-in finishes the RSVP. Both redirect back here (returning the
+ * Response to send) so the outcome shows once and a refresh starts fresh.
  * Anything else is the postcard to render.
  */
 export const rsvpPage = async (
@@ -213,17 +202,22 @@ export const rsvpPage = async (
 ): Promise<Response | RsvpCard> => {
 	const { session, locals } = context;
 	const signedInHandle = locals.loggedInUser?.handle ?? "";
+	const show = (card: RsvpCard) => {
+		if (!session) return unavailable("RSVPs");
+		session.set(CARD_KEY, card, { ttl: 600 });
+		return returnTo("/rsvp");
+	};
 	if (context.request.method === "POST") {
 		const request = readRsvpRequest(
 			await context.request.formData(),
 			signedInHandle,
 		);
 		if (request) return startRsvp(context, request);
-		return {
+		return show({
 			kind: "form",
 			handle: signedInHandle,
 			failure: { kind: "missing-handle" },
-		};
+		});
 	}
 
 	const request = await session?.get(REQUEST_KEY);
@@ -235,9 +229,12 @@ export const rsvpPage = async (
 			failure: { kind: "sign-in", detail: locals.authproto.errorDescription },
 		};
 	}
-	if (!request || !locals.loggedInUser) {
-		return { kind: "form", handle: signedInHandle };
+	if (request && locals.loggedInUser) {
+		session?.delete(REQUEST_KEY);
+		return show(await completeRsvp(request, locals, locals.loggedInUser));
 	}
-	session?.delete(REQUEST_KEY);
-	return completeRsvp(request, locals, locals.loggedInUser);
+	const card = await session?.get(CARD_KEY);
+	if (!card) return { kind: "form", handle: signedInHandle };
+	session?.delete(CARD_KEY);
+	return card;
 };
