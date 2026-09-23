@@ -7,9 +7,10 @@ import type { StampDefinition } from "./stamps/stamps";
 interface Props {
 	message: string;
 	stamp: StampDefinition;
+	sharedBy?: string;
 }
 
-const { message, stamp } = Astro.props;
+const { message, stamp, sharedBy } = Astro.props;
 ---
 
 <PostcardFrame
@@ -23,6 +24,9 @@ const { message, stamp } = Astro.props;
 		id="shared-postcard-title"
 		title="A postcard for you"
 	/>
+	{sharedBy && (
+		<div class="sender">Sent by <b>@{sharedBy}</b></div>
+	)}
 	<blockquote>{message}</blockquote>
 	<a class="rsvp-action" href="/rsvp">
 		RSVP with me <span aria-hidden="true">↗</span>
@@ -64,5 +68,8 @@ const { message, stamp } = Astro.props;
 		color: var(--paper);
 		font-weight: 800;
 		text-decoration: none;
+	}
+	.sender {
+		margin-bottom: 1rem;
 	}
 </style>
