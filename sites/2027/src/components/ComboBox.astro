@@ -4,6 +4,7 @@ interface Props {
 	name: string;
 	label: string;
 	placeholder?: string;
+	value?: string;
 	inputClass?: string;
 	disabled?: boolean;
 	required?: boolean;
@@ -25,6 +26,7 @@ const {
 	name,
 	label,
 	placeholder,
+	value,
 	inputClass,
 	disabled = false,
 	required,
@@ -53,6 +55,7 @@ const hintId = `${id}-hint`;
 			class:list={["cmb-input", inputClass]}
 			disabled={disabledAttr}
 			placeholder={placeholder}
+			value={value}
 			role="combobox"
 			aria-autocomplete="list"
 			aria-expanded="false"

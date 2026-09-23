@@ -26,11 +26,13 @@ const { words, duration = 3000 } = Astro.props;
 		if (reduceMotion.matches) continue;
 
 		const suffixes = rotator.querySelector(".suffix-options");
-		const firstSuffix = suffixes?.firstElementChild;
 		const count = suffixes?.children.length ?? 0;
-		if (!suffixes || !firstSuffix || count < 2) continue;
+		if (!suffixes || count < 2) continue;
 
-		const wordHeight = firstSuffix.getBoundingClientRect().height;
+		// Percentages of the column's own height, not measured pixels: a
+		// measurement taken before the web font swaps in is off by a pixel or
+		// so per word, and the drift left the final word sitting low.
+		const wordHeight = 100 / count;
 		const transitions = count - 1;
 		const segment = 0.6 / transitions;
 		const keyframes: Keyframe[] = [{ offset: 0, transform: "translateY(0)" }];
@@ -39,23 +41,26 @@ const { words, duration = 3000 } = Astro.props;
 			keyframes.push(
 				{
 					offset: segment * (index + 0.75),
-					transform: `translateY(${-index * wordHeight}px)`,
+					transform: `translateY(${-index * wordHeight}%)`,
+					// Eases each slide on its own. Easing the whole timeline
+					// instead squeezes every slide into the curve's steep middle,
+					// where they snap rather than scroll.
+					easing: "cubic-bezier(0.85, 0, 0.15, 1)",
 				},
 				{
 					offset: segment * (index + 1),
-					transform: `translateY(${-(index + 1) * wordHeight}px)`,
+					transform: `translateY(${-(index + 1) * wordHeight}%)`,
 				},
 			);
 		}
 
 		keyframes.push({
 			offset: 1,
-			transform: `translateY(${-transitions * wordHeight}px)`,
+			transform: `translateY(${-transitions * wordHeight}%)`,
 		});
 
 		suffixes.animate(keyframes, {
 			duration: Number(rotator.dataset.duration) || 3000,
-			easing: "cubic-bezier(0.85, 0, 0.15, 1)",
 			fill: "forwards",
 		});
 	}
@@ -69,7 +74,6 @@ const { words, duration = 3000 } = Astro.props;
 		height: var(--word-height);
 		overflow: hidden;
 		vertical-align: baseline;
-		margin-top: 1px;
 	}
 
 	.suffix-options {

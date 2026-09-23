@@ -46,6 +46,8 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 	const tail = root.querySelector<SVGGElement>("[data-goose-tail]");
 	const tailRestTransform = tail?.getAttribute("transform") ?? "";
 	if (tail) body.prepend(tail);
+	const glasses = root.querySelector<SVGGElement>("[data-goose-glasses]");
+	if (glasses) body.append(glasses);
 	const runner = root.querySelector<SVGGElement>("[data-goose-runner]");
 	const arm = root.querySelector<SVGGElement>("[data-goose-running-arm]");
 	if (runner) body.append(runner);
