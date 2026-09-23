@@ -11,11 +11,9 @@ import {
 } from "./subscribe";
 
 const rsvp = community.lexicon.calendar.rsvp;
-// Placeholder until the AtmosphereConf 2027 event record is published. Swap
-// both values for the real event's strongRef.
 const EVENT = {
-	uri: "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/community.lexicon.calendar.event/atmosphereconf2027",
-	cid: "bafyreigwhmc4gfdaypya4ufsqigaf7gitcwgmx2sybitmc6uw5z44rtamm",
+	uri: "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/community.lexicon.calendar.event/3mw74r4r3gsej",
+	cid: "bafyreihykrqz27n6uundgzqpt7rd3m5fbq2hprk53pbwbol5wuvommicbu",
 } as const;
 // Every scope here must also be declared in astro.config.mjs, or authproto
 // silently drops it from the login request.
