@@ -48,6 +48,11 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 	if (tail) body.prepend(tail);
 	const glasses = root.querySelector<SVGGElement>("[data-goose-glasses]");
 	if (glasses) body.append(glasses);
+	// The waffle's glow spreads past the art's clip, so it stays outside it
+	// and copies the body's motion. The glint sits on the waffle itself.
+	const shine = root.querySelector<SVGGElement>("[data-goose-shine]");
+	const glint = root.querySelector<SVGGElement>("[data-goose-glint]");
+	if (glint) body.append(glint);
 	const runner = root.querySelector<SVGGElement>("[data-goose-runner]");
 	const arm = root.querySelector<SVGGElement>("[data-goose-running-arm]");
 	if (runner) body.append(runner);
@@ -63,6 +68,7 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 
 	const reset = () => {
 		for (const part of motionParts) part.removeAttribute("transform");
+		shine?.removeAttribute("transform");
 		arm?.removeAttribute("transform");
 		if (tailRestTransform) tail?.setAttribute("transform", tailRestTransform);
 		else tail?.removeAttribute("transform");
@@ -102,6 +108,7 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 		const roll = gait.lean + gait.roll * Math.sin(2 * Math.PI * t);
 		const bodyMotion = `translate(${sway.toFixed(2)} ${bob.toFixed(2)}) rotate(${roll.toFixed(2)} ${gait.pivot[0]} ${gait.pivot[1]})`;
 		body.setAttribute("transform", bodyMotion);
+		shine?.setAttribute("transform", bodyMotion);
 		// Let the tail lag behind each step without changing its authored placement.
 		const bodyVelocity = previousBob === null || dt === 0 ? 0 : (bob - previousBob) / dt;
 		previousBob = bob;

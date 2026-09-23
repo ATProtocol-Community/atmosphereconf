@@ -150,7 +150,7 @@ jobs:
           script: |
             const marker = '<!-- railway-preview -->';
             const envName = 'pr-${{ github.event.pull_request.number }}';
-            const domain = `conf-demo-pr-${{ github.event.pull_request.number }}.up.railway.app`;
+            const domain = `atmosphereconf-2027-pr-${{ github.event.pull_request.number }}.up.railway.app`;
 
 
             const { data: comments } = await github.rest.issues.listComments({

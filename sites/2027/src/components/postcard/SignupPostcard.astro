@@ -2,36 +2,17 @@
 import PostcardForm from "./PostcardForm.astro";
 import PostcardFrame from "./PostcardFrame.astro";
 import PostcardHeader from "./PostcardHeader.astro";
-import type { SignupCard, SignupFailure } from "../lib/subscribe";
+import type { SignupCard } from "../lib/subscribe";
+import { signupError, signupReceipt } from "../lib/outcomes";
 
 interface Props {
 	card: SignupCard;
 }
 
 const { card } = Astro.props;
-const failureMessages: Record<
-	Exclude<SignupFailure["kind"], "sign-in">,
-	string
-> = {
-	check: "We couldn't check your subscriptions. Try your handle again.",
-	subscribe: "We couldn't confirm your subscription. Try your handle again.",
-	"bad-email": "That email address doesn't look right.",
-	"save-email": "We couldn't save your email. Please try again.",
-};
-const failure = card.kind === "form" ? card.failure : undefined;
 const error =
-	failure?.kind === "sign-in"
-		? (failure.detail ??
-			"Sign-in could not be completed. Try your handle again.")
-		: failure && failureMessages[failure.kind];
-const receipt =
-	card.kind !== "subscribed"
-		? undefined
-		: card.via === "email"
-			? "You're on the list."
-			: card.already
-				? "Your Atmosphere account is already subscribed."
-				: "Subscribed with your Atmosphere account. The next postcard knows where to find you.";
+	card.kind === "form" && card.failure ? signupError(card.failure) : undefined;
+const receipt = card.kind === "subscribed" ? signupReceipt(card) : undefined;
 ---
 
 <PostcardFrame label="A postcard from AtmosphereConf" titleId="signup-title">

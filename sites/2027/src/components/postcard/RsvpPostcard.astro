@@ -3,8 +3,14 @@ import PostcardFrame from "./PostcardFrame.astro";
 import HandleInput from "./HandleInput.astro";
 import PostcardHeader from "./PostcardHeader.astro";
 import Tooltip from "../Tooltip.astro";
-import type { RsvpCard, RsvpFailure } from "../lib/rsvp";
-import { PUBLICATION } from "../lib/subscribe";
+import type { RsvpCard } from "../lib/rsvp";
+import {
+	RSVP_TITLE,
+	rsvpError,
+	rsvpFollowUp,
+	rsvpReceipt,
+} from "../lib/outcomes";
+import Words from "./Words.astro";
 
 interface Props {
 	card: RsvpCard;
@@ -12,39 +18,22 @@ interface Props {
 
 const { card } = Astro.props;
 const rsvped = card.kind === "rsvped" ? card : undefined;
-const failure = card.kind === "form" ? card.failure : undefined;
-const failureMessages: Record<
-	Exclude<RsvpFailure["kind"], "sign-in">,
-	string
-> = {
-	"missing-handle": "Enter your Atmosphere handle to RSVP.",
-	save: "We couldn't save your RSVP. Try your handle again.",
-};
+const lines = rsvped ? rsvpReceipt(rsvped) : undefined;
 const error =
-	failure?.kind === "sign-in"
-		? (failure.detail ??
-			"Sign-in could not be completed. Try your handle again.")
-		: failure && failureMessages[failure.kind];
-const newsFailures = {
-	"no-email":
-		"We couldn't read your account email, so email news isn't set up.",
-	"bad-email":
-		"That email address doesn't look right, so email news isn't set up.",
-};
-// Leaflet double-decodes this, matching the postcard's email form.
-const newsAction = encodeURIComponent(
-	JSON.stringify({ action: "subscribe", publication: PUBLICATION }),
-);
+	card.kind === "form" && card.failure ? rsvpError(card.failure) : undefined;
 ---
 
 <PostcardFrame
 	label="AtmosphereConf 2027 RSVP postcard"
 	titleId={rsvped ? "confirmation-title" : "rsvp-title"}
+	sunny={!!rsvped}
 >
 	<PostcardHeader
 		id={rsvped ? "confirmation-title" : "rsvp-title"}
-		title={rsvped ? "Tot dan!" : "RSVP, Save the Date, Honk aboard!"}
-		subtitle="AtmosphereConf 2027 will be in Amsterdam. RSVP below for an exclusive prize: friends!"
+		title={rsvped ? RSVP_TITLE : "RSVP, Save the Date, Honk aboard!"}
+		subtitle={rsvped
+			? "We’re all a-gaggle with excitement, and can’t wait to welcome you with open wings. Are these goosebumps I feel?"
+			: "AtmosphereConf 2027 will be in Amsterdam. RSVP below for an exclusive prize: friends!"}
 	>
 		{
 			!rsvped && (
@@ -62,63 +51,81 @@ const newsAction = encodeURIComponent(
 				</svg>
 			)
 		}
+		{
+			rsvped && (
+				<svg
+					slot="decoration"
+					width="512"
+					height="512"
+					viewBox="20 -30 580 580"
+					fill="currentColor"
+					class="goose-popper"
+					style="width: 73.5px"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<!-- The mask cuts a thin gap around the goose so the beak reads as
+					     clamping the popper instead of merging into it. -->
+					<defs>
+						<mask id="goose-popper-gap" maskUnits="userSpaceOnUse" x="20" y="-30" width="580" height="580">
+							<rect x="20" y="-30" width="580" height="580" fill="#fff" />
+							<use href="#goose-popper-goose" fill="#000" stroke="#000" stroke-width="14" stroke-linejoin="round" />
+						</mask>
+					</defs>
+					<path
+						id="goose-popper-goose"
+						d="M370.019 18.023c-2.843-.035-5.859.197-9.075.73c-81.664 13.54-38.657 142.295-36.095 217.397c-84.163-16.327-168.007 121.048-289.118 152.787c58.086 52.473 206.05 89.6 331.739 11.85c39.804-24.622 45.26-92.014 34.343-165.049c-6.703-44.845-71.755-133.176-10.269-141.266l.611-.504c12.884-10.608 16.606-23.842 22.522-37.699l1.699-3.976c-11.688-16.016-23.17-33.986-46.357-34.27m5.08 19.625a9 9 0 0 1 9 9a9 9 0 0 1-9 9a9 9 0 0 1-9-9a9 9 0 0 1 9-9m52.703 34.172c-3.28 8.167-7.411 17.45-14.612 26.293c21.035 7.63 41.929 3.078 63.079-.863c-15.515-9.272-32.003-18.195-48.467-25.43m-89.608 181.053c19.109 25.924 21.374 53.965 11.637 78.183s-30.345 44.797-55.67 60.49c-50.65 31.389-121.288 44.45-170.553 17.11l8.735-15.738c40.364 22.4 106.342 11.833 152.338-16.67c22.997-14.252 40.72-32.684 48.449-51.906s6.596-39.053-9.426-60.79zM273.28 456.322a333 333 0 0 1-19.095 3.232l-3.508 16.426h-13.084l3.508-14.842a400 400 0 0 1-18.852 1.506l-7.408 31.336h95.79v-18h-41.548z"
+					/>
+					<g mask="url(#goose-popper-gap)">
+						<path
+							transform="translate(445.43 121.84) rotate(-22) scale(6) translate(-5 -21)"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="m5.658 11.002l-1.47 3.308c-1.856 4.174-2.783 6.261-1.77 7.274s3.098.085 7.272-1.77L13 18.342c2.517-1.119 3.776-1.678 3.976-2.757s-.774-2.053-2.722-4l-1.838-1.839c-1.947-1.948-2.921-2.922-4-2.721c-1.079.2-1.638 1.459-2.757 3.976M6.5 10.5l7 7m-9-2l4 4M16 8l3-3m2.876 1h-.125M22 6a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0m-1.124 7.25h-.125m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0m-2.875-11H18m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0m-7.124 1H11m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0M14.198 2c.4.667.718 2.4-1.197 4M22 9.803c-.666-.4-2.4-.719-4 1.197"
+						/>
+					</g>
+				</svg>
+			)
+		}
 	</PostcardHeader>
 	{
 		rsvped ? (
 			<div class="confirmation" data-confirmation>
-				<p>We have your handle and are not afraid to use it.</p>
-				{rsvped.standard === "subscribed" && (
-					<p>
-						We also subscribed you via <strong>Standard.site</strong>, as a
-						treat.
-					</p>
-				)}
-				{rsvped.standard === "failed" && (
-					<p class="receipt-note" role="status">
-						We couldn't set up your Standard.site subscription.
-					</p>
-				)}
-				{rsvped.news?.kind === "stored" && (
-					<p>
-						We'll send email news to <strong>{rsvped.news.email}</strong>.
-					</p>
-				)}
-				{rsvped.news?.kind === "leaflet-step" && (
-					<form
-						class="inline-action news-step"
-						action="https://leaflet.pub/api/auth/email-login"
-						method="get"
-					>
-						<p>
-							One more step for email news: we'll send a code to{" "}
-							<strong>{rsvped.news.email}</strong>.
+				<ul class="checklist">
+					{lines
+						?.filter(({ tone }) => tone !== "failed")
+						.map(({ words, tone, action }) => (
+							<li class={tone}>
+								<span><Words words={words} /></span>
+								{action && (
+									<a class="postcard-action small-action" href={action.href}>
+										{action.label} <span aria-hidden="true">↗</span>
+									</a>
+								)}
+							</li>
+						))}
+				</ul>
+				{lines
+					?.filter(({ tone }) => tone === "failed")
+					.map(({ words }) => (
+						<p class="postcard-error" role="status">
+							<Words words={words} />
 						</p>
-						<input type="hidden" name="email" value={rsvped.news.email} />
-						<input type="hidden" name="action" value={newsAction} />
-						<input
-							type="hidden"
-							name="redirect"
-							value="https://news.atmosphereconf.org"
-						/>
-						<button type="submit" class="postcard-action small-action">
-							Send my code <span aria-hidden="true">↗</span>
-						</button>
+					))}
+				{rsvped && (
+					<form class="follow-up" method="post" action="/rsvp">
+						<input type="hidden" name="handle" value={rsvped.handle} />
+						<p><Words words={rsvpFollowUp(rsvped)} /></p>
 					</form>
 				)}
-				{rsvped.news?.kind === "failed" && (
-					<p class="receipt-note" role="status">
-						{newsFailures[rsvped.news.reason]}
-					</p>
-				)}
-				<a class="postcard-action invite" href="/postcard">
-					Invite others <span aria-hidden="true">↗</span>
-				</a>
 			</div>
 		) : (
 			<>
 				<form method="post" class="postcard-form rsvp-form" data-rsvp-form>
 					{error && (
-						<p class="form-error" role="alert">
+						<p class="postcard-error" role="alert">
 							{error}
 						</p>
 					)}
@@ -220,8 +227,9 @@ const newsAction = encodeURIComponent(
 										type="button"
 										data-use-account-email
 									>
-										use your account’s after all</button
-									>.
+										use your account’s after all
+									</button>
+									.
 								</span>
 								<span data-error-invalid>
 									That doesn’t look like an email address.
@@ -350,6 +358,14 @@ const newsAction = encodeURIComponent(
 </script>
 
 <style>
+	/* Mirrored so the goose faces the title. The header tilts every
+	   decoration 12deg; this counter-rotates to a net 1deg, and the
+	   translate is pre-rotated so the goose lands up by the edition line. */
+	.goose-popper {
+		scale: -1 1;
+		rotate: -11deg;
+		translate: -1px -39px;
+	}
 	/* The row wears the field's border so "RSVP as:" reads as a prefix
 	   inside it; the input itself goes borderless. */
 	.handle-row {
@@ -458,7 +474,8 @@ const newsAction = encodeURIComponent(
 		font-size: 11px;
 		line-height: 1.35;
 	}
-	.change-email {
+	.change-email,
+	.follow-up :global(.change-email) {
 		padding: 0;
 		border: 0;
 		background: transparent;
@@ -483,11 +500,12 @@ const newsAction = encodeURIComponent(
 		display: grid;
 	}
 	.newsletter-options .postcard-field[aria-invalid="true"] {
-		border-color: var(--cancel-stamp);
-		outline: 1px solid var(--cancel-stamp);
+		border-color: var(--error);
+		outline: 1px solid var(--error);
 	}
 	.field-error {
 		margin: 0;
+		color: var(--error);
 		font-size: 12px;
 		font-weight: 800;
 		line-height: 1.35;
@@ -501,26 +519,50 @@ const newsAction = encodeURIComponent(
 		font-size: 14px;
 		line-height: 1.4;
 	}
-	.inline-action {
-		margin: 0;
-	}
-	.news-step {
+	/* What the RSVP got done, as a plain list rather than anything that
+	   could pass for the form's checkboxes. A to-do points at its step. */
+	.checklist {
 		display: grid;
-		justify-items: start;
 		gap: 8px;
-	}
-	.confirmation strong,
-	.form-error {
-		overflow-wrap: anywhere;
-	}
-	.form-error {
 		margin: 0;
-		font-size: 13px;
-		font-weight: 800;
+		padding: 0;
+		list-style: none;
+	}
+	.checklist li {
+		display: grid;
+		grid-template-columns: 16px 1fr;
+		align-items: start;
+		column-gap: 8px;
+		row-gap: 8px;
+		font-size: 14px;
 		line-height: 1.4;
 	}
-	.invite {
-		margin-top: 16px;
+	.checklist li::before {
+		content: "✓" / "";
+		color: var(--strong);
+		font-weight: 800;
+		text-align: center;
+	}
+	.checklist li.todo::before {
+		content: "→" / "";
+	}
+	.checklist li > .postcard-action {
+		grid-column: 2;
+		justify-self: start;
+		/* Room above so it reads as this step's, and below so it doesn't
+		   crowd whatever follows the list. */
+		margin: 4px 0 8px;
+	}
+	.follow-up {
+		margin: 0;
+	}
+	.follow-up :global(a) {
+		color: var(--strong);
+		font-weight: 800;
+		text-underline-offset: 3px;
+	}
+	.confirmation :global(strong) {
+		overflow-wrap: anywhere;
 	}
 	@media (max-width: 660px) {
 		.newsletter-options {

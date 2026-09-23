@@ -2,6 +2,7 @@
 import ComboBox from "../ComboBox.astro";
 import Tooltip from "../Tooltip.astro";
 import { hasDatabase } from "../lib/db";
+import { LEAFLET_ACTION, LEAFLET_EMAIL_LOGIN, NEWS_URL } from "../lib/subscribe";
 import HandleIcon from "./HandleIcon.astro";
 import RotatingSuffix from "./RotatingSuffix.astro";
 
@@ -11,9 +12,7 @@ interface Props {
 
 const { error } = Astro.props;
 // With a database, emails stay here; otherwise Leaflet collects them.
-const emailAction = hasDatabase
-	? "/subscribe"
-	: "https://leaflet.pub/api/auth/email-login";
+const emailAction = hasDatabase ? "/subscribe" : LEAFLET_EMAIL_LOGIN;
 const emailMethod = hasDatabase ? "post" : "get";
 ---
 
@@ -96,7 +95,7 @@ const emailMethod = hasDatabase ? "post" : "get";
 		error && (
 			<p
 				id="postcard-subscription-result"
-				class="subscription-result"
+				class="postcard-error"
 				role="alert"
 				tabindex="-1"
 			>
@@ -104,16 +103,8 @@ const emailMethod = hasDatabase ? "post" : "get";
 			</p>
 		)
 	}
-	<input
-		type="hidden"
-		name="action"
-		value="%7B%22action%22%3A%22subscribe%22%2C%22publication%22%3A%22at%3A%2F%2Fdid%3Aplc%3Alehcqqkwzcwvjvw66uthu5oq%2Fsite.standard.publication%2F3m367bemk3c2i%22%7D"
-	/>
-	<input
-		type="hidden"
-		name="redirect"
-		value="https://news.atmosphereconf.org"
-	/>
+	<input type="hidden" name="action" value={LEAFLET_ACTION} />
+	<input type="hidden" name="redirect" value={NEWS_URL} />
 </form>
 <script>
 	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
@@ -264,9 +255,8 @@ const emailMethod = hasDatabase ? "post" : "get";
 		emailInput.name = isHandle ? "atproto-id" : "email";
 		emailInput.value = isHandle ? identifier.replace(/^@/, "") : identifier;
 		if (redirectInput instanceof HTMLInputElement) {
-			redirectInput.value = isHandle
-				? "/subscribe"
-				: "https://news.atmosphereconf.org";
+			// defaultValue is the news URL the page rendered with.
+			redirectInput.value = isHandle ? "/subscribe" : redirectInput.defaultValue;
 		}
 		if (actionInput instanceof HTMLInputElement)
 			actionInput.disabled = isHandle;
@@ -438,11 +428,4 @@ const emailMethod = hasDatabase ? "post" : "get";
 		anchor-name: --tip;
 	}
 
-	.subscription-result {
-		margin: 0;
-		font-size: 13px;
-		font-weight: 800;
-		line-height: 1.4;
-		overflow-wrap: anywhere;
-	}
 </style>

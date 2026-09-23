@@ -1,0 +1,121 @@
+---
+// Every state the signup and RSVP postcards can end in, for eyeballing in
+// dev. Without ?state= this lists them; with it, it shows that one. The
+// `satisfies` lines stop compiling when an outcome goes missing here.
+import RsvpPostcard from "../../components/postcard/RsvpPostcard.astro";
+import SignupPostcard from "../../components/postcard/SignupPostcard.astro";
+import PostcardLayout from "../../layouts/PostcardLayout.astro";
+import type { RsvpCard, RsvpFailure, RsvpReceipt } from "../../components/lib/rsvp";
+import type {
+	NewsOutcome,
+	SignupCard,
+	SignupFailure,
+} from "../../components/lib/subscribe";
+
+if (!import.meta.env.DEV) return new Response(null, { status: 404 });
+
+const handle = "example.bsky.social";
+const email = "someone@example.com";
+
+const signupFailures = {
+	"sign-in": { kind: "sign-in" },
+	subscribe: { kind: "subscribe" },
+	"bad-email": { kind: "bad-email" },
+} satisfies Record<SignupFailure["kind"], SignupFailure>;
+
+const rsvpFailures = {
+	"sign-in": { kind: "sign-in" },
+	"missing-handle": { kind: "missing-handle" },
+	save: { kind: "save" },
+} satisfies Record<RsvpFailure["kind"], RsvpFailure>;
+
+type NewsKey =
+	| Exclude<NewsOutcome["kind"], "failed">
+	| `failed-${Extract<NewsOutcome, { kind: "failed" }>["reason"]}`;
+const news = {
+	none: undefined,
+	stored: { kind: "stored", email },
+	"leaflet-step": { kind: "leaflet-step", email },
+	"failed-no-email": { kind: "failed", reason: "no-email" },
+	"failed-bad-email": { kind: "failed", reason: "bad-email" },
+} satisfies Record<NewsKey | "none", NewsOutcome | undefined>;
+
+const standard = {
+	none: undefined,
+	subscribed: "subscribed",
+	failed: "failed",
+} satisfies Record<NonNullable<RsvpReceipt["standard"]> | "none", RsvpReceipt["standard"]>;
+
+const states: Record<string, { signup: SignupCard } | { rsvp: RsvpCard }> = {
+	"signup/form": { signup: { kind: "form" } },
+	...Object.fromEntries(
+		Object.entries(signupFailures).map(([key, failure]) => [
+			`signup/error/${key}`,
+			{ signup: { kind: "form", failure } },
+		]),
+	),
+	"signup/error/sign-in-with-detail": {
+		signup: { kind: "form", failure: { kind: "sign-in", detail: "Example detail from the sign-in server." } },
+	},
+	"signup/done/email": { signup: { kind: "subscribed", via: "email" } },
+	"signup/done/handle-new": { signup: { kind: "subscribed", via: "atmosphere", already: false } },
+	"signup/done/handle-existing": { signup: { kind: "subscribed", via: "atmosphere", already: true } },
+	"rsvp/form": { rsvp: { kind: "form", handle: "" } },
+	...Object.fromEntries(
+		Object.entries(rsvpFailures).map(([key, failure]) => [
+			`rsvp/error/${key}`,
+			{ rsvp: { kind: "form", handle, failure } },
+		]),
+	),
+	"rsvp/error/sign-in-with-detail": {
+		rsvp: { kind: "form", handle, failure: { kind: "sign-in", detail: "Example detail from the sign-in server." } },
+	},
+	...Object.fromEntries(
+		Object.entries(standard).flatMap(([standardKey, standardOutcome]) =>
+			Object.entries(news).map(([newsKey, newsOutcome]) => [
+				`rsvp/done/standard-${standardKey}/news-${newsKey}`,
+				{
+					rsvp: {
+						kind: "rsvped",
+						handle,
+						...(standardOutcome && { standard: standardOutcome }),
+						...(newsOutcome && { news: newsOutcome }),
+					},
+				},
+			]),
+		),
+	),
+};
+
+const picked = Astro.url.searchParams.get("state");
+const state = picked ? states[picked] : undefined;
+---
+
+{
+	state ? (
+		<PostcardLayout title={picked!} description="End state preview">
+			{"signup" in state ? (
+				<SignupPostcard card={state.signup} />
+			) : (
+				<RsvpPostcard card={state.rsvp} />
+			)}
+		</PostcardLayout>
+	) : (
+		<html lang="en">
+			<head>
+				<meta charset="UTF-8" />
+				<title>End states</title>
+			</head>
+			<body>
+				<h1>End states ({Object.keys(states).length})</h1>
+				<ul>
+					{Object.keys(states).map((key) => (
+						<li>
+							<a href={`?state=${encodeURIComponent(key)}`}>{key}</a>
+						</li>
+					))}
+				</ul>
+			</body>
+		</html>
+	)
+}
