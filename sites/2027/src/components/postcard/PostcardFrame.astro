@@ -87,8 +87,10 @@ const { label, titleId, class: className } = Astro.props;
 		display: flex;
 		justify-content: space-between;
 		min-height: 14px;
-		margin: 12px 0 0;
-		font-size: 11px;
+		/* Wider than the gaps inside the form, so the sign-off reads as the
+		   card's closing line rather than part of the button row. */
+		margin: 24px 0 0;
+		font-size: 12px;
 	}
 
 	.signoff nav {

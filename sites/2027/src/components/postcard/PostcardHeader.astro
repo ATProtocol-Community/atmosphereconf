@@ -4,16 +4,24 @@ interface Props {
 	title: string;
 	subtitle?: string;
 	as?: "h1" | "h2";
+	/** Width reserved for the decoration, as a multiple of its size. */
+	decorationLane?: number;
 }
 
-const { id, title, subtitle, as: Heading = "h1" } = Astro.props;
+const {
+	id,
+	title,
+	subtitle,
+	as: Heading = "h1",
+	decorationLane = 0.75,
+} = Astro.props;
 ---
 
 <header class="postcard-header">
 	<p class="edition">
 		AtmosphereConf #3 <span>April 29th–May 2nd, 2027 </span>
 	</p>
-	<div class="title-wrap">
+	<div class="title-wrap" style={`--decoration-lane: ${decorationLane}`}>
 		{
 			Astro.slots.has("decoration") && (
 				<span class="decoration" aria-hidden="true">
@@ -50,7 +58,7 @@ const { id, title, subtitle, as: Heading = "h1" } = Astro.props;
 	/* Reserve a lane on the right so the title wraps before the decoration
 	   instead of running under it. */
 	.title-wrap:has(.decoration) {
-		padding-inline-end: calc(var(--decoration-size) * 0.75);
+		padding-inline-end: calc(var(--decoration-size) * var(--decoration-lane));
 	}
 	/* Top-aligned so it never drops into the subtitle below. */
 	.decoration {
