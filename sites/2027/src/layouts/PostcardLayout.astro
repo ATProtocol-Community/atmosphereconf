@@ -50,6 +50,51 @@ const clouds = [
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
+		<!-- Astro streams the page, so the first frame can land before the
+		     card has fully arrived. The flip snapshots that frame, which then
+		     shows a blank card. Holding rendering until the card is parsed
+		     keeps the snapshot whole. -->
+		<link rel="expect" href="#postcard" blocking="render" />
+		<script is:inline>
+			// The postcard only flips on the way forward. Going back through
+			// history just swaps pages. Has to be inline in <head> so the
+			// listener exists before the new page's first frame.
+			window.addEventListener("pagereveal", (event) => {
+				if (
+					event.viewTransition &&
+					window.navigation?.activation?.navigationType === "traverse"
+				) {
+					event.viewTransition.skipTransition();
+				}
+				// On short screens the page scrolls, and a fresh page would
+				// start at the top and yank the card out from under the flip.
+				// Pick up where the last page left off instead. History
+				// navigations restore their own scroll, so they skip this.
+				const scroll = sessionStorage.getItem("2027:scroll");
+				sessionStorage.removeItem("2027:scroll");
+				if (event.viewTransition && scroll !== null) {
+					// Instant, or the site's smooth scrolling would glide down
+					// from the top mid-flip.
+					window.scrollTo({ top: Number(scroll), behavior: "instant" });
+				}
+			});
+			// "← Back to…" links are regular navigations to the browser, but
+			// they should feel like going back, so they don't flip either.
+			let backLinkClicked = false;
+			document.addEventListener("click", (event) => {
+				backLinkClicked = !!event.target.closest?.("a[data-no-flip]");
+			});
+			window.addEventListener("pageswap", (event) => {
+				if (!event.viewTransition) return;
+				if (backLinkClicked) {
+					event.viewTransition.skipTransition();
+					return;
+				}
+				if (event.activation?.navigationType !== "traverse") {
+					sessionStorage.setItem("2027:scroll", String(window.scrollY));
+				}
+			});
+		</script>
 	</head>
 	<body data-palette="sky" data-direction="editorial">
 		<script is:inline>
@@ -169,6 +214,18 @@ const clouds = [
 	}
 	:global(.visually-hidden) {
 		display: none;
+	}
+	/* Too short to center the card over the masthead without the two
+	   colliding, so stack it below and let the page scroll. Threshold
+	   matches the one in PostcardFrame. */
+	@media (min-width: 661px) and (max-height: 840px) {
+		:global(body) {
+			height: auto;
+		}
+		:global(main) {
+			grid-row: 2;
+			padding-bottom: 32px;
+		}
 	}
 	@media (max-width: 660px) {
 		.cloud:nth-child(4),

@@ -1,12 +1,19 @@
 ---
 import PostcardFrame from "./PostcardFrame.astro";
+import HandleInput from "./HandleInput.astro";
 import PostcardHeader from "./PostcardHeader.astro";
+import Tooltip from "../Tooltip.astro";
+import { PUBLICATION } from "../lib/subscribe";
 
 interface Props {
 	confirmed?: boolean;
 	handle?: string;
 	removedStandard?: boolean;
 	subscribedViaStandard?: boolean;
+	newsEmail?: string;
+	newsVia?: "database" | "leaflet";
+	notice?: string;
+	error?: string;
 }
 
 const {
@@ -14,7 +21,15 @@ const {
 	handle = "",
 	removedStandard = false,
 	subscribedViaStandard = false,
+	newsEmail,
+	newsVia,
+	notice,
+	error,
 } = Astro.props;
+// Leaflet double-decodes this, matching the postcard's email form.
+const newsAction = encodeURIComponent(
+	JSON.stringify({ action: "subscribe", publication: PUBLICATION }),
+);
 ---
 
 <PostcardFrame
@@ -30,6 +45,38 @@ const {
 		confirmed ? (
 			<div class="confirmation" data-confirmation>
 				<p>We have your handle and are not afraid to use it.</p>
+				{notice && (
+					<p class="receipt-note" role="status">
+						{notice}
+					</p>
+				)}
+				{newsEmail && newsVia === "database" && (
+					<p>
+						We'll send email news to <strong>{newsEmail}</strong>.
+					</p>
+				)}
+				{newsEmail && newsVia === "leaflet" && (
+					<form
+						class="inline-action news-step"
+						action="https://leaflet.pub/api/auth/email-login"
+						method="get"
+					>
+						<p>
+							One more step for email news: we'll send a code to{" "}
+							<strong>{newsEmail}</strong>.
+						</p>
+						<input type="hidden" name="email" value={newsEmail} />
+						<input type="hidden" name="action" value={newsAction} />
+						<input
+							type="hidden"
+							name="redirect"
+							value="https://news.atmosphereconf.org"
+						/>
+						<button type="submit" class="postcard-action small-action">
+							Send my code <span aria-hidden="true">↗</span>
+						</button>
+					</form>
+				)}
 				{removedStandard ? (
 					<p class="receipt-note" role="status">
 						Standard.site subscription removed.
@@ -53,46 +100,53 @@ const {
 						<p>Let us join your other Standard.site subscriptions?</p>
 						<form method="post" class="inline-action">
 							<input type="hidden" name="handle" value={handle} />
-							<input type="hidden" name="intent" value="confirm" />
-							<input type="hidden" name="subscribeNews" value="yes" />
-							<input type="hidden" name="standardOnly" value="yes" />
-							<button type="submit" class="small-action">
+							<input type="hidden" name="intent" value="subscribe" />
+							<button type="submit" class="postcard-action small-action">
 								I’m in
 							</button>
 						</form>
 					</>
 				)}
-				<a class="primary-action invite" href="/postcard">
+				<a class="postcard-action invite" href="/postcard">
 					Invite others <span aria-hidden="true">↗</span>
 				</a>
 			</div>
 		) : (
 			<>
-				<form method="post" class="rsvp-form" data-rsvp-form>
+				<form method="post" class="postcard-form rsvp-form" data-rsvp-form>
+					{error && (
+						<p class="form-error" role="alert">
+							{error}
+						</p>
+					)}
 					<label class="sr-only" for="rsvp-handle">
 						Atmosphere handle
 					</label>
-					<div class="handle-field">
-						<span aria-hidden="true">@</span>
-						<input
-							id="rsvp-handle"
-							name="handle"
-							type="text"
-							value={handle}
-							placeholder="handle"
-							autocomplete="username"
-							required
-						/>
-					</div>
-					<label class="check-row" for="standard-only">
+					<HandleInput id="rsvp-handle" name="handle" value={handle} required />
+					{/* The tooltip trigger sits outside the <label> so clicking it
+					    doesn't toggle the checkbox; aria-label restores the full name. */}
+					<div class="check-row standard-row">
 						<input
 							id="standard-only"
 							name="standardOnly"
 							type="checkbox"
 							value="yes"
+							aria-label="Subscribe via Standard.site"
 						/>
-						<span>Subscribe via Standard.site</span>
-					</label>
+						<span>
+							<label for="standard-only">Subscribe via</label>{" "}
+							<Tooltip
+								id="rsvp-standard-tooltip"
+								label="Standard.site"
+								class="standard"
+								blockAnchor="--standard-row"
+								>An open format for publishing on the Atmosphere. Subscribe
+								once, and our posts show up in any reader that speaks it, like{" "}
+								<a href="https://leaflet.pub/reader">Leaflet</a> or{" "}
+								<a href="https://pckt.blog/read">pckt</a>.</Tooltip
+							>
+						</span>
+					</div>
 					<label class="check-row" for="subscribe-news">
 						<input
 							id="subscribe-news"
@@ -116,8 +170,11 @@ const {
 						</button>
 					</span>
 					<div id="newsletter-options" class="newsletter-options" hidden>
-						<label for="alternate-email">Send to this other email:</label>
+						<label class="postcard-label" for="alternate-email">
+							Send to this other email:
+						</label>
 						<input
+							class="postcard-field"
 							id="alternate-email"
 							name="alternateEmail"
 							type="email"
@@ -125,16 +182,19 @@ const {
 						/>
 					</div>
 					<input type="hidden" name="intent" value="confirm" />
-					<button class="primary-action" type="submit">
+					<button class="postcard-action" type="submit">
 						Count me in! <span aria-hidden="true">↗</span>
 					</button>
+					<a class="postcard-action secondary" href="/postcard">
+						Invite your friends <span aria-hidden="true">→</span>
+					</a>
 				</form>
 			</>
 		)
 	}
 
 	<Fragment slot="footer">
-		<a href="/">← Back to the postcard</a>
+		<a href="/" data-no-flip>← Back to the postcard</a>
 		<span>See you out there. <span aria-hidden="true">♡</span></span>
 	</Fragment>
 </PostcardFrame>
@@ -181,32 +241,6 @@ const {
 </script>
 
 <style>
-	.rsvp-form {
-		display: grid;
-		gap: 10px;
-	}
-	.handle-field {
-		display: flex;
-		align-items: center;
-		min-height: 48px;
-		padding-inline: 14px;
-		border: 1px solid var(--ink);
-		border-radius: 16px;
-		background: color-mix(in srgb, var(--paper) 78%, white);
-	}
-	.handle-field span {
-		font-weight: 700;
-	}
-	.handle-field input {
-		width: 100%;
-		min-width: 0;
-		padding: 10px 2px;
-		border: 0;
-		outline: 0;
-		background: transparent;
-		color: var(--ink);
-		font-size: 16px;
-	}
 	.check-row {
 		display: flex;
 		align-items: center;
@@ -215,6 +249,22 @@ const {
 		font-size: 15px;
 		font-weight: 700;
 		cursor: pointer;
+	}
+	.standard-row {
+		anchor-name: --standard-row;
+	}
+	/* The trigger is rendered by <Tooltip>, so it carries that component's
+	   scope; the scoped `.standard-row` still confines this to us. */
+	.standard-row:has(input:checked) :global(.tooltip-button.standard) {
+		color: var(--cancel-stamp);
+	}
+	.standard-row label {
+		cursor: pointer;
+	}
+	.standard-row :global(.tooltip a) {
+		color: inherit;
+		font-weight: 800;
+		text-underline-offset: 2px;
 	}
 	.check-row input {
 		width: 19px;
@@ -249,35 +299,6 @@ const {
 	.rsvp-form:has(#subscribe-news:checked) .newsletter-options:not([hidden]) {
 		display: grid;
 	}
-	.newsletter-options > label:first-child {
-		font-size: 11px;
-		font-weight: 700;
-	}
-	.newsletter-options > input {
-		min-height: 40px;
-		padding: 8px 10px;
-		border: 1px solid var(--ink);
-		border-radius: 10px;
-		background: var(--paper);
-		color: var(--ink);
-	}
-	.primary-action,
-	.small-action {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		min-height: 48px;
-		padding: 11px 15px;
-		border: 0;
-		border-radius: 16px;
-		background: var(--strong);
-		color: var(--paper);
-		font-weight: 800;
-	}
-	.primary-action:hover,
-	.small-action:hover {
-		filter: brightness(1.08);
-	}
 	.confirmation {
 		display: grid;
 		gap: 10px;
@@ -290,9 +311,25 @@ const {
 	.inline-action {
 		margin: 0;
 	}
+	.news-step {
+		display: grid;
+		justify-items: start;
+		gap: 8px;
+	}
+	.confirmation strong,
+	.form-error {
+		overflow-wrap: anywhere;
+	}
+	.form-error {
+		margin: 0;
+		font-size: 13px;
+		font-weight: 800;
+		line-height: 1.4;
+	}
 	.small-action {
 		display: inline-flex;
-		min-height: 38px;
+		min-height: 40px;
+		padding-block: 8px;
 		padding-inline: 18px;
 		background: var(--mint);
 		color: var(--ink);
@@ -308,9 +345,7 @@ const {
 		text-underline-offset: 3px;
 	}
 	.invite {
-		width: 100%;
 		margin-top: 16px;
-		text-decoration: none;
 	}
 	@media (max-width: 660px) {
 		.newsletter-options {

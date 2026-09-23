@@ -237,6 +237,65 @@ main {
 	transform: translateY(0);
 }
 
+/* Shared by the signup, RSVP, and postcard-builder forms so the three
+   cards read as one set. */
+.postcard-form {
+	display: grid;
+	gap: 10px;
+}
+
+.postcard-field {
+	width: 100%;
+	min-width: 0;
+	min-height: 50px;
+	padding: 10px 14px;
+	border: 1px solid var(--ink);
+	border-radius: 16px;
+	background: color-mix(in srgb, var(--paper) 78%, white);
+	color: var(--ink);
+	font-size: 16px;
+}
+
+/* Textareas miss the global focus rule, so the shared field restates it. */
+.postcard-field:focus-visible {
+	outline: 1px solid var(--ink);
+}
+
+.postcard-label {
+	font-size: 11px;
+	font-weight: 800;
+}
+
+.postcard-action {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 50px;
+	padding: 12px 16px;
+	border: 0;
+	border-radius: 16px;
+	background: var(--strong);
+	color: var(--paper);
+	font-size: 15px;
+	font-weight: 800;
+	text-decoration: none;
+}
+
+.postcard-action:hover {
+	filter: brightness(1.08);
+}
+
+.postcard-action.secondary {
+	border: 2px solid var(--strong);
+	background: transparent;
+	color: var(--strong);
+}
+
+.postcard-action > [aria-hidden="true"] {
+	font-size: 20px;
+	line-height: 1;
+}
+
 .sr-only {
 	position: absolute;
 	width: 1px;
@@ -282,5 +341,62 @@ main {
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
+	}
+}
+
+/* Page-to-page navigation flips the postcard over: the old card turns
+   away and the next page's card turns into view from its back. Browsers
+   without cross-document view transitions just navigate normally. */
+@view-transition {
+	navigation: auto;
+}
+
+::view-transition-group(postcard) {
+	animation-duration: 0.7s;
+	animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+::view-transition-old(postcard),
+::view-transition-new(postcard) {
+	/* Both faces sit in the same spot, so only whichever is facing the
+	   viewer should show, with no blending between them. */
+	backface-visibility: hidden;
+	mix-blend-mode: normal;
+	animation-duration: 0.7s;
+	animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+	animation-fill-mode: both;
+}
+
+::view-transition-old(postcard) {
+	animation-name: postcard-flip-away;
+}
+
+::view-transition-new(postcard) {
+	animation-name: postcard-flip-in;
+}
+
+@keyframes postcard-flip-away {
+	from {
+		transform: perspective(2400px) rotateY(0deg);
+	}
+	to {
+		transform: perspective(2400px) rotateY(180deg);
+	}
+}
+
+@keyframes postcard-flip-in {
+	from {
+		transform: perspective(2400px) rotateY(-180deg);
+	}
+	to {
+		transform: perspective(2400px) rotateY(0deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none;
 	}
 }

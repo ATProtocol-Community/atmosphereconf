@@ -40,6 +40,17 @@ const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor
 	if (!Object.hasOwn(HTMLButtonElement.prototype, "interestForElement")) {
 		import("interestfor");
 	}
+
+	// A drag that selects text in the tooltip easily overshoots its edge, which
+	// loses interest and closes it mid-selection. Capturing the pointer keeps
+	// the tooltip hovered until the button is released.
+	for (const tooltip of document.querySelectorAll<HTMLElement>(".tooltip")) {
+		tooltip.addEventListener("pointerdown", (event) => {
+			if (event.pointerType === "mouse" && event.button === 0) {
+				tooltip.setPointerCapture(event.pointerId);
+			}
+		});
+	}
 </script>
 
 <style>
@@ -60,10 +71,11 @@ const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor
 		text-underline-offset: 3px;
 		cursor: help;
 		anchor-name: var(--tooltip-anchor);
-		/* Open instantly on hover, linger briefly so the pointer can reach the
-		   tooltip. Duplicated as a custom property for the polyfill. */
-		interest-delay: 0s 120ms;
-		--interest-delay: 0s 120ms;
+		/* Wait a second on hover so passing over the text doesn't pop it open,
+		   then linger briefly so the pointer can reach the tooltip. Duplicated
+		   as a custom property for the polyfill. */
+		interest-delay: 1s 120ms;
+		--interest-delay: 1s 120ms;
 	}
 
 	.tooltip-button:focus-visible {
@@ -101,6 +113,12 @@ const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor
 			transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
 			display 180ms allow-discrete,
 			overlay 180ms allow-discrete;
+	}
+
+	/* The site-wide highlight is butter too, which vanishes on this background. */
+	.tooltip::selection {
+		background: var(--ink);
+		color: var(--butter);
 	}
 
 	.tooltip:popover-open {

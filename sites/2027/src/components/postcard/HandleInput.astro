@@ -1,0 +1,97 @@
+---
+import ComboBox from "../ComboBox.astro";
+import RotatingSuffix from "./RotatingSuffix.astro";
+
+interface Props {
+	id: string;
+	name: string;
+	value?: string;
+	required?: boolean;
+}
+
+const { id, name, value, required } = Astro.props;
+---
+
+<div class="handle-input" data-handle-input>
+	<ComboBox
+		id={id}
+		name={name}
+		value={value}
+		inputClass="postcard-field"
+		autocomplete="username"
+		placeholder="you.example.com"
+		label="Atmosphere handle"
+		required={required}
+	/>
+	<div class="handle-placeholder" aria-hidden="true">
+		<span>you</span><RotatingSuffix
+			words={[".example.com", ".bsky.social", ".blacksky.social"]}
+		/>
+	</div>
+</div>
+
+<script>
+	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
+
+	for (const combobox of document.querySelectorAll(
+		"[data-handle-input] cmb-combobox",
+	)) {
+		combobox.addEventListener("combobox-search", (e) => {
+			const detail = (
+				e as CustomEvent<{ query: string; results: Promise<ActorSuggestion[]> | null }>
+			).detail;
+			detail.results = searchActors((detail.query ?? "").trim());
+		});
+	}
+</script>
+
+<style>
+	.handle-input {
+		position: relative;
+		--card: white;
+		--rounding: 16px;
+	}
+
+	/* Painted over the input so the suffix can rotate; clicks pass through. */
+	.handle-placeholder {
+		position: absolute;
+		left: 15px;
+		top: 50%;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		height: 100%;
+		transform: translateY(-50%);
+		color: var(--ink);
+		opacity: 0.65;
+		pointer-events: none;
+	}
+
+	.handle-input:has(input:not(:placeholder-shown)) .handle-placeholder {
+		opacity: 0;
+	}
+
+	.handle-input :global(.cmb-input) {
+		appearance: none;
+		-webkit-appearance: none;
+		position: relative;
+		z-index: 1;
+	}
+
+	.handle-input :global(.cmb-input::placeholder) {
+		opacity: 0;
+	}
+
+	.handle-input :global(.cmb-listbox) {
+		padding-block: 10px;
+	}
+
+	.handle-input :global(.cmb-listbox li) {
+		padding: 8px 10px;
+	}
+
+	.handle-input :global(.cmb-listbox li:hover) {
+		background: var(--butter);
+		border-radius: var(--rounding);
+	}
+</style>

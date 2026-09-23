@@ -1,14 +1,17 @@
 import type { APIContext } from "astro";
-import { getPdsAgent } from "@fujocoded/authproto/helpers";
+import { type Client, currentDatetimeString } from "@atproto/lex";
+import { site } from "../../lexicons/index.js";
+import { clientFor, rkeyOf } from "./records";
+import { isEmail, saveNewsSubscriber } from "./db";
 
-const COLLECTION = "site.standard.graph.subscription";
-const PUBLICATION =
+const subscription = site.standard.graph.subscription;
+export const PUBLICATION =
 	"at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i";
 const SESSION_KEY = "postcardSubscription";
 const LOGIN_ERROR = "Sign-in could not be completed. Try your handle again.";
 
 type SubscriptionResult =
-	| { kind: "success"; message: string; recordUri: string }
+	| { kind: "success"; message: string; recordUri?: string }
 	| { kind: "error"; message: string };
 declare global {
 	namespace App {
@@ -17,6 +20,35 @@ declare global {
 		}
 	}
 }
+
+export const findSubscriptions = async (client: Client) => {
+	const found: { uri: string }[] = [];
+	for await (const record of client.listAll(subscription)) {
+		if (record.valid && record.value.publication === PUBLICATION) {
+			found.push(record);
+		}
+	}
+	return found;
+};
+
+const createSubscription = async (client: Client) => {
+	const { uri } = await client.create(subscription, {
+		publication: PUBLICATION,
+		createdAt: currentDatetimeString(),
+	});
+	return uri;
+};
+
+export const ensureSubscription = async (client: Client) => {
+	const [existing] = await findSubscriptions(client);
+	if (!existing) await createSubscription(client);
+};
+
+export const removeSubscriptions = async (client: Client) => {
+	for (const { uri } of await findSubscriptions(client)) {
+		await client.delete(subscription, { rkey: rkeyOf(uri) });
+	}
+};
 
 const returnToPostcard = () =>
 	new Response(null, {
@@ -56,16 +88,6 @@ export const doSubscription = async (
 		});
 	}
 
-	const matchesPublication = (value: unknown): boolean => {
-		console.log(value)
-		return typeof value === "object" &&
-			value !== null &&
-			"$type" in value &&
-			value.$type === COLLECTION &&
-			"publication" in value &&
-			value.publication === PUBLICATION;
-	}
-
 	const fail = (message: string) => {
 		session.set(SESSION_KEY, { kind: "error", message }, { ttl: 600 });
 		return returnToPostcard();
@@ -88,42 +110,61 @@ export const doSubscription = async (
 	if (!user || locals.authproto?.errorCode || locals.authproto?.errorDescription) {
 		return fail(LOGIN_ERROR);
 	}
-	const agent = await getPdsAgent({ loggedInUser: user });
-	if (!agent) return fail(LOGIN_ERROR);
-	const repo = user.did;
+	const client = clientFor(locals);
+	if (!client) return fail(LOGIN_ERROR);
+	let existing: { uri: string } | undefined;
 	try {
-		let cursor: string | undefined;
-		const seenCursors = new Set<string>();
-		do {
-			const { data } = await agent.com.atproto.repo.listRecords({
-				repo,
-				collection: COLLECTION,
-				limit: 100,
-				...(cursor ? { cursor } : {}),
-			});
-			const existing = data.records.find((record) =>
-				matchesPublication(record.value) && record.uri.startsWith(`at://${repo}/${COLLECTION}/`),
-			);
-			if (existing) return succeed(existing.uri, true);
-			cursor = data.cursor;
-			if (cursor && seenCursors.has(cursor)) throw new Error("Repeated subscription cursor");
-			if (cursor) seenCursors.add(cursor);
-		} while (cursor);
+		[existing] = await findSubscriptions(client);
 	} catch {
 		return fail("We couldn't check your subscriptions. Try your handle again.");
 	}
+	if (existing) return succeed(existing.uri, true);
 	try {
-		const { data } = await agent.com.atproto.repo.createRecord({
-			repo,
-			collection: COLLECTION,
-			record: {
-				$type: COLLECTION,
-				publication: PUBLICATION,
-				createdAt: new Date().toISOString(),
-			},
-		});
-		return succeed(data.uri, false);
+		return succeed(await createSubscription(client), false);
 	} catch {
 		return fail("We couldn't confirm your subscription. Try your handle again.");
 	}
+};
+
+/**
+ * Saves an email from the main page's postcard form. Only reachable when the
+ * site has a database; otherwise the form posts straight to Leaflet.
+ */
+export const doEmailSubscription = async (
+	session: APIContext["session"],
+	formData: FormData,
+) => {
+	if (!session) {
+		return new Response("Subscriptions are temporarily unavailable. Please try again.", {
+			status: 503,
+			headers: { "Cache-Control": "no-store" },
+		});
+	}
+	const submitted = formData.get("email");
+	const email = typeof submitted === "string" ? submitted.trim() : "";
+	if (!isEmail(email)) {
+		session.set(
+			SESSION_KEY,
+			{ kind: "error", message: "That email address doesn't look right." },
+			{ ttl: 600 },
+		);
+		return returnToPostcard();
+	}
+	try {
+		await saveNewsSubscriber({ email });
+	} catch (error) {
+		console.error("Saving news subscriber failed", error);
+		session.set(
+			SESSION_KEY,
+			{ kind: "error", message: "We couldn't save your email. Please try again." },
+			{ ttl: 600 },
+		);
+		return returnToPostcard();
+	}
+	session.set(
+		SESSION_KEY,
+		{ kind: "success", message: "You're on the list." },
+		{ ttl: 600 },
+	);
+	return returnToPostcard();
 };
