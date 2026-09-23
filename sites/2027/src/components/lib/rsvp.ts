@@ -12,7 +12,7 @@ import {
 
 const rsvp = community.lexicon.calendar.rsvp;
 const EVENT = {
-	uri: "at://did:plc:lehcqqkwzcwvjvw66uthu5oq/community.lexicon.calendar.event/3mw74r4r3gsej",
+	uri: "at://did:plc:3xewinw4wtimo2lqfy5fm5sw/community.lexicon.calendar.event/3mw74r4r3gsej",
 	cid: "bafyreihykrqz27n6uundgzqpt7rd3m5fbq2hprk53pbwbol5wuvommicbu",
 } as const;
 // Every scope here must also be declared in astro.config.mjs, or authproto
