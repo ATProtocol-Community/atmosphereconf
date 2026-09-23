@@ -63,7 +63,7 @@ const emailMethod = hasDatabase ? "post" : "get";
 		/>
 		<div class="airmail-email-placeholder">
 			<span class="airmail-prefix-text">you</span><RotatingSuffix
-				words={["@example.com", ".bsky.social", ".blacksky.social"]}
+				words={["@example.com", ".bsky.social", ".blacksky.social",".example.com"]}
 			/>
 		</div>
 	</div>
@@ -118,6 +118,7 @@ const emailMethod = hasDatabase ? "post" : "get";
 <script>
 	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
 
+	const radioOptLabels = document.querySelectorAll<HTMLLabelElement>(".segmented-option");
 	const emailInput = document.getElementById(
 		"airmail-email",
 	) as HTMLInputElement | null;
@@ -151,6 +152,7 @@ const emailMethod = hasDatabase ? "post" : "get";
 	const handleLikePattern =
 		/^@[\w.-]+$|^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9.-]*$/i;
 	const setSuffixFromMethod = (isHandleMode: boolean) => {
+		console.log(isHandleMode);
 		if (!suffixOptionsEl || suffixOptionElements.length === 0) return;
 		const firstSuffix = suffixOptionValues[0];
 		const candidateSuffixes = isHandleMode
@@ -158,14 +160,25 @@ const emailMethod = hasDatabase ? "post" : "get";
 			: firstSuffix
 				? [firstSuffix]
 				: [];
+		console.log("1");
 		if (candidateSuffixes.length === 0) return;
 		const idx = isHandleMode
 			? Math.floor(Math.random() * candidateSuffixes.length)
 			: 0;
 		const next = candidateSuffixes[idx];
+		console.log("2");
 		if (!next) return;
-		suffixOptionElements[0]!.textContent = next;
+		console.log("3");
+		suffixOptionElements[suffixOptionElements.length - 1]!.textContent = next;
 	};
+
+	radioOptLabels.forEach((x) => x.addEventListener("click", () => {
+		if (x.htmlFor === "method-handle") {
+			setSuffixFromMethod(true);
+		} else {
+			setSuffixFromMethod(false);
+		}
+	}));
 
 	const detectMethod = (rawValue: string): "email" | "handle" => {
 		const value = String(rawValue ?? "")
