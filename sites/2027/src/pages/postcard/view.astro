@@ -11,8 +11,9 @@ const message =
 	submittedMessage.slice(0, 180) || "Meet me at AtmosphereConf 2027!";
 const title = "A postcard for you — AtmosphereConf 2027";
 const description = message;
+const handle = Astro.url.searchParams.get("handle")?.trim() ?? undefined;
 ---
 
 <PostcardLayout title={title} description={description}>
-	<SharedPostcard message={message} stamp={stamp} />
+	<SharedPostcard message={message} stamp={stamp} sharedBy={handle} />
 </PostcardLayout>

@@ -5,15 +5,17 @@ import Stamp from "./stamps/Stamp.astro";
 import { stamps } from "./stamps/stamps";
 
 const defaultMessage = "Meet me at AtmosphereConf 2027!";
+
+const handle = Astro.locals.loggedInUser?.handle ?? undefined;
 ---
 
 <PostcardFrame
 	label="Build an AtmosphereConf postcard"
 	titleId="builder-title"
 >
-		<Fragment slot="postage" />
+	<Fragment slot="postage" />
 
-	<form class="postcard-form builder-form" data-postcard-builder>
+	<form class="postcard-form builder-form" data-postcard-builder data-handle={handle}>
 		<fieldset class="postage-area">
 			<legend class="sr-only">Choose a stamp</legend>
 			<div class="stamp-options">
@@ -89,9 +91,13 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 			const stamp =
 				form.querySelector<HTMLInputElement>('input[name="stamp"]:checked')
 					?.value ?? "0";
+			const handle = form.dataset.handle ?? undefined;
 			const postcardUrl = new URL("/postcard/view", window.location.origin);
 			postcardUrl.searchParams.set("stamp", stamp);
 			postcardUrl.searchParams.set("message", message.value.trim());
+			if (handle) {
+				postcardUrl.searchParams.set("handle", handle);
+			}
 			const text = `A postcard for you from AtmosphereConf 2027:\n\n${postcardUrl.href}`;
 
 			try {
