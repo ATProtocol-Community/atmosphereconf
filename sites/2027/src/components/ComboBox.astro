@@ -546,8 +546,9 @@ const hintId = `${id}-hint`;
 	.cmb-leading:empty {
 		display: none;
 	}
+	/* Hosts whose icon is narrower (or wider) set --cmb-leading-space. */
 	.cmb-input-wrap:has(.cmb-leading:not(:empty)) .cmb-input {
-		padding-left: 36px;
+		padding-left: var(--cmb-leading-space, 36px);
 	}
 
 	.cmb-input:disabled {

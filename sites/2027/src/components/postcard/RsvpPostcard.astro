@@ -43,8 +43,8 @@ const newsAction = encodeURIComponent(
 >
 	<PostcardHeader
 		id={rsvped ? "confirmation-title" : "rsvp-title"}
-		title={rsvped ? "Tot dan!" : "Save the Date, and Honk aboard!"}
-		subtitle="AtmosphereConf 2027 will be in Amsterdam! RSVP below and win an exclusive prize: friends!"
+		title={rsvped ? "Tot dan!" : "RSVP, Save the Date, Honk aboard!"}
+		subtitle="AtmosphereConf 2027 will be in Amsterdam. RSVP below for an exclusive prize: friends!"
 	>
 		{
 			!rsvped && (
@@ -133,63 +133,86 @@ const newsAction = encodeURIComponent(
 							required
 						/>
 					</div>
-					{/* The tooltip trigger sits outside the <label> so clicking it
-					    doesn't toggle the checkbox; aria-label restores the full name. */}
-					<div class="check-row standard-row">
-						<input
-							id="standard-only"
-							name="standardOnly"
-							type="checkbox"
-							value="yes"
-							aria-label="Also subscribe via Standard.site"
-						/>
-						<span>
-							<label for="standard-only">Get updates via</label>{" "}
-							<Tooltip
-								id="rsvp-standard-tooltip"
-								label="Standard.site"
-								class="standard"
-								blockAnchor="--standard-row"
-							>
-								An open format for publishing on the Atmosphere. Subscribe once,
-								and our posts show up in any reader that speaks it, like{" "}
-								<a href="https://leaflet.pub/reader">Leaflet</a> or{" "}
-								<a href="https://pckt.blog/read">pckt</a>.
-							</Tooltip>
-						</span>
-					</div>
-					<label class="check-row" for="subscribe-news">
-						<input
-							id="subscribe-news"
-							name="subscribeNews"
-							type="checkbox"
-							value="yes"
-						/>
-						<span>Email me news!</span>
-					</label>
-					<span class="news-note">
-						We’ll use your Atmosphere email—the one you signed up with!{" "}
-						<button
-							class="change-email"
-							type="button"
-							data-change-email
-							aria-controls="newsletter-options"
-							aria-expanded="false"
-						>
-							change me
-						</button>
-					</span>
-					<div id="newsletter-options" class="newsletter-options" hidden>
-						<label class="postcard-label" for="alternate-email">
-							Send to this other email:
+					<div class="extras">
+						{/* The tooltip trigger sits outside the <label> so clicking it
+						    doesn't toggle the checkbox; aria-label restores the full name. */}
+						<div class="check-row standard-row">
+							<input
+								id="standard-only"
+								name="standardOnly"
+								type="checkbox"
+								value="yes"
+								aria-label="Also subscribe via Standard.site"
+							/>
+							<span>
+								<label for="standard-only">Get updates via</label>{" "}
+								<Tooltip
+									id="rsvp-standard-tooltip"
+									label="Standard.site"
+									class="standard"
+									blockAnchor="--standard-row"
+								>
+									An open format for publishing on the Atmosphere. Subscribe
+									once, and our posts show up in any reader that speaks it, like{" "}
+									<a href="https://leaflet.pub/reader">Leaflet</a> or{" "}
+									<a href="https://pckt.blog/read">pckt</a>.
+								</Tooltip>
+							</span>
+						</div>
+						<label class="check-row" for="subscribe-news">
+							<input
+								id="subscribe-news"
+								name="subscribeNews"
+								type="checkbox"
+								value="yes"
+							/>
+							<span>Email me news!</span>
 						</label>
-						<input
-							class="postcard-field"
-							id="alternate-email"
-							name="alternateEmail"
-							type="email"
-							autocomplete="email"
-						/>
+						<span class="news-note" data-note-account>
+							We’ll use your Atmosphere account’s email.{" "}
+							<button
+								class="change-email"
+								type="button"
+								data-change-email
+								aria-controls="newsletter-options"
+							>
+								change me
+							</button>
+						</span>
+						<span class="news-note" data-note-other hidden>
+							We’ll leave your Atmosphere account’s email alone.{" "}
+							<button
+								class="change-email"
+								type="button"
+								data-use-account-email
+								aria-controls="newsletter-options"
+							>
+								use it after all
+							</button>
+						</span>
+						<div id="newsletter-options" class="newsletter-options" hidden>
+							<label class="postcard-label" for="alternate-email">
+								Send to this other email:
+							</label>
+							{/* The pattern and length mirror the server's isEmail, which
+							    type="email" alone lets "a@b" slip past. */}
+							<input
+								class="postcard-field"
+								id="alternate-email"
+								name="alternateEmail"
+								type="email"
+								autocomplete="email"
+								required
+								maxlength="254"
+								pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+								aria-describedby="alternate-email-error"
+							/>
+							<p
+								id="alternate-email-error"
+								class="field-error"
+								aria-live="polite"
+							></p>
+						</div>
 					</div>
 					<div class="form-actions">
 						<a class="form-actions-link" href="/">
@@ -211,39 +234,91 @@ const newsAction = encodeURIComponent(
 	)) {
 		const newsCheckbox =
 			form.querySelector<HTMLInputElement>("#subscribe-news");
+		const accountNote = form.querySelector<HTMLElement>("[data-note-account]");
+		const otherNote = form.querySelector<HTMLElement>("[data-note-other]");
 		const changeEmailButton = form.querySelector<HTMLButtonElement>(
 			"[data-change-email]",
+		);
+		const useAccountButton = form.querySelector<HTMLButtonElement>(
+			"[data-use-account-email]",
 		);
 		const newsletterOptions = form.querySelector<HTMLElement>(
 			"#newsletter-options",
 		);
 		const alternateEmail =
 			form.querySelector<HTMLInputElement>("#alternate-email");
-		const newsletterFields = Array.from(
-			form.querySelectorAll<HTMLInputElement>(".newsletter-options input"),
+		const emailError = form.querySelector<HTMLElement>(
+			"#alternate-email-error",
 		);
-		const syncNewsletterFields = () => {
-			const wantsNews = newsCheckbox?.checked ?? false;
-			const changeRequested =
-				changeEmailButton?.getAttribute("aria-expanded") === "true";
-			const showNewsletterOptions = wantsNews && changeRequested;
+		if (
+			!newsCheckbox ||
+			!accountNote ||
+			!otherNote ||
+			!changeEmailButton ||
+			!useAccountButton ||
+			!newsletterOptions ||
+			!alternateEmail ||
+			!emailError
+		) {
+			continue;
+		}
 
-			if (newsletterOptions) newsletterOptions.hidden = !showNewsletterOptions;
-			for (const field of newsletterFields) {
-				field.disabled = !showNewsletterOptions;
-			}
+		let wantsOtherEmail = false;
+		const showError = () => {
+			emailError.textContent = alternateEmail.validity.valueMissing
+				? "Add an email here, or use your account’s after all."
+				: "That doesn’t look like an email address.";
+			alternateEmail.setAttribute("aria-invalid", "true");
 		};
-		newsCheckbox?.addEventListener("change", () => {
-			if (!newsCheckbox.checked && changeEmailButton) {
-				changeEmailButton.setAttribute("aria-expanded", "false");
-			}
+		const clearError = () => {
+			emailError.textContent = "";
+			alternateEmail.removeAttribute("aria-invalid");
+		};
+		const syncNewsletterFields = () => {
+			const showOther = newsCheckbox.checked && wantsOtherEmail;
+			accountNote.hidden = showOther;
+			otherNote.hidden = !showOther;
+			newsletterOptions.hidden = !showOther;
+			// Disabled fields skip validation and aren't submitted, so a
+			// tucked-away address can't block the RSVP or replace the account's.
+			alternateEmail.disabled = !showOther;
+			if (!showOther) clearError();
+		};
+
+		newsCheckbox.addEventListener("change", () => {
+			// Unticking falls back to the account email; whatever they typed
+			// stays in the field for the next "change me".
+			if (!newsCheckbox.checked) wantsOtherEmail = false;
 			syncNewsletterFields();
 		});
-		changeEmailButton?.addEventListener("click", () => {
-			if (newsCheckbox) newsCheckbox.checked = true;
-			changeEmailButton.setAttribute("aria-expanded", "true");
+		changeEmailButton.addEventListener("click", () => {
+			newsCheckbox.checked = true;
+			wantsOtherEmail = true;
 			syncNewsletterFields();
-			alternateEmail?.focus();
+			alternateEmail.focus();
+		});
+		useAccountButton.addEventListener("click", () => {
+			wantsOtherEmail = false;
+			alternateEmail.value = "";
+			syncNewsletterFields();
+			// The same spot now offers "change me", so focus lands where it was.
+			changeEmailButton.focus();
+		});
+		// Complain only once they've left the field, and stop as soon as they
+		// start fixing it.
+		alternateEmail.addEventListener("blur", () => {
+			if (alternateEmail.value && !alternateEmail.validity.valid) showError();
+		});
+		alternateEmail.addEventListener("input", clearError);
+		// Submitting with a bad address trips native validation; cancelling it
+		// swaps the browser's bubble for the inline message.
+		alternateEmail.addEventListener("invalid", (event) => {
+			event.preventDefault();
+			showError();
+			// Leave focus to the browser when the handle is the first problem.
+			if (form.querySelector(":invalid") === alternateEmail) {
+				alternateEmail.focus();
+			}
 		});
 		syncNewsletterFields();
 	}
@@ -278,23 +353,30 @@ const newsAction = encodeURIComponent(
 	.handle-label {
 		flex: none;
 		font-family: var(--label-font), "Avenir Next", sans-serif;
-		font-size: 15px;
-		font-weight: 800;
+		font-size: 14px;
+		font-weight: 700;
 		cursor: text;
 	}
 	.check-row {
 		display: flex;
 		align-items: center;
-		gap: 9px;
+		gap: 8px;
 		font-family: var(--label-font), "Avenir Next", sans-serif;
-		font-size: 15px;
-		font-weight: 700;
+		font-size: 14px;
+		font-weight: 600;
 		cursor: pointer;
 	}
-	/* The form's 10px gap spaces rows within a group; these add room
-	   between the handle, the extras, and the actions. */
-	.standard-row {
+	/* The optional extras sit in their own tinted panel, inset to match the
+	   "RSVP as:" prefix in the field above so both line up on one edge. */
+	.extras {
+		display: grid;
+		gap: 10px;
 		margin-top: 6px;
+		padding: 14px 15px;
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--mint) 30%, transparent);
+	}
+	.standard-row {
 		anchor-name: --standard-row;
 	}
 	/* The trigger is rendered by <Tooltip>, so it carries that component's
@@ -316,12 +398,13 @@ const newsAction = encodeURIComponent(
 		flex: none;
 		display: grid;
 		place-content: center;
-		width: 16px;
-		height: 16px;
+		width: 17px;
+		height: 17px;
 		margin: 0;
-		border: 1.5px solid color-mix(in srgb, var(--ink) 70%, transparent);
-		border-radius: 5px;
-		background: transparent;
+		/* Same ink and fill as the handle field above, so they read as one set. */
+		border: 1.5px solid var(--ink);
+		border-radius: 4px;
+		background: color-mix(in srgb, var(--paper) 78%, white);
 		appearance: none;
 		cursor: pointer;
 		transition:
@@ -363,10 +446,26 @@ const newsAction = encodeURIComponent(
 		padding: 12px;
 		border: 1px dashed color-mix(in srgb, var(--ink) 55%, transparent);
 		border-radius: 12px;
-		background: color-mix(in srgb, var(--mint) 25%, transparent);
+		/* Already inside the mint extras panel, so it takes the field's fill
+		   rather than stacking a second tint. */
+		background: color-mix(in srgb, var(--paper) 78%, white);
 	}
 	.rsvp-form:has(#subscribe-news:checked) .newsletter-options:not([hidden]) {
 		display: grid;
+	}
+	.newsletter-options .postcard-field[aria-invalid="true"] {
+		border-color: var(--cancel-stamp);
+		outline: 1px solid var(--cancel-stamp);
+	}
+	.field-error {
+		margin: 0;
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1.35;
+	}
+	/* Keeps the panel's gap from reserving a blank row while there's no error. */
+	.field-error:empty {
+		display: none;
 	}
 	.confirmation {
 		display: grid;

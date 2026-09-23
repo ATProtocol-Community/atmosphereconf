@@ -56,7 +56,9 @@ const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor
 <style>
 	.tooltip-button {
 		display: inline;
-		margin: 0;
+		/* The padding gives the focus ring room; the matching negative margin
+		   keeps it from widening the spaces around the word. */
+		margin: 0 -2px;
 		padding: 1px 2px;
 		border: 0;
 		border-radius: 3px;

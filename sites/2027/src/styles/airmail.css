@@ -263,7 +263,7 @@ main {
 .form-actions-link {
 	color: var(--strong);
 	font-size: 14px;
-	font-weight: 800;
+	font-weight: 500;
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
@@ -330,7 +330,7 @@ main {
 	padding-inline: 18px;
 	background: var(--fill);
 	color: var(--ink);
-	outline: 1.5px dashed color-mix(in srgb, currentColor 45%, transparent);
+	outline: 2px dashed color-mix(in srgb, var(--paper) 90%, transparent);
 	outline-offset: -5px;
 	transition: transform 160ms ease;
 }
