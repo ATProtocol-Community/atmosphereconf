@@ -108,6 +108,7 @@ const emailMethod = hasDatabase ? "post" : "get";
 </form>
 <script>
 	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
+	import { attachSpritePreview } from "../lib/sprite-preview";
 
 	const radioOptLabels = document.querySelectorAll<HTMLLabelElement>(".segmented-option");
 	const emailInput = document.getElementById(
@@ -119,6 +120,9 @@ const emailMethod = hasDatabase ? "post" : "get";
 	const methodHandleInput = document.getElementById(
 		"method-handle",
 	) as HTMLInputElement | null;
+	const spritePreview = emailInput
+		? attachSpritePreview(emailInput, () => methodHandleInput?.checked ?? false)
+		: undefined;
 	const suffixOptionsEl = emailInput
 		?.closest("form")
 		?.querySelector(".suffix-options") as HTMLDivElement | null;
@@ -206,10 +210,12 @@ const emailMethod = hasDatabase ? "post" : "get";
 	const handleEmailSelection = () => {
 		setSuffixFromMethod(false);
 		setSuggestionsEnabledByMethod();
+		spritePreview?.reset();
 	};
 	const handleHandleSelection = () => {
 		setSuffixFromMethod(true);
 		setSuggestionsEnabledByMethod();
+		spritePreview?.refresh();
 	};
 
 	methodEmailInput?.addEventListener("click", handleEmailSelection);

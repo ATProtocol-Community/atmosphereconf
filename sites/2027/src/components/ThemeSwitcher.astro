@@ -75,6 +75,7 @@
 			sky: { label: "Sky", image: "goose" },
 			garden: { label: "Garden", image: "goose" },
 			colibri: { label: "Colibri", image: "colibri" },
+			"rpg-actor": { label: "rpg.actor", image: null },
 			blacksky: { label: "Blacksky", image: "goose" },
 			semble: { label: "Semble", image: "goose" },
 			fujocoded: { label: "Fujocoded", image: "goose" },
@@ -115,13 +116,21 @@
 			const gooseImage = document.getElementById("goose-img");
 			const gooseSvg = document.getElementById("goose-svg");
 			const pronounsFlock = document.getElementById("pronouns-flock");
-			const isFlock = themes[theme].image === "flock";
+			const image = themes[theme].image;
+			const isFlock = image === "flock";
+			const usesCustomArt = image === null;
 
 			if (pronounsFlock) {
 				pronounsFlock.style.display = isFlock ? "block" : "none";
 			}
 
 			if (isFlock) {
+				if (gooseImage) gooseImage.style.display = "none";
+				if (gooseSvg) gooseSvg.style.display = "none";
+				return;
+			}
+
+			if (usesCustomArt) {
 				if (gooseImage) gooseImage.style.display = "none";
 				if (gooseSvg) gooseSvg.style.display = "none";
 				return;
@@ -136,7 +145,7 @@
 				imageData = {};
 			}
 
-			const src = imageData[themes[theme].image];
+			const src = imageData[image];
 
 			if (src) {
 				if (gooseSvg) gooseSvg.style.display = "none";
