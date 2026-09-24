@@ -64,6 +64,28 @@ body[data-palette="colibri"] {
 	--paper: #f9f5ff;
 }
 
+body[data-palette="rpg-actor"] {
+	color-scheme: light;
+	--ink: #2c2416;
+	--strong: #8b4513;
+	--sky: #71cdf9;
+	--butter: #c9a227;
+	--mint: #619231;
+	--paper: #fffdf9;
+	--goose: #2c2416;
+	--cancel-stamp: #8b2020;
+	--error: #8b2020;
+	/* Destination text/arrow sit on --sky, not --paper, so they get their
+	   own parchment tone (rpg.actor's own --parchment) instead of reusing
+	   the cloud-white --paper token. */
+	--label-ink: #f4f1e8;
+	background: #e8e4d8;
+}
+
+body[data-palette="rpg-actor"] .picture {
+	background: var(--sky);
+}
+
 body[data-palette="blacksky"] {
 	--ink: #6b7bf5;
 	--strong: #5b5bf5;
@@ -358,6 +380,10 @@ main {
 body[data-palette="fujocoded"] .postcard-action.small-action {
 	--fill: #4d2e91;
 	color: var(--paper);
+}
+
+body[data-palette="rpg-actor"] .postcard-action.small-action {
+	color: #fff;
 }
 
 .postcard-action > [aria-hidden="true"] {
