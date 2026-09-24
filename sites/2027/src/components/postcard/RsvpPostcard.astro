@@ -252,6 +252,8 @@ const error =
 </PostcardFrame>
 
 <script>
+	import { attachSpritePreview } from "../lib/sprite-preview";
+
 	for (const form of document.querySelectorAll<HTMLFormElement>(
 		"[data-rsvp-form]",
 	)) {
@@ -280,6 +282,8 @@ const error =
 		const invalidError = form.querySelector<HTMLElement>(
 			"[data-error-invalid]",
 		);
+		const handleInput = form.querySelector<HTMLInputElement>("#rsvp-handle");
+		if (handleInput) attachSpritePreview(handleInput);
 		if (
 			!newsCheckbox ||
 			!accountNote ||
@@ -353,6 +357,7 @@ const error =
 				alternateEmail.focus();
 			}
 		});
+
 		syncNewsletterFields();
 	}
 </script>
