@@ -1,7 +1,9 @@
 ---
 import GooseSvg from "./goose.svg";
+import D20Logo from "./d20-favicon.svg";
 import PronounsGoose from "./PronounsGoose.astro";
 import hummingbird from "./hummingbird.png";
+import { cloudShapes } from "../lib/cloud-shapes";
 
 interface Props {
 	/** The goose's waffle shines like the sun. */
@@ -9,9 +11,35 @@ interface Props {
 }
 
 const { sunny = false } = Astro.props;
+
+// Live actor.rpg.sprite blob for @goose.art on rpg.actor (3 cols x 4 rows,
+// 48px frames). CID-addressed, so this URL never goes stale.
+const RPG_ACTOR_SPRITE_URL =
+	"https://selfhosted.social/xrpc/com.atproto.sync.getBlob?did=did:plc:hsqwcidfez66lwm3gxhfv5in&cid=bafkreidohkm2byu7ynzhrc6vpljtv4vpv2vmvje4av55zft5adzjhfv4xa";
+
+// Scaled down to drift inside the postcard's own clipped scene, instead of
+// only around its edges like the page-wide sky's clouds.
+const postcardClouds = [
+	{ shape: 0, width: 36, top: "14%", duration: 32, delay: 4 },
+	{ shape: 1, width: 30, top: "42%", duration: 40, delay: 18 },
+	{ shape: 0, width: 24, top: "6%", duration: 26, delay: 10 },
+];
 ---
 
 <section class="picture" aria-labelledby="headline">
+	<div class="postcard-clouds" aria-hidden="true">
+		{
+			postcardClouds.map((cloud) => (
+				<svg
+					class="postcard-cloud"
+					viewBox="0 0 190 105"
+					style={`--cloud-top: ${cloud.top}; --cloud-width: ${cloud.width}cqw; --cloud-duration: ${cloud.duration}s; --cloud-delay: -${cloud.delay}s;`}
+				>
+					<path d={cloudShapes[cloud.shape]} />
+				</svg>
+			))
+		}
+	</div>
 	<div class="picture-layout">
 		<p class="air-label">The 100% unofficial gathering of atmospherizens</p>
 		<div class="goose-route" aria-hidden="true">
@@ -25,6 +53,15 @@ const { sunny = false } = Astro.props;
 				width={hummingbird.width}
 				height={hummingbird.height}
 			/>
+
+			<!-- rpg-actor: a live actor.rpg.sprite frame for @goose.art, stepped
+			     the same way every sprite walks on rpg.actor (3x4 sheet, row/col
+			     background-position, steps() timing). CID-addressed, so it's stable. -->
+			<div
+				class="goose rpg-actor-sprite"
+				id="rpg-actor-goose"
+				style={`background-image:url(${RPG_ACTOR_SPRITE_URL})`}
+			></div>
 
 			<GooseSvg data-shiny={sunny || undefined} />
 			<PronounsGoose />
@@ -57,7 +94,11 @@ const { sunny = false } = Astro.props;
 			<span class="headline-word">Back</span>
 			<span class="last-line"
 				><span class="headline-word headline-at">At</span>
-				<span class="headline-word">It<span class="period">.</span></span></span
+				<span class="headline-word"
+					>It<span class="period">.</span><D20Logo
+						class="period-logo"
+						aria-hidden="true"
+					/></span></span
 			>
 		</h1>
 		<div class="destination">
@@ -248,6 +289,42 @@ const { sunny = false } = Astro.props;
 		animation: revolve 70s linear infinite;
 	}
 
+	.postcard-clouds {
+		position: absolute;
+		inset: 0;
+		z-index: -3;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.postcard-cloud {
+		position: absolute;
+		top: var(--cloud-top);
+		left: -40%;
+		width: var(--cloud-width);
+		height: auto;
+		fill: var(--paper);
+		opacity: 0.6;
+		animation: postcard-cloud-drift var(--cloud-duration) linear
+			var(--cloud-delay) infinite;
+	}
+
+	@keyframes postcard-cloud-drift {
+		from {
+			left: -40%;
+		}
+		to {
+			left: 140%;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.postcard-cloud {
+			animation: none;
+			left: 30%;
+		}
+	}
+
 	.distant-windmill {
 		position: absolute;
 		z-index: -1;
@@ -356,6 +433,22 @@ const { sunny = false } = Astro.props;
 		margin-right: 15px;
 	}
 
+	.period-logo {
+		display: none;
+		width: 0.207em;
+		height: 0.207em;
+		margin-left: 0.05em;
+		vertical-align: -0.05em;
+	}
+
+	:global(body[data-palette="rpg-actor"]) .period {
+		display: none;
+	}
+
+	:global(body[data-palette="rpg-actor"]) .period-logo {
+		display: inline-block;
+	}
+
 	.headline-at {
 		display: inline-block;
 		padding: 0.03em 0.14em 0.1em;
@@ -421,6 +514,20 @@ const { sunny = false } = Astro.props;
 		right: 0;
 	}
 
+	/* rpg-actor's postcard sits on a bright sky, so its label/destination
+	   text needs to read against --sky instead of the default paper card;
+	   --label-ink is the palette's dedicated token for that (see airmail.css). */
+	:global(body[data-palette="rpg-actor"]) .air-label,
+	:global(body[data-palette="rpg-actor"]) .destination > span:first-child {
+		color: var(--ink);
+	}
+
+	:global(body[data-palette="rpg-actor"]) .destination div,
+	:global(body[data-palette="rpg-actor"]) .destination .online,
+	:global(body[data-palette="rpg-actor"]) .destination-arrow {
+		color: var(--label-ink);
+	}
+
 	.goose-route {
 		position: relative;
 		z-index: 1;
@@ -446,13 +553,66 @@ const { sunny = false } = Astro.props;
 		animation: stride 0.65s ease-in-out infinite alternate;
 	}
 
-	:global(body[data-palette="colibri"]) .goose {
+	:global(body[data-palette="colibri"]) #goose-img {
 		display: block;
 	}
 
 	:global(body[data-palette="colibri"]) #goose-svg,
 	:global(body[data-palette="pronouns"]) #goose-svg {
 		display: none;
+	}
+
+	:global(body[data-palette="rpg-actor"]) #goose-svg {
+		display: none;
+	}
+
+	/* rpg-actor's sprite steps through its walk cycle the same way every
+	   sprite on rpg.actor does: a 3x4 sheet, one row per facing, three
+	   frames per stride, stepped with background-position + steps().
+	   Fixed at a 2x integer scale (48px frames -> 96px) so the crop lands
+	   on whole pixels instead of the fractional offsets percentage sizing
+	   would produce against the goose-route's fluid width. Anchored to the
+	   bottom of the route so it sits on the ground instead of floating. */
+	.rpg-actor-sprite {
+		width: 96px;
+		height: 96px;
+		align-self: flex-end;
+		background-repeat: no-repeat;
+		background-size: 288px 384px;
+		background-position: 0 -96px;
+		image-rendering: pixelated;
+		animation:
+			rpg-actor-walk 0.6s steps(1) infinite,
+			rpg-actor-sway 1.2s ease-in-out infinite alternate;
+	}
+
+	:global(body[data-palette="rpg-actor"]) #rpg-actor-goose {
+		display: block;
+	}
+
+	@keyframes rpg-actor-sway {
+		from {
+			transform: translateX(-3px);
+		}
+		to {
+			transform: translateX(3px);
+		}
+	}
+
+	@keyframes rpg-actor-walk {
+		0%,
+		100% {
+			background-position-x: 0;
+		}
+		25% {
+			background-position-x: -96px;
+		}
+		50% {
+			background-position-x: -192px;
+		}
+		75% {
+			background-position-x: -96px;
+		}
 	}
 
 	@keyframes stride {
