@@ -139,7 +139,12 @@ const ensureRsvp = async (client: Client) => {
 	for await (const record of client.listAll(rsvp)) {
 		if (record.valid && record.value.subject.uri === EVENT.uri) return;
 	}
-	await client.create(rsvp, { subject: EVENT, status: rsvp.Going });
+	const record: community.lexicon.calendar.rsvp.Main = {
+		$type: rsvp.$type,
+		subject: EVENT,
+		status: rsvp.Going,
+	};
+	await client.createRecord({ ...record, createdAt: new Date().toISOString() });
 };
 
 const readAccountEmail = async (client: Client) => {

@@ -1,21 +1,16 @@
 import { createClient, type Client } from "@libsql/client";
 import { LIBSQL_AUTH_TOKEN, LIBSQL_URL } from "astro:env/server";
 
-// Without a database, RSVP news emails go through Leaflet's sign-up instead.
 export const hasDatabase = !!LIBSQL_URL;
 
-// The app never creates tables; run scripts/init-db.mjs against the database
-// first.
 let db: Client | undefined;
 
 const getDb = () =>
-	(db ??= createClient({
-		url: LIBSQL_URL!,
-		authToken: LIBSQL_AUTH_TOKEN,
-	}));
+(db ??= createClient({
+	url: LIBSQL_URL!,
+	authToken: LIBSQL_AUTH_TOKEN,
+}));
 
-// The form's type="email" is only a browser hint; this keeps obvious junk out
-// of the mailing list.
 export const isEmail = (value: string) =>
 	value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 

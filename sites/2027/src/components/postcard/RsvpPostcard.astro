@@ -100,7 +100,12 @@ const error =
 							<li class={tone}>
 								<span><Words words={words} /></span>
 								{action && (
-									<a class="postcard-action small-action" href={action.href}>
+									<a
+										class="postcard-action small-action"
+										href={action.href}
+										target="_blank"
+										rel="noopener"
+									>
 										{action.label} <span aria-hidden="true">↗</span>
 									</a>
 								)}

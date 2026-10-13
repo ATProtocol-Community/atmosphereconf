@@ -51,12 +51,10 @@ export const signupError = (failure: SignupFailure): string => {
 	}
 };
 
-export const signupReceipt = (receipt: SignupReceipt): string => {
-	if (receipt.via === "email") return "You're on the list.";
-	return receipt.already
+export const signupReceipt = (receipt: SignupReceipt): string =>
+	receipt.already
 		? "Your Atmosphere account is already subscribed."
 		: "Subscribed with your Atmosphere account! Our postcards will know where to find you.";
-};
 
 export const rsvpError = (failure: RsvpFailure): string => {
 	switch (failure.kind) {
@@ -88,11 +86,6 @@ const standardLine = (standard: "subscribed" | "failed"): Line => {
 
 const newsLine = (news: NewsOutcome): Line => {
 	switch (news.kind) {
-		case "stored":
-			return {
-				words: ["We'll send email news to ", { strong: news.email }, "."],
-				tone: "done",
-			};
 		case "leaflet-step":
 			return {
 				words: [
