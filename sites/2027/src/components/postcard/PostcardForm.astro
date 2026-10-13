@@ -11,7 +11,8 @@ interface Props {
 }
 
 const { error } = Astro.props;
-// With a database, emails stay here; otherwise Leaflet collects them.
+// With a database, emails stop here to be saved on the way to Leaflet;
+// otherwise they go straight there.
 const emailAction = hasDatabase ? "/subscribe" : LEAFLET_EMAIL_LOGIN;
 const emailMethod = hasDatabase ? "post" : "get";
 ---

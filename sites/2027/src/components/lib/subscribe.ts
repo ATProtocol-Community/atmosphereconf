@@ -9,8 +9,8 @@ export const PUBLICATION =
 	"at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i";
 const SESSION_KEY = "postcardSubscription";
 
-// Leaflet only adds an email to the list after mailing it a code, so when we
-// can't keep an address ourselves, the visitor finishes signing up there.
+// Leaflet only adds an email to the list after mailing it a code, so every
+// email signup finishes there, even when we keep a copy of the address.
 export const LEAFLET_EMAIL_LOGIN = "https://leaflet.pub/api/auth/email-login";
 // Leaflet double-decodes this, so it goes out encoded once already.
 export const LEAFLET_ACTION = encodeURIComponent(
@@ -31,15 +31,12 @@ export type SignupFailure =
 	| { kind: "subscribe" }
 	| { kind: "bad-email" };
 
-export type SignupReceipt =
-	| { kind: "subscribed"; via: "email" }
-	| { kind: "subscribed"; via: "atmosphere"; already: boolean };
+export type SignupReceipt = { kind: "subscribed"; already: boolean };
 
 /** What the signup postcard shows. */
 export type SignupCard = { kind: "form"; failure?: SignupFailure } | SignupReceipt;
 
 export type NewsOutcome =
-	| { kind: "stored"; email: string }
 	// The visitor still has to confirm through Leaflet.
 	| { kind: "leaflet-step"; email: string }
 	| { kind: "failed"; reason: "no-email" | "bad-email" };
@@ -87,8 +84,8 @@ export const ensureSubscription = async (
 };
 
 /**
- * Puts an email on the news list. Without a database, or if saving fails,
- * the visitor still has Leaflet's step to get on it.
+ * Keeps a copy of the email when there's a database, then hands the visitor
+ * Leaflet's step to actually get on the list.
  */
 export const signUpForNews = async (subscriber: {
 	email: string;
@@ -100,7 +97,6 @@ export const signUpForNews = async (subscriber: {
 	if (hasDatabase) {
 		try {
 			await saveNewsSubscriber(subscriber);
-			return { kind: "stored", email };
 		} catch (error) {
 			console.error("Saving news subscriber failed", error);
 		}
@@ -155,16 +151,13 @@ export const doSubscription = async (
 		// covers both.
 		return fail({ kind: "subscribe" });
 	}
-	return finish({
-		kind: "subscribed",
-		via: "atmosphere",
-		already: result === "existing",
-	});
+	return finish({ kind: "subscribed", already: result === "existing" });
 };
 
 /**
- * Saves an email from the main page's postcard form. Only reachable when the
- * site has a database; otherwise the form posts straight to Leaflet.
+ * Saves an email from the main page's postcard form, then sends the visitor
+ * on to Leaflet's code step. Only reachable when the site has a database;
+ * otherwise the form goes straight to Leaflet.
  */
 export const doEmailSubscription = async (
 	session: APIContext["session"],
@@ -183,11 +176,7 @@ export const doEmailSubscription = async (
 				{ ttl: 600 },
 			);
 			return returnTo("/");
-		// Saving failed, so send them where the form goes without a database.
 		case "leaflet-step":
 			return returnTo(leafletStepUrl(news.email));
-		case "stored":
-			session.set(SESSION_KEY, { kind: "subscribed", via: "email" }, { ttl: 600 });
-			return returnTo("/");
 	}
 };
