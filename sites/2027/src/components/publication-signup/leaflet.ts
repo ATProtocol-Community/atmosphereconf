@@ -1,6 +1,7 @@
 import { type Client, currentDatetimeString } from "@atproto/lex";
 import * as subscription from "../../lexicons/site/standard/graph/subscription.js";
 import type { SignupFailure, SignupReceipt } from "./server";
+import { signInFailed } from "../lib/sign-in";
 
 /** A Leaflet email signup starts confirmation; it isn't a subscription receipt. */
 export const createLeafletSignup = ({
@@ -35,13 +36,12 @@ export const createLeafletSignup = ({
 export const isEmail = (value: string) =>
 	value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-const signInFailed = (detail?: string) =>
-	detail ?? "Sign-in could not be completed. Try your handle again.";
-
 export const signupError = (failure: SignupFailure): string => {
 	switch (failure.kind) {
 		case "sign-in":
 			return signInFailed(failure.detail);
+		case "missing":
+			return "Enter an email or Atmosphere handle.";
 		case "subscribe":
 			return "We couldn't confirm your subscription. Try your handle again.";
 		case "bad-email":

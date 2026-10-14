@@ -1,25 +1,32 @@
 import type { APIContext } from "astro";
 import type { Client } from "@atproto/lex";
 import { com, community } from "../../lexicons/index.js";
-import { clientFor } from "./records";
+import { clientFor } from "../lib/records";
 import {
 	ensureSubscription,
 	type NewsOutcome,
 	signUpForNews,
+	SUBSCRIBE_SCOPE,
 } from "../publication-signup/server";
-
-import { returnTo, unavailable } from "./responses";
+import {
+	park,
+	showOnce,
+	signInError,
+	startSignIn,
+	unpark,
+	type SignInContext,
+	type SignInFailure,
+} from "../lib/sign-in";
+import { unavailable } from "../lib/responses";
 
 const rsvp = community.lexicon.calendar.rsvp;
 const EVENT = {
 	uri: "at://did:plc:3xewinw4wtimo2lqfy5fm5sw/community.lexicon.calendar.event/3mw74r4r3gsej",
 	cid: "bafyreihykrqz27n6uundgzqpt7rd3m5fbq2hprk53pbwbol5wuvommicbu",
 } as const;
-// Every scope here must also be declared in astro.config.mjs, or authproto
-// silently drops it from the login request.
 const RSVP_SCOPES = {
 	rsvp: `repo:${rsvp.$nsid}?action=create`,
-	subscribe: "repo:site.standard.graph.subscription?action=create",
+	subscribe: SUBSCRIBE_SCOPE,
 	email: "account:email",
 };
 const REQUEST_KEY = "rsvpRequest";
@@ -35,7 +42,7 @@ type RsvpRequest = {
 // Every failure sends the visitor back to the form to try again.
 export type RsvpFailure =
 	| { kind: "missing-handle" }
-	| { kind: "sign-in"; detail?: string }
+	| SignInFailure
 	| { kind: "save" };
 
 /**
@@ -63,10 +70,7 @@ declare global {
 	}
 }
 
-type RsvpContext = Pick<
-	APIContext,
-	"session" | "locals" | "redirect" | "rewrite" | "request" | "url"
->;
+type RsvpContext = SignInContext & Pick<APIContext, "session">;
 
 const readRsvpRequest = (
 	formData: FormData,
@@ -101,38 +105,17 @@ const scopesFor = (request: RsvpRequest) => [
 
 /**
  * Parks the request in the session and signs the user in with the scopes it
- * needs. OAuth comes back to /rsvp, where `rsvpPage` finishes the job.
+ * needs. Sign-in comes back to /rsvp, where `rsvpPage` finishes the job.
  */
-const startRsvp = async (context: RsvpContext, request: RsvpRequest) => {
-	const { session, locals } = context;
+const startRsvp = (context: RsvpContext, request: RsvpRequest) => {
+	const { session } = context;
 	if (!session) return unavailable("RSVPs");
-	session.set(REQUEST_KEY, request, { ttl: 600 });
-	const scopes = scopesFor(request);
-	const user = locals.loggedInUser;
-	if (
-		user &&
-		user.handle.toLowerCase() === request.handle.toLowerCase() &&
-		scopes.every((scope) => user.scopes.includes(scope))
-	) {
-		return context.redirect("/rsvp", 303);
-	}
-	// Hand the same request to authproto's login route with the scopes filled
-	// in server-side, rather than trusting scope fields from the form.
-	const body = new URLSearchParams({
-		"atproto-id": request.handle,
-		redirect: "/rsvp",
+	park(session, REQUEST_KEY, request);
+	return startSignIn(context, {
+		handle: request.handle,
+		scopes: scopesFor(request),
+		backTo: "/rsvp",
 	});
-	for (const scope of ["atproto", ...scopes]) body.append("scope", scope);
-	const headers = new Headers(context.request.headers);
-	headers.delete("content-type");
-	headers.delete("content-length");
-	return context.rewrite(
-		new Request(new URL("/oauth/login", context.url), {
-			method: "POST",
-			headers,
-			body,
-		}),
-	);
 };
 
 const ensureRsvp = async (client: Client) => {
@@ -207,8 +190,7 @@ export const rsvpPage = async (
 	const signedInHandle = locals.loggedInUser?.handle ?? "";
 	const show = (card: RsvpCard) => {
 		if (!session) return unavailable("RSVPs");
-		session.set(CARD_KEY, card, { ttl: 600 });
-		return returnTo("/rsvp");
+		return showOnce(session, "/rsvp", CARD_KEY, card);
 	};
 	if (context.request.method === "POST") {
 		const request = readRsvpRequest(
@@ -223,21 +205,19 @@ export const rsvpPage = async (
 		});
 	}
 
-	const request = await session?.get(REQUEST_KEY);
-	if (locals.authproto?.errorCode || locals.authproto?.errorDescription) {
-		session?.delete(REQUEST_KEY);
+	const request = await unpark(session, REQUEST_KEY);
+	const signIn = signInError(locals);
+	if (signIn) {
 		return {
 			kind: "form",
 			handle: request?.handle ?? signedInHandle,
-			failure: { kind: "sign-in", detail: locals.authproto.errorDescription },
+			failure: signIn,
 		};
 	}
 	if (request && locals.loggedInUser) {
-		session?.delete(REQUEST_KEY);
 		return show(await completeRsvp(request, locals, locals.loggedInUser));
 	}
-	const card = await session?.get(CARD_KEY);
-	if (!card) return { kind: "form", handle: signedInHandle };
-	session?.delete(CARD_KEY);
-	return card;
+	return (
+		(await unpark(session, CARD_KEY)) ?? { kind: "form", handle: signedInHandle }
+	);
 };

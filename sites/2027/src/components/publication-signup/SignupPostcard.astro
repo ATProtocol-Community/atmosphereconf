@@ -51,7 +51,7 @@ const receipt = card.kind === "subscribed" ? signupReceipt(card) : undefined;
 	{
 		receipt ? (
 			<div class="receipt">
-				<p id="signup-receipt" role="status" tabindex="-1">
+				<p role="status" tabindex="-1" data-focus-on-load>
 					{receipt}
 				</p>
 				<a class="postcard-action" href="/rsvp">
@@ -63,10 +63,6 @@ const receipt = card.kind === "subscribed" ? signupReceipt(card) : undefined;
 		)
 	}
 </PostcardFrame>
-
-<script>
-	document.getElementById("signup-receipt")?.focus();
-</script>
 
 <style>
 	.receipt {

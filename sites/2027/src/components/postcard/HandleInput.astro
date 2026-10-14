@@ -7,9 +7,26 @@ interface Props {
 	name: string;
 	value?: string;
 	required?: boolean;
+	label?: string;
+	placeholder?: string;
+	autocomplete?: string;
+	/** Off for a field that takes emails too, where a leading "@" would mislead. */
+	atSign?: boolean;
+	/** What the placeholder cycles through after "you". */
+	suffixes?: readonly string[];
 }
 
-const { id, name, value, required } = Astro.props;
+const {
+	id,
+	name,
+	value,
+	required,
+	label = "Atmosphere handle",
+	placeholder = "you.example.com",
+	autocomplete = "username",
+	atSign = true,
+	suffixes = [".example.com", ".bsky.social", ".blacksky.social"],
+} = Astro.props;
 ---
 
 <div class="handle-input" data-handle-input>
@@ -18,35 +35,25 @@ const { id, name, value, required } = Astro.props;
 		name={name}
 		value={value}
 		inputClass="postcard-field"
-		autocomplete="username"
-		placeholder="you.example.com"
-		label="Atmosphere handle"
+		autocomplete={autocomplete}
+		placeholder={placeholder}
+		label={label}
 		required={required}
 	>
-		<span slot="leading-icon" class="at-sign">@</span>
+		{atSign && <span slot="leading-icon" class="at-sign">@</span>}
 	</ComboBox>
 	<div class="handle-placeholder" aria-hidden="true">
-		<span>you</span><RotatingSuffix
-			words={[".example.com", ".bsky.social", ".blacksky.social"]}
-		/>
+		<span>you</span><RotatingSuffix words={suffixes} />
 	</div>
 </div>
 
 <script>
-	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
+	import { wireActorSearch } from "../lib/actor-search";
 
 	for (const combobox of document.querySelectorAll(
 		"[data-handle-input] cmb-combobox",
 	)) {
-		combobox.addEventListener("combobox-search", (e) => {
-			const detail = (
-				e as CustomEvent<{
-					query: string;
-					results: Promise<ActorSuggestion[]> | null;
-				}>
-			).detail;
-			detail.results = searchActors((detail.query ?? "").trim());
-		});
+		wireActorSearch(combobox);
 	}
 </script>
 
@@ -78,6 +85,11 @@ const { id, name, value, required } = Astro.props;
 		color: var(--ink);
 		opacity: 0.65;
 		pointer-events: none;
+	}
+
+	/* No "@" to clear, so the overlay starts where the text does. */
+	.handle-input:not(:has(.at-sign)) .handle-placeholder {
+		left: 15px;
 	}
 
 	.handle-input:has(input:not(:placeholder-shown)) .handle-placeholder {

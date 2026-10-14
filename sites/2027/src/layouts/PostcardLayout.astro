@@ -141,6 +141,10 @@ const clouds = [
 </html>
 
 <script>
+	// Outcomes (an error, a receipt) take focus on load so screen readers
+	// land on them; they aren't controls, so their focus ring is hidden.
+	document.querySelector<HTMLElement>("[data-focus-on-load]")?.focus();
+
 	const picture = document.querySelector<HTMLElement>(".picture");
 	const sky = document.querySelector<HTMLElement>(".page-sky");
 	if (picture && sky) {

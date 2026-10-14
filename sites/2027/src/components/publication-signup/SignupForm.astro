@@ -1,29 +1,17 @@
 ---
-import ComboBox from "../ComboBox.astro";
 import Tooltip from "../Tooltip.astro";
-import { hasDatabase } from "../lib/db";
-import { newsSignup } from "./settings";
 import HandleIcon from "../postcard/HandleIcon.astro";
-import RotatingSuffix from "../postcard/RotatingSuffix.astro";
+import HandleInput from "../postcard/HandleInput.astro";
 
 interface Props {
 	error?: string;
 }
 
 const { error } = Astro.props;
-// With a database, emails stop here to be saved on the way to Leaflet;
-// otherwise they go straight there.
-const emailAction = hasDatabase ? "/subscribe" : newsSignup.form.action;
-const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 ---
 
-<form
-	class="postcard-form"
-	action={emailAction}
-	method={emailMethod}
-	data-email-action={emailAction}
-	data-email-method={emailMethod}
->
+{/* Posts to the homepage, where `signupPage` picks email or handle. */}
+<form class="postcard-form" method="post" action="/" data-signup-form>
 	<fieldset class="segmented">
 		<input id="method-email" name="method" type="radio" value="email" checked />
 		<label class="segmented-option" for="method-email">
@@ -51,22 +39,16 @@ const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 		</label>
 	</fieldset>
 	<label class="sr-only" for="airmail-email">Email or Atmosphere handle</label>
-	<div class="airmail-email-wrap">
-		<ComboBox
-			id="airmail-email"
-			name="email"
-			inputClass="postcard-field"
-			autocomplete="username webauthn email"
-			placeholder="you@example.com"
-			label="login text"
-			required
-		/>
-		<div class="airmail-email-placeholder">
-			<span class="airmail-prefix-text">you</span><RotatingSuffix
-				words={["@example.com", ".bsky.social", ".blacksky.social",".example.com"]}
-			/>
-		</div>
-	</div>
+	<HandleInput
+		id="airmail-email"
+		name="identifier"
+		label="Email or Atmosphere handle"
+		placeholder="you@example.com"
+		autocomplete="username webauthn email"
+		atSign={false}
+		suffixes={["@example.com", ".bsky.social", ".blacksky.social", ".example.com"]}
+		required
+	/>
 	<p class="tip">
 		Whether via{" "}
 		<Tooltip
@@ -94,36 +76,23 @@ const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 	</div>
 	{
 		error && (
-			<p
-				id="postcard-subscription-result"
-				class="postcard-error"
-				role="alert"
-				tabindex="-1"
-			>
+			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
 				{error}
 			</p>
 		)
 	}
-	<input type="hidden" name="action" value={newsSignup.form.fields.action} />
-	<input type="hidden" name="redirect" value={newsSignup.form.fields.redirect} />
 </form>
 <script>
-	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
 	import { attachSpritePreview } from "../lib/sprite-preview";
+	import { sureMethod, type Method } from "./identifier";
 
-	type Mode = "email" | "handle";
-
-	const form = document.querySelector<HTMLFormElement>("form.postcard-form");
+	const form = document.querySelector<HTMLFormElement>("[data-signup-form]");
 	const input = document.getElementById("airmail-email") as HTMLInputElement | null;
 	const radios = {
 		email: document.getElementById("method-email") as HTMLInputElement | null,
 		handle: document.getElementById("method-handle") as HTMLInputElement | null,
 	};
 	const combobox = input?.closest("cmb-combobox");
-	const redirectInput = form?.querySelector<HTMLInputElement>('input[name="redirect"]');
-	const actionInput = form?.querySelector<HTMLInputElement>('input[name="action"]');
-	// Captured now: assigning a hidden input's value also rewrites its defaultValue.
-	const newsRedirect = redirectInput?.value ?? "";
 
 	// RotatingSuffix ends on a repeat of its first word; that last slot is the
 	// one we overwrite so the placeholder settles on a word for the method.
@@ -131,33 +100,18 @@ const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 		form?.querySelectorAll<HTMLDivElement>(".suffix-options div") ?? [],
 	);
 	const suffixWords = suffixSlots.map((el) => el.textContent?.trim() ?? "");
-	const suffixFor: Record<Mode, string | undefined> = {
+	const suffixFor: Record<Method, string | undefined> = {
 		email: suffixWords[0],
 		handle: suffixWords.at(-2),
 	};
 
-	const didPattern = /^did:[a-z0-9.-]+:/i;
-	const handleLikePattern = /^@[\w.-]+$|^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9.-]*$/i;
-	// Only signals that can't change meaning with more typing: a bare dotted
-	// word ("bob.smith") looks like a handle until the "@" arrives.
-	const detectSureMode = (raw: string): Mode | null => {
-		const value = raw.trim().toLowerCase();
-		if (didPattern.test(value) || value.startsWith("@")) return "handle";
-		if (value.includes("@")) return "email";
-		return null;
-	};
-	const detectMode = (raw: string): Mode => {
-		const sure = detectSureMode(raw);
-		if (sure) return sure;
-		return handleLikePattern.test(raw.trim()) ? "handle" : "email";
-	};
-
-	let mode: Mode = radios.handle?.checked ? "handle" : "email";
+	let mode: Method = radios.handle?.checked ? "handle" : "email";
 	const spritePreview = input
 		? attachSpritePreview(input, () => mode === "handle")
 		: undefined;
 
-	// Everything the method affects is written here, from `mode` alone.
+	// Everything the method affects is written here, from `mode` alone. The
+	// server makes the same call on submit, so this is only ever cosmetic.
 	const render = () => {
 		const radio = radios[mode];
 		if (radio) radio.checked = true;
@@ -167,7 +121,7 @@ const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 		if (word && slot) slot.textContent = word;
 	};
 
-	const setMode = (next: Mode) => {
+	const setMode = (next: Method) => {
 		if (next === mode) return;
 		mode = next;
 		render();
@@ -179,37 +133,11 @@ const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 	radios.email?.addEventListener("change", () => setMode("email"));
 	radios.handle?.addEventListener("change", () => setMode("handle"));
 	input?.addEventListener("input", () => {
-		const sure = detectSureMode(input.value);
+		const sure = sureMethod(input.value);
 		if (sure) setMode(sure);
 	});
 
-	combobox?.addEventListener("combobox-search", (e) => {
-		const detail = (
-			e as CustomEvent<{ query: string; results: Promise<ActorSuggestion[]> | null }>
-		).detail;
-		try {
-			detail.results = searchActors((detail?.query ?? "").trim());
-		} catch {
-			// Keep form usable if search event detail is immutable for this environment.
-		}
-	});
-
-	form?.addEventListener("submit", () => {
-		if (!input) return;
-		const identifier = input.value.trim();
-		setMode(detectMode(identifier));
-		const isHandle = mode === "handle";
-		// Reset every field even when returning with Back or changing methods.
-		form.setAttribute("method", isHandle ? "post" : form.dataset.emailMethod!);
-		form.setAttribute("action", isHandle ? "/oauth/login" : form.dataset.emailAction!);
-		input.name = isHandle ? "atproto-id" : "email";
-		input.value = isHandle ? identifier.replace(/^@/, "") : identifier;
-		if (redirectInput) redirectInput.value = isHandle ? "/subscribe" : newsRedirect;
-		if (actionInput) actionInput.disabled = isHandle;
-	});
-
 	render();
-	document.getElementById("postcard-subscription-result")?.focus();
 </script>
 <style>
 	form {
@@ -317,53 +245,6 @@ const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 	form:has(input[value="handle"]:checked) :global(.tooltip-button.handle),
 	form:has(input[value="email"]:checked) :global(.tooltip-button.email) {
 		color: var(--cancel-stamp);
-	}
-
-	.airmail-email-wrap {
-		position: relative;
-		--card: white;
-	}
-
-	.airmail-email-placeholder {
-		position: absolute;
-		left: 15px;
-		top: 50%;
-		transform: translateY(-50%);
-		color: var(--ink);
-		opacity: 0.65;
-		pointer-events: none;
-		/* Above the input, which now has its own fill; clicks pass through. */
-		z-index: 2;
-		display: flex;
-		height: 100%;
-		align-items: center;
-	}
-
-	:global(#airmail-email)::placeholder {
-		opacity: 0;
-	}
-
-	:global(
-		form:has(#airmail-email:not(:placeholder-shown)) .airmail-email-placeholder
-	) {
-		opacity: 0;
-	}
-
-	:global(#airmail-email) {
-		appearance: none;
-		-webkit-appearance: none;
-		position: relative;
-		z-index: 1;
-	}
-	:global(#airmail-email-listbox) {
-		padding-block: 10px;
-		li {
-			padding: 8px 10px;
-		}
-		li:hover {
-			background: var(--butter);
-			border-radius: var(--rounding);
-		}
 	}
 
 	.tip {

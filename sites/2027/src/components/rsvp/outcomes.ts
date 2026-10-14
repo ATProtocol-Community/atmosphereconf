@@ -3,7 +3,8 @@
  * outcome sits next to its words, and the switches below stop compiling if
  * an outcome is added without any.
  */
-import type { RsvpFailure, RsvpReceipt } from "./rsvp";
+import type { RsvpFailure, RsvpReceipt } from "./server";
+import { signInFailed } from "../lib/sign-in";
 import {
 	leafletStepUrl,
 	type NewsOutcome,
@@ -34,9 +35,6 @@ export type Line = {
 	/** The step a to-do needs. */
 	action?: { label: string; href: string };
 };
-
-const signInFailed = (detail?: string) =>
-	detail ?? "Sign-in could not be completed. Try your handle again.";
 
 export const rsvpError = (failure: RsvpFailure): string => {
 	switch (failure.kind) {
