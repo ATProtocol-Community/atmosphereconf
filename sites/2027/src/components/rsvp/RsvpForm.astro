@@ -1,0 +1,276 @@
+---
+import HandleInput from "../postcard/HandleInput.astro";
+import PostcardHeader from "../postcard/PostcardHeader.astro";
+import Tooltip from "../Tooltip.astro";
+import Calendar from "./calendar.svg";
+import type { RsvpFailure } from "./server";
+import { rsvpError } from "./outcomes";
+
+interface Props {
+	handle: string;
+	failure?: RsvpFailure;
+}
+
+const { handle, failure } = Astro.props;
+const error = failure ? rsvpError(failure) : undefined;
+---
+
+<PostcardHeader
+	id="rsvp-title"
+	title="RSVP, Save the Date, Honk aboard!"
+	subtitle="AtmosphereConf 2027 will be in Amsterdam. RSVP below for an exclusive prize: friends!"
+>
+	<Fragment slot="decoration"><Calendar /></Fragment>
+</PostcardHeader>
+<form method="post" class="postcard-form rsvp-form" data-rsvp-form>
+	{
+		error && (
+			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
+				{error}
+			</p>
+		)
+	}
+	<div class="handle-row">
+		<label class="handle-label" for="rsvp-handle">
+			RSVP as<span class="sr-only"> your Atmosphere handle</span>:
+		</label>
+		<HandleInput id="rsvp-handle" name="handle" value={handle} required />
+	</div>
+	<div class="extras">
+		{/* The tooltip trigger sits outside the <label> so clicking it
+		    doesn't toggle the checkbox; aria-label restores the full name. */}
+		<div class="check-row standard-row">
+			<input
+				id="standard-only"
+				name="standardOnly"
+				type="checkbox"
+				value="yes"
+				aria-label="Also subscribe via Standard.site"
+			/>
+			<span>
+				<label for="standard-only">Get updates via</label>{" "}
+				<Tooltip
+					id="rsvp-standard-tooltip"
+					label="Standard.site"
+					class="standard"
+					blockAnchor="--standard-row"
+				>
+					An open format for publishing on the Atmosphere. Subscribe once, and
+					our posts show up in any reader that speaks it, like{" "}
+					<a href="https://leaflet.pub/reader">Leaflet</a> or{" "}
+					<a href="https://pckt.blog/read">pckt</a>.
+				</Tooltip>
+			</span>
+		</div>
+		<label class="check-row" for="subscribe-news">
+			<input id="subscribe-news" name="subscribeNews" type="checkbox" value="yes" />
+			<span>Email me news!</span>
+		</label>
+		<span class="news-note" data-note-account>
+			We’ll use your Atmosphere account’s email.{" "}
+			<button
+				class="change-email"
+				type="button"
+				data-change-email
+				aria-controls="newsletter-options"
+			>
+				change me
+			</button>
+		</span>
+		<span class="news-note" data-note-other hidden>
+			We’ll leave your Atmosphere account’s email alone.{" "}
+			<button
+				class="change-email"
+				type="button"
+				data-use-account-email
+				aria-controls="newsletter-options"
+			>
+				use it after all
+			</button>
+		</span>
+		<div id="newsletter-options" class="newsletter-options" hidden>
+			<label class="postcard-label" for="alternate-email">
+				Send to this other email:
+			</label>
+			{/* The pattern and length mirror the server's isEmail, which
+			    type="email" alone lets "a@b" slip past. */}
+			<input
+				class="postcard-field"
+				id="alternate-email"
+				name="alternateEmail"
+				type="email"
+				autocomplete="email"
+				required
+				maxlength="254"
+				pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+				aria-describedby="alternate-email-error"
+			/>
+			<p id="alternate-email-error" class="field-error" aria-live="polite" hidden>
+				<span data-error-missing>
+					Add an email here, or{" "}
+					<button class="change-email" type="button" data-use-account-email>
+						use your account’s after all
+					</button>
+					.
+				</span>
+				<span data-error-invalid>That doesn’t look like an email address.</span>
+			</p>
+		</div>
+	</div>
+	<div class="form-actions">
+		<a class="form-actions-link" href="/">
+			Just the news, please! <span aria-hidden="true">→</span>
+		</a>
+		<button class="postcard-action small-action" type="submit">
+			I'll be there! <span aria-hidden="true">↗</span>
+		</button>
+	</div>
+</form>
+
+<script src="./newsletter-fields.ts"></script>
+<script>
+	import { attachSpritePreview } from "../lib/sprite-preview";
+
+	const handleInput = document.querySelector<HTMLInputElement>("#rsvp-handle");
+	if (handleInput) attachSpritePreview(handleInput);
+</script>
+
+<style>
+	/* The row wears the field's border so "RSVP as:" reads as a prefix
+	   inside it; the input itself goes borderless. */
+	.handle-row {
+		display: flex;
+		align-items: center;
+		padding-left: 15px;
+		border: 1px solid var(--ink);
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--paper) 78%, white);
+	}
+	.handle-row:has(input:focus-visible) {
+		outline: 1px solid var(--ink);
+	}
+	.handle-row > :global(.handle-input) {
+		flex: 1;
+		min-width: 0;
+	}
+	.handle-row :global(.postcard-field) {
+		min-height: 48px;
+		border-color: transparent;
+		background: transparent;
+	}
+	.handle-row :global(.postcard-field:focus-visible) {
+		outline: none;
+	}
+	.handle-label {
+		flex: none;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
+		font-size: 14px;
+		font-weight: 700;
+		cursor: text;
+	}
+	.check-row {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-family: var(--label-font), "Avenir Next", sans-serif;
+		font-size: 14px;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	/* The optional extras sit in their own tinted panel, inset to match the
+	   "RSVP as:" prefix in the field above so both line up on one edge. */
+	.extras {
+		display: grid;
+		gap: 10px;
+		margin-top: 6px;
+		padding: 14px 15px;
+		border-radius: 16px;
+		background: color-mix(in srgb, var(--mint) 30%, transparent);
+	}
+	/* --mint is a gradient in this palette, which color-mix() can't take. */
+	:global(body[data-palette="fujocoded"]) .extras {
+		background: color-mix(in srgb, #9687fa 20%, transparent);
+	}
+	.standard-row {
+		anchor-name: --standard-row;
+	}
+	/* The trigger is rendered by <Tooltip>, so it carries that component's
+	   scope; the scoped `.standard-row` still confines this to us. */
+	.standard-row:has(input:checked) :global(.tooltip-button.standard) {
+		color: var(--cancel-stamp);
+	}
+	.standard-row label {
+		cursor: pointer;
+	}
+	.standard-row :global(.tooltip a) {
+		color: inherit;
+		font-weight: 800;
+		text-underline-offset: 2px;
+	}
+	/* Drawn by hand so the box takes the palette's colors; the native
+	   checkbox stays a bright white square on every theme. */
+	.check-row input {
+		flex: none;
+		display: grid;
+		place-content: center;
+		width: 17px;
+		height: 17px;
+		margin: 0;
+		/* Same ink and fill as the handle field above, so they read as one set. */
+		border: 1.5px solid var(--ink);
+		border-radius: 4px;
+		background: color-mix(in srgb, var(--paper) 78%, white);
+		appearance: none;
+		cursor: pointer;
+		transition:
+			background-color 140ms ease,
+			border-color 140ms ease;
+	}
+	.check-row input:hover {
+		border-color: var(--strong);
+	}
+	.check-row input:checked {
+		border-color: var(--strong);
+		background: var(--strong)
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+			center / 100% no-repeat;
+	}
+	.check-row input:focus-visible {
+		outline: 2px solid var(--strong);
+		outline-offset: 2px;
+	}
+	.news-note {
+		margin: -4px 0 0 25px;
+		font-size: 11px;
+		line-height: 1.35;
+	}
+	.newsletter-options {
+		display: none;
+		gap: 6px;
+		padding: 12px;
+		border: 1px dashed color-mix(in srgb, var(--ink) 55%, transparent);
+		border-radius: 12px;
+		/* Already inside the mint extras panel, so it takes the field's fill
+		   rather than stacking a second tint. */
+		background: color-mix(in srgb, var(--paper) 78%, white);
+	}
+	.rsvp-form:has(#subscribe-news:checked) .newsletter-options:not([hidden]) {
+		display: grid;
+	}
+	.newsletter-options .postcard-field[aria-invalid="true"] {
+		border-color: var(--error);
+		outline: 1px solid var(--error);
+	}
+	.field-error {
+		margin: 0;
+		color: var(--error);
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1.35;
+	}
+	@media (max-width: 660px) {
+		.newsletter-options {
+			padding: 10px;
+		}
+	}
+</style>

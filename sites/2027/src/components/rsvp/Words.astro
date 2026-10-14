@@ -6,7 +6,7 @@ interface Props {
 }
 
 // Buttons re-send the RSVP with their extra ticked, so they only work inside
-// the RSVP postcard's follow-up form. Styling comes from that postcard.
+// the RSVP receipt's follow-up form.
 const fieldFor = { standard: "standardOnly", news: "subscribeNews" } as const;
 const { words } = Astro.props;
 ---

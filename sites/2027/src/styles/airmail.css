@@ -320,6 +320,18 @@ main {
 	font-weight: 800;
 }
 
+.change-email {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--strong);
+	font: inherit;
+	font-weight: 800;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
+}
+
 .postcard-action {
 	display: flex;
 	align-items: center;

@@ -4,6 +4,7 @@ import D20Logo from "./d20-favicon.svg";
 import PronounsGoose from "./PronounsGoose.astro";
 import hummingbird from "./hummingbird.png";
 import { cloudShapes } from "../lib/cloud-shapes";
+import PaperPlane from "./paper-plane.svg";
 
 interface Props {
 	/** The goose's waffle shines like the sun. */
@@ -66,13 +67,7 @@ const postcardClouds = [
 			<GooseSvg data-shiny={sunny || undefined} />
 			<PronounsGoose />
 		</div>
-		<div class="grass">
-			{
-				Array.from({ length: 36 }, () => (
-					<div class="grass-blade" aria-hidden="true" />
-				))
-			}
-		</div>
+		<div class="grass"></div>
 		<svg
 			class="distant-windmill"
 			viewBox="0 0 80 100"
@@ -106,145 +101,13 @@ const postcardClouds = [
 			<div>
 				Somewhere<br />in Amsterdam <span class="online">(and online)</span>
 				<span class="destination-arrow" aria-hidden="true">
-					<svg
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						xmlns="http://www.w3.org/2000/svg"
-						><path
-							fill="currentColor"
-							d="m10.775 10.4l-6.25-2.7q-.6-.275-.737-.888t.337-1.087l.4-.4q.2-.2.488-.3t.587-.05l9 1.6l3.1-3.125q.575-.575 1.413-.575t1.412.575t.575 1.413t-.575 1.412l-3.1 3.125L19 18.375q.05.3-.038.6t-.287.5l-.4.375q-.475.475-1.1.35t-.9-.725l-2.675-6.25l-2.55 2.525l.55 3.1q.05.25-.025.488t-.25.412l-.425.425q-.35.35-.862.275t-.763-.525L7.45 16.55l-3.375-1.825q-.45-.25-.525-.762t.275-.863l.425-.425q.175-.175.413-.25t.487-.025l3.075.525z"
-						></path></svg
-					>
+					<PaperPlane />
 				</span>
 			</div>
 		</div>
 	</div>
 </section>
 
-<script>
-	// Sample size for non-perfect-circle moments
-	const ARC_SAMPLES = 720;
-
-	function buildArcTable(rx: number, ry: number) {
-		const lengths = new Float64Array(ARC_SAMPLES + 1);
-		const dt = (Math.PI * 2) / ARC_SAMPLES;
-		let prevX = 0;
-		let prevY = ry;
-
-		for (let i = 1; i <= ARC_SAMPLES; i++) {
-			const t = i * dt;
-			const x = rx * Math.sin(t);
-			const y = ry * Math.cos(t);
-			lengths[i] = lengths[i - 1] + Math.hypot(x - prevX, y - prevY);
-			prevX = x;
-			prevY = y;
-		}
-
-		return lengths;
-	}
-
-	function tAtLength(lengths: Float64Array, target: number) {
-		let lo = 0;
-		let hi = lengths.length - 1;
-
-		while (lo < hi) {
-			const mid = (lo + hi) >> 1;
-			if (lengths[mid] < target) lo = mid + 1;
-			else hi = mid;
-		}
-
-		if (lo === 0) return 0;
-
-		const a = lengths[lo - 1];
-		const b = lengths[lo];
-		const frac = b > a ? (target - a) / (b - a) : 0;
-
-		return ((lo - 1 + frac) * Math.PI * 2) / ARC_SAMPLES;
-	}
-
-	function initGrassBlades() {
-		const earth = document.querySelector<HTMLDivElement>(".grass")!;
-		if (!earth) return;
-
-		const blades = Array.from(
-			earth.querySelectorAll<HTMLDivElement>(".grass-blade"),
-		);
-		if (blades.length === 0) return;
-
-		function layout() {
-			// Reset
-			for (const blade of blades) {
-				blade.style.left = "";
-				blade.style.top = "";
-				blade.style.transform = "";
-			}
-
-			// Recalc
-			const cx = earth.clientWidth / 2;
-			const cy = earth.clientHeight / 2;
-			const rx = cx;
-			const ry = cy;
-
-			if (rx === 0 || ry === 0) return;
-
-			const natural = blades.map((blade) => ({
-				x: blade.offsetLeft,
-				y: blade.offsetTop,
-				w: blade.offsetWidth,
-				h: blade.offsetHeight,
-			}));
-
-			const arc = buildArcTable(rx, ry);
-			const perimeter = arc[ARC_SAMPLES];
-
-			// Recycle (how'd that comment joke even work lmao)
-			blades.forEach((blade, idx) => {
-				const t = tAtLength(arc, (idx / blades.length) * perimeter);
-				const { x, y, w, h } = natural[idx];
-
-				const px = cx + rx * Math.sin(t) - w / 2;
-				const py = cy + ry * Math.cos(t) - h / 2;
-
-				const deg =
-					(Math.atan2(-Math.sin(t) / rx, Math.cos(t) / ry) * 180) / Math.PI;
-
-				blade.style.left = `${px - x}px`;
-				blade.style.top = `${py - y}px`;
-				blade.style.transform = `rotate(${deg}deg)`;
-				blade.style.opacity = "1";
-			});
-		}
-
-		// Please no spam browser ty :D
-		let frame = 0;
-		const observer = new ResizeObserver(() => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(layout);
-		});
-
-		observer.observe(earth);
-
-		return () => {
-			cancelAnimationFrame(frame);
-			observer.disconnect();
-		};
-	}
-
-	let teardownGrass: (() => void) | void;
-
-	function startGrass() {
-		teardownGrass?.();
-		teardownGrass = initGrassBlades();
-	}
-
-	function stopGrass() {
-		teardownGrass?.();
-		teardownGrass = undefined;
-	}
-
-	startGrass();
-</script>
 <script src="./goose-anim.ts"></script>
 
 <style>
@@ -376,30 +239,6 @@ const postcardClouds = [
 		}
 	}
 
-	.grass-blade {
-		display: none;
-		width: 4px;
-		height: 24px;
-		border-radius: 9px;
-		background: color-mix(in srgb, var(--mint) 75%, black);
-		position: relative;
-		opacity: 0;
-		transform-origin: center center;
-	}
-
-	.grass-blade::after {
-		content: "";
-		position: absolute;
-		width: 4px;
-		height: 12px;
-		border-radius: 9px;
-		background: color-mix(in srgb, var(--mint) 75%, black);
-		transform-origin: center center;
-		rotate: 45deg;
-		top: 8px;
-		right: 4px;
-	}
-
 	.air-label {
 		position: relative;
 		z-index: 2;
@@ -476,13 +315,11 @@ const postcardClouds = [
 		padding: 12px 12px;
 		margin: 0 0 calc(5px - var(--picture-pad-block))
 			calc(20px - var(--picture-pad-inline));
-		/* background: var(--mint); */
 		border-radius: 8px;
 		font-size: 45px;
 	}
 
 	.destination > span:first-child {
-		grid-column: 1 / -1;
 		font-family: var(--label-font), "Avenir Next", sans-serif;
 		font-size: 11px;
 		font-weight: 700;
@@ -667,10 +504,6 @@ const postcardClouds = [
 
 		.goose-route {
 			width: clamp(120px, 24cqw, 145px);
-		}
-
-		.destination strong {
-			font-size: 22px;
 		}
 
 		.destination .online {
