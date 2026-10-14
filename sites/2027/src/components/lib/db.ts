@@ -11,9 +11,6 @@ const getDb = () =>
 	authToken: LIBSQL_AUTH_TOKEN,
 }));
 
-export const isEmail = (value: string) =>
-	value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
 // Signups from the main page have no account, so a later email-only signup
 // must not wipe the DID and handle an RSVP already recorded.
 export const saveNewsSubscriber = async ({

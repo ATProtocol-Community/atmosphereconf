@@ -5,10 +5,10 @@ import { clientFor } from "./records";
 import {
 	ensureSubscription,
 	type NewsOutcome,
-	returnTo,
 	signUpForNews,
-	unavailable,
-} from "./subscribe";
+} from "../publication-signup/server";
+
+import { returnTo, unavailable } from "./responses";
 
 const rsvp = community.lexicon.calendar.rsvp;
 const EVENT = {

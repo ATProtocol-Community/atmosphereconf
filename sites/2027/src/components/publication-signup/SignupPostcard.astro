@@ -1,9 +1,9 @@
 ---
-import PostcardForm from "./PostcardForm.astro";
-import PostcardFrame from "./PostcardFrame.astro";
-import PostcardHeader from "./PostcardHeader.astro";
-import type { SignupCard } from "../lib/subscribe";
-import { signupError, signupReceipt } from "../lib/outcomes";
+import SignupForm from "./SignupForm.astro";
+import PostcardFrame from "../postcard/PostcardFrame.astro";
+import PostcardHeader from "../postcard/PostcardHeader.astro";
+import type { SignupCard } from "./server";
+import { signupError, signupReceipt } from "./leaflet";
 
 interface Props {
 	card: SignupCard;
@@ -59,7 +59,7 @@ const receipt = card.kind === "subscribed" ? signupReceipt(card) : undefined;
 				</a>
 			</div>
 		) : (
-			<PostcardForm error={error} />
+			<SignupForm error={error} />
 		)
 	}
 </PostcardFrame>

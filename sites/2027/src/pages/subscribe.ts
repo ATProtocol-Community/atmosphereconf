@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { doEmailSubscription, doSubscription } from "../components/lib/subscribe";
+import { doEmailSubscription, doSubscription } from "../components/publication-signup/server";
 import { hasDatabase } from "../components/lib/db";
 
 export const GET: APIRoute = ({ session, locals }) =>
