@@ -4,18 +4,33 @@ import { clientFor } from "../lib/records";
 import { hasDatabase, saveNewsSubscriber } from "../lib/db";
 import { newsSignup, PUBLICATION } from "./settings";
 import { isEmail, ensurePublicationSubscription } from "./leaflet";
-
+import { methodFor, type Method } from "./identifier";
+import {
+	park,
+	showOnce,
+	signInError,
+	startSignIn,
+	unpark,
+	type SignInContext,
+	type SignInFailure,
+} from "../lib/sign-in";
 import { returnTo, unavailable } from "../lib/responses";
 
-const SESSION_KEY = "postcardSubscription";
+export const SUBSCRIBE_SCOPE = "repo:site.standard.graph.subscription?action=create";
+
+const REQUEST_KEY = "signupRequest";
+const CARD_KEY = "signupCard";
 
 // Leaflet only adds an email to the list after mailing it a code, so every
 // email signup finishes there, even when we keep a copy of the address.
 export const leafletStepUrl = newsSignup.url;
 
+type SignupRequest = { handle: string };
+
 // Every failure sends the visitor back to the form to try again.
 export type SignupFailure =
-	| { kind: "sign-in"; detail?: string }
+	| SignInFailure
+	| { kind: "missing" }
 	| { kind: "subscribe" }
 	| { kind: "bad-email" };
 
@@ -32,10 +47,13 @@ export type NewsOutcome =
 declare global {
 	namespace App {
 		interface SessionData {
-			postcardSubscription: SignupCard;
+			signupRequest: SignupRequest;
+			signupCard: SignupCard;
 		}
 	}
 }
+
+type SignupContext = SignInContext & Pick<APIContext, "session">;
 
 /** Subscribes the account unless it already is, and says which it was. */
 export const ensureSubscription = (client: Client) =>
@@ -62,79 +80,84 @@ export const signUpForNews = async (subscriber: {
 	return { kind: "leaflet-step", email };
 };
 
-/**
- * The signup postcard's state: the outcome of a signup that just redirected
- * back here, shown once, or the plain form.
- */
-export const signupCard = async ({
-	session,
-	locals,
-}: Pick<APIContext, "session" | "locals">): Promise<SignupCard> => {
-	const { authproto } = locals;
-	if (authproto?.errorCode || authproto?.errorDescription) {
-		session?.delete(SESSION_KEY);
-		return {
-			kind: "form",
-			failure: { kind: "sign-in", detail: authproto.errorDescription },
-		};
-	}
-	const card = await session?.get(SESSION_KEY);
-	if (!card) return { kind: "form" };
-	session?.delete(SESSION_KEY);
-	return card;
+const readMethod = (formData: FormData): Method | null => {
+	const chosen = formData.get("method");
+	return chosen === "email" || chosen === "handle" ? chosen : null;
 };
 
-export const doSubscription = async (
-	session: APIContext["session"],
-	locals: App.Locals,
-) => {
-	if (!session) return unavailable("Subscriptions");
-
-	const finish = (card: SignupCard) => {
-		session.set(SESSION_KEY, card, { ttl: 600 });
-		return returnTo("/");
-	};
-	const fail = (failure: SignupFailure) => finish({ kind: "form", failure });
-	const user = locals.loggedInUser;
-	if (!user || locals.authproto?.errorCode || locals.authproto?.errorDescription) {
-		return fail({ kind: "sign-in" });
+/** Reads the form's one field as whichever kind of address it holds. */
+const readIdentifier = (
+	formData: FormData,
+): { kind: "missing" } | { kind: "email"; email: string } | { kind: "handle"; handle: string } => {
+	const submitted = formData.get("identifier");
+	const raw = typeof submitted === "string" ? submitted.trim() : "";
+	if (!raw) return { kind: "missing" };
+	if (methodFor(raw, readMethod(formData)) === "email") {
+		return { kind: "email", email: raw };
 	}
+	return { kind: "handle", handle: raw.replace(/^@/, "") };
+};
+
+/**
+ * An email goes on to Leaflet's code step; a handle parks the request and
+ * starts sign-in, which comes back here for `signupPage` to finish.
+ */
+const startSignup = async (context: SignupContext, formData: FormData) => {
+	const { session } = context;
+	if (!session) return unavailable("Subscriptions");
+	const fail = (failure: SignupFailure) =>
+		showOnce(session, "/", CARD_KEY, { kind: "form", failure });
+	const identifier = readIdentifier(formData);
+	switch (identifier.kind) {
+		case "missing":
+			return fail({ kind: "missing" });
+		case "handle":
+			park(session, REQUEST_KEY, { handle: identifier.handle });
+			return startSignIn(context, {
+				handle: identifier.handle,
+				scopes: [SUBSCRIBE_SCOPE],
+				backTo: "/",
+			});
+		case "email": {
+			const news = await signUpForNews({ email: identifier.email });
+			if (news.kind === "failed") return fail({ kind: "bad-email" });
+			return returnTo(leafletStepUrl(news.email));
+		}
+	}
+};
+
+const completeSignup = async (locals: App.Locals): Promise<SignupCard> => {
 	const client = clientFor(locals);
-	if (!client) return fail({ kind: "sign-in" });
-	let result: "new" | "existing";
+	if (!client) return { kind: "form", failure: { kind: "sign-in" } };
 	try {
-		result = await ensureSubscription(client);
+		const result = await ensureSubscription(client);
+		return { kind: "subscribed", already: result === "existing" };
 	} catch {
 		// Can't tell whether the lookup or the create failed, so the message
 		// covers both.
-		return fail({ kind: "subscribe" });
+		return { kind: "form", failure: { kind: "subscribe" } };
 	}
-	return finish({ kind: "subscribed", already: result === "existing" });
 };
 
 /**
- * Saves an email from the main page's postcard form, then sends the visitor
- * on to Leaflet's code step. Only reachable when the site has a database;
- * otherwise the form goes straight to Leaflet.
+ * Runs the signup postcard: a submitted form starts the signup, and the
+ * return trip from sign-in finishes it. Both redirect back here (returning
+ * the Response to send) so the outcome shows once. Anything else is the
+ * postcard to render.
  */
-export const doEmailSubscription = async (
-	session: APIContext["session"],
-	formData: FormData,
-) => {
-	if (!session) return unavailable("Subscriptions");
-	const submitted = formData.get("email");
-	const news = await signUpForNews({
-		email: typeof submitted === "string" ? submitted.trim() : "",
-	});
-	switch (news.kind) {
-		case "failed":
-			session.set(
-				SESSION_KEY,
-				{ kind: "form", failure: { kind: "bad-email" } },
-				{ ttl: 600 },
-			);
-			return returnTo("/");
-		case "leaflet-step":
-			return returnTo(leafletStepUrl(news.email));
+export const signupPage = async (
+	context: SignupContext,
+): Promise<Response | SignupCard> => {
+	const { session, locals } = context;
+	if (context.request.method === "POST") {
+		return startSignup(context, await context.request.formData());
 	}
+	const request = await unpark(session, REQUEST_KEY);
+	const signIn = signInError(locals);
+	if (signIn) return { kind: "form", failure: signIn };
+	if (request && locals.loggedInUser) {
+		if (!session) return unavailable("Subscriptions");
+		return showOnce(session, "/", CARD_KEY, await completeSignup(locals));
+	}
+	return (await unpark(session, CARD_KEY)) ?? { kind: "form" };
 };
