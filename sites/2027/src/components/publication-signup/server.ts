@@ -1,29 +1,17 @@
 import type { APIContext } from "astro";
-import { type Client, currentDatetimeString } from "@atproto/lex";
-import { site } from "../../lexicons/index.js";
-import { clientFor } from "./records";
-import { hasDatabase, isEmail, saveNewsSubscriber } from "./db";
+import type { Client } from "@atproto/lex";
+import { clientFor } from "../lib/records";
+import { hasDatabase, saveNewsSubscriber } from "../lib/db";
+import { newsSignup, PUBLICATION } from "./settings";
+import { isEmail, ensurePublicationSubscription } from "./leaflet";
 
-const subscription = site.standard.graph.subscription;
-export const PUBLICATION =
-	"at://did:plc:lehcqqkwzcwvjvw66uthu5oq/site.standard.publication/3m367bemk3c2i";
+import { returnTo, unavailable } from "../lib/responses";
+
 const SESSION_KEY = "postcardSubscription";
 
 // Leaflet only adds an email to the list after mailing it a code, so every
 // email signup finishes there, even when we keep a copy of the address.
-export const LEAFLET_EMAIL_LOGIN = "https://leaflet.pub/api/auth/email-login";
-// Leaflet double-decodes this, so it goes out encoded once already.
-export const LEAFLET_ACTION = encodeURIComponent(
-	JSON.stringify({ action: "subscribe", publication: PUBLICATION }),
-);
-export const NEWS_URL = "https://news.atmosphereconf.org";
-
-export const leafletStepUrl = (email: string) =>
-	`${LEAFLET_EMAIL_LOGIN}?${new URLSearchParams({
-		email,
-		action: LEAFLET_ACTION,
-		redirect: NEWS_URL,
-	})}`;
+export const leafletStepUrl = newsSignup.url;
 
 // Every failure sends the visitor back to the form to try again.
 export type SignupFailure =
@@ -49,39 +37,9 @@ declare global {
 	}
 }
 
-/** Sent when there's no session to carry a signup or RSVP through sign-in. */
-export const unavailable = (what: string) =>
-	new Response(`${what} are temporarily unavailable. Please try again.`, {
-		status: 503,
-		headers: { "Cache-Control": "no-store" },
-	});
-
-/** Redirects back to a postcard page, which shows the outcome once. */
-export const returnTo = (location: string) =>
-	new Response(null, {
-		status: 303,
-		headers: {
-			Location: location,
-			"Cache-Control": "no-store",
-			"Referrer-Policy": "no-referrer",
-		},
-	});
-
 /** Subscribes the account unless it already is, and says which it was. */
-export const ensureSubscription = async (
-	client: Client,
-): Promise<"new" | "existing"> => {
-	for await (const record of client.listAll(subscription)) {
-		if (record.valid && record.value.publication === PUBLICATION) {
-			return "existing";
-		}
-	}
-	await client.create(subscription, {
-		publication: PUBLICATION,
-		createdAt: currentDatetimeString(),
-	});
-	return "new";
-};
+export const ensureSubscription = (client: Client) =>
+	ensurePublicationSubscription(client, PUBLICATION);
 
 /**
  * Keeps a copy of the email when there's a database, then hands the visitor

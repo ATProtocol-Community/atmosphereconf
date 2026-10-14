@@ -1,5 +1,5 @@
 /**
- * Everything the signup and RSVP postcards say once a visitor submits. Each
+ * Everything the RSVP postcard says once a visitor submits. Each
  * outcome sits next to its words, and the switches below stop compiling if
  * an outcome is added without any.
  */
@@ -7,9 +7,7 @@ import type { RsvpFailure, RsvpReceipt } from "./rsvp";
 import {
 	leafletStepUrl,
 	type NewsOutcome,
-	type SignupFailure,
-	type SignupReceipt,
-} from "./subscribe";
+} from "../publication-signup/server";
 
 /** An extra the RSVP form offers that the visitor can still add. */
 export type Extra = "standard" | "news";
@@ -39,22 +37,6 @@ export type Line = {
 
 const signInFailed = (detail?: string) =>
 	detail ?? "Sign-in could not be completed. Try your handle again.";
-
-export const signupError = (failure: SignupFailure): string => {
-	switch (failure.kind) {
-		case "sign-in":
-			return signInFailed(failure.detail);
-		case "subscribe":
-			return "We couldn't confirm your subscription. Try your handle again.";
-		case "bad-email":
-			return "That email address doesn't look right.";
-	}
-};
-
-export const signupReceipt = (receipt: SignupReceipt): string =>
-	receipt.already
-		? "Your Atmosphere account is already subscribed."
-		: "Subscribed with your Atmosphere account! Our postcards will know where to find you.";
 
 export const rsvpError = (failure: RsvpFailure): string => {
 	switch (failure.kind) {

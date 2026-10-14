@@ -2,9 +2,9 @@
 import ComboBox from "../ComboBox.astro";
 import Tooltip from "../Tooltip.astro";
 import { hasDatabase } from "../lib/db";
-import { LEAFLET_ACTION, LEAFLET_EMAIL_LOGIN, NEWS_URL } from "../lib/subscribe";
-import HandleIcon from "./HandleIcon.astro";
-import RotatingSuffix from "./RotatingSuffix.astro";
+import { newsSignup } from "./settings";
+import HandleIcon from "../postcard/HandleIcon.astro";
+import RotatingSuffix from "../postcard/RotatingSuffix.astro";
 
 interface Props {
 	error?: string;
@@ -13,8 +13,8 @@ interface Props {
 const { error } = Astro.props;
 // With a database, emails stop here to be saved on the way to Leaflet;
 // otherwise they go straight there.
-const emailAction = hasDatabase ? "/subscribe" : LEAFLET_EMAIL_LOGIN;
-const emailMethod = hasDatabase ? "post" : "get";
+const emailAction = hasDatabase ? "/subscribe" : newsSignup.form.action;
+const emailMethod = hasDatabase ? "post" : newsSignup.form.method;
 ---
 
 <form
@@ -104,170 +104,111 @@ const emailMethod = hasDatabase ? "post" : "get";
 			</p>
 		)
 	}
-	<input type="hidden" name="action" value={LEAFLET_ACTION} />
-	<input type="hidden" name="redirect" value={NEWS_URL} />
+	<input type="hidden" name="action" value={newsSignup.form.fields.action} />
+	<input type="hidden" name="redirect" value={newsSignup.form.fields.redirect} />
 </form>
 <script>
 	import { searchActors, type ActorSuggestion } from "../lib/actor-search";
 	import { attachSpritePreview } from "../lib/sprite-preview";
 
-	const radioOptLabels = document.querySelectorAll<HTMLLabelElement>(".segmented-option");
-	const emailInput = document.getElementById(
-		"airmail-email",
-	) as HTMLInputElement | null;
-	const methodEmailInput = document.getElementById(
-		"method-email",
-	) as HTMLInputElement | null;
-	const methodHandleInput = document.getElementById(
-		"method-handle",
-	) as HTMLInputElement | null;
-	const spritePreview = emailInput
-		? attachSpritePreview(emailInput, () => methodHandleInput?.checked ?? false)
-		: undefined;
-	const suffixOptionsEl = emailInput
-		?.closest("form")
-		?.querySelector(".suffix-options") as HTMLDivElement | null;
-	const suffixOptionElements = suffixOptionsEl
-		? Array.from(suffixOptionsEl.querySelectorAll("div"))
-		: [];
-	const suffixOptionValues = suffixOptionElements
-		.map((node) => node.textContent?.trim() ?? "")
-		.filter((value) => !!value);
-	const getMiddleSuffixOptions = (): string[] => {
-		const count = suffixOptionValues.length;
-		if (count === 0) return [];
-		if (count % 2 === 0) {
-			const start = Math.floor((count - 1) / 2);
-			return suffixOptionValues.slice(start, Math.min(count, start + 2));
-		}
-		const middle = Math.floor(count / 2);
-		return [suffixOptionValues[middle]];
+	type Mode = "email" | "handle";
+
+	const form = document.querySelector<HTMLFormElement>("form.postcard-form");
+	const input = document.getElementById("airmail-email") as HTMLInputElement | null;
+	const radios = {
+		email: document.getElementById("method-email") as HTMLInputElement | null,
+		handle: document.getElementById("method-handle") as HTMLInputElement | null,
 	};
+	const combobox = input?.closest("cmb-combobox");
+	const redirectInput = form?.querySelector<HTMLInputElement>('input[name="redirect"]');
+	const actionInput = form?.querySelector<HTMLInputElement>('input[name="action"]');
+	// Captured now: assigning a hidden input's value also rewrites its defaultValue.
+	const newsRedirect = redirectInput?.value ?? "";
+
+	// RotatingSuffix ends on a repeat of its first word; that last slot is the
+	// one we overwrite so the placeholder settles on a word for the method.
+	const suffixSlots = Array.from(
+		form?.querySelectorAll<HTMLDivElement>(".suffix-options div") ?? [],
+	);
+	const suffixWords = suffixSlots.map((el) => el.textContent?.trim() ?? "");
+	const suffixFor: Record<Mode, string | undefined> = {
+		email: suffixWords[0],
+		handle: suffixWords.at(-2),
+	};
+
 	const didPattern = /^did:[a-z0-9.-]+:/i;
-	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
-	const handleLikePattern =
-		/^@[\w.-]+$|^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9.-]*$/i;
-	const setSuffixFromMethod = (isHandleMode: boolean) => {
-		console.log(isHandleMode);
-		if (!suffixOptionsEl || suffixOptionElements.length === 0) return;
-		const firstSuffix = suffixOptionValues[0];
-		const candidateSuffixes = isHandleMode
-			? /*getMiddleSuffixOptions()*/ [".example.com"]
-			: firstSuffix
-				? [firstSuffix]
-				: [];
-		console.log("1");
-		if (candidateSuffixes.length === 0) return;
-		const idx = isHandleMode
-			? Math.floor(Math.random() * candidateSuffixes.length)
-			: 0;
-		const next = candidateSuffixes[idx];
-		console.log("2");
-		if (!next) return;
-		console.log("3");
-		suffixOptionElements[suffixOptionElements.length - 1]!.textContent = next;
-	};
-
-	radioOptLabels.forEach((x) => x.addEventListener("click", () => {
-		if (x.htmlFor === "method-handle") {
-			setSuffixFromMethod(true);
-		} else {
-			setSuffixFromMethod(false);
-		}
-	}));
-
-	const detectMethod = (rawValue: string): "email" | "handle" => {
-		const value = String(rawValue ?? "")
-			.trim()
-			.toLowerCase();
-		if (!value) return "email";
-		if (didPattern.test(value)) return "handle";
-		if (value.startsWith("@")) return "handle";
+	const handleLikePattern = /^@[\w.-]+$|^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9.-]*$/i;
+	// Only signals that can't change meaning with more typing: a bare dotted
+	// word ("bob.smith") looks like a handle until the "@" arrives.
+	const detectSureMode = (raw: string): Mode | null => {
+		const value = raw.trim().toLowerCase();
+		if (didPattern.test(value) || value.startsWith("@")) return "handle";
 		if (value.includes("@")) return "email";
-		if (handleLikePattern.test(value)) return "handle";
-		return "email";
+		return null;
+	};
+	const detectMode = (raw: string): Mode => {
+		const sure = detectSureMode(raw);
+		if (sure) return sure;
+		return handleLikePattern.test(raw.trim()) ? "handle" : "email";
 	};
 
-	const setMethodFromInput = () => {
-		if (!emailInput || !methodEmailInput || !methodHandleInput) return;
-		const method = detectMethod(emailInput.value);
-		if (method === "handle") {
-			methodHandleInput.checked = true;
-		} else {
-			methodEmailInput.checked = true;
-		}
-		setSuffixFromMethod(method === "handle");
-		setSuggestionsEnabledByMethod();
+	let mode: Mode = radios.handle?.checked ? "handle" : "email";
+	const spritePreview = input
+		? attachSpritePreview(input, () => mode === "handle")
+		: undefined;
+
+	// Everything the method affects is written here, from `mode` alone.
+	const render = () => {
+		const radio = radios[mode];
+		if (radio) radio.checked = true;
+		combobox?.toggleAttribute("disable-suggestions", mode === "email");
+		const word = suffixFor[mode];
+		const slot = suffixSlots.at(-1);
+		if (word && slot) slot.textContent = word;
 	};
 
-	const setSuggestionsEnabledByMethod = () => {
-		if (!combobox) return;
-		const disableSuggestions = methodEmailInput?.checked ?? false;
-		combobox.toggleAttribute("disable-suggestions", disableSuggestions);
+	const setMode = (next: Mode) => {
+		if (next === mode) return;
+		mode = next;
+		render();
+		if (mode === "handle") spritePreview?.refresh();
+		else spritePreview?.reset();
 	};
 
-	const combobox = emailInput?.closest("cmb-combobox");
-	// emailInput?.addEventListener("input", setMethodFromInput);
-	const handleEmailSelection = () => {
-		setSuffixFromMethod(false);
-		setSuggestionsEnabledByMethod();
-		spritePreview?.reset();
-	};
-	const handleHandleSelection = () => {
-		setSuffixFromMethod(true);
-		setSuggestionsEnabledByMethod();
-		spritePreview?.refresh();
-	};
+	// The radio sets the mode; typing overrides it once the text is unambiguous.
+	radios.email?.addEventListener("change", () => setMode("email"));
+	radios.handle?.addEventListener("change", () => setMode("handle"));
+	input?.addEventListener("input", () => {
+		const sure = detectSureMode(input.value);
+		if (sure) setMode(sure);
+	});
 
-	methodEmailInput?.addEventListener("click", handleEmailSelection);
-	methodEmailInput?.addEventListener("change", handleEmailSelection);
-	methodHandleInput?.addEventListener("click", handleHandleSelection);
-	methodHandleInput?.addEventListener("change", handleHandleSelection);
-	// setMethodFromInput();
-	setSuggestionsEnabledByMethod();
-	setSuffixFromMethod(false);
 	combobox?.addEventListener("combobox-search", (e) => {
 		const detail = (
-			e as CustomEvent<{
-				query: string;
-				results: Promise<ActorSuggestion[]> | null;
-			}>
+			e as CustomEvent<{ query: string; results: Promise<ActorSuggestion[]> | null }>
 		).detail;
-		const query = (detail?.query ?? "").trim();
 		try {
-			detail.results = searchActors(query);
+			detail.results = searchActors((detail?.query ?? "").trim());
 		} catch {
 			// Keep form usable if search event detail is immutable for this environment.
 		}
-		// const method = detectMethod(query);
-		// if (methodHandleInput && method === "handle") {
-		// 	methodHandleInput.checked = true;
-		// } else if (methodEmailInput) {
-		// 	methodEmailInput.checked = true;
-		// }
 	});
-	const form = emailInput?.closest("form");
-	const redirectInput = form?.querySelector('input[name="redirect"]');
-	const actionInput = form?.querySelector('input[name="action"]');
+
 	form?.addEventListener("submit", () => {
-		if (!emailInput) return;
-		const identifier = emailInput.value.trim();
-		const isHandle = detectMethod(identifier) === "handle";
+		if (!input) return;
+		const identifier = input.value.trim();
+		setMode(detectMode(identifier));
+		const isHandle = mode === "handle";
 		// Reset every field even when returning with Back or changing methods.
 		form.setAttribute("method", isHandle ? "post" : form.dataset.emailMethod!);
-		form.setAttribute(
-			"action",
-			isHandle ? "/oauth/login" : form.dataset.emailAction!,
-		);
-		emailInput.name = isHandle ? "atproto-id" : "email";
-		emailInput.value = isHandle ? identifier.replace(/^@/, "") : identifier;
-		if (redirectInput instanceof HTMLInputElement) {
-			// defaultValue is the news URL the page rendered with.
-			redirectInput.value = isHandle ? "/subscribe" : redirectInput.defaultValue;
-		}
-		if (actionInput instanceof HTMLInputElement)
-			actionInput.disabled = isHandle;
+		form.setAttribute("action", isHandle ? "/oauth/login" : form.dataset.emailAction!);
+		input.name = isHandle ? "atproto-id" : "email";
+		input.value = isHandle ? identifier.replace(/^@/, "") : identifier;
+		if (redirectInput) redirectInput.value = isHandle ? "/subscribe" : newsRedirect;
+		if (actionInput) actionInput.disabled = isHandle;
 	});
+
+	render();
 	document.getElementById("postcard-subscription-result")?.focus();
 </script>
 <style>
