@@ -13,8 +13,8 @@ interface Props {
 const { error } = Astro.props;
 ---
 
-{/* Posts to the homepage, where `signupPage` picks email or handle. */}
-<form class="postcard-form" method="post" action="/" data-signup-form>
+{/* Posts to /signup, where `signupPage` picks email or handle. */}
+<form class="postcard-form" method="post" action="/signup" data-signup-form>
 	<fieldset class="segmented">
 		<input id="method-email" name="method" type="radio" value="email" checked />
 		<label class="segmented-option" for="method-email">
@@ -56,7 +56,7 @@ const { error } = Astro.props;
 			class="handle"
 			blockAnchor="--tip"
 			>From Blacksky to Pckt, from Bluesky to Offprint, the same username
-			unlocks countless apps and website—no matter which got you first.</Tooltip
+			unlocks countless apps and websites—no matter which got you first.</Tooltip
 		>, our news reaches you all across the web.
 	</p>
 	<PostcardError>{error}</PostcardError>

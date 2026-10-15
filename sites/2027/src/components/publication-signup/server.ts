@@ -135,7 +135,7 @@ const startSignup = async (context: SignupContext, formData: FormData) => {
 	const { session } = context;
 	if (!session) return unavailable("Subscriptions");
 	const fail = (failure: SignupFailure) =>
-		showOnce(session, "/", CARD_KEY, { kind: "form", failure });
+		showOnce(session, "/signup", CARD_KEY, { kind: "form", failure });
 	const identifier = readIdentifier(formData);
 	switch (identifier.kind) {
 		case "missing":
@@ -145,12 +145,12 @@ const startSignup = async (context: SignupContext, formData: FormData) => {
 			return startSignIn(context, {
 				handle: identifier.handle,
 				scopes: [SUBSCRIBE_SCOPE],
-				backTo: "/",
+				backTo: "/signup",
 			});
 		case "email": {
 			const news = await signUpForNews({ email: identifier.email });
 			if (news.kind === "failed") return fail({ kind: "bad-email" });
-			return showOnce(session, "/", CARD_KEY, { kind: "email-pending", news });
+			return showOnce(session, "/signup", CARD_KEY, { kind: "email-pending", news });
 		}
 	}
 };
@@ -186,7 +186,7 @@ export const signupPage = async (
 	if (signIn) return { kind: "form", failure: signIn };
 	if (request && locals.loggedInUser) {
 		if (!session) return unavailable("Subscriptions");
-		return showOnce(session, "/", CARD_KEY, await completeSignup(locals));
+		return showOnce(session, "/signup", CARD_KEY, await completeSignup(locals));
 	}
 	return (await unpark(session, CARD_KEY)) ?? { kind: "form" };
 };
