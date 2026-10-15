@@ -286,8 +286,27 @@ main {
 	margin-inline-start: auto;
 }
 
+.form-actions-links {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+/* Hangs in the margin so the link text stays aligned with its neighbours. */
+.form-actions-links .link-icon {
+	width: 1.3em;
+	height: 1.3em;
+	margin-inline: -1.45em 0.15em;
+	vertical-align: -0.3em;
+	/* Same washed-out stamp red as the header decorations. */
+	color: var(--cancel-stamp);
+	opacity: 0.55;
+}
+
+/* Muted so secondary links don't compete with the primary button. */
 .form-actions-link {
-	color: var(--strong);
+	color: color-mix(in oklch, var(--strong) 30%, var(--ink));
 	font-size: 14px;
 	font-weight: 500;
 	text-decoration: underline;
@@ -318,6 +337,18 @@ main {
 .postcard-label {
 	font-size: 11px;
 	font-weight: 800;
+}
+
+.change-email {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: var(--strong);
+	font: inherit;
+	font-weight: 800;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
 }
 
 .postcard-action {
@@ -494,37 +525,4 @@ body[data-palette="rpg-actor"] .postcard-action.small-action {
 	::view-transition-new(*) {
 		animation: none;
 	}
-}
-
-/* Something that went wrong, whether a form error or an extra that didn't
-   happen, so it can't be mistaken for good news. */
-.postcard-error {
-	display: flex;
-	align-items: flex-start;
-	gap: 8px;
-	margin: 0;
-	padding: 8px 12px;
-	border: 1.5px solid var(--error);
-	border-radius: 12px;
-	background: color-mix(in srgb, var(--error) 10%, var(--paper));
-	color: var(--error);
-	font-size: 13px;
-	font-weight: 700;
-	line-height: 1.4;
-	overflow-wrap: anywhere;
-}
-.postcard-error::before {
-	content: "!" / "";
-	flex: none;
-	display: grid;
-	place-content: center;
-	width: 18px;
-	height: 18px;
-	margin-top: 1px;
-	border-radius: 50%;
-	background: var(--error);
-	color: var(--paper);
-	font-size: 12px;
-	font-weight: 800;
-	line-height: 1;
 }

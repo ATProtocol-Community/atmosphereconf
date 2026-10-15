@@ -1,0 +1,25 @@
+---
+import PostcardFrame from "../postcard/PostcardFrame.astro";
+import RsvpForm from "./RsvpForm.astro";
+import RsvpReceipt from "./RsvpReceipt.astro";
+import type { RsvpCard } from "./server";
+
+interface Props {
+	card: RsvpCard;
+}
+
+const { card } = Astro.props;
+---
+
+<PostcardFrame
+	label="AtmosphereConf 2027 RSVP postcard"
+	sunny={card.kind === "rsvped"}
+>
+	{
+		card.kind === "rsvped" ? (
+			<RsvpReceipt rsvp={card} />
+		) : (
+			<RsvpForm handle={card.handle} failure={card.failure} />
+		)
+	}
+</PostcardFrame>

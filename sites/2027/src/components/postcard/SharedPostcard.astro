@@ -15,13 +15,11 @@ const { message, stamp, sharedBy } = Astro.props;
 
 <PostcardFrame
 	label="A shared AtmosphereConf postcard"
-	titleId="shared-postcard-title"
 >
 	<div class="shared-postage" slot="postage" aria-hidden="true">
 		<Stamp stamp={stamp} />
 	</div>
 	<PostcardHeader
-		id="shared-postcard-title"
 		title="A postcard for you"
 	/>
 	{sharedBy && (

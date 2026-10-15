@@ -1,0 +1,49 @@
+---
+import SignupForm from "./SignupForm.astro";
+import PostcardFrame from "../postcard/PostcardFrame.astro";
+import PostcardHeader from "../postcard/PostcardHeader.astro";
+import Megaphone from "./megaphone.svg";
+import { newsLine, type SignupCard } from "./server";
+import { signupError, signupReceipt } from "./leaflet";
+import Confirmation, { type Line } from "../postcard/Confirmation.astro";
+
+interface Props {
+	card: SignupCard;
+}
+
+const { card } = Astro.props;
+const error =
+	card.kind === "form" && card.failure ? signupError(card.failure) : undefined;
+const confirmed = card.kind !== "form";
+const lines: Line[] =
+	card.kind === "subscribed"
+		? [{ words: signupReceipt(card), tone: "done" }]
+		: card.kind === "email-pending"
+			? [newsLine(card.news)]
+			: [];
+---
+
+<PostcardFrame
+	label="A postcard from AtmosphereConf"
+	sunny={confirmed}
+>
+	{
+		confirmed ? (
+			<Confirmation lines={lines}>
+				<p>Coming there? <a href="/rsvp">RSVP here <span aria-hidden="true">→</span></a></p>
+			</Confirmation>
+		) : (
+			<>
+				<PostcardHeader
+					as="h2"
+					decorationLane={0.7}
+					title="Hear it straight from the gaggle-vine"
+					subtitle="Be the first to learn about dates, tickets, news, and exclusive geese reveals!"
+				>
+					<Fragment slot="decoration"><Megaphone /></Fragment>
+				</PostcardHeader>
+				<SignupForm error={error} />
+			</>
+		)
+	}
+</PostcardFrame>

@@ -4,22 +4,24 @@ import PostcardPicture from "./PostcardPicture.astro";
 
 interface Props {
 	label: string;
-	titleId: string;
 	class?: string;
 	/** The goose's waffle shines like the sun. */
 	sunny?: boolean;
 }
 
-const { label, titleId, class: className, sunny } = Astro.props;
+const { label, class: className, sunny } = Astro.props;
 ---
 
 <article class:list={["mail", className]} id="postcard" aria-label={label}>
-	<PostcardPicture sunny={sunny} />
+	<PostcardPicture sunny={sunny}>
+		<slot name="first-word" slot="first-word">Back</slot>
+	</PostcardPicture>
 
-	<section class="address" aria-labelledby={titleId}>
+	<section class="address" aria-labelledby="postcard-title">
 		<slot name="postage">
 			<StampCollection />
 		</slot>
+		<div class="message-gap" aria-hidden="true"></div>
 		<div class="message"><slot /></div>
 		<footer class="signoff">
 			<slot name="footer">
@@ -79,10 +81,13 @@ const { label, titleId, class: className, sunny } = Astro.props;
 		box-shadow: 1px 0 0 var(--paper);
 	}
 
-	/* margin-top: auto parks the message against the footer, so the slot
-	   content brings its own breathing room above. */
+	.message-gap {
+		flex: 1 0 0;
+		max-height: 120px;
+	}
+
 	.message {
-		margin-top: auto;
+		margin-bottom: auto;
 	}
 
 	.signoff {
