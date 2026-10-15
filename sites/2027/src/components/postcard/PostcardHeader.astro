@@ -1,6 +1,5 @@
 ---
 interface Props {
-	id: string;
 	title: string;
 	subtitle?: string;
 	as?: "h1" | "h2";
@@ -9,7 +8,6 @@ interface Props {
 }
 
 const {
-	id,
 	title,
 	subtitle,
 	as: Heading = "h1",
@@ -29,7 +27,7 @@ const {
 				</span>
 			)
 		}
-		<Heading id={id} class="title">{title}</Heading>
+		<Heading id="postcard-title" class="title">{title}</Heading>
 	</div>
 	{
 		Astro.slots.has("subtitle") ? (

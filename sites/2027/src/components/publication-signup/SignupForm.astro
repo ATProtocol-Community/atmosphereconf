@@ -3,6 +3,7 @@ import Tooltip from "../Tooltip.astro";
 import HandleIcon from "../postcard/handle.svg";
 import Envelope from "./envelope.svg";
 import FormActionLinks from "../postcard/FormActionLinks.astro";
+import PostcardError from "../postcard/PostcardError.astro";
 import HandleInput from "../postcard/HandleInput.astro";
 
 interface Props {
@@ -58,13 +59,7 @@ const { error } = Astro.props;
 			unlocks countless apps and website—no matter which got you first.</Tooltip
 		>, our news reaches you all across the web.
 	</p>
-	{
-		error && (
-			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
-				{error}
-			</p>
-		)
-	}
+	<PostcardError>{error}</PostcardError>
 	<div class="form-actions">
 		<FormActionLinks>
 			<a class="form-actions-link" href="/rsvp"

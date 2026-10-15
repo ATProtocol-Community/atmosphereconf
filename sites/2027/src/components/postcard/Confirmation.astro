@@ -1,8 +1,13 @@
 ---
-import PostcardHeader from "../postcard/PostcardHeader.astro";
-import GoosePopper from "../rsvp/goose-popper.svg";
-import { RSVP_TITLE, type Line } from "../rsvp/outcomes";
-import Words from "../rsvp/Words.astro";
+import PostcardHeader from "./PostcardHeader.astro";
+import GoosePopper from "./goose-popper.svg";
+import PostcardError from "./PostcardError.astro";
+
+export type Line = {
+	words: string;
+	tone: "done" | "todo" | "failed";
+	action?: { label: string; href: string };
+};
 
 interface Props {
 	lines: Line[];
@@ -14,8 +19,7 @@ const failed = lines.filter(({ tone }) => tone === "failed");
 ---
 
 <PostcardHeader
-	id="confirmation-title"
-	title={RSVP_TITLE}
+	title="Tot dan! What a beautiful beak⁠-⁠inning!"
 	decorationLane={0.2}
 	subtitle="We’re all a-gaggle with excitement, and can’t wait to welcome you with open wings. Are these goosebumps I feel?"
 >
@@ -23,14 +27,18 @@ const failed = lines.filter(({ tone }) => tone === "failed");
 		<GoosePopper class="goose-popper" style="width: 73.5px" />
 	</Fragment>
 </PostcardHeader>
-<div class="confirmation" data-confirmation role="status" tabindex="-1" data-focus-on-load>
+<div
+	class="confirmation"
+	data-confirmation
+	role="status"
+	tabindex="-1"
+	data-focus-on-load
+>
 	<ul class="checklist">
 		{
 			done.map(({ words, tone, action }) => (
 				<li class={tone}>
-					<span>
-						<Words words={words} />
-					</span>
+					<span set:html={words} />
 					{action && (
 						<a
 							class="postcard-action small-action"
@@ -47,9 +55,9 @@ const failed = lines.filter(({ tone }) => tone === "failed");
 	</ul>
 	{
 		failed.map(({ words }) => (
-			<p class="postcard-error" role="status">
-				<Words words={words} />
-			</p>
+			<PostcardError alert={false}>
+				<Fragment set:html={words} />
+			</PostcardError>
 		))
 	}
 	<div class="follow-up"><slot /></div>
@@ -71,7 +79,7 @@ const failed = lines.filter(({ tone }) => tone === "failed");
 	.confirmation:focus {
 		outline: none;
 	}
-	.confirmation p {
+	.confirmation :global(p) {
 		margin: 0;
 		font-size: 14px;
 		line-height: 1.4;
@@ -110,18 +118,10 @@ const failed = lines.filter(({ tone }) => tone === "failed");
 		   crowd whatever follows the list. */
 		margin: 4px 0 8px;
 	}
-	.follow-up {
-		margin: 0;
-	}
 	.follow-up :global(a) {
 		color: var(--strong);
 		font-weight: 800;
 		text-underline-offset: 3px;
-	}
-	.follow-up :global(p) {
-		margin: 0;
-		font-size: 14px;
-		line-height: 1.4;
 	}
 	.confirmation :global(strong) {
 		overflow-wrap: anywhere;

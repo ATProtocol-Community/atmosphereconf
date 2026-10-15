@@ -15,6 +15,8 @@ import {
 	type SignInFailure,
 } from "../lib/sign-in";
 import { unavailable } from "../lib/responses";
+import type { Line } from "../postcard/Confirmation.astro";
+import { htmlEscape as html } from "escape-goat";
 
 export const SUBSCRIBE_SCOPE = "repo:site.standard.graph.subscription?action=create";
 
@@ -46,6 +48,30 @@ export type NewsOutcome =
 	// The visitor still has to confirm through Leaflet.
 	| { kind: "leaflet-step"; email: string }
 	| { kind: "failed"; reason: "no-email" | "bad-email" };
+
+export const newsLine = (news: NewsOutcome): Line => {
+	switch (news.kind) {
+		case "leaflet-step":
+			return {
+				words: html`One more step: we'll send a code to <strong>${news.email}</strong>.`,
+				tone: "todo",
+				action: { label: "Send my code", href: leafletStepUrl(news.email) },
+			};
+		case "failed":
+			switch (news.reason) {
+				case "no-email":
+					return {
+						words: html`We couldn't read your account email, so email news isn't set up.`,
+						tone: "failed",
+					};
+				case "bad-email":
+					return {
+						words: html`That email address doesn't look right, so email news isn't set up.`,
+						tone: "failed",
+					};
+			}
+	}
+};
 
 declare global {
 	namespace App {
