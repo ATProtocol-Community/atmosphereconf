@@ -1,4 +1,5 @@
 ---
+import FormActionLinks from "../postcard/FormActionLinks.astro";
 import HandleInput from "../postcard/HandleInput.astro";
 import PostcardHeader from "../postcard/PostcardHeader.astro";
 import Tooltip from "../Tooltip.astro";
@@ -23,13 +24,6 @@ const error = failure ? rsvpError(failure) : undefined;
 	<Fragment slot="decoration"><Calendar /></Fragment>
 </PostcardHeader>
 <form method="post" class="postcard-form rsvp-form" data-rsvp-form>
-	{
-		error && (
-			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
-				{error}
-			</p>
-		)
-	}
 	<div class="handle-row">
 		<label class="handle-label" for="rsvp-handle">
 			RSVP as<span class="sr-only"> your Atmosphere handle</span>:
@@ -117,10 +111,19 @@ const error = failure ? rsvpError(failure) : undefined;
 			</p>
 		</div>
 	</div>
+	{
+		error && (
+			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
+				{error}
+			</p>
+		)
+	}
 	<div class="form-actions">
-		<a class="form-actions-link" href="/">
-			Just the news, please! <span aria-hidden="true">→</span>
-		</a>
+		<FormActionLinks>
+			<a class="form-actions-link" href="/">
+				Just the news, please! <span aria-hidden="true">→</span>
+			</a>
+		</FormActionLinks>
 		<button class="postcard-action small-action" type="submit">
 			I'll be there! <span aria-hidden="true">↗</span>
 		</button>

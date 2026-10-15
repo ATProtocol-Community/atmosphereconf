@@ -286,8 +286,27 @@ main {
 	margin-inline-start: auto;
 }
 
+.form-actions-links {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+/* Hangs in the margin so the link text stays aligned with its neighbours. */
+.form-actions-links .link-icon {
+	width: 1.3em;
+	height: 1.3em;
+	margin-inline: -1.45em 0.15em;
+	vertical-align: -0.3em;
+	/* Same washed-out stamp red as the header decorations. */
+	color: var(--cancel-stamp);
+	opacity: 0.55;
+}
+
+/* Muted so secondary links don't compete with the primary button. */
 .form-actions-link {
-	color: var(--strong);
+	color: color-mix(in oklch, var(--strong) 30%, var(--ink));
 	font-size: 14px;
 	font-weight: 500;
 	text-decoration: underline;

@@ -14,7 +14,7 @@ import {
 	type SignInContext,
 	type SignInFailure,
 } from "../lib/sign-in";
-import { returnTo, unavailable } from "../lib/responses";
+import { unavailable } from "../lib/responses";
 
 export const SUBSCRIBE_SCOPE = "repo:site.standard.graph.subscription?action=create";
 
@@ -37,7 +37,10 @@ export type SignupFailure =
 export type SignupReceipt = { kind: "subscribed"; already: boolean };
 
 /** What the signup postcard shows. */
-export type SignupCard = { kind: "form"; failure?: SignupFailure } | SignupReceipt;
+export type SignupCard =
+	| { kind: "form"; failure?: SignupFailure }
+	| SignupReceipt
+	| { kind: "email-pending"; news: Extract<NewsOutcome, { kind: "leaflet-step" }> };
 
 export type NewsOutcome =
 	// The visitor still has to confirm through Leaflet.
@@ -99,7 +102,7 @@ const readIdentifier = (
 };
 
 /**
- * An email goes on to Leaflet's code step; a handle parks the request and
+ * An email gets a receipt linking to Leaflet's code step; a handle parks the request and
  * starts sign-in, which comes back here for `signupPage` to finish.
  */
 const startSignup = async (context: SignupContext, formData: FormData) => {
@@ -121,7 +124,7 @@ const startSignup = async (context: SignupContext, formData: FormData) => {
 		case "email": {
 			const news = await signUpForNews({ email: identifier.email });
 			if (news.kind === "failed") return fail({ kind: "bad-email" });
-			return returnTo(leafletStepUrl(news.email));
+			return showOnce(session, "/", CARD_KEY, { kind: "email-pending", news });
 		}
 	}
 };

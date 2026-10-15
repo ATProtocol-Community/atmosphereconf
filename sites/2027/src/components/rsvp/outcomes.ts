@@ -47,7 +47,9 @@ export const rsvpError = (failure: RsvpFailure): string => {
 	}
 };
 
-export const RSVP_TITLE = "Tot dan! What a beautiful beak-inning!";
+// Word joiners (U+2060) keep "beak-inning" on one line without swapping in a
+// non-breaking hyphen glyph
+export const RSVP_TITLE = "Tot dan! What a beautiful beak⁠-⁠inning!";
 
 const standardLine = (standard: "subscribed" | "failed"): Line => {
 	switch (standard) {
@@ -64,7 +66,7 @@ const standardLine = (standard: "subscribed" | "failed"): Line => {
 	}
 };
 
-const newsLine = (news: NewsOutcome): Line => {
+export const newsLine = (news: NewsOutcome): Line => {
 	switch (news.kind) {
 		case "leaflet-step":
 			return {

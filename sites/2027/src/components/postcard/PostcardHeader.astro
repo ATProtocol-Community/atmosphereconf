@@ -31,7 +31,15 @@ const {
 		}
 		<Heading id={id} class="title">{title}</Heading>
 	</div>
-	{subtitle && <p class="subtitle">{subtitle}</p>}
+	{
+		Astro.slots.has("subtitle") ? (
+			<p class="subtitle">
+				<slot name="subtitle" />
+			</p>
+		) : (
+			subtitle && <p class="subtitle">{subtitle}</p>
+		)
+	}
 </header>
 
 <style>
@@ -86,7 +94,7 @@ const {
 		line-height: 1.05;
 		letter-spacing: -0.035em;
 		text-transform: none;
-		text-wrap: pretty;
+		text-wrap: balance;
 	}
 	.subtitle {
 		margin: 10px 0 0;

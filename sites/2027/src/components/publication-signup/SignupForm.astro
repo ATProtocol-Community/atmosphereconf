@@ -2,6 +2,7 @@
 import Tooltip from "../Tooltip.astro";
 import HandleIcon from "../postcard/handle.svg";
 import Envelope from "./envelope.svg";
+import FormActionLinks from "../postcard/FormActionLinks.astro";
 import HandleInput from "../postcard/HandleInput.astro";
 
 interface Props {
@@ -34,10 +35,10 @@ const { error } = Astro.props;
 		id="airmail-email"
 		name="identifier"
 		label="Email or Atmosphere handle"
-		placeholder="you@example.com"
+		placeholder="you@atmosphere.web"
 		autocomplete="username webauthn email"
 		atSign={false}
-		suffixes={["@example.com", ".bsky.social", ".blacksky.social", ".example.com"]}
+		suffixes={["@atmosphere.web", ".bsky.social", ".blacksky.social", ".atmosphere.web"]}
 		required
 	/>
 	<p class="tip">
@@ -57,14 +58,6 @@ const { error } = Astro.props;
 			unlocks countless apps and website—no matter which got you first.</Tooltip
 		>, our news reaches you all across the web.
 	</p>
-	<div class="form-actions">
-		<a class="form-actions-link" href="/rsvp"
-			>Coming there? RSVP! <span aria-hidden="true">→</span></a
-		>
-		<button class="postcard-action small-action" type="submit"
-			>Keep me posted <span aria-hidden="true">↗</span></button
-		>
-	</div>
 	{
 		error && (
 			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
@@ -72,6 +65,16 @@ const { error } = Astro.props;
 			</p>
 		)
 	}
+	<div class="form-actions">
+		<FormActionLinks>
+			<a class="form-actions-link" href="/rsvp"
+				>Coming there? RSVP! <span aria-hidden="true">→</span></a
+			>
+		</FormActionLinks>
+		<button class="postcard-action small-action" type="submit"
+			>Keep me posted <span aria-hidden="true">↗</span></button
+		>
+	</div>
 </form>
 <script>
 	import { attachSpritePreview } from "../lib/sprite-preview";

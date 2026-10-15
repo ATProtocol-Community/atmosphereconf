@@ -134,16 +134,30 @@ const clouds = [
 			<a class="wordmark" href="/" aria-label="AtmosphereConf home"
 				>AtmosphereConf <small>2027</small></a
 			>
-			<ThemeSwitcher />
+			<div class="masthead-actions">
+				<ThemeSwitcher />
+				<a
+					class="github-link"
+					href="https://github.com/ATProtocol-Community/atmosphereconf"
+					aria-label="AtmosphereConf GitHub repository"
+					title="GitHub repository"
+				>
+					<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+						<path
+							d="M12 .75a11.25 11.25 0 0 0-3.558 21.923c.563.104.768-.244.768-.543 0-.267-.01-.974-.015-1.912-3.13.68-3.791-1.508-3.791-1.508-.512-1.3-1.25-1.646-1.25-1.646-1.023-.7.078-.686.078-.686 1.13.08 1.725 1.16 1.725 1.16 1.006 1.724 2.64 1.226 3.283.938.102-.729.394-1.226.715-1.508-2.499-.284-5.126-1.25-5.126-5.565 0-1.23.44-2.233 1.16-3.02-.116-.284-.503-1.428.11-2.977 0 0 .945-.303 3.094 1.153A10.79 10.79 0 0 1 12 6.18c.956.004 1.918.13 2.817.379 2.148-1.456 3.092-1.153 3.092-1.153.615 1.549.228 2.693.112 2.977.722.787 1.158 1.79 1.158 3.02 0 4.327-2.631 5.278-5.138 5.557.404.349.765 1.034.765 2.084 0 1.504-.014 2.717-.014 3.086 0 .302.202.652.774.542A11.25 11.25 0 0 0 12 .75Z"
+						></path>
+					</svg>
+				</a>
+			</div>
 		</header>
 		<main><slot /></main>
 	</body>
 </html>
 
 <script>
-	// Outcomes (an error, a receipt) take focus on load so screen readers
-	// land on them; they aren't controls, so their focus ring is hidden.
-	document.querySelector<HTMLElement>("[data-focus-on-load]")?.focus();
+	if (window.self === window.top) {
+		document.querySelector<HTMLElement>("[data-focus-on-load]")?.focus();
+	}
 
 	const picture = document.querySelector<HTMLElement>(".picture");
 	const sky = document.querySelector<HTMLElement>(".page-sky");
@@ -164,6 +178,40 @@ const clouds = [
 </script>
 
 <style>
+	.masthead-actions {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		flex: 0 0 170px;
+	}
+	.github-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		flex: none;
+		border-radius: 50%;
+	}
+	.github-link svg {
+		width: 22px;
+		height: 22px;
+	}
+	.github-link:focus-visible {
+		outline: 2px solid var(--ink);
+		outline-offset: 2px;
+	}
+	@container (max-width: 480px) {
+		.masthead-actions {
+			flex-basis: 64px;
+			gap: 8px;
+		}
+	}
+	@container (max-width: 320px) {
+		.wordmark {
+			font-size: 22px;
+		}
+	}
 	:global(html) {
 		height: 100%;
 	}

@@ -1,0 +1,12 @@
+---
+import Microphone from "../talks/microphone.svg";
+---
+
+{/* The talk link leads every form; the slot adds the form's own way out. */}
+<div class="form-actions-links">
+	<a class="form-actions-link" href="/speak"
+		><Microphone class="link-icon" aria-hidden="true" />Submit your talk{" "}
+		<span aria-hidden="true">→</span></a
+	>
+	<slot />
+</div>

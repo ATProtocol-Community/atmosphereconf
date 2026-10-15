@@ -66,9 +66,14 @@ const scribblePath =
 			id="talks-title"
 			decorationLane={0.3}
 			title="Spread your wings...and thoughts!"
-			subtitle="AtmosphereConf’s first Call for Talks is here: developers, artists, journalists, moderators, writers, informers, informed, and all who make the atmosphere, let’s hear from you!"
 		>
 			<Fragment slot="decoration"><Microphone class="talks-mic" /></Fragment>
+			<Fragment slot="subtitle">
+				AtmosphereConf’s first Call for Talks is here: developers, artists,
+				journalists, moderators, writers, informers, informed, and all who make
+				the atmosphere,{" "}
+				<a class="form-actions-link" href={submissionUrl}>let’s hear from you!</a>
+			</Fragment>
 		</PostcardHeader>
 		<ul class="topics" aria-label="Talk tracks">
 			{
@@ -83,8 +88,8 @@ const scribblePath =
 				))
 			}
 		</ul>
-		<a class="postcard-action" href={submissionUrl}>
-			Submit your talk <span aria-hidden="true">→</span>
+		<a class="postcard-action small-action" href={submissionUrl}>
+			Submit your talk <span aria-hidden="true">↗</span>
 		</a>
 		<p class="keep-in-touch">
 			Not ready yet? <a class="form-actions-link" href="/rsvp">RSVP</a> or{" "}
@@ -180,6 +185,17 @@ const scribblePath =
 		margin: 0;
 		font-size: 13px;
 		line-height: 1.4;
+	}
+
+	/* Full width like the topic grid, label centered over "Not ready yet?". */
+	.small-action {
+		display: flex;
+		justify-content: center;
+	}
+
+	:global(body[data-palette="pronouns"]) .small-action {
+		--fill: var(--strong);
+		color: var(--accent-contrast);
 	}
 
 	.keep-in-touch {
