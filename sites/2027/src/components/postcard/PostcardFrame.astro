@@ -21,6 +21,7 @@ const { label, class: className, sunny } = Astro.props;
 		<slot name="postage">
 			<StampCollection />
 		</slot>
+		<div class="message-gap" aria-hidden="true"></div>
 		<div class="message"><slot /></div>
 		<footer class="signoff">
 			<slot name="footer">
@@ -80,10 +81,13 @@ const { label, class: className, sunny } = Astro.props;
 		box-shadow: 1px 0 0 var(--paper);
 	}
 
-	/* margin-top: auto parks the message against the footer, so the slot
-	   content brings its own breathing room above. */
+	.message-gap {
+		flex: 1 0 0;
+		max-height: 120px;
+	}
+
 	.message {
-		margin-top: auto;
+		margin-bottom: auto;
 	}
 
 	.signoff {
