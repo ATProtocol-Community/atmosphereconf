@@ -1,6 +1,5 @@
 ---
 interface Props {
-	id: string;
 	title: string;
 	subtitle?: string;
 	as?: "h1" | "h2";
@@ -9,7 +8,6 @@ interface Props {
 }
 
 const {
-	id,
 	title,
 	subtitle,
 	as: Heading = "h1",
@@ -29,9 +27,17 @@ const {
 				</span>
 			)
 		}
-		<Heading id={id} class="title">{title}</Heading>
+		<Heading id="postcard-title" class="title">{title}</Heading>
 	</div>
-	{subtitle && <p class="subtitle">{subtitle}</p>}
+	{
+		Astro.slots.has("subtitle") ? (
+			<p class="subtitle">
+				<slot name="subtitle" />
+			</p>
+		) : (
+			subtitle && <p class="subtitle">{subtitle}</p>
+		)
+	}
 </header>
 
 <style>
@@ -86,7 +92,7 @@ const {
 		line-height: 1.05;
 		letter-spacing: -0.035em;
 		text-transform: none;
-		text-wrap: pretty;
+		text-wrap: balance;
 	}
 	.subtitle {
 		margin: 10px 0 0;

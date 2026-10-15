@@ -1,0 +1,40 @@
+---
+import Confirmation from "../postcard/Confirmation.astro";
+import type { RsvpReceipt } from "./server";
+import { rsvpReceipt } from "./outcomes";
+
+interface Props {
+	rsvp: RsvpReceipt;
+}
+
+const { rsvp } = Astro.props;
+const BLUESKY = "https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw";
+// Offer only the extras the visitor didn't ask for; failed ones already have
+// their own note.
+const offerStandard = !rsvp.standard;
+const offerNews = !rsvp.news;
+---
+
+<Confirmation lines={rsvpReceipt(rsvp)}>
+	{/* The buttons re-send the RSVP with their extra ticked. */}
+	<form method="post" action="/rsvp">
+		<input type="hidden" name="handle" value={rsvp.handle} />
+		<p>
+			In the meantime, you can follow us on <a href={BLUESKY}>Bluesky</a>{
+				(offerStandard || offerNews) && ", and if you haven't yet, "
+			}{
+				offerStandard && (
+					<button class="change-email" name="standardOnly" value="yes">
+						get updates via Standard.site
+					</button>
+				)
+			}{offerStandard && offerNews && " or "}{
+				offerNews && (
+					<button class="change-email" name="subscribeNews" value="yes">
+						get news by email
+					</button>
+				)
+			}.
+		</p>
+	</form>
+</Confirmation>
