@@ -1,0 +1,60 @@
+---
+interface Props {
+	/**
+	 * Announce the error and move focus to it. Turn off when it sits inside
+	 * a region that's already announced, or screen readers say it twice.
+	 */
+	alert?: boolean;
+}
+
+const { alert = true } = Astro.props;
+// Rendered up front so an empty message (`{error}` with no error) skips the
+// box entirely; `slots.has` counts that expression as content.
+const message = (await Astro.slots.render("default")).trim();
+---
+
+{
+	message && (
+		<p
+			class="postcard-error"
+			role={alert ? "alert" : undefined}
+			tabindex={alert ? -1 : undefined}
+			data-focus-on-load={alert || undefined}
+		>
+			<Fragment set:html={message} />
+		</p>
+	)
+}
+
+<style>
+	.postcard-error {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		margin: 0;
+		padding: 8px 12px;
+		border: 1.5px solid var(--error);
+		border-radius: 12px;
+		background: color-mix(in srgb, var(--error) 10%, var(--paper));
+		color: var(--error);
+		font-size: 13px;
+		font-weight: 700;
+		line-height: 1.4;
+		overflow-wrap: anywhere;
+	}
+	.postcard-error::before {
+		content: "!" / "";
+		flex: none;
+		display: grid;
+		place-content: center;
+		width: 18px;
+		height: 18px;
+		margin-top: 1px;
+		border-radius: 50%;
+		background: var(--error);
+		color: var(--paper);
+		font-size: 12px;
+		font-weight: 800;
+		line-height: 1;
+	}
+</style>

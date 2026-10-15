@@ -11,7 +11,6 @@ const handle = Astro.locals.loggedInUser?.handle ?? undefined;
 
 <PostcardFrame
 	label="Build an AtmosphereConf postcard"
-	titleId="builder-title"
 >
 	<Fragment slot="postage" />
 
@@ -42,7 +41,7 @@ const handle = Astro.locals.loggedInUser?.handle ?? undefined;
 			<div class="postage-corner" aria-hidden="true"></div>
 		</fieldset>
 
-		<PostcardHeader id="builder-title" title="Send a postcard" />
+		<PostcardHeader title="Send a postcard" />
 
 		<label class="postcard-label write-label" for="postcard-message">
 			Write your message

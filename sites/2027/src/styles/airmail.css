@@ -526,36 +526,3 @@ body[data-palette="rpg-actor"] .postcard-action.small-action {
 		animation: none;
 	}
 }
-
-/* Something that went wrong, whether a form error or an extra that didn't
-   happen, so it can't be mistaken for good news. */
-.postcard-error {
-	display: flex;
-	align-items: flex-start;
-	gap: 8px;
-	margin: 0;
-	padding: 8px 12px;
-	border: 1.5px solid var(--error);
-	border-radius: 12px;
-	background: color-mix(in srgb, var(--error) 10%, var(--paper));
-	color: var(--error);
-	font-size: 13px;
-	font-weight: 700;
-	line-height: 1.4;
-	overflow-wrap: anywhere;
-}
-.postcard-error::before {
-	content: "!" / "";
-	flex: none;
-	display: grid;
-	place-content: center;
-	width: 18px;
-	height: 18px;
-	margin-top: 1px;
-	border-radius: 50%;
-	background: var(--error);
-	color: var(--paper);
-	font-size: 12px;
-	font-weight: 800;
-	line-height: 1;
-}

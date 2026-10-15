@@ -1,5 +1,6 @@
 ---
 import FormActionLinks from "../postcard/FormActionLinks.astro";
+import PostcardError from "../postcard/PostcardError.astro";
 import HandleInput from "../postcard/HandleInput.astro";
 import PostcardHeader from "../postcard/PostcardHeader.astro";
 import Tooltip from "../Tooltip.astro";
@@ -17,7 +18,6 @@ const error = failure ? rsvpError(failure) : undefined;
 ---
 
 <PostcardHeader
-	id="rsvp-title"
 	title="RSVP, Save the Date, Honk aboard!"
 	subtitle="AtmosphereConf 2027 will be in Amsterdam. RSVP below for an exclusive prize: friends!"
 >
@@ -111,13 +111,7 @@ const error = failure ? rsvpError(failure) : undefined;
 			</p>
 		</div>
 	</div>
-	{
-		error && (
-			<p class="postcard-error" role="alert" tabindex="-1" data-focus-on-load>
-				{error}
-			</p>
-		)
-	}
+	<PostcardError>{error}</PostcardError>
 	<div class="form-actions">
 		<FormActionLinks>
 			<a class="form-actions-link" href="/">

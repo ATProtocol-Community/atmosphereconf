@@ -3,10 +3,9 @@ import SignupForm from "./SignupForm.astro";
 import PostcardFrame from "../postcard/PostcardFrame.astro";
 import PostcardHeader from "../postcard/PostcardHeader.astro";
 import Megaphone from "./megaphone.svg";
-import type { SignupCard } from "./server";
+import { newsLine, type SignupCard } from "./server";
 import { signupError, signupReceipt } from "./leaflet";
-import Confirmation from "../postcard/Confirmation.astro";
-import { newsLine, type Line } from "../rsvp/outcomes";
+import Confirmation, { type Line } from "../postcard/Confirmation.astro";
 
 interface Props {
 	card: SignupCard;
@@ -18,7 +17,7 @@ const error =
 const confirmed = card.kind !== "form";
 const lines: Line[] =
 	card.kind === "subscribed"
-		? [{ words: [signupReceipt(card)], tone: "done" }]
+		? [{ words: signupReceipt(card), tone: "done" }]
 		: card.kind === "email-pending"
 			? [newsLine(card.news)]
 			: [];
@@ -26,7 +25,6 @@ const lines: Line[] =
 
 <PostcardFrame
 	label="A postcard from AtmosphereConf"
-	titleId={confirmed ? "confirmation-title" : "signup-title"}
 	sunny={confirmed}
 >
 	{
@@ -37,7 +35,6 @@ const lines: Line[] =
 		) : (
 			<>
 				<PostcardHeader
-					id="signup-title"
 					as="h2"
 					decorationLane={0.7}
 					title="Hear it straight from the gaggle-vine"

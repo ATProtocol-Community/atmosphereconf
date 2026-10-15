@@ -4,13 +4,12 @@ import PostcardPicture from "./PostcardPicture.astro";
 
 interface Props {
 	label: string;
-	titleId: string;
 	class?: string;
 	/** The goose's waffle shines like the sun. */
 	sunny?: boolean;
 }
 
-const { label, titleId, class: className, sunny } = Astro.props;
+const { label, class: className, sunny } = Astro.props;
 ---
 
 <article class:list={["mail", className]} id="postcard" aria-label={label}>
@@ -18,7 +17,7 @@ const { label, titleId, class: className, sunny } = Astro.props;
 		<slot name="first-word" slot="first-word">Back</slot>
 	</PostcardPicture>
 
-	<section class="address" aria-labelledby={titleId}>
+	<section class="address" aria-labelledby="postcard-title">
 		<slot name="postage">
 			<StampCollection />
 		</slot>

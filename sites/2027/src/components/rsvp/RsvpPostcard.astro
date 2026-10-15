@@ -13,7 +13,6 @@ const { card } = Astro.props;
 
 <PostcardFrame
 	label="AtmosphereConf 2027 RSVP postcard"
-	titleId={card.kind === "rsvped" ? "confirmation-title" : "rsvp-title"}
 	sunny={card.kind === "rsvped"}
 >
 	{
