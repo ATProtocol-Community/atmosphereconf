@@ -22,10 +22,10 @@ const {
 	value,
 	required,
 	label = "Atmosphere handle",
-	placeholder = "you.example.com",
+	placeholder = "you.atmosphere.web",
 	autocomplete = "username",
 	atSign = true,
-	suffixes = [".example.com", ".bsky.social", ".blacksky.social"],
+	suffixes = [".atmosphere.web", ".bsky.social", ".blacksky.social"],
 } = Astro.props;
 ---
 
@@ -59,7 +59,7 @@ const {
 
 <style>
 	/* Same face and size as the typed text, so "@" and the handle read as
-	   one word: @you.example.com. */
+	   one word: @you.atmosphere.web. */
 	.at-sign {
 		font-size: 16px;
 		line-height: 1;

@@ -1,0 +1,129 @@
+---
+import PostcardHeader from "../postcard/PostcardHeader.astro";
+import GoosePopper from "../rsvp/goose-popper.svg";
+import { RSVP_TITLE, type Line } from "../rsvp/outcomes";
+import Words from "../rsvp/Words.astro";
+
+interface Props {
+	lines: Line[];
+}
+
+const { lines } = Astro.props;
+const done = lines.filter(({ tone }) => tone !== "failed");
+const failed = lines.filter(({ tone }) => tone === "failed");
+---
+
+<PostcardHeader
+	id="confirmation-title"
+	title={RSVP_TITLE}
+	decorationLane={0.2}
+	subtitle="We’re all a-gaggle with excitement, and can’t wait to welcome you with open wings. Are these goosebumps I feel?"
+>
+	<Fragment slot="decoration">
+		<GoosePopper class="goose-popper" style="width: 73.5px" />
+	</Fragment>
+</PostcardHeader>
+<div class="confirmation" data-confirmation role="status" tabindex="-1" data-focus-on-load>
+	<ul class="checklist">
+		{
+			done.map(({ words, tone, action }) => (
+				<li class={tone}>
+					<span>
+						<Words words={words} />
+					</span>
+					{action && (
+						<a
+							class="postcard-action small-action"
+							href={action.href}
+							target="_blank"
+							rel="noopener"
+						>
+							{action.label} <span aria-hidden="true">↗</span>
+						</a>
+					)}
+				</li>
+			))
+		}
+	</ul>
+	{
+		failed.map(({ words }) => (
+			<p class="postcard-error" role="status">
+				<Words words={words} />
+			</p>
+		))
+	}
+	<div class="follow-up"><slot /></div>
+</div>
+
+<style>
+	/* Mirrored so the goose faces the title. The header tilts every
+	   decoration 12deg; this counter-rotates to a net 1deg, and the
+	   translate is pre-rotated so the goose lands up by the edition line. */
+	.goose-popper {
+		scale: -1 1;
+		rotate: -11deg;
+		translate: -1px -39px;
+	}
+	.confirmation {
+		display: grid;
+		gap: 10px;
+	}
+	.confirmation:focus {
+		outline: none;
+	}
+	.confirmation p {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.4;
+	}
+	/* What the RSVP got done, as a plain list rather than anything that
+	   could pass for the form's checkboxes. A to-do points at its step. */
+	.checklist {
+		display: grid;
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.checklist li {
+		display: grid;
+		grid-template-columns: 16px 1fr;
+		align-items: start;
+		column-gap: 8px;
+		row-gap: 8px;
+		font-size: 14px;
+		line-height: 1.4;
+	}
+	.checklist li::before {
+		content: "✓" / "";
+		color: var(--strong);
+		font-weight: 800;
+		text-align: center;
+	}
+	.checklist li.todo::before {
+		content: "→" / "";
+	}
+	.checklist li > .postcard-action {
+		grid-column: 2;
+		justify-self: start;
+		/* Room above so it reads as this step's, and below so it doesn't
+		   crowd whatever follows the list. */
+		margin: 4px 0 8px;
+	}
+	.follow-up {
+		margin: 0;
+	}
+	.follow-up :global(a) {
+		color: var(--strong);
+		font-weight: 800;
+		text-underline-offset: 3px;
+	}
+	.follow-up :global(p) {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.4;
+	}
+	.confirmation :global(strong) {
+		overflow-wrap: anywhere;
+	}
+</style>

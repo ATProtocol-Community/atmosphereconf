@@ -2,7 +2,8 @@
 import GooseSvg from "./goose.svg";
 import D20Logo from "./d20-favicon.svg";
 import PronounsGoose from "./PronounsGoose.astro";
-import hummingbird from "./hummingbird.png";
+import hummingbird from "./hummingbird-bird.png";
+import ColibriMegaphone from "./colibri-megaphone.svg";
 import { cloudShapes } from "../lib/cloud-shapes";
 import PaperPlane from "./paper-plane.svg";
 
@@ -63,6 +64,8 @@ const postcardClouds = [
 				id="rpg-actor-goose"
 				style={`background-image:url(${RPG_ACTOR_SPRITE_URL})`}
 			></div>
+
+			<ColibriMegaphone class="goose colibri-megaphone" />
 
 			<GooseSvg data-shiny={sunny || undefined} />
 			<PronounsGoose />
@@ -303,6 +306,15 @@ const postcardClouds = [
 		transform: rotate(-3deg);
 	}
 
+	:global(body[data-palette="pronouns"]) h1 {
+		color: var(--butter);
+	}
+
+	:global(body[data-palette="pronouns"]) .headline-at {
+		color: var(--strong);
+		-webkit-text-stroke-color: var(--butter);
+	}
+
 	.destination {
 		position: relative;
 		z-index: 2;
@@ -390,7 +402,13 @@ const postcardClouds = [
 		animation: stride 0.65s ease-in-out infinite alternate;
 	}
 
-	:global(body[data-palette="colibri"]) #goose-img {
+	.colibri-megaphone {
+		position: absolute;
+		inset: 0;
+	}
+
+	:global(body[data-palette="colibri"]) #goose-img,
+	:global(body[data-palette="colibri"]) .colibri-megaphone {
 		display: block;
 	}
 

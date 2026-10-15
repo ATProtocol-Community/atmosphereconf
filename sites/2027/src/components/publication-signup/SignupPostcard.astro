@@ -5,6 +5,8 @@ import PostcardHeader from "../postcard/PostcardHeader.astro";
 import Megaphone from "./megaphone.svg";
 import type { SignupCard } from "./server";
 import { signupError, signupReceipt } from "./leaflet";
+import Confirmation from "../postcard/Confirmation.astro";
+import { newsLine, type Line } from "../rsvp/outcomes";
 
 interface Props {
 	card: SignupCard;
@@ -13,48 +15,38 @@ interface Props {
 const { card } = Astro.props;
 const error =
 	card.kind === "form" && card.failure ? signupError(card.failure) : undefined;
-const receipt = card.kind === "subscribed" ? signupReceipt(card) : undefined;
+const confirmed = card.kind !== "form";
+const lines: Line[] =
+	card.kind === "subscribed"
+		? [{ words: [signupReceipt(card)], tone: "done" }]
+		: card.kind === "email-pending"
+			? [newsLine(card.news)]
+			: [];
 ---
 
-<PostcardFrame label="A postcard from AtmosphereConf" titleId="signup-title">
-	<PostcardHeader
-		id="signup-title"
-		as="h2"
-		decorationLane={1.1}
-		title="Hear it straight from the gaggle-vine"
-		subtitle="Be the first to learn about dates, tickets, news, and exclusive geese reveals!"
-	>
-		<Fragment slot="decoration"><Megaphone /></Fragment>
-	</PostcardHeader>
+<PostcardFrame
+	label="A postcard from AtmosphereConf"
+	titleId={confirmed ? "confirmation-title" : "signup-title"}
+	sunny={confirmed}
+>
 	{
-		receipt ? (
-			<div class="receipt">
-				<p role="status" tabindex="-1" data-focus-on-load>
-					{receipt}
-				</p>
-				<a class="postcard-action" href="/rsvp">
-					RSVP here <span aria-hidden="true">→</span>
-				</a>
-			</div>
+		confirmed ? (
+			<Confirmation lines={lines}>
+				<p>Coming there? <a href="/rsvp">RSVP here <span aria-hidden="true">→</span></a></p>
+			</Confirmation>
 		) : (
-			<SignupForm error={error} />
+			<>
+				<PostcardHeader
+					id="signup-title"
+					as="h2"
+					decorationLane={0.7}
+					title="Hear it straight from the gaggle-vine"
+					subtitle="Be the first to learn about dates, tickets, news, and exclusive geese reveals!"
+				>
+					<Fragment slot="decoration"><Megaphone /></Fragment>
+				</PostcardHeader>
+				<SignupForm error={error} />
+			</>
 		)
 	}
 </PostcardFrame>
-
-<style>
-	.receipt {
-		display: grid;
-		gap: 16px;
-	}
-	.receipt p {
-		margin: 0;
-		font-size: 14px;
-		font-weight: 800;
-		line-height: 1.4;
-	}
-	/* Focused on load so screen readers land on it; it isn't a control. */
-	.receipt p:focus {
-		outline: none;
-	}
-</style>
