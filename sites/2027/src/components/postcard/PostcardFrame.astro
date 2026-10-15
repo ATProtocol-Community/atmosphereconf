@@ -14,7 +14,9 @@ const { label, titleId, class: className, sunny } = Astro.props;
 ---
 
 <article class:list={["mail", className]} id="postcard" aria-label={label}>
-	<PostcardPicture sunny={sunny} />
+	<PostcardPicture sunny={sunny}>
+		<slot name="first-word" slot="first-word">Back</slot>
+	</PostcardPicture>
 
 	<section class="address" aria-labelledby={titleId}>
 		<slot name="postage">

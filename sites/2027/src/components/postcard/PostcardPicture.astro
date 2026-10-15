@@ -86,7 +86,7 @@ const postcardClouds = [
 			<circle class="windmill-detail" cx="40" cy="56" r="3"></circle>
 		</svg>
 		<h1 id="headline">
-			<span class="headline-word">Back</span>
+			<span class="headline-word"><slot name="first-word">Back</slot></span>
 			<span class="last-line"
 				><span class="headline-word headline-at">At</span>
 				<span class="headline-word"
@@ -97,7 +97,7 @@ const postcardClouds = [
 			>
 		</h1>
 		<div class="destination">
-			<span>Arriving soon</span>
+			<span>April 29th–May 2nd, 2027</span>
 			<div>
 				Somewhere<br />in Amsterdam <span class="online">(and online)</span>
 				<span class="destination-arrow" aria-hidden="true">

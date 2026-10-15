@@ -1,7 +1,6 @@
 const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 	const SVG_NS = "http://www.w3.org/2000/svg";
 	const bodyPivot: readonly [number, number] = [470, 550];
-	const bouquetPivot: readonly [number, number] = [248, 427];
 	const frontFootPivot: readonly [number, number] = [343.861, 610.977];
 	// Matching shoe contours: undo the rear shoe's authored tilt at its collar.
 	const rearFootPivot: readonly [number, number] = [551.418, 590.368];
@@ -10,12 +9,13 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 	const walk = {
 		period: 1.1, stance: 0.6, stride: 44, lift: 20,
 		bob: 2.5, sway: 2, roll: 0.6, lean: 0, toe: 8,
-		pivot: bodyPivot,
+		pivot: bodyPivot, bagRest: 0, bagSwing: 2, armSwing: 5,
 	};
 	const run = {
 		period: 0.5, stance: 0.4, stride: 66, lift: 56,
 		bob: 7, sway: 3, roll: 3, lean: -9, toe: 18,
-		pivot: [400, 360] as const,
+		// Flung back so it clears the race bib.
+		pivot: [400, 360] as const, bagRest: -34, bagSwing: 3, armSwing: 26,
 	};
 
 	const art = root.querySelector<SVGGElement>("g[clip-path]");
@@ -23,10 +23,10 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 
 	const parts = Array.from(art.children);
 	const ranges = {
-		bouquet: [0, 8],
-		leftLeg: [8, 11],
-		rightLeg: [11, 14],
-		body: [14, 19],
+		bouquet: [0, 1],
+		leftLeg: [1, 4],
+		rightLeg: [4, 7],
+		body: [7, 12],
 	} as const;
 	if (parts.length !== ranges.body[1]) return;
 
@@ -39,6 +39,26 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 	};
 
 	const bouquet = wrap("goose-bouquet", ranges.bouquet);
+	const backWing = root.querySelector<SVGGElement>("[data-goose-back-wing]");
+	const megaphone = root.querySelector<SVGGElement>("[data-goose-megaphone]");
+	backWing?.setAttribute(
+		"transform",
+		"translate(50 70) rotate(25 250 315)",
+	);
+	megaphone?.setAttribute(
+		"transform",
+		"translate(-35 203) rotate(-20 152 158) translate(152 158) scale(0.98 1.2) translate(-152 -158)",
+	);
+	if (megaphone) {
+		backWing?.append(megaphone);
+		const [handle, mouthpiece, shell, highlight, rim, interior] = megaphone.querySelectorAll("path");
+		handle?.setAttribute("fill", "#577996");
+		mouthpiece?.setAttribute("fill", "#577996");
+		shell?.setAttribute("fill", "#436785");
+		highlight?.setAttribute("stroke", "#7895AC");
+		rim?.setAttribute("fill", "#7895AC");
+		interior?.setAttribute("fill", "#FFF6E3");
+	}
 	const leftLeg = wrap("goose-leg-left", ranges.leftLeg);
 	const rightLeg = wrap("goose-leg-right", ranges.rightLeg);
 	const body = wrap("goose-body", ranges.body);
@@ -48,6 +68,9 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 	if (tail) body.prepend(tail);
 	const glasses = root.querySelector<SVGGElement>("[data-goose-glasses]");
 	if (glasses) body.append(glasses);
+	const bag = root.querySelector<SVGGElement>("[data-goose-bag]");
+	const bagRestTransform = bag?.getAttribute("transform") ?? "";
+	if (bag) body.append(bag);
 	// The waffle's glow spreads past the art's clip, so it stays outside it
 	// and copies the body's motion. The glint sits on the waffle itself.
 	const shine = root.querySelector<SVGGElement>("[data-goose-shine]");
@@ -70,6 +93,7 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 		for (const part of motionParts) part.removeAttribute("transform");
 		shine?.removeAttribute("transform");
 		arm?.removeAttribute("transform");
+		if (bagRestTransform) bag?.setAttribute("transform", bagRestTransform);
 		if (tailRestTransform) tail?.setAttribute("transform", tailRestTransform);
 		else tail?.removeAttribute("transform");
 		tailAngle = 0;
@@ -108,6 +132,11 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 		const roll = gait.lean + gait.roll * Math.sin(2 * Math.PI * t);
 		const bodyMotion = `translate(${sway.toFixed(2)} ${bob.toFixed(2)}) rotate(${roll.toFixed(2)} ${gait.pivot[0]} ${gait.pivot[1]})`;
 		body.setAttribute("transform", bodyMotion);
+		// The back wing lifts the megaphone a little with each step.
+		bouquet.setAttribute(
+			"transform",
+			`${bodyMotion} rotate(${(3 * Math.sin(2 * Math.PI * t)).toFixed(2)} 300 385)`,
+		);
 		shine?.setAttribute("transform", bodyMotion);
 		// Let the tail lag behind each step without changing its authored placement.
 		const bodyVelocity = previousBob === null || dt === 0 ? 0 : (bob - previousBob) / dt;
@@ -121,11 +150,13 @@ const gooseAnim = (root: SVGSVGElement, phase = 0) => {
 		);
 		arm?.setAttribute(
 			"transform",
-			`rotate(${(26 * Math.sin(2 * Math.PI * t)).toFixed(2)} 332 319)`,
+			`rotate(${(gait.armSwing * Math.sin(2 * Math.PI * t)).toFixed(2)} 332 319)`,
 		);
-		bouquet.setAttribute(
+		// The satchel swings from its strap at the shoulder.
+		const bagAngle = gait.bagRest + gait.bagSwing * Math.sin(2 * Math.PI * t - 0.6);
+		bag?.setAttribute(
 			"transform",
-			`${bodyMotion} rotate(${(3 * Math.sin(2 * Math.PI * t)).toFixed(2)} ${bouquetPivot[0]} ${bouquetPivot[1]})`,
+			`${bagRestTransform} rotate(${bagAngle.toFixed(2)} 11 -2)`,
 		);
 
 		// Bring the drawing's wide stance under the belly so the feet can pass.
