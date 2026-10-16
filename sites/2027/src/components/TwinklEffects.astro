@@ -1,0 +1,226 @@
+---
+const stars = Array.from({ length: 140 }, (_, index) => ({
+	left: Math.random() * 100,
+	top: Math.random() * 100,
+	size: 3 + Math.random() * 14,
+	duration: 2 + Math.random() * 3,
+	delay: -Math.random() * 10,
+	color: ["#ff9cdb", "#7dffff", "#d5a5ff"][index % 3],
+}));
+---
+
+<div class="twinkl-stars" aria-hidden="true">
+	{
+		stars.map((star) => (
+			<span style={`left: ${star.left}%; top: ${star.top}%; --star-size: ${star.size}px; --star-duration: ${star.duration}s; --star-delay: ${star.delay}s; --star-color: ${star.color};`}>✦</span>
+		))
+	}
+</div>
+
+<style>
+	.twinkl-stars {
+		display: none;
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const starfield = document.querySelector(".twinkl-stars");
+		if (starfield) document.body.prepend(starfield);
+		const mountPictureStars = () => {
+			const picture = document.querySelector(".picture");
+			if (!picture || !starfield || picture.querySelector(".twinkl-picture-stars")) return;
+			const field = starfield.cloneNode(true);
+			field.className = "twinkl-stars twinkl-picture-stars";
+			for (const star of field.children) {
+				star.style.left = `${Math.random() * 100}%`;
+				star.style.top = `${Math.random() * 100}%`;
+			}
+			picture.prepend(field);
+		};
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", mountPictureStars, { once: true });
+		} else {
+			mountPictureStars();
+		}
+		const motion = matchMedia("(prefers-reduced-motion: reduce)");
+		let canvas = null;
+		let context = null;
+		let sprites = [];
+		let particles = [];
+		let frame = 0;
+		let lastEmission = -Infinity;
+		let previous = null;
+		let suspended = false;
+		const limit = 320;
+
+		const resize = () => {
+			if (!canvas || !context) return;
+			const ratio = Math.min(devicePixelRatio || 1, 2);
+			canvas.width = Math.round(innerWidth * ratio);
+			canvas.height = Math.round(innerHeight * ratio);
+			context.setTransform(ratio, 0, 0, ratio, 0, 0);
+			particles = [];
+			previous = null;
+		};
+
+		const makeSprite = (color) => {
+			const sprite = document.createElement("canvas");
+			sprite.width = sprite.height = 64;
+			const brush = sprite.getContext("2d");
+			if (!brush) return sprite;
+			brush.fillStyle = color;
+			brush.shadowColor = color;
+			brush.shadowBlur = 8;
+			brush.beginPath();
+			brush.moveTo(32, 9);
+			brush.lineTo(37, 27);
+			brush.lineTo(55, 32);
+			brush.lineTo(37, 37);
+			brush.lineTo(32, 55);
+			brush.lineTo(27, 37);
+			brush.lineTo(9, 32);
+			brush.lineTo(27, 27);
+			brush.closePath();
+			brush.fill();
+			brush.fillStyle = "#ffffff";
+			brush.fillRect(30, 30, 4, 4);
+			return sprite;
+		};
+
+		const draw = (now) => {
+			frame = 0;
+			if (!context) return;
+			context.clearRect(0, 0, innerWidth, innerHeight);
+			particles = particles.filter((particle) => now - particle.born < particle.life);
+			for (const particle of particles) {
+				const age = (now - particle.born) / 1000;
+				const remaining = 1 - (now - particle.born) / particle.life;
+				const size = particle.size * (0.4 + remaining * 0.6);
+				context.globalAlpha = remaining * (0.65 + 0.35 * Math.sin(age * 9 + particle.phase));
+				context.save();
+				context.translate(
+					particle.x + particle.vx * age,
+					particle.y + particle.vy * age + 55 * age * age,
+				);
+				context.rotate(particle.phase + age * particle.spin);
+				context.drawImage(sprites[particle.sprite], -size / 2, -size / 2, size, size);
+				context.restore();
+			}
+			context.globalAlpha = 1;
+			if (particles.length) frame = requestAnimationFrame(draw);
+		};
+
+		const emit = (clientX, clientY, count, burst) => {
+			const now = performance.now();
+			for (let index = 0; index < count; index++) {
+				const angle = Math.random() * Math.PI * 2;
+				const speed = (burst ? 90 : 35) + Math.random() * (burst ? 230 : 140);
+				const glitter = Math.random() < 0.55;
+				particles.push({
+					x: clientX + (Math.random() - 0.5) * (burst ? 14 : 42),
+					y: clientY + (Math.random() - 0.5) * (burst ? 14 : 42),
+					vx: Math.cos(angle) * speed,
+					vy: Math.sin(angle) * speed - 35,
+					born: now,
+					life: (burst ? 1000 : 650) + Math.random() * 700,
+					size: glitter ? 4 + Math.random() * 8 : 16 + Math.random() * 22,
+					sprite: Math.floor(Math.random() * sprites.length),
+					phase: Math.random() * Math.PI * 2,
+					spin: (Math.random() - 0.5) * 5,
+				});
+			}
+			particles = particles.slice(-limit);
+			if (!frame) frame = requestAnimationFrame(draw);
+		};
+
+		const burst = (event) => {
+			if (event.button !== 0) return;
+			const bounds = event.target instanceof Element ? event.target.getBoundingClientRect() : null;
+			emit(
+				event.detail === 0 && bounds ? bounds.left + bounds.width / 2 : event.clientX,
+				event.detail === 0 && bounds ? bounds.top + bounds.height / 2 : event.clientY,
+				90,
+				true,
+			);
+		};
+
+		const move = (event) => {
+			if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+			const now = performance.now();
+			if (now - lastEmission < 16) return;
+			const start = previous && now - lastEmission < 100 ? previous : event;
+			const distance = Math.hypot(event.clientX - start.clientX, event.clientY - start.clientY);
+			const count = Math.min(16, Math.max(6, Math.ceil(distance / 6)));
+			lastEmission = now;
+			emit(event.clientX, event.clientY, count, false);
+			previous = { clientX: event.clientX, clientY: event.clientY };
+			if (!frame) frame = requestAnimationFrame(draw);
+		};
+
+		const deactivate = () => {
+			cancelAnimationFrame(frame);
+			frame = 0;
+			window.removeEventListener("pointermove", move);
+			window.removeEventListener("click", burst);
+			window.removeEventListener("resize", resize);
+			canvas?.remove();
+			if (canvas) canvas.width = canvas.height = 0;
+			for (const sprite of sprites) sprite.width = sprite.height = 0;
+			canvas = context = null;
+			sprites = [];
+			particles = [];
+			previous = null;
+			lastEmission = -Infinity;
+		};
+
+		const sync = () => {
+			const active = document.documentElement.dataset.theme === "twinkl";
+			if (!active || motion.matches || document.hidden || suspended) {
+				deactivate();
+				return;
+			}
+			if (canvas) return;
+			canvas = document.createElement("canvas");
+			canvas.className = "twinkl-trail";
+			canvas.setAttribute("aria-hidden", "true");
+			context = canvas.getContext("2d");
+			if (!context) {
+				deactivate();
+				return;
+			}
+			sprites = ["#ff9cdb", "#7dffff", "#d5a5ff"].map(makeSprite);
+			document.body.append(canvas);
+			resize();
+			window.addEventListener("pointermove", move, { passive: true });
+			window.addEventListener("click", burst, { passive: true });
+			window.addEventListener("resize", resize, { passive: true });
+		};
+
+		const observer = new MutationObserver(sync);
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["data-theme"],
+		});
+		motion.addEventListener("change", sync);
+		document.addEventListener("visibilitychange", sync);
+		window.addEventListener("pagehide", () => {
+			suspended = true;
+			observer.disconnect();
+			motion.removeEventListener("change", sync);
+			document.removeEventListener("visibilitychange", sync);
+			deactivate();
+		});
+		window.addEventListener("pageshow", () => {
+			suspended = false;
+			observer.observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["data-theme"],
+			});
+			motion.addEventListener("change", sync);
+			document.addEventListener("visibilitychange", sync);
+			sync();
+		});
+		sync();
+	})();
+</script>
