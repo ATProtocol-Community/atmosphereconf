@@ -1,0 +1,188 @@
+body[data-palette="twinkl"] {
+	color-scheme: dark;
+	isolation: isolate;
+	--heading-font: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+	--body-font: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+	--label-font: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+	--ink: #e5d5ff;
+	--strong: #7dffff;
+	--sky: #0a001a;
+	--paper: #1c0b3a;
+	--mint: #301456;
+	--butter: #ff9cdb;
+	--goose: #e5d5ff;
+	--cancel-stamp: #ff9cdb;
+	--error: #ffaaaa;
+	--tab-active-foreground: #0a001a;
+	--tab-inactive-foreground: #e5d5ff;
+	background-color: #0a001a;
+	background-image: none;
+}
+
+body[data-palette="twinkl"] .page-sky,
+body[data-palette="twinkl"] .postcard-clouds {
+	display: none;
+}
+
+body[data-palette="twinkl"] .mail {
+	box-shadow: 0 0 0 2px #ff9cdb, -8px -5px 24px #ff329f88, 8px -5px 28px #ffe66d66, 8px 5px 32px #36ffbf66, -8px 5px 40px #8e75ff88;
+	animation: twinkl-neon 10s ease-in-out infinite;
+}
+
+body[data-palette="twinkl"] .picture {
+	isolation: isolate;
+	background: linear-gradient(135deg, #301456, #0a001a, #32103b, #122448);
+	background-size: 250% 250%;
+	animation: twinkl-aurora 18s ease-in-out infinite alternate;
+}
+
+body[data-palette="twinkl"] :is(h1, h2, .wordmark) {
+	text-shadow: 2px 2px 0 #651c78, 0 0 8px #ff00ffaa, 0 0 24px #8b00ff88;
+}
+
+body[data-palette="twinkl"] .headline-at {
+	-webkit-text-stroke-color: #913487;
+}
+
+body[data-palette="twinkl"] .postcard-field {
+	background: #0a001a;
+	border-color: #ff69b4;
+	color: #e5d5ff;
+}
+
+body[data-palette="twinkl"] .postcard-field::placeholder {
+	color: #c2abdf;
+	opacity: 1;
+}
+
+body[data-palette="twinkl"] .postcard-action {
+	background: linear-gradient(125deg, #ff9cdb, #d5a5ff, #7dffff);
+	color: #0a001a;
+	box-shadow: 0 0 10px #ff00ff55;
+}
+
+body[data-palette="twinkl"] .postcard-action.secondary {
+	background: #1c0b3a;
+	color: #7dffff;
+	border-color: #ff69b4;
+}
+
+body[data-palette="twinkl"] :is(a, button, input, textarea, summary):focus-visible {
+	outline: 2px solid #7dffff;
+	outline-offset: 3px;
+}
+
+body[data-palette="twinkl"] .twinkl-stars {
+	display: block;
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+body[data-palette="twinkl"] .picture .twinkl-picture-stars {
+	position: absolute;
+	z-index: -3;
+}
+
+body[data-palette="twinkl"] .twinkl-stars span {
+	position: absolute;
+	color: var(--star-color);
+	text-shadow: 0 0 6px currentColor, 0 0 14px currentColor;
+	font-size: var(--star-size);
+	line-height: 1;
+	opacity: 0.55;
+	animation: twinkl-shimmer var(--star-duration) ease-in-out var(--star-delay) infinite alternate;
+}
+
+body[data-palette="twinkl"] .twinkl-trail {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9;
+	pointer-events: none;
+}
+
+body[data-palette="twinkl"] a:not(.postcard-action) {
+	color: #ff9cdb;
+	text-shadow: 0 0 5px currentColor, 0 0 12px #ff00ff;
+	animation: twinkl-rainbow-link 6s ease-in-out infinite;
+}
+
+body[data-palette="twinkl"] a:not(.postcard-action):is(:hover, :focus-visible) {
+	text-shadow: 0 0 3px #fff, 0 0 9px currentColor, 0 0 18px #ff00ff, 0 0 28px #00ffff;
+	text-decoration-color: currentColor;
+}
+
+body[data-palette="twinkl"] :is(.current-stamp, .postcard-action, .stamp-option-art):is(:hover, :focus-visible),
+body[data-palette="twinkl"] .stamp-option:is(:hover, :focus-visible) .stamp-option-art {
+	filter: drop-shadow(-4px -3px 4px #ff329f) drop-shadow(4px 0 6px #ffe66d) drop-shadow(0 4px 8px #36ffbf) drop-shadow(-2px 0 12px #8e75ff);
+	animation: twinkl-rainbow-halo 4s ease-in-out infinite;
+}
+
+@keyframes twinkl-rainbow-link {
+	0%, 100% { color: #ff9cdb; }
+	20% { color: #ffc18c; }
+	40% { color: #fff39c; }
+	60% { color: #8affcd; }
+	80% { color: #8cecff; }
+	90% { color: #d5a5ff; }
+}
+
+@keyframes twinkl-rainbow-halo {
+	0%, 100% {
+		filter: drop-shadow(-4px -3px 4px #ff329f) drop-shadow(4px 0 6px #ffe66d) drop-shadow(0 4px 8px #36ffbf) drop-shadow(-2px 0 12px #8e75ff);
+	}
+	50% {
+		filter: drop-shadow(-4px -3px 6px #36ffbf) drop-shadow(4px 0 8px #8e75ff) drop-shadow(0 4px 10px #ff329f) drop-shadow(-2px 0 16px #ffe66d);
+	}
+}
+
+@keyframes twinkl-neon {
+	0%, 100% {
+		box-shadow: 0 0 0 2px #ff82d5, -8px -5px 26px #ff00ff88, 8px 5px 32px #00ffff77, 0 0 64px #8b00ff66;
+	}
+	25% {
+		box-shadow: 0 0 0 2px #ffca82, -8px -5px 26px #ff703b88, 8px 5px 32px #ffe66d77, 0 0 64px #ff329f66;
+	}
+	50% {
+		box-shadow: 0 0 0 2px #baff82, -8px -5px 26px #ffe66d88, 8px 5px 32px #36ffbf77, 0 0 64px #00ffff66;
+	}
+	75% {
+		box-shadow: 0 0 0 2px #82dcff, -8px -5px 26px #00ffff88, 8px 5px 32px #8e75ff77, 0 0 64px #ff00ff66;
+	}
+}
+
+@keyframes twinkl-aurora {
+	from {
+		background-position: 0% 20%;
+	}
+	to {
+		background-position: 100% 80%;
+	}
+}
+
+@keyframes twinkl-shimmer {
+	from {
+		opacity: 0.12;
+		transform: scale(0.55) rotate(-15deg);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1.4) rotate(15deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body[data-palette="twinkl"] a:not(.postcard-action),
+	body[data-palette="twinkl"] :is(.current-stamp, .postcard-action, .stamp-option-art):is(:hover, :focus-visible),
+	body[data-palette="twinkl"] .stamp-option:is(:hover, :focus-visible) .stamp-option-art,
+	body[data-palette="twinkl"] .mail,
+	body[data-palette="twinkl"] .picture,
+	body[data-palette="twinkl"] .twinkl-stars span,
+	body[data-palette="twinkl"] .grass {
+		animation: none;
+	}
+}
