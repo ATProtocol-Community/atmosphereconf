@@ -1,3 +1,9 @@
+---
+import TwinklEffects from "./TwinklEffects.astro";
+import "../styles/twinkl.css";
+---
+
+<TwinklEffects />
 <div class="theme-switcher">
 	<button id="theme-toggle" aria-label="Toggle theme">
 		<svg
@@ -82,6 +88,7 @@
 			sifa: { label: "Sifa", image: "goose" },
 			kimbia: { label: "Kimbia", image: "goose" },
 			pronouns: { label: "Pronouns", image: "flock" },
+			twinkl: { label: "Twinkl", image: "goose" },
 		};
 
 		const themeKeys = Object.keys(themes);
