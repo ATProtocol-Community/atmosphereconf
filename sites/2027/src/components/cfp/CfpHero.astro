@@ -1,0 +1,46 @@
+---
+import vancouver from "../../../images/illustrations/vancouver-stamp.png";
+import seattle from "../../../images/illustrations/seattle-stamp.png";
+import Cloud from "../site/Cloud.astro";
+import { cfp } from "../../data/cfp";
+---
+
+<section
+	class="relative overflow-hidden bg-azure text-white"
+	aria-labelledby="cfp-title"
+>
+	<div
+		class="relative z-2 wrap flex flex-col items-center pt-16 pb-44 text-center md:pt-24 md:pb-56 lg:pt-28 lg:pb-64"
+	>
+		<div class="relative">
+			<img
+				class="absolute top-[12%] left-0 hidden w-40 -translate-x-[115%] -rotate-6 md:block lg:w-52"
+				src={vancouver.src}
+				alt="A speaker at the Vancouver ATProto conference"
+				width={vancouver.width}
+				height={vancouver.height}
+			/>
+			<h1
+				class="display text-[40px]/[1.1] md:text-[64px]/[1.05] lg:text-[96px]/[1.05]"
+				id="cfp-title"
+			>
+				Speak at<br />Atmosphere<br />Conf 2027
+			</h1>
+			<img
+				class="absolute top-[30%] right-0 hidden w-40 translate-x-[115%] rotate-6 md:block lg:w-52"
+				src={seattle.src}
+				alt="The audience at the Seattle ATProto conference"
+				width={seattle.width}
+				height={seattle.height}
+			/>
+		</div>
+		<a class="mt-8 btn md:mt-10" href={cfp.submissionUrl}
+			>Submit a proposal <span aria-hidden="true">▸</span></a
+		>
+	</div>
+	<Cloud shape="bumpy" class="-bottom-1 -left-15 w-65 md:-left-10 md:w-105" />
+	<Cloud
+		shape="long"
+		class="-right-25 -bottom-1 w-87.5 md:-right-10 md:w-150"
+	/>
+</section>

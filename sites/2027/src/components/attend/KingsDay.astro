@@ -1,0 +1,31 @@
+---
+import bicycle from "../../../images/illustrations/bycicle.svg?url";
+import NumberedList from "../site/NumberedList.astro";
+
+const options = [
+	{
+		lead: "If you like the party/crazy:",
+		text: "arrive early and you’ll see the city at its busiest and most orange.",
+	},
+	{ lead: "If you prefer to avoid that:", text: "arrive on the 28th." },
+];
+---
+
+<section class="bg-navy text-white" aria-labelledby="kings-day-title">
+	<div
+		class="wrap grid gap-10 pt-16 pb-12 md:grid-cols-2 md:items-center md:gap-12 md:pt-20 md:pb-16 lg:gap-19 lg:pt-30 lg:pb-24"
+	>
+		<h2 class="title" id="kings-day-title">
+			King’s Day falls on Tuesday 27 April, two days before we start.
+		</h2>
+		<NumberedList items={options} />
+	</div>
+	<img
+		class="w-full max-md:min-h-47.5 max-md:object-cover max-md:object-center"
+		src={bicycle}
+		alt="A goose cycling past tulips with a basket of flowers, under a string of orange bunting"
+		width="1440"
+		height="436"
+		loading="lazy"
+	/>
+</section>

@@ -1,0 +1,77 @@
+---
+import airplane from "../../../images/airplane.svg?url";
+import Cloud from "../site/Cloud.astro";
+import { cfp } from "../../data/cfp";
+
+const link = "underline underline-offset-4 hover:no-underline";
+---
+
+<section
+	class="relative overflow-hidden bg-blue text-white"
+	aria-labelledby="good-to-know-title"
+>
+	<div
+		class="relative z-2 wrap grid gap-8 pt-16 pb-10 md:grid-cols-2 md:gap-12 md:pt-20 lg:gap-19 lg:pt-30"
+	>
+		<h2 class="title" id="good-to-know-title">Good to know</h2>
+		<ol
+			class="divide-y divide-white/40 border-y border-white/40 text-sm md:text-base"
+		>
+			{
+				[
+					<>
+						<strong class="font-semibold">A free ticket is</strong> included
+						with every accepted full talk. Lightning talks don’t include a free
+						ticket.
+					</>,
+					<>
+						Submit in round 1 if you need a{" "}
+						<strong class="font-semibold">visa or travel support</strong>
+					</>,
+					<>All talks are recorded and livestreamed.</>,
+					<>
+						Everyone at AtmosphereConf follows our{" "}
+						<a class={link} href={cfp.codeOfConductUrl}>
+							Code of Conduct
+						</a>
+						.
+					</>,
+					<>
+						Questions? Email{" "}
+						<a class={link} href={`mailto:${cfp.contactEmail}`}>
+							{cfp.contactEmail}
+						</a>
+						.
+					</>,
+				].map((item, index) => (
+					<li class="flex gap-6 py-4 md:gap-8">
+						<span class="w-5 shrink-0 pt-1 eyebrow">
+							{String(index + 1).padStart(2, "0")}
+						</span>
+						<p>{item}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+	<div class="relative z-1 mx-auto w-[min(593px,80vw)] pt-6 pb-40 md:pb-48">
+		<img
+			class="w-full"
+			src={airplane}
+			alt=""
+			width="593"
+			height="248"
+			loading="lazy"
+		/>
+	</div>
+	<Cloud
+		shape="puffy"
+		class="-bottom-1 -left-15 w-65 md:left-0 md:w-125"
+		loading="lazy"
+	/>
+	<Cloud
+		shape="long"
+		class="-right-25 -bottom-1 w-87.5 md:right-0 md:w-168.75"
+		loading="lazy"
+	/>
+</section>

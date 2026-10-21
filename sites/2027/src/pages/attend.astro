@@ -1,0 +1,18 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import AttendHero from "../components/attend/AttendHero.astro";
+import KingsDay from "../components/attend/KingsDay.astro";
+import Calendar from "../components/attend/Calendar.astro";
+import HandyInfo from "../components/attend/HandyInfo.astro";
+---
+
+<SiteLayout
+	title="Attend — AtmosphereConf 2027"
+	description="Four days in Amsterdam-Oost at KIT, 29 April to 2 May 2027. When to arrive, what’s on around King’s Day, and handy info for your stay."
+	ogDescription="29 April–2 May 2027 · KIT, Amsterdam-Oost. Plan your trip to AtmosphereConf."
+>
+	<AttendHero />
+	<KingsDay />
+	<Calendar />
+	<HandyInfo />
+</SiteLayout>

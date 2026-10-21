@@ -1,0 +1,67 @@
+---
+import sitting from "../../../images/guus/sitting.svg?url";
+import Cloud from "../site/Cloud.astro";
+
+const facts = [
+	{ term: "When", value: "29.04–02.05" },
+	{ term: "Where", value: "Amsterdam-Oost at KIT" },
+];
+---
+
+<section
+	class="relative overflow-hidden text-white sky-gradient"
+	aria-labelledby="attend-title"
+>
+	<div
+		class="relative z-2 wrap grid gap-16 pt-16 pb-36 md:grid-cols-[1fr_minmax(0,380px)] md:items-end md:gap-10 md:pt-30 md:pb-30 lg:pt-40 lg:pb-36"
+	>
+		<div>
+			<h1
+				class="display text-[40px]/[1.2] md:text-[56px]/[1.2] lg:text-[64px]/[1.2]"
+				id="attend-title"
+			>
+				Attend
+			</h1>
+			<p class="mt-6 max-w-170 text-base md:mt-8 md:text-lg">
+				AtmosphereConf 2027 takes place in Amsterdam from Thursday 29 April to
+				Sunday 2 May 2027, in Amsterdam-Oost (East) at KIT.
+			</p>
+		</div>
+		<div class="relative mt-20 md:mt-0">
+			<img
+				class="absolute -top-26 right-2 w-25 md:-top-30 md:w-29"
+				src={sitting}
+				alt=""
+				width="201"
+				height="250"
+			/>
+			<div class="relative rounded-xl bg-cream p-6 text-navy md:p-8">
+				<p class="eyebrow text-azure before:mr-2 before:content-['▪']">
+					Conference guide
+				</p>
+				<h2
+					class="mt-8 font-display text-xl/[1.3] uppercase md:mt-10 md:text-2xl/[1.3]"
+				>
+					Four days in Amsterdam-Oost
+				</h2>
+				<dl class="mt-8 border-t border-line md:mt-10">
+					{
+						facts.map(({ term, value }) => (
+							<div class="flex items-baseline justify-between gap-4 border-b border-line py-3">
+								<dt class="eyebrow text-steel">{term}</dt>
+								<dd class="text-xs font-medium uppercase md:text-sm">
+									{value}
+								</dd>
+							</div>
+						))
+					}
+				</dl>
+			</div>
+		</div>
+	</div>
+	<Cloud shape="puffy" class="-bottom-1 -left-15 w-65 md:left-0 md:w-125" />
+	<Cloud
+		shape="long"
+		class="-right-25 -bottom-1 w-87.5 md:right-0 md:w-168.75"
+	/>
+</section>
