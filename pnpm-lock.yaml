@@ -331,6 +331,9 @@ importers:
       node-gyp:
         specifier: ^13.0.2
         version: 13.1.0
+      unstorage:
+        specifier: ^1.17.6
+        version: 1.17.6
       vite:
         specifier: ^8
         version: 8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1)

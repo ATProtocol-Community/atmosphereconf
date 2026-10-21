@@ -26,7 +26,8 @@
     "interestfor": "^1.0.8",
     "node-addon-api": "^8.9.2",
     "node-gyp": "^13.0.2",
-    "vite": "^8"
+    "vite": "^8",
+    "unstorage": "^1.17.6"
   },
   "devDependencies": {
 	  "prettier": "^3.8.1",
