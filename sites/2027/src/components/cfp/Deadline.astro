@@ -1,0 +1,21 @@
+---
+import { cfp, timeUntil } from "../../data/cfp";
+
+const countdown = timeUntil(cfp.deadline);
+---
+
+<section class="bg-white text-center" aria-labelledby="deadline-title">
+	<div class="wrap py-16 md:py-20 lg:py-30">
+		<h2 class="eyebrow" id="deadline-title">Submissions close</h2>
+		<p class="mt-4">
+			<time
+				class="block display text-[32px]/[1.2] md:text-[48px]/[1.2] lg:text-[64px]/[1.2]"
+				datetime={cfp.deadline.toISOString()}>{cfp.deadlineLabel}</time
+			><span class="mt-1 block text-sm text-slate">({cfp.timeZone})</span>
+		</p>
+		<p class="mt-6 text-sm text-slate">{countdown}</p>
+		<a class="mt-6 btn" href={cfp.submissionUrl}
+			>Submit a proposal <span aria-hidden="true">▸</span></a
+		>
+	</div>
+</section>

@@ -1,0 +1,48 @@
+---
+import { cfp } from "../../data/cfp";
+
+const card = "rounded-xl bg-cream p-6 md:p-8";
+const cardTitle = "font-display text-lg/[1.3] uppercase md:text-xl/[1.3]";
+const body = "mt-4 text-sm/5 text-slate md:text-base/6";
+---
+
+<section class="bg-white" aria-labelledby="selection-title">
+	<div class="wrap py-16 md:py-20 lg:py-30">
+		<h2 class="title" id="selection-title">How we select</h2>
+		<div class="mt-8 grid gap-4 md:mt-10 md:grid-cols-2">
+			<article class={card}>
+				<h3 class={cardTitle}>We run the CFP in two rounds</h3>
+				<p class={body}>
+					Most slots are filled in round 1, and we keep room in round 2 for new
+					topics and things that come up early next year.
+				</p>
+				<dl class="mt-6 space-y-5">
+					{
+						cfp.rounds.map(({ name, dates, reply }) => (
+							<div>
+								<dt class="text-sm font-medium md:text-base">
+									{name}: {dates}
+								</dt>
+								<dd class="mt-1 text-xs/5 whitespace-pre-line text-slate md:text-sm/5">
+									{reply}
+								</dd>
+							</div>
+						))
+					}
+				</dl>
+				<p class="mt-6 text-xs/5 text-slate md:text-sm/5">
+					Proposals from round 1 that we like but can’t place yet are
+					automatically considered again in round 2.
+				</p>
+			</article>
+			<article class={card}>
+				<h3 class={cardTitle}>Track leads review with the content team</h3>
+				<p class={body}>
+					Track leads from the community review proposals together with the
+					content team. We look for a mix of topics, perspectives and places,
+					and we read every proposal.
+				</p>
+			</article>
+		</div>
+	</div>
+</section>
