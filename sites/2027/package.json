@@ -13,7 +13,8 @@
     "start": "node ./dist/server/entry.mjs",
     "db:init": "node --env-file-if-exists=.env scripts/init-db.mjs",
     "postinstall": "lex build --clear --indexFile",
-    "update-lexicons": "lex install --update && lex build --clear --indexFile"
+    "update-lexicons": "lex install --update && lex build --clear --indexFile",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/node": "^11.1.5",
@@ -24,6 +25,13 @@
     "escape-goat": "^4.0.0",
     "interestfor": "^1.0.8",
     "node-addon-api": "^8.9.2",
-    "node-gyp": "^13.0.2"
+    "node-gyp": "^13.0.2",
+    "vite": "^8",
+    "unstorage": "^1.17.6"
+  },
+  "devDependencies": {
+	  "prettier": "^3.8.1",
+	  "prettier-plugin-astro": "^0.14.1",
+	  "prettier-plugin-tailwindcss": "^0.7.2"
   }
 }

@@ -1,0 +1,7 @@
+packages:
+  - sites/*
+allowBuilds:
+  core-js: true
+  esbuild: true
+  plyr: true
+  sharp: true
