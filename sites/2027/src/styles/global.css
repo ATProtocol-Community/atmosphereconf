@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme {
+	/* Three layouts: phone (base), tablet (md), desktop (lg). xl only nudges
+	   the hero goose once the viewport outgrows the hero art. */
+	--breakpoint-*: initial;
+	--breakpoint-md: 701px;
+	--breakpoint-lg: 1101px;
+	--breakpoint-xl: 1441px;
+
+	--color-navy: #001941;
+	--color-blue: #023a97;
+	--color-azure: #005fe2;
+	--color-orange: #fe6e25;
+	--color-cream: #faf7f2;
+	--color-slate: #525c6c;
+	--color-steel: #777e89;
+	--color-line: #cdced0;
+
+	--font-sans: "Stack Sans Text", Arial, sans-serif;
+	--font-display: "Boldonse", Impact, sans-serif;
+
+	--text-base--line-height: 1.25rem;
+	--text-lg--line-height: 1.5rem;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		scroll-padding-top: 24px;
+	}
+	body {
+		color: var(--color-navy);
+		font-family: var(--font-sans);
+		font-size: 17px;
+		line-height: 1.6;
+		letter-spacing: -0.01em;
+		@variant md {
+			font-size: 20px;
+		}
+	}
+	button,
+	a {
+		-webkit-tap-highlight-color: transparent;
+	}
+	a:focus-visible,
+	button:focus-visible {
+		outline: 3px solid var(--color-orange);
+		outline-offset: 5px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+	}
+}
+
+@utility wrap {
+	width: calc(100% - 40px);
+	margin-inline: auto;
+	@variant md {
+		width: calc(100% - 64px);
+	}
+	@variant lg {
+		width: min(100% - 96px, 1344px);
+	}
+}
+
+@utility sky-gradient {
+	background: linear-gradient(
+		180deg,
+		#005fe2 0%,
+		#7d7cd8 42%,
+		#ea97df 77%,
+		#eb9b9b 100%
+	);
+}
+
+@utility display {
+	font-family: var(--font-display);
+	font-weight: 400;
+	text-transform: uppercase;
+}
+
+@utility title {
+	@apply display text-[28px]/[1.5] md:text-[34px]/[1.33] lg:text-[48px]/[1.33];
+}
+
+@utility eyebrow {
+	@apply text-xs/4 font-medium tracking-[0.03em] uppercase;
+}
+
+@utility btn {
+	@apply inline-flex min-h-12 items-center justify-center gap-2 rounded border border-navy bg-navy px-3 py-3 font-sans text-xs/[1.4] font-normal whitespace-nowrap text-white md:px-4 md:text-sm/[1.4];
+	@apply disabled:cursor-not-allowed disabled:opacity-65;
+	&:is(a):hover {
+		@apply border-blue bg-blue text-white;
+	}
+}
+
+@utility btn-outline {
+	@apply bg-transparent text-navy;
+	&:is(a):hover {
+		@apply bg-navy text-white;
+	}
+}
+
+/* Tints the white SVG logo navy for use on light backgrounds. */
+@utility tint-navy {
+	filter: brightness(0) saturate(100%) invert(9%) sepia(59%) saturate(2454%)
+		hue-rotate(197deg) brightness(92%) contrast(106%);
+}

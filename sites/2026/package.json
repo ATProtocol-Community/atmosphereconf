@@ -24,8 +24,8 @@
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",
     "@atproto/api": "^0.19.3",
-    "@atproto/lexicon": "^0.7.17",
     "@atproto/identity": "^0.4.8",
+    "@atproto/lexicon": "^0.7.17",
     "@fujocoded/astro-atproto-loader": "^0.2.2",
     "@fujocoded/atproto-badges": "^0.2.0",
     "@fujocoded/authproto": "^0.4.0",
@@ -52,8 +52,8 @@
     "slugify": "^1.6.6",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
-    "zod": "^3.25.76",
-    "unstorage": "^1.17.6"
+    "unstorage": "^1.17.6",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@clack/prompts": "^1.1.0",
@@ -62,7 +62,7 @@
     "@types/react-dom": "^19.2.3",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "tsx": "^4.19.0",
     "vitest": "^4.1.0"
   }
