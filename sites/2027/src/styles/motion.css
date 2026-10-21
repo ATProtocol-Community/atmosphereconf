@@ -1,0 +1,17 @@
+[data-scene] {
+	--play: paused;
+	overflow: visible;
+}
+[data-scene][data-playing] {
+	--play: running;
+}
+[data-scene] [data-part] {
+	transform-box: view-box;
+	animation-play-state: var(--play);
+}
+@media (prefers-reduced-motion: reduce) {
+	[data-scene],
+	[data-scene] [data-part] {
+		animation: none !important;
+	}
+}

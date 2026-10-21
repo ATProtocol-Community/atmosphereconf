@@ -1,19 +1,22 @@
 ---
 import logo from "../../../images/logo/logo-large.svg?url";
-import flying from "../../../images/guus/flying.svg?url";
-import Cloud from "../site/Cloud.astro";
+import Goose from "../../../images/guus/flying.svg";
+import CloudMarquee from "../site/CloudMarquee.astro";
 import EventDetails from "../site/EventDetails.astro";
+import RevealWords from "../site/RevealWords.astro";
 ---
 
 <section
-	class="relative min-h-180 overflow-hidden text-white sky-gradient md:min-h-212.5 lg:min-h-248"
+	data-hero
+	class="relative min-h-180 overflow-hidden text-white [--cloud-band:220px] sky-gradient md:min-h-212.5 md:[--cloud-band:280px] lg:min-h-248 lg:[--cloud-band:320px]"
 	aria-labelledby="hero-title"
 >
 	<div
-		class="relative z-2 px-5 pt-19 pb-67.5 text-center md:px-6 md:pt-27.5 md:pb-70 lg:pt-32"
+		class="relative z-2 px-5 pt-19 pb-[calc(var(--cloud-band)+24px)] text-center md:px-6 md:pt-27.5 lg:pt-32"
 	>
 		<h1 id="hero-title">
 			<img
+				data-hero-logo
 				class="mx-auto w-full max-w-132.5 md:w-[min(944px,80vw)] md:max-w-none"
 				src={logo}
 				alt="AtmosphereConf 2027"
@@ -23,37 +26,236 @@ import EventDetails from "../site/EventDetails.astro";
 			/>
 		</h1>
 		<p
-			class="my-7 display text-[clamp(19px,4vw,28px)] leading-[1.6] md:my-10 md:text-[32px] md:leading-[1.33] lg:text-[48px]"
+			class="my-7 display text-[clamp(19px,4vw,28px)] leading-[1.6] [--reveal-at:450ms] [--reveal-step:70ms] md:my-10 md:text-[32px] md:leading-[1.33] lg:text-[48px]"
 		>
-			Building for a new internet
+			<RevealWords text="Building for a new internet" />
 		</p>
-		<EventDetails />
+		<EventDetails reveal class="[--reveal-at:850ms] [--reveal-step:50ms]" />
 		<div class="flex flex-wrap justify-center gap-2">
-			<a class="btn" href="#tickets"
+			<a class="btn" data-hero-rise style="--i:0" href="#tickets"
 				>Early-bird tickets <span aria-hidden="true">▸</span></a
-			><a class="btn btn-outline" href="/speak"
-				>Apply to speak <span aria-hidden="true">▸</span></a
+			><a
+				class="btn btn-outline"
+				data-hero-rise
+				data-hero-last
+				style="--i:1"
+				href="/speak">Apply to speak <span aria-hidden="true">▸</span></a
 			>
 		</div>
 	</div>
-	<Cloud
-		shape="bumpy"
-		class="bottom-52.5 -left-17.5 w-37.5 md:bottom-68.75 md:-left-26.25 md:w-87.5"
-	/>
-	<Cloud
-		shape="puffy"
-		class="-right-21.25 bottom-55 w-37.5 md:-right-8.75 md:bottom-78.75 md:w-66.25"
-	/>
-	<Cloud shape="puffy" class="-bottom-0.75 -left-15 w-65 md:left-0 md:w-125" />
-	<Cloud
-		shape="long"
-		class="-right-25 -bottom-0.75 w-87.5 md:right-0 md:w-168.75"
-	/>
-	<img
-		class="absolute right-[8%] bottom-6.25 w-52.5 md:right-[7%] md:bottom-12 md:w-67.5 lg:right-[13%] lg:w-81.5 xl:right-[calc(50%-530px)]"
-		src={flying}
-		alt=""
-		width="326"
-		height="269"
-	/>
+	<CloudMarquee variant="a" />
+	<div
+		class="hero-goose absolute right-[8%] bottom-6 z-1 w-52.5 md:right-[7%] md:w-67.5 lg:right-[13%] lg:w-81.5 xl:right-[calc(50%-530px)]"
+		data-hero-goose
+	>
+		<div class="hero-goose-y">
+			<Goose data-scene="hero-goose" class="h-auto w-full" aria-hidden="true" />
+		</div>
+	</div>
 </section>
+
+<style>
+	:global(html[data-motion]) [data-hero-logo] {
+		animation: hero-logo 900ms var(--ease-soft) backwards;
+	}
+
+	:global(html[data-motion]) [data-hero-rise] {
+		animation: hero-rise 500ms var(--ease-soft) backwards;
+		animation-delay: calc(1450ms + var(--i) * 100ms);
+	}
+
+	@keyframes hero-logo {
+		from {
+			opacity: 0;
+			filter: blur(8px);
+			transform: translateY(16px);
+		}
+		to {
+			opacity: 1;
+			filter: blur(0);
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes hero-rise {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
+
+<script>
+	import { prefersReducedMotion } from "../lib/motion";
+
+	const hero = document.querySelector<HTMLElement>("[data-hero]");
+	const last = document.querySelector<HTMLElement>("[data-hero-last]");
+
+	const ready = () => {
+		if (!hero || hero.dataset.heroReady !== undefined) return;
+		hero.dataset.heroReady = "";
+		hero.dispatchEvent(new CustomEvent("hero:ready", { bubbles: true }));
+	};
+
+	if (
+		!hero ||
+		!last ||
+		prefersReducedMotion() ||
+		!document.documentElement.hasAttribute("data-motion")
+	) {
+		ready();
+	} else {
+		last.addEventListener("animationend", ready, { once: true });
+		setTimeout(ready, 2600);
+	}
+</script>
+
+<style is:global>
+	[data-scene="hero-goose"] [data-part="goose"] {
+		transform-origin: 160px 150px;
+		animation: hero-bob 1.1s cubic-bezier(0.45, 0, 0.55, 1) -0.275s infinite
+			var(--play);
+	}
+
+	[data-scene="hero-goose"] [data-part="wing-near"] {
+		animation: hero-flap 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite
+			var(--play);
+	}
+
+	[data-scene="hero-goose"] [data-part="wing-far"] {
+		animation: hero-flap 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite
+			var(--play);
+	}
+
+	[data-scene="hero-goose"] [data-part="leg-near"] {
+		animation: hero-dangle-near 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite
+			var(--play);
+	}
+
+	[data-scene="hero-goose"] [data-part="leg-far"] {
+		animation: hero-dangle-far 1.1s cubic-bezier(0.45, 0, 0.55, 1) -0.12s
+			infinite var(--play);
+	}
+
+	html[data-motion] [data-hero]:not([data-hero-ready]) .hero-goose,
+	html[data-motion] .hero-goose.is-flying {
+		animation: hero-fly-x 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) both paused;
+	}
+
+	html[data-motion] [data-hero]:not([data-hero-ready]) .hero-goose-y,
+	html[data-motion] .is-flying .hero-goose-y {
+		animation: hero-fly-y 2.2s cubic-bezier(0.6, 0, 0.4, 1) both paused;
+	}
+
+	html[data-motion] .hero-goose.is-flying,
+	html[data-motion] .is-flying .hero-goose-y {
+		animation-play-state: running;
+	}
+
+	html[data-motion] .hero-goose.has-landed,
+	html[data-motion] .has-landed .hero-goose-y {
+		animation: none;
+	}
+
+	html[data-motion] .hero-goose.is-flying:not(.has-landed) [data-scene] {
+		--play: running;
+	}
+
+	.hero-goose-y {
+		--fly-lift: -15vh;
+	}
+
+	@media (min-width: 701px) {
+		.hero-goose-y {
+			--fly-lift: -30vh;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-goose,
+		.hero-goose-y {
+			animation: none !important;
+		}
+	}
+
+	@keyframes hero-flap {
+		0%,
+		100% {
+			transform: rotate(-6deg);
+		}
+		50% {
+			transform: rotate(20deg);
+		}
+	}
+
+	@keyframes hero-dangle-near {
+		0%,
+		100% {
+			transform: rotate(-4deg);
+		}
+		50% {
+			transform: rotate(5deg);
+		}
+	}
+
+	@keyframes hero-dangle-far {
+		0%,
+		100% {
+			transform: rotate(-3deg);
+		}
+		50% {
+			transform: rotate(4deg);
+		}
+	}
+
+	@keyframes hero-bob {
+		0%,
+		100% {
+			transform: translateY(0) rotate(-1.5deg);
+		}
+		50% {
+			transform: translateY(-7px) rotate(1.5deg);
+		}
+	}
+
+	@keyframes hero-fly-x {
+		from {
+			transform: translateX(max(60vw, calc(100% + 12vw)));
+		}
+		to {
+			transform: none;
+		}
+	}
+
+	@keyframes hero-fly-y {
+		from {
+			transform: translateY(var(--fly-lift)) rotate(-6deg);
+		}
+		to {
+			transform: none;
+		}
+	}
+</style>
+
+<script>
+	import { prefersReducedMotion, whenHeroReady } from "../lib/motion";
+
+	const goose = document.querySelector<HTMLElement>("[data-hero-goose]");
+
+	if (
+		goose &&
+		!prefersReducedMotion() &&
+		document.documentElement.hasAttribute("data-motion")
+	) {
+		goose.addEventListener("animationend", (event) => {
+			if (event.target === goose && event.animationName === "hero-fly-x") {
+				goose.classList.add("has-landed");
+			}
+		});
+		whenHeroReady().then(() => goose.classList.add("is-flying"));
+	}
+</script>

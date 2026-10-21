@@ -9,12 +9,14 @@ const defaultMessage = "Meet me at AtmosphereConf 2027!";
 const handle = Astro.locals.loggedInUser?.handle ?? undefined;
 ---
 
-<PostcardFrame
-	label="Build an AtmosphereConf postcard"
->
-	<Fragment slot="postage" />
+<PostcardFrame label="Build an AtmosphereConf postcard">
+	<Fragment slot="postage"></Fragment>
 
-	<form class="postcard-form builder-form" data-postcard-builder data-handle={handle}>
+	<form
+		class="postcard-form builder-form"
+		data-postcard-builder
+		data-handle={handle}
+	>
 		<fieldset class="postage-area">
 			<legend class="sr-only">Choose a stamp</legend>
 			<div class="stamp-options">

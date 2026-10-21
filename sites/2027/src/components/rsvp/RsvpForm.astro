@@ -31,8 +31,10 @@ const error = failure ? rsvpError(failure) : undefined;
 		<HandleInput id="rsvp-handle" name="handle" value={handle} required />
 	</div>
 	<div class="extras">
-		{/* The tooltip trigger sits outside the <label> so clicking it
-		    doesn't toggle the checkbox; aria-label restores the full name. */}
+		{
+			/* The tooltip trigger sits outside the <label> so clicking it
+		    doesn't toggle the checkbox; aria-label restores the full name. */
+		}
 		<div class="check-row standard-row">
 			<input
 				id="standard-only"
@@ -57,7 +59,12 @@ const error = failure ? rsvpError(failure) : undefined;
 			</span>
 		</div>
 		<label class="check-row" for="subscribe-news">
-			<input id="subscribe-news" name="subscribeNews" type="checkbox" value="yes" />
+			<input
+				id="subscribe-news"
+				name="subscribeNews"
+				type="checkbox"
+				value="yes"
+			/>
 			<span>Email me news!</span>
 		</label>
 		<span class="news-note" data-note-account>
@@ -86,8 +93,10 @@ const error = failure ? rsvpError(failure) : undefined;
 			<label class="postcard-label" for="alternate-email">
 				Send to this other email:
 			</label>
-			{/* The pattern and length mirror the server's isEmail, which
-			    type="email" alone lets "a@b" slip past. */}
+			{
+				/* The pattern and length mirror the server's isEmail, which
+			    type="email" alone lets "a@b" slip past. */
+			}
 			<input
 				class="postcard-field"
 				id="alternate-email"
@@ -99,7 +108,12 @@ const error = failure ? rsvpError(failure) : undefined;
 				pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
 				aria-describedby="alternate-email-error"
 			/>
-			<p id="alternate-email-error" class="field-error" aria-live="polite" hidden>
+			<p
+				id="alternate-email-error"
+				class="field-error"
+				aria-live="polite"
+				hidden
+			>
 				<span data-error-missing>
 					Add an email here, or{" "}
 					<button class="change-email" type="button" data-use-account-email>

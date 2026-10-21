@@ -1,15 +1,15 @@
 ---
-import running from "../../../images/guus/running.svg?url";
-import walking from "../../../images/guus/walking.svg?url";
-import drinking from "../../../images/guus/drinking.svg?url";
+import Running from "../../../images/guus/running.svg";
+import Walking from "../../../images/guus/walking.svg";
+import Drinking from "../../../images/guus/drinking.svg";
 import TicketCard from "./TicketCard.astro";
 
 const tickets = [
-	{ name: "Early goose", price: "50", image: running },
-	{ name: "Community goose", price: "199", image: walking },
-	{ name: "Employed goose", price: "350", image: drinking },
-	{ name: "Online goose", price: "10", image: running },
-];
+	{ name: "Early goose", price: "50", goose: Running, kind: "running" },
+	{ name: "Community goose", price: "199", goose: Walking, kind: "walking" },
+	{ name: "Employed goose", price: "350", goose: Drinking, kind: "drinking" },
+	{ name: "Online goose", price: "10", goose: Running, kind: "running" },
+] as const;
 ---
 
 <section
@@ -44,3 +44,17 @@ const tickets = [
 		</div>
 	</div>
 </section>
+
+<script>
+	import { hoverLoop } from "../lib/motion";
+
+	for (const card of document.querySelectorAll<HTMLElement>(
+		"#tickets [data-card]",
+	)) {
+		const scene = card.querySelector<SVGSVGElement>("svg[data-scene]");
+		const loopPart = scene?.querySelector(
+			'[data-part="body"], [data-part="upper"]',
+		);
+		if (scene && loopPart) hoverLoop(card, scene, loopPart);
+	}
+</script>

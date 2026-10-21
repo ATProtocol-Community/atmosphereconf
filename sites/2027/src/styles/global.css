@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./motion.css";
 
 @theme {
 	/* Three layouts: phone (base), tablet (md), desktop (lg). xl only nudges
@@ -22,6 +23,9 @@
 
 	--text-base--line-height: 1.25rem;
 	--text-lg--line-height: 1.5rem;
+
+	--ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+	--ease-hit: cubic-bezier(0.6, 0, 1, 1);
 }
 
 @layer base {
@@ -91,17 +95,69 @@
 }
 
 @utility btn {
-	@apply inline-flex min-h-12 items-center justify-center gap-2 rounded border border-navy bg-navy px-3 py-3 font-sans text-xs/[1.4] font-normal whitespace-nowrap text-white md:px-4 md:text-sm/[1.4];
+	--btn-pane: var(--color-blue);
+	--btn-hover-border: var(--color-blue);
+	--btn-hover-text: white;
+	@apply relative isolate inline-flex min-h-12 items-center justify-center gap-2 overflow-hidden rounded border border-navy bg-navy px-3 py-3 font-sans text-xs/[1.4] font-normal whitespace-nowrap text-white md:px-4 md:text-sm/[1.4];
 	@apply disabled:cursor-not-allowed disabled:opacity-65;
-	&:is(a):hover {
-		@apply border-blue bg-blue text-white;
+	transition:
+		color 250ms var(--ease-soft),
+		border-color 250ms var(--ease-soft);
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--btn-pane);
+		translate: 0 100%;
+		transition: translate 250ms var(--ease-soft);
+	}
+	& > span[aria-hidden="true"]:last-child {
+		transition: translate 250ms var(--ease-soft);
+	}
+	@media (hover: hover) {
+		&:not(:disabled):hover {
+			color: var(--btn-hover-text);
+			border-color: var(--btn-hover-border);
+			&::before {
+				translate: 0 0;
+			}
+			& > span[aria-hidden="true"]:last-child {
+				translate: 3px 0;
+			}
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+		&::before,
+		& > span[aria-hidden="true"]:last-child {
+			transition: none;
+		}
 	}
 }
 
 @utility btn-outline {
+	--btn-pane: var(--color-navy);
+	--btn-hover-border: var(--color-navy);
 	@apply bg-transparent text-navy;
-	&:is(a):hover {
-		@apply bg-navy text-white;
+}
+
+@utility card-lift {
+	transition:
+		translate 200ms var(--ease-soft),
+		box-shadow 200ms var(--ease-soft);
+	@media (hover: hover) {
+		&:hover {
+			translate: 0 -4px;
+			box-shadow: 0 16px 32px -16px rgb(0 25 65 / 0.35);
+		}
+	}
+	&:is(:focus-visible, :focus-within) {
+		translate: 0 -4px;
+		box-shadow: 0 16px 32px -16px rgb(0 25 65 / 0.35);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
 	}
 }
 

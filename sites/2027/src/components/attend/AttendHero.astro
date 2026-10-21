@@ -1,6 +1,6 @@
 ---
-import sitting from "../../../images/guus/sitting.svg?url";
-import Cloud from "../site/Cloud.astro";
+import Goose from "../../../images/guus/sitting.svg";
+import CloudMarquee from "../site/CloudMarquee.astro";
 
 const facts = [
 	{ term: "When", value: "29.04–02.05" },
@@ -9,11 +9,11 @@ const facts = [
 ---
 
 <section
-	class="relative overflow-hidden text-white sky-gradient"
+	class="relative overflow-hidden text-white [--cloud-band:160px] sky-gradient md:[--cloud-band:240px] lg:[--cloud-band:280px]"
 	aria-labelledby="attend-title"
 >
 	<div
-		class="relative z-2 wrap grid gap-16 pt-16 pb-36 md:grid-cols-[1fr_minmax(0,380px)] md:items-end md:gap-10 md:pt-30 md:pb-30 lg:pt-40 lg:pb-36"
+		class="relative z-2 wrap grid gap-16 pt-16 pb-[calc(var(--cloud-band)+24px)] md:grid-cols-[1fr_minmax(0,380px)] md:items-end md:gap-10 md:pt-30 lg:pt-40"
 	>
 		<div>
 			<h1
@@ -28,12 +28,10 @@ const facts = [
 			</p>
 		</div>
 		<div class="relative mt-20 md:mt-0">
-			<img
-				class="absolute -top-26 right-2 w-25 md:-top-30 md:w-29"
-				src={sitting}
-				alt=""
-				width="201"
-				height="250"
+			<Goose
+				data-scene="attend-goose"
+				class="absolute -top-26 right-2 h-auto w-25 md:-top-30 md:w-29"
+				aria-hidden="true"
 			/>
 			<div class="relative rounded-xl bg-cream p-6 text-navy md:p-8">
 				<p class="eyebrow text-azure before:mr-2 before:content-['▪']">
@@ -59,9 +57,65 @@ const facts = [
 			</div>
 		</div>
 	</div>
-	<Cloud shape="puffy" class="-bottom-1 -left-15 w-65 md:left-0 md:w-125" />
-	<Cloud
-		shape="long"
-		class="-right-25 -bottom-1 w-87.5 md:right-0 md:w-168.75"
-	/>
+	<CloudMarquee variant="c" />
 </section>
+
+<style is:global>
+	[data-scene="attend-goose"] [data-part="upper"] {
+		transform-origin: 105px 215px;
+		animation: attend-goose-sway 3s ease-in-out infinite var(--play);
+	}
+	[data-scene="attend-goose"] [data-part="bonnet"] {
+		transform-origin: 112px 62px;
+		animation: attend-goose-bonnet 3s ease-in-out -0.3s infinite var(--play);
+	}
+	[data-scene="attend-goose"] [data-part="eye"] {
+		transform-origin: 85.7px 49px;
+		animation: attend-goose-blink 4.5s ease-in-out infinite var(--play);
+	}
+	[data-scene="attend-goose"] [data-part="clog-left"] {
+		transform-origin: 66px 201px;
+		animation: attend-goose-tap 6s ease-in-out infinite var(--play);
+	}
+	@keyframes attend-goose-sway {
+		0%,
+		100% {
+			transform: translateY(0) rotate(0.8deg);
+		}
+		50% {
+			transform: translateY(-3px) rotate(-1deg);
+		}
+	}
+	@keyframes attend-goose-bonnet {
+		0%,
+		100% {
+			transform: rotate(0.6deg);
+		}
+		50% {
+			transform: rotate(-1deg);
+		}
+	}
+	@keyframes attend-goose-blink {
+		0%,
+		95%,
+		100% {
+			transform: scaleY(1);
+		}
+		97% {
+			transform: scaleY(0.1);
+		}
+	}
+	@keyframes attend-goose-tap {
+		0%,
+		70%,
+		80%,
+		90%,
+		100% {
+			transform: rotate(0deg);
+		}
+		75%,
+		85% {
+			transform: rotate(-7deg);
+		}
+	}
+</style>

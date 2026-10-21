@@ -1,16 +1,16 @@
 ---
 import vancouver from "../../../images/illustrations/vancouver-stamp.png";
 import seattle from "../../../images/illustrations/seattle-stamp.png";
-import Cloud from "../site/Cloud.astro";
+import CloudMarquee from "../site/CloudMarquee.astro";
 import { cfp } from "../../data/cfp";
 ---
 
 <section
-	class="relative overflow-hidden bg-azure text-white"
+	class="relative overflow-hidden bg-azure text-white [--cloud-band:160px] md:[--cloud-band:240px] lg:[--cloud-band:280px]"
 	aria-labelledby="cfp-title"
 >
 	<div
-		class="relative z-2 wrap flex flex-col items-center pt-16 pb-44 text-center md:pt-24 md:pb-56 lg:pt-28 lg:pb-64"
+		class="relative z-2 wrap flex flex-col items-center pt-16 pb-[calc(var(--cloud-band)+24px)] text-center md:pt-24 lg:pt-28"
 	>
 		<div class="relative">
 			<img
@@ -19,9 +19,10 @@ import { cfp } from "../../data/cfp";
 				alt="A speaker at the Vancouver ATProto conference"
 				width={vancouver.width}
 				height={vancouver.height}
+				data-cfp-photo="left"
 			/>
 			<h1
-				class="display text-[40px]/[1.1] md:text-[64px]/[1.05] lg:text-[96px]/[1.05]"
+				class="display text-[40px]/[1.4] tracking-[0.02em] md:text-[64px]/[1.4] md:tracking-[0.04em] lg:text-[96px]/[1.4]"
 				id="cfp-title"
 			>
 				Speak at<br />Atmosphere<br />Conf 2027
@@ -32,15 +33,52 @@ import { cfp } from "../../data/cfp";
 				alt="The audience at the Seattle ATProto conference"
 				width={seattle.width}
 				height={seattle.height}
+				data-cfp-photo="right"
 			/>
 		</div>
-		<a class="mt-8 btn md:mt-10" href={cfp.submissionUrl}
+		<a class="btn mt-8 md:mt-10" href={cfp.submissionUrl}
 			>Submit a proposal <span aria-hidden="true">▸</span></a
 		>
 	</div>
-	<Cloud shape="bumpy" class="-bottom-1 -left-15 w-65 md:-left-10 md:w-105" />
-	<Cloud
-		shape="long"
-		class="-right-25 -bottom-1 w-87.5 md:-right-10 md:w-150"
-	/>
+	<CloudMarquee variant="c" />
 </section>
+
+<style>
+	:global(html[data-motion]) [data-cfp-photo] {
+		animation: 900ms var(--ease-soft) backwards;
+	}
+	:global(html[data-motion]) [data-cfp-photo="left"] {
+		animation-name: cfp-photo-left;
+		animation-delay: 200ms;
+	}
+	:global(html[data-motion]) [data-cfp-photo="right"] {
+		animation-name: cfp-photo-right;
+		animation-delay: 350ms;
+	}
+	@keyframes cfp-photo-left {
+		from {
+			opacity: 0;
+			transform: translateX(-60%) rotate(-10deg);
+		}
+		70% {
+			opacity: 1;
+			transform: translateX(4%) rotate(1deg);
+		}
+		to {
+			transform: none;
+		}
+	}
+	@keyframes cfp-photo-right {
+		from {
+			opacity: 0;
+			transform: translateX(60%) rotate(10deg);
+		}
+		70% {
+			opacity: 1;
+			transform: translateX(-4%) rotate(-1deg);
+		}
+		to {
+			transform: none;
+		}
+	}
+</style>

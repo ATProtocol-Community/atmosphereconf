@@ -41,9 +41,7 @@ type RsvpRequest = {
 
 // Every failure sends the visitor back to the form to try again.
 export type RsvpFailure =
-	| { kind: "missing-handle" }
-	| SignInFailure
-	| { kind: "save" };
+	{ kind: "missing-handle" } | SignInFailure | { kind: "save" };
 
 /**
  * What the RSVP postcard shows. Once the RSVP is saved, the extras the
@@ -58,8 +56,7 @@ export type RsvpReceipt = {
 };
 
 export type RsvpCard =
-	| { kind: "form"; handle: string; failure?: RsvpFailure }
-	| RsvpReceipt;
+	{ kind: "form"; handle: string; failure?: RsvpFailure } | RsvpReceipt;
 
 declare global {
 	namespace App {
@@ -156,7 +153,11 @@ const completeRsvp = async (
 ): Promise<RsvpCard> => {
 	const client = clientFor(locals);
 	if (!client) {
-		return { kind: "form", handle: request.handle, failure: { kind: "sign-in" } };
+		return {
+			kind: "form",
+			handle: request.handle,
+			failure: { kind: "sign-in" },
+		};
 	}
 	try {
 		await ensureRsvp(client);
@@ -218,6 +219,9 @@ export const rsvpPage = async (
 		return show(await completeRsvp(request, locals, locals.loggedInUser));
 	}
 	return (
-		(await unpark(session, CARD_KEY)) ?? { kind: "form", handle: signedInHandle }
+		(await unpark(session, CARD_KEY)) ?? {
+			kind: "form",
+			handle: signedInHandle,
+		}
 	);
 };

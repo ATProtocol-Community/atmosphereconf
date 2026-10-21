@@ -1,10 +1,13 @@
 ---
+import Icon from "./Icon.astro";
+import type { IconName } from "./Icon.astro";
+
 /**
  * Icon, two-line prompt, and an action on the right.
  * Pass the button or link as children.
  */
 interface Props {
-	icon: string;
+	icon: IconName;
 	title: string;
 	description: string;
 	/** Background; pick the one that contrasts with the surrounding section. */
@@ -19,14 +22,11 @@ const { icon, title, description, tone = "cream" } = Astro.props;
 		"mt-10 flex flex-wrap items-center gap-3 rounded-xl p-4 text-navy md:gap-4 md:px-6 lg:flex-nowrap",
 		tone === "cream" ? "bg-cream" : "bg-white",
 	]}
+	data-card
 >
-	<img
-		class="w-11 shrink-0 md:w-16"
-		src={icon}
-		alt=""
-		width="64"
-		height="64"
-	/><p class="flex-1 max-md:basis-[calc(100%-56px)]">
+	<Icon name={icon} class="size-11 shrink-0 md:size-16" /><p
+		class="flex-1 max-md:basis-[calc(100%-56px)]"
+	>
 		<span class="block text-lg tracking-[-0.02em]">{title}</span><span
 			class="block text-base text-slate">{description}</span
 		>
