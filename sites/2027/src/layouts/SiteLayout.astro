@@ -1,0 +1,45 @@
+---
+import "../styles/global.css";
+import SiteHeader from "../components/site/SiteHeader.astro";
+import SiteFooter from "../components/site/SiteFooter.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	/** Shorter description for link previews. Falls back to `description`. */
+	ogDescription?: string;
+}
+
+const { title, description, ogDescription = description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={ogDescription} />
+		<meta property="og:image" content="https://atmosphereconf.org/og.png" />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="icon" href="/favicon.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Boldonse&family=Stack+Sans+Text:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<a
+			class="absolute top-2.5 left-5 z-10 translate-y-[-160%] bg-white p-3 underline focus:translate-y-0"
+			href="#main">Skip to content</a
+		>
+		<SiteHeader />
+		<main id="main"><slot /></main>
+		<SiteFooter />
+	</body>
+</html>

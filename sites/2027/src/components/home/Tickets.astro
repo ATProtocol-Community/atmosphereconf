@@ -1,0 +1,46 @@
+---
+import running from "../../../images/guus/running.svg?url";
+import walking from "../../../images/guus/walking.svg?url";
+import drinking from "../../../images/guus/drinking.svg?url";
+import TicketCard from "./TicketCard.astro";
+
+const tickets = [
+	{ name: "Early goose", price: "50", image: running },
+	{ name: "Community goose", price: "199", image: walking },
+	{ name: "Employed goose", price: "350", image: drinking },
+	{ name: "Online goose", price: "10", image: running },
+];
+---
+
+<section
+	id="tickets"
+	class="text-white sky-gradient"
+	aria-labelledby="tickets-title"
+>
+	<div class="wrap py-16 md:py-20 lg:py-30">
+		<div class="mb-10 grid items-start gap-6 md:grid-cols-2 md:gap-9">
+			<h2 class="title" id="tickets-title">Tickets</h2><p>
+				Choose your ticket and join the community. All tickets include three
+				days of entry, food and drinks, and an afterparty on the final day.
+			</p>
+		</div>
+		<div class="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4 lg:gap-6">
+			{tickets.map((ticket) => <TicketCard {...ticket} />)}
+		</div>
+		<div
+			class="mt-4 flex flex-wrap items-center gap-5 rounded-[10px] bg-white p-6 text-navy md:flex-nowrap md:gap-8 md:px-12"
+		>
+			<div class="basis-full md:flex-1 md:basis-auto">
+				<h3 class="font-display text-[19px]/10 uppercase md:text-xl/10">
+					Opportunity ticket
+				</h3><p class="mt-2 text-sm text-slate">
+					We do not have any specific criteria for the opportunity tickets. If
+					you think you deserve a free ticket or sponsorship to attend, then
+					please apply.
+				</p>
+			</div><button class="btn" disabled title="Applications coming soon"
+				>Apply <span aria-hidden="true">▸</span></button
+			>
+		</div>
+	</div>
+</section>

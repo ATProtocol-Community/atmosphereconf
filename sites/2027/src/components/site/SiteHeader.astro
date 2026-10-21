@@ -1,0 +1,33 @@
+---
+import logo from "../../../images/logo/logo-large.svg?url";
+import ThemeButton from "./ThemeButton.astro";
+---
+
+<header class="border-b border-line bg-white">
+	<nav
+		class="wrap flex min-h-19 flex-wrap items-center gap-4.5 py-4 text-sm md:min-h-19.75 md:flex-nowrap md:gap-10 md:py-0"
+		aria-label="Main navigation"
+	>
+		<a
+			class="md:border-r md:border-[#ddd] md:pr-10"
+			href="/"
+			aria-label="AtmosphereConf 2027 home"
+			><img
+				class="w-26 tint-navy md:w-30"
+				src={logo}
+				alt="AtmosphereConf 2027"
+				width="141"
+				height="40"
+			/></a
+		>
+		<div
+			class="ml-auto flex items-center gap-4 text-xs md:ml-0 md:gap-10 md:text-sm [&>a:hover]:underline [&>a:hover]:underline-offset-4"
+		>
+			<a href="#tickets">Attend</a><a href="/speak">Call for papers</a>
+		</div>
+		<ThemeButton class="ml-auto hidden md:inline-flex" />
+		<a class="-ml-7 btn hidden md:inline-flex" href="#tickets"
+			>Early-bird tickets <span aria-hidden="true">▸</span></a
+		>
+	</nav>
+</header>

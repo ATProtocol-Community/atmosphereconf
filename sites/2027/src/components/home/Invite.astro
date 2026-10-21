@@ -1,0 +1,38 @@
+---
+import stamp from "../../../images/illustrations/stamp.svg?url";
+import postmark from "../../../images/postmark.svg?url";
+import EventDetails from "../site/EventDetails.astro";
+---
+
+<section class="bg-cream" aria-labelledby="invite-title">
+	<div
+		class="wrap flex flex-col items-center justify-center gap-8 py-16 md:flex-row md:gap-6 md:py-30 lg:gap-10"
+	>
+		<img
+			class="w-57.5 md:w-[30%] lg:w-88"
+			src={stamp}
+			alt="An Amsterdam postage stamp with a cycling goose"
+			width="381"
+			height="489"
+			loading="lazy"
+		/>
+		<div class="text-center">
+			<img
+				class="mx-auto mb-6 w-27.5 md:mb-10 md:w-auto"
+				src={postmark}
+				alt=""
+				width="150"
+				height="75"
+				loading="lazy"
+			/><h2 class="mb-10 title max-md:text-2xl/normal" id="invite-title">
+				Send a postcard to<br />invite a friend
+			</h2><EventDetails /><div class="flex flex-wrap justify-center gap-2">
+				<a class="btn" href="/postcard"
+					>Send a postcard <span aria-hidden="true">▸</span></a
+				><a class="btn btn-outline" href="#tickets"
+					>Early-bird tickets <span aria-hidden="true">▸</span></a
+				>
+			</div>
+		</div>
+	</div>
+</section>

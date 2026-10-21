@@ -1,0 +1,62 @@
+---
+import crown from "../../../images/icons/crown.svg?url";
+import bluesky from "../../../images/logo/bluesky-wordmark.svg?url";
+import google from "../../../images/logo/google-open-source.png";
+import Callout from "../site/Callout.astro";
+
+const platinum = [
+	{
+		name: "Bluesky",
+		href: "https://bsky.social",
+		src: bluesky,
+		width: 292,
+		height: 64,
+	},
+	{
+		name: "Google Open Source",
+		href: "https://opensource.google/",
+		src: google.src,
+		width: 231,
+		height: 135,
+	},
+];
+---
+
+<section class="bg-cream" aria-labelledby="sponsors-title">
+	<div class="wrap py-16 md:py-20 lg:py-30">
+		<h2 class="title" id="sponsors-title">Sponsors</h2>
+		<p class="mt-10 mb-4 eyebrow text-steel">Platinum</p>
+		<div class="grid grid-cols-2 gap-3 md:gap-4">
+			{
+				platinum.map((sponsor) => (
+					<a
+						class="grid min-h-32.5 place-items-center rounded-[10px] bg-white px-3 py-2 md:min-h-50 md:rounded-2xl md:px-4"
+						href={sponsor.href}
+						aria-label={sponsor.name}
+					>
+						<img
+							src={sponsor.src}
+							alt=""
+							width={sponsor.width}
+							height={sponsor.height}
+							loading="lazy"
+						/>
+					</a>
+				))
+			}
+		</div>
+		<Callout
+			icon={crown}
+			title="Interested in becoming a sponsor?"
+			description="Community sponsorship starts at €1.2k"
+			tone="white"
+		>
+			<button
+				class="btn btn-outline max-lg:ml-auto"
+				disabled
+				title="Sponsorship contact coming soon"
+				>Get in touch <span aria-hidden="true">▸</span></button
+			>
+		</Callout>
+	</div>
+</section>

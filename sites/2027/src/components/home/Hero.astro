@@ -1,0 +1,59 @@
+---
+import logo from "../../../images/logo/logo-large.svg?url";
+import flying from "../../../images/guus/flying.svg?url";
+import Cloud from "../site/Cloud.astro";
+import EventDetails from "../site/EventDetails.astro";
+---
+
+<section
+	class="relative min-h-180 overflow-hidden text-white sky-gradient md:min-h-212.5 lg:min-h-248"
+	aria-labelledby="hero-title"
+>
+	<div
+		class="relative z-2 px-5 pt-19 pb-67.5 text-center md:px-6 md:pt-27.5 md:pb-70 lg:pt-32"
+	>
+		<h1 id="hero-title">
+			<img
+				class="mx-auto w-full max-w-132.5 md:w-[min(944px,80vw)] md:max-w-none"
+				src={logo}
+				alt="AtmosphereConf 2027"
+				width="944"
+				height="268"
+				fetchpriority="high"
+			/>
+		</h1>
+		<p
+			class="my-7 display text-[clamp(19px,4vw,28px)] leading-[1.6] md:my-10 md:text-[32px] md:leading-[1.33] lg:text-[48px]"
+		>
+			Building for a new internet
+		</p>
+		<EventDetails />
+		<div class="flex flex-wrap justify-center gap-2">
+			<a class="btn" href="#tickets"
+				>Early-bird tickets <span aria-hidden="true">▸</span></a
+			><a class="btn btn-outline" href="/speak"
+				>Apply to speak <span aria-hidden="true">▸</span></a
+			>
+		</div>
+	</div>
+	<Cloud
+		shape="bumpy"
+		class="bottom-52.5 -left-17.5 w-37.5 md:bottom-68.75 md:-left-26.25 md:w-87.5"
+	/>
+	<Cloud
+		shape="puffy"
+		class="-right-21.25 bottom-55 w-37.5 md:-right-8.75 md:bottom-78.75 md:w-66.25"
+	/>
+	<Cloud shape="puffy" class="-bottom-0.75 -left-15 w-65 md:left-0 md:w-125" />
+	<Cloud
+		shape="long"
+		class="-right-25 -bottom-0.75 w-87.5 md:right-0 md:w-168.75"
+	/>
+	<img
+		class="absolute right-[8%] bottom-6.25 w-52.5 md:right-[7%] md:bottom-12 md:w-67.5 lg:right-[13%] lg:w-81.5 xl:right-[calc(50%-530px)]"
+		src={flying}
+		alt=""
+		width="326"
+		height="269"
+	/>
+</section>
