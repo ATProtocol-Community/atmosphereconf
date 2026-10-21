@@ -1,0 +1,27 @@
+---
+/** Placeholder for the Atmo theme switcher. Disabled until the themes land. */
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<button
+	class:list={[
+		"btn w-30 justify-between border-line btn-outline px-3",
+		className,
+	]}
+	disabled
+	title="Atmo theme"
+	><svg
+		width="20"
+		height="20"
+		viewBox="0 0 20 20"
+		fill="none"
+		stroke="currentColor"
+		aria-hidden="true"
+		><rect x="3" y="2" width="7" height="16" rx="1"></rect><path
+			d="m10 4 6 5a1 1 0 0 1 0 2l-6 6M6.5 14v1"></path></svg
+	>Atmo</button
+>

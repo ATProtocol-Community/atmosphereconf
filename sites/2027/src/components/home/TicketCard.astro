@@ -1,0 +1,37 @@
+---
+interface Props {
+	name: string;
+	/** Whole euros, excluding VAT. */
+	price: string;
+	image: string;
+}
+
+const { name, price, image } = Astro.props;
+---
+
+<article
+	class="flex min-h-90 flex-col items-center rounded-xl border border-line bg-white px-3 py-5 text-center text-navy md:min-h-105 md:py-6 lg:min-h-117.75 lg:px-4"
+>
+	<img
+		class="mb-4 w-33.75 md:w-43.25"
+		src={image}
+		alt=""
+		width="173"
+		height="180"
+		loading="lazy"
+	/>
+	<h3
+		class="text-[11px]/4 font-medium tracking-[0.03em] uppercase md:text-sm/4"
+	>
+		{name}
+	</h3>
+	<p class="mt-2 font-display text-[32px]/12 tracking-normal">€{price}</p>
+	<p class="mt-2 text-sm text-slate">Exc. 21% VAT</p>
+	<button
+		class="mt-8 btn uppercase md:mt-auto"
+		disabled
+		aria-label={`Purchase ${name} ticket — coming soon`}
+	>
+		Purchase <span aria-hidden="true">▸</span>
+	</button>
+</article>

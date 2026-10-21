@@ -1,0 +1,71 @@
+---
+import seattle from "../../../images/illustrations/seattle-stamp.png";
+import vancouver from "../../../images/illustrations/vancouver-stamp.png";
+import postmark from "../../../images/postmark.svg?url";
+import microphone from "../../../images/icons/microphone.svg?url";
+import Callout from "../site/Callout.astro";
+---
+
+<section
+	class="wrap grid grid-cols-[minmax(0,1fr)] gap-9 py-16 md:grid-cols-[1fr_1fr] md:py-20 lg:min-h-229.75 lg:py-30"
+	aria-labelledby="intro-title"
+>
+	<div class="contents md:block">
+		<h2 class="title" id="intro-title">
+			The ATProto<br />conference is<br />back
+		</h2>
+		<div
+			class="relative order-3 mx-auto h-70 w-85 md:order-0 md:mx-0 md:mt-17.5 md:-mb-17.5 md:h-92.5 md:w-117.5 md:max-w-full md:origin-top-left md:scale-80 lg:mb-0 lg:scale-100"
+		>
+			<img
+				class="absolute top-6.25 left-0 w-[53%] md:w-61.25"
+				src={vancouver.src}
+				alt="A speaker at the Vancouver ATProto conference"
+				width={vancouver.width}
+				height={vancouver.height}
+				loading="lazy"
+			/>
+			<img
+				class="absolute top-0 left-[44%] w-[53%] md:left-55 md:w-61.25"
+				src={seattle.src}
+				alt="The audience at the Seattle ATProto conference"
+				width={seattle.width}
+				height={seattle.height}
+				loading="lazy"
+			/>
+			<img
+				class="absolute bottom-0 left-[38%] w-[56%] md:left-47.5 md:w-62.5"
+				src={postmark}
+				alt=""
+				width="250"
+				height="125"
+				loading="lazy"
+			/>
+		</div>
+	</div>
+	<div class="text-slate md:pt-10">
+		<p>
+			ATProto is the foundation: a shared protocol layer for building
+			decentralized, interoperable, and resilient digital environments.
+		</p>
+		<p class="mt-8">
+			The Atmosphere is the space where that protocol meets practice: a
+			gathering of builders, researchers, and operators shaping the next
+			network.
+		</p>
+		<p class="mt-8">
+			This conference is designed to move from theory to implementation:
+			aligning standards, testing real-world use cases, and building the teams
+			that will carry the work forward.
+		</p>
+		<Callout
+			icon={microphone}
+			title="Interested in speaking?"
+			description="View our Call for papers"
+		>
+			<a class="btn btn-outline max-lg:ml-auto" href="/speak"
+				>Call for papers <span aria-hidden="true">▸</span></a
+			>
+		</Callout>
+	</div>
+</section>

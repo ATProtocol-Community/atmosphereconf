@@ -1,0 +1,80 @@
+---
+import heart from "../../../images/logo/heart.svg?url";
+import { event } from "../../data/event";
+import Cloud from "./Cloud.astro";
+import ThemeButton from "./ThemeButton.astro";
+
+const navList =
+	"*:mb-4.75 [&>*:last-child]:mb-0 [&>a]:block [&>a]:w-fit [&>a]:text-base/6 md:[&>a]:text-lg [&>a:hover]:underline [&>a:hover]:underline-offset-4";
+const navTitle = "eyebrow before:mr-2 before:content-['▪']";
+const comingSoon = "block cursor-not-allowed text-lg opacity-65";
+---
+
+<footer
+	class="relative overflow-hidden text-white sky-gradient max-md:min-h-162.5"
+>
+	<div class="relative z-1 wrap pt-16 pb-40 md:pt-30 md:pb-45">
+		<div
+			class="grid grid-cols-2 gap-10 md:grid-cols-[1fr_150px_150px] md:gap-6 lg:grid-cols-[1fr_204px_204px]"
+		>
+			<div class="max-md:col-span-full">
+				<dl class="mb-6 flex gap-6 text-left md:gap-12">
+					<div>
+						<dt class="eyebrow">Dates</dt><dd class="mt-1 text-sm uppercase">
+							{event.dates}
+						</dd>
+					</div><div>
+						<dt class="eyebrow">Location</dt><dd class="mt-1 text-sm uppercase">
+							{event.venue}
+						</dd>
+					</div>
+				</dl><div class="flex flex-wrap gap-2">
+					<a class="btn" href="#tickets"
+						>Early-bird tickets <span aria-hidden="true">▸</span></a
+					><ThemeButton class="text-white" />
+				</div>
+			</div><nav class={navList} aria-label="Conference">
+				<h2 class={navTitle}>Join Atmo27</h2><a href="#tickets">Attend</a><a
+					href="/speak">Call for papers</a
+				>
+			</nav><nav class={navList} aria-label="Community">
+				<h2 class={navTitle}>Community</h2><a
+					href="https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw"
+					>Bluesky</a
+				><a href="https://github.com/ATProtocol-Community/atmosphereconf"
+					>GitHub</a
+				>
+				<span class={comingSoon} role="link" aria-disabled="true">YouTube</span
+				><span class={comingSoon} role="link" aria-disabled="true"
+					>LinkedIn</span
+				>
+			</nav>
+		</div>
+		<p
+			class="mt-14 flex flex-wrap items-center gap-3 font-display text-[27px] leading-[1.3] uppercase md:mt-30 md:flex-nowrap md:gap-[0.25em] md:text-[clamp(20px,5.4vw,78px)]/26.5 md:whitespace-nowrap"
+		>
+			<span class="max-md:basis-full">Atmosphere Conf</span><img
+				class="w-16.25 md:w-[12%]"
+				src={heart}
+				alt=""
+				width="206"
+				height="129"
+			/><span>2027</span>
+		</p><p class="mt-6 text-xs/5 md:text-sm">
+			Copyright 2026 © Atmosphere Conference
+		</p>
+	</div>
+	<Cloud
+		shape="bumpy"
+		class="-bottom-3.75 -left-7.5 w-57.5 md:left-0 md:w-105"
+		loading="lazy"
+	/><Cloud
+		shape="puffy"
+		class="-bottom-7.5 left-[20%] w-60 md:left-[34%] md:w-115"
+		loading="lazy"
+	/><Cloud
+		shape="long"
+		class="-right-30 -bottom-1.25 w-80 md:-right-17.5 md:w-130"
+		loading="lazy"
+	/>
+</footer>

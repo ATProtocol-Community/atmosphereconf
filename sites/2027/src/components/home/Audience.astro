@@ -1,0 +1,46 @@
+---
+import canal from "../../../images/illustrations/canal.svg?url";
+
+const audiences = [
+	{
+		name: "Builders",
+		description: "Communities that care: developers, scientists & makers",
+	},
+	{
+		name: "Creators",
+		description:
+			"Connoisseurs of internet culture: artists, musicians, creators",
+	},
+	{ name: "Storytellers", description: "News, media, and journalists" },
+	{ name: "Stewards", description: "Policy makers and officials" },
+];
+---
+
+<section class="bg-blue text-white" aria-labelledby="audience-title">
+	<div
+		class="wrap grid gap-10 pt-16 pb-17.5 md:grid-cols-2 md:gap-12 md:pt-20 md:pb-25 lg:gap-19 lg:pt-30 lg:pb-46"
+	>
+		<h2 class="title" id="audience-title">
+			Who attends &amp;<br />what to expect
+		</h2><dl class="space-y-10 pb-6 md:space-y-16 md:py-6">
+			{
+				audiences.map((audience) => (
+					<div>
+						<dt class="eyebrow">{audience.name}</dt>
+						<dd class="mt-4 max-w-152.5 display text-xl leading-[1.6] md:leading-loose">
+							{audience.description}
+						</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+	<img
+		class="w-full max-md:min-h-47.5 max-md:object-cover max-md:object-center"
+		src={canal}
+		alt="Amsterdam canal houses, tulips, and boats, with a goose walking across a bridge"
+		width="1440"
+		height="448"
+		loading="lazy"
+	/>
+</section>

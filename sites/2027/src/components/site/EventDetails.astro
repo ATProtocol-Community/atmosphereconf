@@ -1,0 +1,16 @@
+---
+import { event } from "../../data/event";
+
+/** Dates and venue as a definition list, sized for the hero and invite sections. */
+const term = "eyebrow text-[10px] md:text-sm/4";
+const value =
+	"mt-2 font-display text-sm/6 uppercase md:mt-4 md:text-lg/10 lg:text-xl/10";
+---
+
+<dl class="mb-7 flex justify-center gap-6 text-left md:mb-10 md:gap-12">
+	<div>
+		<dt class={term}>Three days</dt><dd class={value}>{event.dates}</dd>
+	</div><div>
+		<dt class={term}>Venue</dt><dd class={value}>{event.venue}</dd>
+	</div>
+</dl>
