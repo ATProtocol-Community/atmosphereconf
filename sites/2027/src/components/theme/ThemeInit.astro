@@ -1,0 +1,21 @@
+---
+import { themes } from "./themes";
+---
+
+<script is:inline define:vars={{ themeKeys: Object.keys(themes) }}>
+	// Apply the URL override or saved palette before the first frame.
+	(() => {
+		let theme = new URLSearchParams(window.location.search).get("theme");
+		if (!themeKeys.includes(theme)) {
+			try {
+				theme = localStorage.getItem("2027:page-theme");
+			} catch {
+				// No storage access, keep the server-rendered default.
+			}
+		}
+		if (themeKeys.includes(theme)) {
+			document.documentElement.dataset.theme = theme;
+			document.body.dataset.palette = theme;
+		}
+	})();
+</script>

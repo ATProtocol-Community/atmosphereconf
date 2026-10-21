@@ -1,6 +1,7 @@
 ---
-import ThemeSwitcher from "../components/ThemeSwitcher.astro";
+import ThemeSwitcher from "../components/theme/ThemeSwitcher.astro";
 import { cloudShapes } from "../components/lib/cloud-shapes";
+import ThemeInit from "../components/theme/ThemeInit.astro";
 import "../styles/airmail.css";
 
 interface Props {
@@ -94,19 +95,7 @@ const clouds = [
 		<slot name="head" />
 	</head>
 	<body data-palette="sky" data-direction="editorial">
-		<script is:inline>
-			// Runs before the page paints, so the stored palette is already on
-			// <body> by the first frame.
-			try {
-				const stored = localStorage.getItem("2027:page-theme");
-				if (stored) {
-					document.documentElement.dataset.theme = stored;
-					document.body.dataset.palette = stored;
-				}
-			} catch {
-				// no storage access, keep the server-rendered default
-			}
-		</script>
+		<ThemeInit />
 		<div class="page-sky" aria-hidden="true">
 			{
 				clouds.map((cloud) => (
