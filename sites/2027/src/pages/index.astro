@@ -1,0 +1,1346 @@
+---
+import logo from "../../images/logo/logo-large.svg?url";
+import heart from "../../images/logo/heart.svg?url";
+import flying from "../../images/guus/flying.svg?url";
+import running from "../../images/guus/running.svg?url";
+import walking from "../../images/guus/walking.svg?url";
+import drinking from "../../images/guus/drinking.svg?url";
+import puffy from "../../images/clouds/puffy.svg?url";
+import bumpy from "../../images/clouds/bumpy.svg?url";
+import longCloud from "../../images/clouds/long.svg?url";
+import canal from "../../images/illustrations/canal.svg?url";
+import stamp from "../../images/illustrations/stamp.svg?url";
+import seattle from "../../images/illustrations/seattle-stamp.png";
+import vancouver from "../../images/illustrations/vancouver-stamp.png";
+import postmark from "../../images/postmark.svg?url";
+import microphone from "../../images/icons/microphone.svg?url";
+import crown from "../../images/icons/crown.svg?url";
+import bluesky from "../../images/logo/bluesky-wordmark.svg?url";
+import google from "../../images/logo/google-open-source.png";
+
+const tickets = [
+	{ name: "Early goose", price: "50", image: running },
+	{ name: "Community goose", price: "199", image: walking },
+	{ name: "Employed goose", price: "350", image: drinking },
+	{ name: "Online goose", price: "10", image: running },
+];
+const audiences = [
+	{
+		name: "Builders",
+		description: "Communities that care: developers, scientists & makers",
+	},
+	{
+		name: "Creators",
+		description:
+			"Connoisseurs of internet culture: artists, musicians, creators",
+	},
+	{ name: "Storytellers", description: "News, media, and journalists" },
+	{ name: "Stewards", description: "Policy makers and officials" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>AtmosphereConf 2027 — Building for a new internet</title>
+		<meta
+			name="description"
+			content="The ATProto conference is back. Join builders, creators, storytellers, and stewards in Amsterdam, 29 April–1 May 2027."
+		/>
+		<meta
+			property="og:title"
+			content="AtmosphereConf 2027 — Building for a new internet"
+		/>
+		<meta
+			property="og:description"
+			content="29 April–1 May 2027 · KIT, Amsterdam. Three days building for a new internet."
+		/>
+		<meta property="og:image" content="https://atmosphereconf.org/og.png" />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="icon" href="/favicon.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Boldonse&family=Stack+Sans+Text:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<header class="site-header">
+			<nav class="navigation container" aria-label="Main navigation">
+				<a class="brand" href="/" aria-label="AtmosphereConf 2027 home"
+					><img
+						src={logo}
+						alt="AtmosphereConf 2027"
+						width="141"
+						height="40"
+					/></a
+				>
+				<div class="nav-links">
+					<a href="#tickets">Attend</a><a href="/speak">Call for papers</a>
+				</div>
+				<button class="button theme-button outline" disabled title="Atmo theme"
+					><svg
+						width="20"
+						height="20"
+						viewBox="0 0 20 20"
+						fill="none"
+						stroke="currentColor"
+						aria-hidden="true"
+						><rect x="3" y="2" width="7" height="16" rx="1"></rect><path
+							d="m10 4 6 5a1 1 0 0 1 0 2l-6 6M6.5 14v1"></path></svg
+					>Atmo</button
+				>
+				<a class="button nav-ticket" href="#tickets"
+					>Early-bird tickets <span aria-hidden="true">▸</span></a
+				>
+			</nav>
+		</header>
+		<main id="main">
+			<section class="hero gradient" aria-labelledby="hero-title">
+				<div class="hero-content">
+					<h1 id="hero-title">
+						<img
+							src={logo}
+							alt="AtmosphereConf 2027"
+							width="944"
+							height="268"
+							fetchpriority="high"
+						/>
+					</h1>
+					<p class="hero-tagline display">Building for a new internet</p>
+					<dl class="event-details">
+						<div><dt>Three days</dt><dd>29 Apr — 1 May</dd></div><div>
+							<dt>Venue</dt><dd>KIT, Amsterdam</dd>
+						</div>
+					</dl>
+					<div class="actions">
+						<a class="button" href="#tickets"
+							>Early-bird tickets <span aria-hidden="true">▸</span></a
+						><a class="button outline" href="/speak"
+							>Apply to speak <span aria-hidden="true">▸</span></a
+						>
+					</div>
+				</div>
+				<img
+					class="cloud cloud-left"
+					src={bumpy}
+					alt=""
+					width="449"
+					height="195"
+				/>
+				<img
+					class="cloud cloud-right"
+					src={puffy}
+					alt=""
+					width="451"
+					height="196"
+				/>
+				<img
+					class="cloud cloud-bottom-left"
+					src={puffy}
+					alt=""
+					width="451"
+					height="196"
+				/>
+				<img
+					class="cloud cloud-bottom-right"
+					src={longCloud}
+					alt=""
+					width="735"
+					height="272"
+				/>
+				<img class="hero-goose" src={flying} alt="" width="326" height="269" />
+			</section>
+
+			<section
+				class="introduction section container"
+				aria-labelledby="intro-title"
+			>
+				<div class="intro-art">
+					<h2 id="intro-title">The ATProto<br />conference is<br />back</h2>
+					<div class="photo-stamps">
+						<img
+							class="vancouver"
+							src={vancouver.src}
+							alt="A speaker at the Vancouver ATProto conference"
+							width={vancouver.width}
+							height={vancouver.height}
+							loading="lazy"
+						/>
+						<img
+							class="seattle"
+							src={seattle.src}
+							alt="The audience at the Seattle ATProto conference"
+							width={seattle.width}
+							height={seattle.height}
+							loading="lazy"
+						/>
+						<img
+							class="photo-postmark"
+							src={postmark}
+							alt=""
+							width="250"
+							height="125"
+							loading="lazy"
+						/>
+					</div>
+				</div>
+				<div class="intro-copy">
+					<p>
+						ATProto is the foundation: a shared protocol layer for building
+						decentralized, interoperable, and resilient digital environments.
+					</p>
+					<p>
+						The Atmosphere is the space where that protocol meets practice: a
+						gathering of builders, researchers, and operators shaping the next
+						network.
+					</p>
+					<p>
+						This conference is designed to move from theory to implementation:
+						aligning standards, testing real-world use cases, and building the
+						teams that will carry the work forward.
+					</p>
+					<div class="callout">
+						<img src={microphone} alt="" width="64" height="64" /><p>
+							<span class="callout-title">Interested in speaking?</span><span
+								class="callout-subtitle">View our Call for papers</span
+							>
+						</p><a class="button outline" href="/speak"
+							>Call for papers <span aria-hidden="true">▸</span></a
+						>
+					</div>
+				</div>
+			</section>
+
+			<section class="sponsors cream" aria-labelledby="sponsors-title">
+				<div class="section container">
+					<h2 id="sponsors-title">Sponsors</h2>
+					<p class="eyebrow sponsor-level">Platinum</p>
+					<div class="sponsor-grid">
+						<a class="sponsor" href="https://bsky.social" aria-label="Bluesky"
+							><img
+								src={bluesky}
+								alt=""
+								width="292"
+								height="64"
+								loading="lazy"
+							/></a
+						>
+						<a
+							class="sponsor"
+							href="https://opensource.google/"
+							aria-label="Google Open Source"
+							><img
+								src={google.src}
+								alt=""
+								width="231"
+								height="135"
+								loading="lazy"
+							/></a
+						>
+					</div>
+					<div class="callout">
+						<img src={crown} alt="" width="64" height="64" /><p>
+							<span class="callout-title">Interested in becoming a sponsor?</span
+							><span class="callout-subtitle"
+								>Community sponsorship starts at €1.2k</span
+							>
+						</p><button
+							class="button outline"
+							disabled
+							title="Sponsorship contact coming soon"
+							>Get in touch <span aria-hidden="true">▸</span></button
+						>
+					</div>
+				</div>
+			</section>
+
+			<section
+				id="tickets"
+				class="tickets gradient"
+				aria-labelledby="tickets-title"
+			>
+				<div class="section container">
+					<div class="section-heading">
+						<h2 id="tickets-title">Tickets</h2><p>
+							Choose your ticket and join the community. All tickets include
+							three days of entry, food and drinks, and an afterparty on the
+							final day.
+						</p>
+					</div>
+					<div class="ticket-grid">
+						{
+							tickets.map((ticket) => (
+								<article class="ticket">
+									<>
+										<img
+											src={ticket.image}
+											alt=""
+											width="173"
+											height="180"
+											loading="lazy"
+										/>
+										<h3>{ticket.name}</h3>
+										<p class="price">€{ticket.price}</p>
+										<p class="tax">Exc. 21% VAT</p>
+										<button
+											class="button"
+											disabled
+											aria-label={`Purchase ${ticket.name} ticket — coming soon`}
+										>
+											Purchase <span aria-hidden="true">▸</span>
+										</button>
+									</>
+								</article>
+							))
+						}
+					</div>
+					<div class="opportunity">
+						<div>
+							<h3>Opportunity ticket</h3><p>
+								We do not have any specific criteria for the opportunity
+								tickets. If you think you deserve a free ticket or sponsorship
+								to attend, then please apply.
+							</p>
+						</div><button
+							class="button"
+							disabled
+							title="Applications coming soon"
+							>Apply <span aria-hidden="true">▸</span></button
+						>
+					</div>
+				</div>
+			</section>
+
+			<section class="audience" aria-labelledby="audience-title">
+				<div class="section audience-content container">
+					<h2 id="audience-title">Who attends &amp;<br />what to expect</h2><dl
+						class="audience-list"
+					>
+						{
+							audiences.map((audience) => (
+								<div>
+									<>
+										<dt class="eyebrow">{audience.name}</dt>
+										<dd class="display">{audience.description}</dd>
+									</>
+								</div>
+							))
+						}
+					</dl>
+				</div>
+				<img
+					class="canal"
+					src={canal}
+					alt="Amsterdam canal houses, tulips, and boats, with a goose walking across a bridge"
+					width="1440"
+					height="448"
+					loading="lazy"
+				/>
+			</section>
+
+			<section class="invite cream" aria-labelledby="invite-title">
+				<div class="invite-content container">
+					<img
+						class="amsterdam-stamp"
+						src={stamp}
+						alt="An Amsterdam postage stamp with a cycling goose"
+						width="381"
+						height="489"
+						loading="lazy"
+					/>
+					<div class="invite-copy">
+						<img
+							class="invite-postmark"
+							src={postmark}
+							alt=""
+							width="150"
+							height="75"
+							loading="lazy"
+						/><h2 id="invite-title">
+							Send a postcard to<br />invite a friend
+						</h2><dl class="event-details">
+							<div><dt>Three days</dt><dd>29 Apr — 1 May</dd></div><div>
+								<dt>Venue</dt><dd>KIT, Amsterdam</dd>
+							</div>
+						</dl><div class="actions">
+							<a class="button" href="/postcard"
+								>Send a postcard <span aria-hidden="true">▸</span></a
+							><a class="button outline" href="#tickets"
+								>Early-bird tickets <span aria-hidden="true">▸</span></a
+							>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+		<footer class="footer gradient">
+			<div class="footer-content container">
+				<div class="footer-top">
+					<div>
+						<dl class="event-details">
+							<div><dt>Dates</dt><dd>29 Apr — 1 May</dd></div><div>
+								<dt>Location</dt><dd>KIT, Amsterdam</dd>
+							</div>
+						</dl><div class="actions footer-actions">
+							<a class="button" href="#tickets"
+								>Early-bird tickets <span aria-hidden="true">▸</span></a
+							><button
+								class="button theme-button outline"
+								disabled
+								title="Atmo theme"
+								><svg
+									width="20"
+									height="20"
+									viewBox="0 0 20 20"
+									fill="none"
+									stroke="currentColor"
+									aria-hidden="true"
+									><rect x="3" y="2" width="7" height="16" rx="1"></rect><path
+										d="m10 4 6 5a1 1 0 0 1 0 2l-6 6M6.5 14v1"></path></svg
+								>Atmo</button
+							>
+						</div>
+					</div><nav aria-label="Conference">
+						<h2 class="eyebrow">Join Atmo27</h2><a href="#tickets">Attend</a><a
+							href="/speak">Call for papers</a
+						>
+					</nav><nav aria-label="Community">
+						<h2 class="eyebrow">Community</h2><a
+							href="https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw"
+							>Bluesky</a
+						><a href="https://github.com/ATProtocol-Community/atmosphereconf"
+							>GitHub</a
+						>
+						<span class="unavailable-link" role="link" aria-disabled="true"
+							>YouTube</span
+						><span class="unavailable-link" role="link" aria-disabled="true"
+							>LinkedIn</span
+						>
+					</nav>
+				</div>
+				<p class="footer-wordmark">
+					<span>Atmosphere Conf</span><img
+						src={heart}
+						alt=""
+						width="206"
+						height="129"
+					/><span>2027</span>
+				</p><p class="copyright">Copyright 2026 © Atmosphere Conference</p>
+			</div>
+			<img
+				class="cloud footer-cloud-one"
+				src={bumpy}
+				alt=""
+				width="449"
+				height="195"
+				loading="lazy"
+			/><img
+				class="cloud footer-cloud-two"
+				src={puffy}
+				alt=""
+				width="451"
+				height="196"
+				loading="lazy"
+			/><img
+				class="cloud footer-cloud-three"
+				src={longCloud}
+				alt=""
+				width="735"
+				height="272"
+				loading="lazy"
+			/>
+		</footer>
+	</body>
+</html>
+
+<style>
+	:global(*) {
+		box-sizing: border-box;
+	}
+	:global(html) {
+		scroll-behavior: smooth;
+		scroll-padding-top: 24px;
+	}
+	:global(body) {
+		margin: 0;
+		color: #001941;
+		background: #fff;
+		font-family: "Stack Sans Text", Arial, sans-serif;
+		font-size: 20px;
+		line-height: 1.6;
+		letter-spacing: -0.01em;
+	}
+	:global(button),
+	:global(a) {
+		-webkit-tap-highlight-color: transparent;
+	}
+	:global(a) {
+		color: inherit;
+	}
+	:global(a:focus-visible),
+	:global(button:focus-visible) {
+		outline: 3px solid #fe6e25;
+		outline-offset: 5px;
+	}
+	:global(img) {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+	h1,
+	h2,
+	h3,
+	p,
+	dl,
+	dd {
+		margin: 0;
+	}
+	h2,
+	.display {
+		font-family: "Boldonse", Impact, sans-serif;
+		font-weight: 400;
+		text-transform: uppercase;
+	}
+	h2 {
+		font-size: 48px;
+		line-height: 1.33;
+	}
+	.container {
+		width: min(100% - 96px, 1344px);
+		margin-inline: auto;
+	}
+	.section {
+		padding-block: 120px;
+	}
+	.gradient {
+		background: linear-gradient(
+			180deg,
+			#005fe2 0%,
+			#7d7cd8 42%,
+			#ea97df 77%,
+			#eb9b9b 100%
+		);
+	}
+	.cream {
+		background: #faf7f2;
+	}
+	.skip-link {
+		position: absolute;
+		top: 10px;
+		left: 20px;
+		z-index: 10;
+		padding: 12px;
+		background: white;
+		transform: translateY(-160%);
+	}
+	.skip-link:focus {
+		transform: translateY(0);
+	}
+	.site-header {
+		border-bottom: 1px solid #cdced0;
+		background: #fff;
+	}
+	.navigation {
+		display: flex;
+		align-items: center;
+		gap: 40px;
+		min-height: 79px;
+		font-size: 14px;
+	}
+	.brand {
+		padding-right: 40px;
+		border-right: 1px solid #ddd;
+	}
+	.brand img {
+		width: 120px;
+		filter: brightness(0) saturate(100%) invert(9%) sepia(59%) saturate(2454%)
+			hue-rotate(197deg) brightness(92%) contrast(106%);
+	}
+	.nav-links {
+		display: flex;
+		align-items: center;
+		gap: 40px;
+	}
+	.nav-links a,
+	.footer nav a {
+		text-decoration: none;
+	}
+	.nav-links a:hover,
+	.footer nav a:hover {
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+	.button.theme-button {
+		width: 120px;
+		justify-content: space-between;
+		padding-inline: 12px;
+		border-color: #cdced0;
+	}
+	.navigation .theme-button {
+		margin-left: auto;
+	}
+	.nav-ticket {
+		margin-left: -28px;
+	}
+	.button {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		gap: 8px;
+		min-height: 48px;
+		padding: 12px 16px;
+		border: 1px solid #001941;
+		border-radius: 4px;
+		background: #001941;
+		color: #fff;
+		font:
+			400 14px/1.4 "Stack Sans Text",
+			Arial,
+			sans-serif;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	a.button:hover {
+		background: #023a97;
+		border-color: #023a97;
+		color: white;
+	}
+	.button.outline {
+		background: transparent;
+		color: #001941;
+	}
+	a.button.outline:hover {
+		background: #001941;
+		color: white;
+	}
+	button:disabled {
+		cursor: not-allowed;
+		opacity: 0.65;
+	}
+	.actions {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.hero {
+		min-height: 992px;
+		position: relative;
+		overflow: hidden;
+		color: white;
+	}
+	.hero-content {
+		position: relative;
+		z-index: 2;
+		padding: 128px 24px 280px;
+		text-align: center;
+	}
+	h1 img {
+		width: min(944px, 80vw);
+		margin-inline: auto;
+	}
+	.hero-tagline {
+		margin: 40px auto;
+		font-size: 48px;
+		line-height: 1.33;
+	}
+	.event-details {
+		display: flex;
+		justify-content: center;
+		gap: 48px;
+		margin-bottom: 40px;
+		text-align: left;
+	}
+	.event-details dt,
+	.eyebrow {
+		font-size: 12px;
+		line-height: 16px;
+		text-transform: uppercase;
+		font-weight: 500;
+		letter-spacing: 0.03em;
+	}
+	.event-details dt {
+		font-size: 14px;
+	}
+	.event-details dd {
+		margin-top: 16px;
+		font:
+			400 20px/40px "Boldonse",
+			Impact,
+			sans-serif;
+		text-transform: uppercase;
+	}
+	.cloud {
+		position: absolute;
+		pointer-events: none;
+	}
+	.cloud-left {
+		width: 350px;
+		left: -105px;
+		bottom: 275px;
+	}
+	.cloud-right {
+		width: 265px;
+		right: -35px;
+		bottom: 315px;
+	}
+	.cloud-bottom-left {
+		width: 500px;
+		left: 0;
+		bottom: -3px;
+	}
+	.cloud-bottom-right {
+		width: 675px;
+		right: 0;
+		bottom: -3px;
+	}
+	.hero-goose {
+		position: absolute;
+		width: 326px;
+		right: 13%;
+		bottom: 48px;
+	}
+	.introduction {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 36px;
+		min-height: 919px;
+	}
+	.intro-copy {
+		padding-top: 40px;
+		color: #525c6c;
+	}
+	.intro-copy > p + p {
+		margin-top: 32px;
+	}
+	.photo-stamps {
+		position: relative;
+		width: 470px;
+		max-width: 100%;
+		height: 370px;
+		margin-top: 70px;
+	}
+	.photo-stamps .vancouver {
+		position: absolute;
+		width: 245px;
+		left: 0;
+		top: 25px;
+	}
+	.photo-stamps .seattle {
+		position: absolute;
+		width: 245px;
+		left: 220px;
+		top: 0;
+	}
+	.photo-postmark {
+		position: absolute;
+		width: 250px;
+		left: 190px;
+		bottom: 0;
+	}
+	.callout {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 16px 24px;
+		margin-top: 40px;
+		border-radius: 12px;
+		background: #faf7f2;
+		color: #001941;
+	}
+	.callout > img {
+		flex: 0 0 64px;
+		width: 64px;
+	}
+	.callout p {
+		flex: 1;
+	}
+	.callout-title {
+		display: block;
+		font-size: 18px;
+		line-height: 24px;
+		letter-spacing: -0.02em;
+	}
+	.callout-subtitle {
+		display: block;
+		font-size: 16px;
+		line-height: 20px;
+		color: #525c6c;
+	}
+	.sponsor-level {
+		margin: 40px 0 16px;
+		color: #777e89;
+	}
+	.sponsor-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+	.sponsor {
+		display: grid;
+		place-items: center;
+		min-height: 200px;
+		padding: 8px 16px;
+		border-radius: 16px;
+		background: white;
+		text-decoration: none;
+	}
+	.sponsors .callout {
+		background: white;
+	}
+	.section-heading {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 36px;
+		align-items: start;
+		margin-bottom: 40px;
+	}
+	.tickets {
+		color: white;
+	}
+	.ticket-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 24px;
+	}
+	.ticket {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background: white;
+		color: #001941;
+		border: 1px solid #cdced0;
+		border-radius: 12px;
+		padding: 24px 16px;
+		min-height: 471px;
+		text-align: center;
+	}
+	.ticket > img {
+		width: 173px;
+		margin-bottom: 16px;
+	}
+	.ticket h3 {
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 16px;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+	.price {
+		margin-top: 8px;
+		font:
+			400 32px/48px "Boldonse",
+			Impact,
+			sans-serif;
+		letter-spacing: 0;
+	}
+	.tax {
+		margin-top: 8px;
+		color: #525c6c;
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.ticket .button {
+		margin-top: auto;
+		text-transform: uppercase;
+	}
+	.opportunity {
+		display: flex;
+		align-items: center;
+		gap: 32px;
+		margin-top: 16px;
+		padding: 24px 48px;
+		background: #fff;
+		color: #001941;
+		border-radius: 10px;
+	}
+	.opportunity > div {
+		flex: 1;
+	}
+	.opportunity h3 {
+		font:
+			400 20px/40px "Boldonse",
+			Impact,
+			sans-serif;
+		text-transform: uppercase;
+	}
+	.opportunity p {
+		margin-top: 8px;
+		color: #525c6c;
+		font-size: 14px;
+		line-height: 20px;
+	}
+	.audience {
+		background: #023a97;
+		color: white;
+	}
+	.audience-content {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 76px;
+		padding-bottom: 184px;
+	}
+	.audience-list {
+		padding-block: 24px;
+	}
+	.audience-list > div + div {
+		margin-top: 64px;
+	}
+	.audience-list dd {
+		max-width: 610px;
+		font-size: 20px;
+		line-height: 2;
+		margin-top: 16px;
+	}
+	.canal {
+		width: 100%;
+	}
+	.invite-content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 40px;
+		padding-block: 120px;
+	}
+	.amsterdam-stamp {
+		width: 352px;
+	}
+	.invite-copy {
+		text-align: center;
+	}
+	.invite-postmark {
+		margin: 0 auto 40px;
+	}
+	.invite h2 {
+		margin-bottom: 40px;
+	}
+	.footer {
+		position: relative;
+		overflow: hidden;
+		color: white;
+	}
+	.footer-content {
+		position: relative;
+		z-index: 1;
+		padding-top: 120px;
+		padding-bottom: 180px;
+	}
+	.footer-top {
+		display: grid;
+		grid-template-columns: 1fr 204px 204px;
+		gap: 24px;
+	}
+	.footer-actions {
+		justify-content: start;
+	}
+	.footer .theme-button {
+		color: white;
+	}
+	.footer .event-details {
+		justify-content: start;
+		margin-bottom: 24px;
+	}
+	.footer .event-details dt {
+		font-size: 12px;
+	}
+	.footer .event-details dd {
+		font:
+			400 14px/20px "Stack Sans Text",
+			Arial,
+			sans-serif;
+		margin-top: 4px;
+	}
+	.footer nav h2 {
+		font-family: "Stack Sans Text", Arial, sans-serif;
+		margin-bottom: 19px;
+	}
+	.footer nav h2::before {
+		content: "▪";
+		margin-right: 8px;
+	}
+	.footer nav .unavailable-link {
+		display: block;
+		font-size: 18px;
+		line-height: 24px;
+		margin-bottom: 19px;
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+	.footer nav a {
+		display: block;
+		width: fit-content;
+		font-size: 18px;
+		line-height: 24px;
+		margin-bottom: 19px;
+	}
+	.footer nav > :last-child {
+		margin-bottom: 0;
+	}
+	.footer-wordmark {
+		display: flex;
+		align-items: center;
+		gap: 0.25em;
+		margin-top: 120px;
+		font-family: "Boldonse", Impact, sans-serif;
+		font-size: clamp(20px, 5.4vw, 78px);
+		line-height: 106px;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+	.footer-wordmark img {
+		width: 12%;
+	}
+	.copyright {
+		font-size: 14px;
+		line-height: 20px;
+		margin-top: 24px;
+	}
+	.footer-cloud-one {
+		width: 420px;
+		left: 0;
+		bottom: -15px;
+	}
+	.footer-cloud-two {
+		width: 460px;
+		left: 34%;
+		bottom: -30px;
+	}
+	.footer-cloud-three {
+		width: 520px;
+		right: -70px;
+		bottom: -5px;
+	}
+	@media (min-width: 1441px) {
+		.hero-goose {
+			right: calc(50% - 530px);
+		}
+	}
+	@media (max-width: 1100px) {
+		h2 {
+			font-size: 34px;
+		}
+		.hero-tagline {
+			font-size: 32px;
+		}
+		.event-details dd {
+			font-size: 18px;
+		}
+		.container {
+			width: calc(100% - 64px);
+		}
+		.section {
+			padding-block: 80px;
+		}
+		.hero {
+			min-height: 850px;
+		}
+		.hero-content {
+			padding-top: 110px;
+		}
+		.hero-goose {
+			right: 7%;
+			width: 270px;
+		}
+		.introduction {
+			min-height: 0;
+		}
+		.photo-stamps {
+			transform-origin: top left;
+			scale: 0.8;
+			margin-bottom: -70px;
+		}
+		.callout {
+			flex-wrap: wrap;
+		}
+		.callout .button {
+			margin-left: auto;
+		}
+		.ticket-grid {
+			gap: 16px;
+		}
+		.ticket {
+			padding-inline: 12px;
+			min-height: 420px;
+		}
+		.audience-content {
+			gap: 48px;
+			padding-bottom: 100px;
+		}
+		.audience-list dd {
+			font-size: 20px;
+		}
+		.amsterdam-stamp {
+			width: 30%;
+		}
+		.invite-content {
+			gap: 24px;
+		}
+		.footer-top {
+			grid-template-columns: 1fr 150px 150px;
+			gap: 24px;
+		}
+	}
+	@media (max-width: 700px) {
+		:global(body) {
+			font-size: 17px;
+		}
+		.container {
+			width: calc(100% - 40px);
+		}
+		.section {
+			padding-block: 64px;
+		}
+		h2 {
+			font-size: 28px;
+			line-height: 1.5;
+		}
+		.navigation {
+			gap: 18px;
+			min-height: 76px;
+			flex-wrap: wrap;
+			padding-block: 16px;
+		}
+		.brand {
+			padding-right: 0;
+			border: 0;
+		}
+		.brand img {
+			width: 104px;
+		}
+		.nav-links {
+			margin-left: auto;
+			gap: 16px;
+			font-size: 12px;
+		}
+		.nav-ticket,
+		.navigation .theme-button {
+			display: none;
+		}
+		.hero {
+			min-height: 720px;
+		}
+		.hero-content {
+			padding: 76px 20px 270px;
+		}
+		h1 img {
+			width: 100%;
+			max-width: 530px;
+		}
+		.hero-tagline {
+			font-size: clamp(19px, 4vw, 28px);
+			margin-block: 28px;
+			line-height: 1.6;
+		}
+		.event-details {
+			gap: 24px;
+			margin-bottom: 28px;
+		}
+		.event-details dt {
+			font-size: 10px;
+		}
+		.event-details dd {
+			font-size: 14px;
+			line-height: 24px;
+			margin-top: 8px;
+		}
+		.button {
+			font-size: 12px;
+			padding-inline: 12px;
+		}
+		.hero-goose {
+			width: 210px;
+			right: 8%;
+			bottom: 25px;
+		}
+		.cloud-left {
+			width: 150px;
+			left: -70px;
+			bottom: 210px;
+		}
+		.cloud-right {
+			width: 150px;
+			right: -85px;
+			bottom: 220px;
+		}
+		.cloud-bottom-left {
+			width: 260px;
+			left: -60px;
+		}
+		.cloud-bottom-right {
+			width: 350px;
+			right: -100px;
+		}
+		.introduction {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 36px;
+		}
+		.intro-art {
+			display: contents;
+		}
+		.intro-copy {
+			padding: 0;
+		}
+		.photo-stamps {
+			order: 3;
+			width: 340px;
+			height: 280px;
+			margin: 0 auto;
+			scale: 1;
+		}
+		.photo-stamps .vancouver {
+			width: 53%;
+		}
+		.photo-stamps .seattle {
+			width: 53%;
+			left: 44%;
+		}
+		.photo-postmark {
+			width: 56%;
+			left: 38%;
+		}
+		.callout {
+			gap: 12px;
+			padding: 16px;
+		}
+		.callout > img {
+			width: 44px;
+			flex-basis: 44px;
+		}
+		.callout p {
+			flex-basis: calc(100% - 56px);
+			font-size: 14px;
+		}
+		.sponsor-grid {
+			gap: 12px;
+		}
+		.sponsor {
+			min-height: 130px;
+			padding: 8px 12px;
+			border-radius: 10px;
+		}
+		.section-heading {
+			grid-template-columns: 1fr;
+			gap: 24px;
+		}
+		.ticket-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 12px;
+		}
+		.ticket {
+			min-height: 360px;
+			padding: 20px 12px;
+		}
+		.ticket > img {
+			width: 135px;
+		}
+		.ticket h3 {
+			font-size: 11px;
+		}
+		.ticket .button {
+			margin-top: 32px;
+		}
+		.opportunity {
+			padding: 24px;
+			flex-wrap: wrap;
+			gap: 20px;
+		}
+		.opportunity > div {
+			flex-basis: 100%;
+		}
+		.opportunity h3 {
+			font-size: 19px;
+		}
+		.audience-content {
+			grid-template-columns: 1fr;
+			gap: 40px;
+			padding-bottom: 70px;
+		}
+		.audience-list {
+			padding-top: 0;
+		}
+		.audience-list > div + div {
+			margin-top: 40px;
+		}
+		.audience-list dd {
+			font-size: 20px;
+			line-height: 1.6;
+		}
+		.canal {
+			min-height: 190px;
+			object-fit: cover;
+			object-position: center;
+		}
+		.invite-content {
+			flex-direction: column;
+			padding-block: 64px;
+			gap: 32px;
+		}
+		.amsterdam-stamp {
+			width: 230px;
+		}
+		.invite h2 {
+			font-size: 24px;
+		}
+		.invite-postmark {
+			width: 110px;
+			margin-bottom: 24px;
+		}
+		.footer {
+			min-height: 650px;
+		}
+		.footer-content {
+			padding-block: 64px 160px;
+		}
+		.footer-top {
+			grid-template-columns: 1fr 1fr;
+			gap: 40px;
+		}
+		.footer-top > div {
+			grid-column: 1 / -1;
+		}
+		.footer nav a {
+			font-size: 16px;
+		}
+		.footer-wordmark {
+			white-space: normal;
+			flex-wrap: wrap;
+			justify-content: start;
+			gap: 12px;
+			margin-top: 56px;
+			font-size: 27px;
+			line-height: 1.3;
+		}
+		.footer-wordmark > span:first-child {
+			flex-basis: 100%;
+		}
+		.footer-wordmark img {
+			width: 65px;
+		}
+		.copyright {
+			font-size: 12px;
+		}
+		.footer-cloud-one {
+			width: 230px;
+			left: -30px;
+		}
+		.footer-cloud-two {
+			width: 240px;
+			left: 20%;
+		}
+		.footer-cloud-three {
+			width: 320px;
+			right: -120px;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		:global(html) {
+			scroll-behavior: auto;
+		}
+	}
+</style>
