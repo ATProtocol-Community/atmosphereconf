@@ -16,12 +16,8 @@ const { SESSION_DIR: sessionDir } = loadEnv(
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://atmosphereconf.org",
+  site: "https://atmosphereconf.org",
   output: "server",
-  // Temporary while the CFP is open, so the homepage can move back later.
-  redirects: {
-    "/": { status: 302, destination: "/speak" },
-  },
   env: {
     schema: {
       // Secrets are read at runtime, so they never end up in the build.
