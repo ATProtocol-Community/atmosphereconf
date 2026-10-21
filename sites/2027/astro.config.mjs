@@ -3,6 +3,7 @@ import { defineConfig, envField, sessionDrivers } from 'astro/config';
 import { loadEnv } from "vite";
 import authproto from "@fujocoded/authproto";
 import node from "@astrojs/node";
+import tailwindcss from "@tailwindcss/vite";
 
 // Set SESSION_DIR to a folder on the Railway volume (e.g. /data/sessions) so
 // logins survive deploys. Without it, logins live in memory. It's read at build
@@ -66,6 +67,9 @@ export default defineConfig({
       },
     }),
   ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   server: {
     host: process.env.NODE_ENV === "development" ? "127.0.0.1" : "0.0.0.0",
   },
