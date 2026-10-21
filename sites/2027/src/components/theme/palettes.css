@@ -1,0 +1,131 @@
+body[data-palette="sky"] {
+	--ink: #173766;
+	--strong: #254ac7;
+	--sky: #9dd8f2;
+	--butter: #ffe69c;
+	--mint: #b4dfc5;
+	--paper: #fff9e8;
+}
+
+body[data-palette="garden"] {
+	--ink: #214d3b;
+	--strong: #326748;
+	--sky: #b4dfc5;
+	--butter: #ffe69c;
+	--mint: #8cbca3;
+	--paper: #fff9e8;
+}
+
+body[data-palette="colibri"] {
+	--ink: #2f0d68;
+	--strong: #6d28d9;
+	--sky: #c4b4ff;
+	--butter: #ffd9a8;
+	--mint: #7fd6d2;
+	--paper: #f9f5ff;
+}
+
+body[data-palette="rpg-actor"] {
+	color-scheme: light;
+	--ink: #2c2416;
+	--strong: #8b4513;
+	--sky: #71cdf9;
+	--butter: #c9a227;
+	--mint: #619231;
+	--paper: #fffdf9;
+	--goose: #2c2416;
+	--cancel-stamp: #8b2020;
+	--error: #8b2020;
+	/* Destination text/arrow sit on --sky, not --paper, so they get their
+	   own parchment tone (rpg.actor's own --parchment) instead of reusing
+	   the cloud-white --paper token. */
+	--label-ink: #f4f1e8;
+	background: #e8e4d8;
+}
+
+body[data-palette="blacksky"] {
+	--ink: #6b7bf5;
+	--strong: #5b5bf5;
+	--sky: #182040;
+	--butter: #fff;
+	--mint: #d2fc51;
+	--paper: #0f1729;
+	--goose: var(--strong);
+	--cancel-stamp: #6b7bf5;
+	--error: #ff8a8a;
+}
+
+body[data-palette="semble"] {
+	--ink: oklch(0.69 0.21 42.88);
+	--strong: oklch(0.69 0.21 42.88);
+	--sky: #ffdac2;
+	--butter: #ffe69c;
+	--mint: #a6e7ff;
+	--paper: #fff9e8;
+	--cancel-stamp: black;
+}
+
+body[data-palette="fujocoded"] {
+	--ink: #ff38eb;
+	--strong: #ff38eb;
+	--sky:
+		linear-gradient(#1a0a3d, #3a1f78),
+		linear-gradient(135deg, #ff38eb, #4360f7, #ff38eb) !important;
+	--butter: #ffe0e0;
+	--mint: radial-gradient(circle at center, #4360f7, #fbb8fe, #9687fa);
+	--paper: #fff9e8;
+	--cancel-stamp: #4360f7;
+}
+
+body[data-palette="sifa"] {
+	--ink: #143a5e;
+	--strong: #205ea6;
+	--sky: #a9d2ed;
+	--butter: #e4dcf6;
+	--mint: #c4b4e8;
+	--paper: #fffcf0;
+}
+
+/* Kimbia: newsprint paper, ink, crimson accent, cinder track underfoot */
+body[data-palette="kimbia"] {
+	--ink: #0d0d0b;
+	--strong: #bb2429;
+	--sky: #ede4d0;
+	--butter: #d9a23f;
+	--mint: #b8832a;
+	--paper: #f4ecd9;
+	--cancel-stamp: #bb2429;
+	--goose: #0d0d0b;
+	--goose-bib: #f4ecd9;
+	--goose-bib-ink: #bb2429;
+}
+
+/* Pronouns: Catppuccin-inspired dark palette with a flock of mascots */
+body[data-palette="pronouns"] {
+	color-scheme: dark;
+	--bg: #1e1e2e;
+	--surface: #313244;
+	--surface-strong: #45475a;
+	--text: #cdd6f4;
+	--muted: #bac2de;
+	--border: #585b70;
+	--accent: #f5c2e7;
+	--accent-contrast: #1e1e2e;
+	--tag-bg: #585b70;
+	--line: #585b7088;
+	--success: #a6e3a1;
+	--success-bg: #243626;
+	--danger: #f38ba8;
+	--danger-bg: #3a1f28;
+	--ink: var(--text);
+	--strong: var(--accent);
+	--sky: var(--bg);
+	--mint: var(--surface-strong);
+	--paper: var(--surface);
+	--cancel-stamp: var(--danger);
+	--error: var(--danger);
+	--goose: var(--accent);
+	--butter: #d98abf;
+	--tab-active-foreground: #1e1e2e;
+	--tab-inactive-foreground: #cdd6f4;
+}

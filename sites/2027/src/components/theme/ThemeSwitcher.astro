@@ -1,6 +1,7 @@
 ---
-import TwinklEffects from "./TwinklEffects.astro";
-import "../styles/twinkl.css";
+import TwinklEffects from "./twinkl/TwinklEffects.astro";
+import "./twinkl/twinkl.css";
+import { themes } from "./themes";
 ---
 
 <TwinklEffects />
@@ -75,22 +76,8 @@ import "../styles/twinkl.css";
 		}
 	}
 </style>
-<script is:inline>
+<script is:inline define:vars={{ themes }}>
 	(() => {
-		const themes = {
-			sky: { label: "Sky", image: "goose" },
-			garden: { label: "Garden", image: "goose" },
-			colibri: { label: "Colibri", image: "colibri" },
-			"rpg-actor": { label: "rpg.actor", image: null },
-			blacksky: { label: "Blacksky", image: "goose" },
-			semble: { label: "Semble", image: "goose" },
-			fujocoded: { label: "Fujocoded", image: "goose" },
-			sifa: { label: "Sifa", image: "goose" },
-			kimbia: { label: "Kimbia", image: "goose" },
-			pronouns: { label: "Pronouns", image: "flock" },
-			twinkl: { label: "Twinkl", image: "goose" },
-		};
-
 		const themeKeys = Object.keys(themes);
 		const DEFAULT_THEME = "sky";
 		const themeStorageKey = "2027:page-theme";
@@ -111,7 +98,11 @@ import "../styles/twinkl.css";
 			}
 		};
 
-		const normalize = (theme) => (themes[theme] ? theme : DEFAULT_THEME);
+		const normalize = (theme) => (themeKeys.includes(theme) ? theme : DEFAULT_THEME);
+		const readQuery = () => {
+			const theme = new URLSearchParams(window.location.search).get("theme");
+			return themeKeys.includes(theme) ? theme : null;
+		};
 
 		const getCurrentTheme = () =>
 			normalize(document.documentElement.dataset.theme || readStored());
@@ -167,12 +158,12 @@ import "../styles/twinkl.css";
 			}
 		};
 
-		const applyTheme = (theme) => {
+		const applyTheme = (theme, persist = true) => {
 			const current = normalize(theme);
 
 			document.documentElement.dataset.theme = current;
 			document.body.dataset.palette = current;
-			writeStored(current);
+			if (persist) writeStored(current);
 
 			const label = document.getElementById("theme-next-label");
 			if (label) label.textContent = themes[getCurrentTheme()].label;
@@ -180,9 +171,21 @@ import "../styles/twinkl.css";
 			syncGoose(current);
 		};
 
-		const cycleTheme = () => applyTheme(getNextTheme(getCurrentTheme()));
+		const cycleTheme = () => {
+			const next = getNextTheme(getCurrentTheme());
+			const url = new URL(window.location.href);
+			url.searchParams.set("theme", next);
+			window.history.replaceState(window.history.state, "", url);
+			applyTheme(next);
+		};
 
 		const init = () => {
+			// Keep the dev preview's iframes in sync with its shared switcher.
+			window.addEventListener("storage", (event) => {
+				if (!readQuery() && event.key === themeStorageKey && event.storageArea === localStorage) {
+					applyTheme(event.newValue, false);
+				}
+			});
 			document
 				.getElementById("theme-toggle")
 				?.addEventListener("click", cycleTheme);
@@ -190,7 +193,7 @@ import "../styles/twinkl.css";
 				.getElementById("theme-toggle-mobile")
 				?.addEventListener("click", cycleTheme);
 
-			applyTheme(getCurrentTheme());
+			applyTheme(readQuery() || getCurrentTheme());
 		};
 
 		if (document.readyState === "loading") {
