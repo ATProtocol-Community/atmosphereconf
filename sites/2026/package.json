@@ -24,6 +24,7 @@
     "@astrojs/react": "^4.4.2",
     "@atcute/bluesky-richtext-parser": "^2.1.1",
     "@atproto/api": "^0.19.3",
+    "@atproto/lexicon": "^0.7.17",
     "@atproto/identity": "^0.4.8",
     "@fujocoded/astro-atproto-loader": "^0.2.2",
     "@fujocoded/atproto-badges": "^0.2.0",
