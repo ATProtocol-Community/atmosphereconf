@@ -1,5 +1,13 @@
 ---
 import { event } from "../../data/event";
+import RevealWords from "./RevealWords.astro";
+
+interface Props {
+	reveal?: boolean;
+	class?: string;
+}
+
+const { reveal = false, class: className } = Astro.props;
 
 /** Dates and venue as a definition list, sized for the hero and invite sections. */
 const term = "eyebrow text-[10px] md:text-sm/4";
@@ -7,10 +15,23 @@ const value =
 	"mt-2 font-display text-sm/6 uppercase md:mt-4 md:text-lg/10 lg:text-xl/10";
 ---
 
-<dl class="mb-7 flex justify-center gap-6 text-left md:mb-10 md:gap-12">
+<dl
+	class:list={[
+		"mb-7 flex justify-center gap-6 text-left md:mb-10 md:gap-12",
+		className,
+	]}
+>
 	<div>
-		<dt class={term}>Three days</dt><dd class={value}>{event.dates}</dd>
+		<dt class={term}>
+			{reveal ? <RevealWords text="Three days" /> : "Three days"}
+		</dt><dd class={value}>
+			{reveal ? <RevealWords text={event.dates} /> : event.dates}
+		</dd>
 	</div><div>
-		<dt class={term}>Venue</dt><dd class={value}>{event.venue}</dd>
+		<dt class={term}>
+			{reveal ? <RevealWords text="Venue" /> : "Venue"}
+		</dt><dd class={value}>
+			{reveal ? <RevealWords text={event.venue} /> : event.venue}
+		</dd>
 	</div>
 </dl>

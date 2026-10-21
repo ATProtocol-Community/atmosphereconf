@@ -1,0 +1,393 @@
+---
+import Bed from "../../../images/icons/bed.svg";
+import BuildingBlocks from "../../../images/icons/building-blocks.svg";
+import CanalHouses from "../../../images/icons/canal-houses.svg";
+import Clock from "../../../images/icons/clock.svg";
+import Crown from "../../../images/icons/crown.svg";
+import MagicWand from "../../../images/icons/magic-wand.svg";
+import Map from "../../../images/icons/map.svg";
+import Microphone from "../../../images/icons/microphone.svg";
+import Scales from "../../../images/icons/scales.svg";
+import Tickets from "../../../images/icons/tickets.svg";
+import Wallet from "../../../images/icons/wallet.svg";
+import Wheelchair from "../../../images/icons/wheelchair.svg";
+import YesNo from "../../../images/icons/yes-no.svg";
+
+const icons = {
+	bed: Bed,
+	"building-blocks": BuildingBlocks,
+	"canal-houses": CanalHouses,
+	clock: Clock,
+	crown: Crown,
+	"magic-wand": MagicWand,
+	map: Map,
+	microphone: Microphone,
+	scales: Scales,
+	tickets: Tickets,
+	wallet: Wallet,
+	wheelchair: Wheelchair,
+	"yes-no": YesNo,
+};
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+	name: IconName;
+	class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const Component = icons[name];
+---
+
+<Component class={className} data-icon={name} aria-hidden="true" />
+
+<style is:global>
+	[data-icon] [data-part] {
+		transform-box: fill-box;
+		transform-origin: 50% 50%;
+		transition: transform 250ms var(--ease-soft);
+	}
+
+	[data-icon]
+		:is(
+			[data-part="pin"],
+			[data-part="bill"],
+			[data-part="crown"],
+			[data-part="ticket-back"],
+			[data-part="ticket-front"]
+		) {
+		transform-origin: 50% 100%;
+	}
+
+	[data-icon="wheelchair"] [data-part="chair"] {
+		transform-box: view-box;
+		transform-origin: 29px 64.4px;
+	}
+
+	[data-icon="clock"] :is([data-part="hour-hand"], [data-part="minute-hand"]) {
+		transform-box: view-box;
+		transform-origin: 34.5px 46.06px;
+	}
+
+	[data-icon="building-blocks"] [data-part="top-block"] {
+		transform-box: view-box;
+		transform-origin: 48px 44px;
+	}
+
+	[data-icon="magic-wand"] [data-part="wand"] {
+		transform-box: view-box;
+		transform-origin: 6px 84px;
+	}
+
+	[data-icon="microphone"] [data-part="wave"] {
+		transform-box: view-box;
+		transform-origin: 50px 26px;
+	}
+
+	[data-icon="scales"] [data-part="beam"] {
+		transform-box: view-box;
+		transform-origin: 44.8125px 20.4439px;
+	}
+
+	[data-icon="scales"] [data-part^="pan-"] {
+		transform-origin: 50% 0;
+	}
+
+	html[data-motion]
+		:is(
+			[data-card]:is(:hover, :focus-within, :focus-visible) [data-icon],
+			[data-icon]:hover
+		) {
+		&[data-icon="map"] [data-part="pin"] {
+			animation: icon-pin 900ms ease-in-out infinite;
+		}
+
+		&[data-icon="wheelchair"] [data-part="chair"] {
+			animation: icon-wheelie 1.2s ease-in-out infinite;
+		}
+
+		&[data-icon="bed"] [data-part="lamp"] > path {
+			animation: icon-lamp 1.8s ease-in-out infinite;
+		}
+
+		&[data-icon="wallet"] [data-part="bill"] {
+			animation: icon-pop 1s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 80ms);
+		}
+
+		&[data-icon="canal-houses"] [data-part="window"] > path {
+			animation: icon-glow 1.8s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 0.15s);
+		}
+
+		&[data-icon="tickets"] [data-part="ticket-back"] {
+			animation: icon-wiggle-a 1s ease-in-out infinite;
+		}
+
+		&[data-icon="tickets"] [data-part="ticket-front"] {
+			animation: icon-wiggle-b 1s ease-in-out infinite;
+		}
+
+		&[data-icon="tickets"] [data-part="sparkle"] {
+			animation: icon-twinkle 1s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 0.4s);
+		}
+
+		&[data-icon="yes-no"] [data-part="yes"] {
+			animation: icon-toggle 1.2s ease-in-out infinite;
+		}
+
+		&[data-icon="yes-no"] [data-part="no"] {
+			animation: icon-toggle 1.2s ease-in-out infinite -600ms;
+		}
+
+		&[data-icon="crown"] [data-part="crown"] {
+			--hop: 4;
+			animation: icon-hop 900ms ease-in-out infinite;
+		}
+
+		&[data-icon="crown"] [data-part="jewel"] > path {
+			animation: icon-glint 1s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 0.3s);
+		}
+
+		&[data-icon="clock"] [data-part="minute-hand"] {
+			animation: icon-spin 1.6s steps(12, end) infinite;
+		}
+
+		&[data-icon="clock"] [data-part="hour-hand"] {
+			animation: icon-spin 19.2s steps(144, end) infinite;
+		}
+
+		&[data-icon="clock"] [data-part="ray"] {
+			animation: icon-twinkle 1s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 0.3s);
+		}
+
+		&[data-icon="building-blocks"] [data-part="top-block"] {
+			animation: icon-place 1.8s infinite;
+		}
+
+		&[data-icon="magic-wand"] [data-part="wand"] {
+			animation: icon-wave 1.2s ease-in-out infinite;
+		}
+
+		&[data-icon="magic-wand"] [data-part="sparkle"] {
+			animation: icon-twinkle 1s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 0.25s);
+		}
+
+		&[data-icon="microphone"] [data-part="wave"] {
+			animation: icon-ripple 1.2s ease-in-out infinite;
+			animation-delay: calc(var(--i) * 0.15s);
+		}
+
+		&[data-icon="scales"] [data-part="beam"] {
+			animation: icon-tilt 2.4s ease-in-out infinite;
+		}
+
+		&[data-icon="scales"] [data-part^="pan-"] {
+			animation: icon-tilt-counter 2.4s ease-in-out infinite;
+		}
+	}
+
+	@keyframes icon-pin {
+		0%,
+		100% {
+			transform: none;
+		}
+		30% {
+			transform: translateY(-8px) scaleY(1.06);
+		}
+		55% {
+			transform: translateY(0) scaleY(0.92);
+		}
+		75% {
+			transform: translateY(-3px);
+		}
+	}
+
+	@keyframes icon-spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes icon-wheelie {
+		0%,
+		100% {
+			transform: none;
+		}
+		50% {
+			transform: rotate(-5deg);
+		}
+	}
+
+	@keyframes icon-lamp {
+		0%,
+		100% {
+			fill: #fe6e25;
+		}
+		50% {
+			fill: #ffa65c;
+		}
+	}
+
+	@keyframes icon-pop {
+		0%,
+		60%,
+		100% {
+			transform: none;
+		}
+		30% {
+			transform: translateY(-6px) scale(1.06);
+		}
+	}
+
+	@keyframes icon-glow {
+		0%,
+		100% {
+			fill: #ffffff;
+		}
+		50% {
+			fill: #fed261;
+		}
+	}
+
+	@keyframes icon-wiggle-a {
+		0%,
+		100% {
+			transform: none;
+		}
+		50% {
+			transform: translate(3px, -2px) rotate(6deg);
+		}
+	}
+
+	@keyframes icon-wiggle-b {
+		0%,
+		100% {
+			transform: none;
+		}
+		50% {
+			transform: translate(-3px, 2px) rotate(-6deg);
+		}
+	}
+
+	@keyframes icon-twinkle {
+		0%,
+		100% {
+			opacity: 1;
+			transform: none;
+		}
+		50% {
+			opacity: 0.45;
+			transform: scale(0.6);
+		}
+	}
+
+	@keyframes icon-toggle {
+		0%,
+		50%,
+		100% {
+			transform: none;
+		}
+		25% {
+			transform: scale(1.1);
+		}
+	}
+
+	@keyframes icon-hop {
+		0%,
+		70%,
+		100% {
+			transform: none;
+		}
+		35% {
+			transform: translateY(calc(var(--hop) * -1px));
+		}
+	}
+
+	@keyframes icon-place {
+		0% {
+			transform: none;
+			animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+		}
+		20%,
+		30% {
+			transform: translate(1.5px, -3.5px);
+			animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+		}
+		48% {
+			transform: none;
+			animation-timing-function: ease-out;
+		}
+		56% {
+			transform: scaleY(0.94);
+			animation-timing-function: ease-out;
+		}
+		68%,
+		100% {
+			transform: none;
+		}
+	}
+
+	@keyframes icon-glint {
+		0%,
+		100% {
+			fill: #005fe2;
+		}
+		50% {
+			fill: #7fb0ff;
+		}
+	}
+
+	@keyframes icon-wave {
+		0%,
+		100% {
+			transform: none;
+		}
+		50% {
+			transform: rotate(-6deg);
+		}
+	}
+
+	@keyframes icon-ripple {
+		0%,
+		100% {
+			opacity: 1;
+			transform: none;
+		}
+		50% {
+			opacity: 0.5;
+			transform: scale(1.1);
+		}
+	}
+
+	@keyframes icon-tilt {
+		0%,
+		100% {
+			transform: none;
+		}
+		25% {
+			transform: rotate(-4deg);
+		}
+		75% {
+			transform: rotate(4deg);
+		}
+	}
+
+	@keyframes icon-tilt-counter {
+		0%,
+		100% {
+			transform: none;
+		}
+		25% {
+			transform: rotate(4deg);
+		}
+		75% {
+			transform: rotate(-4deg);
+		}
+	}
+</style>

@@ -39,7 +39,12 @@ const { error } = Astro.props;
 		placeholder="you@atmosphere.web"
 		autocomplete="username webauthn email"
 		atSign={false}
-		suffixes={["@atmosphere.web", ".bsky.social", ".blacksky.social", ".atmosphere.web"]}
+		suffixes={[
+			"@atmosphere.web",
+			".bsky.social",
+			".blacksky.social",
+			".atmosphere.web",
+		]}
 		required
 	/>
 	<p class="tip">
@@ -76,7 +81,9 @@ const { error } = Astro.props;
 	import { sureMethod, type Method } from "./identifier";
 
 	const form = document.querySelector<HTMLFormElement>("[data-signup-form]");
-	const input = document.getElementById("airmail-email") as HTMLInputElement | null;
+	const input = document.getElementById(
+		"airmail-email",
+	) as HTMLInputElement | null;
 	const radios = {
 		email: document.getElementById("method-email") as HTMLInputElement | null,
 		handle: document.getElementById("method-handle") as HTMLInputElement | null,
@@ -245,5 +252,4 @@ const { error } = Astro.props;
 		/* Narrow-screen anchor: tooltips span the paragraph, as they did in flow. */
 		anchor-name: --tip;
 	}
-
 </style>

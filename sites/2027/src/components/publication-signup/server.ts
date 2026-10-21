@@ -18,7 +18,8 @@ import { unavailable } from "../lib/responses";
 import type { Line } from "../postcard/Confirmation.astro";
 import { htmlEscape as html } from "escape-goat";
 
-export const SUBSCRIBE_SCOPE = "repo:site.standard.graph.subscription?action=create";
+export const SUBSCRIBE_SCOPE =
+	"repo:site.standard.graph.subscription?action=create";
 
 const REQUEST_KEY = "signupRequest";
 const CARD_KEY = "signupCard";
@@ -42,7 +43,10 @@ export type SignupReceipt = { kind: "subscribed"; already: boolean };
 export type SignupCard =
 	| { kind: "form"; failure?: SignupFailure }
 	| SignupReceipt
-	| { kind: "email-pending"; news: Extract<NewsOutcome, { kind: "leaflet-step" }> };
+	| {
+			kind: "email-pending";
+			news: Extract<NewsOutcome, { kind: "leaflet-step" }>;
+	  };
 
 export type NewsOutcome =
 	// The visitor still has to confirm through Leaflet.
@@ -53,7 +57,8 @@ export const newsLine = (news: NewsOutcome): Line => {
 	switch (news.kind) {
 		case "leaflet-step":
 			return {
-				words: html`One more step: we'll send a code to <strong>${news.email}</strong>.`,
+				words: html`One more step: we'll send a code to
+					<strong>${news.email}</strong>.`,
 				tone: "todo",
 				action: { label: "Send my code", href: leafletStepUrl(news.email) },
 			};
@@ -61,12 +66,14 @@ export const newsLine = (news: NewsOutcome): Line => {
 			switch (news.reason) {
 				case "no-email":
 					return {
-						words: html`We couldn't read your account email, so email news isn't set up.`,
+						words: html`We couldn't read your account email, so email news isn't
+						set up.`,
 						tone: "failed",
 					};
 				case "bad-email":
 					return {
-						words: html`That email address doesn't look right, so email news isn't set up.`,
+						words: html`That email address doesn't look right, so email news
+						isn't set up.`,
 						tone: "failed",
 					};
 			}
@@ -117,7 +124,10 @@ const readMethod = (formData: FormData): Method | null => {
 /** Reads the form's one field as whichever kind of address it holds. */
 const readIdentifier = (
 	formData: FormData,
-): { kind: "missing" } | { kind: "email"; email: string } | { kind: "handle"; handle: string } => {
+):
+	| { kind: "missing" }
+	| { kind: "email"; email: string }
+	| { kind: "handle"; handle: string } => {
 	const submitted = formData.get("identifier");
 	const raw = typeof submitted === "string" ? submitted.trim() : "";
 	if (!raw) return { kind: "missing" };
@@ -150,7 +160,10 @@ const startSignup = async (context: SignupContext, formData: FormData) => {
 		case "email": {
 			const news = await signUpForNews({ email: identifier.email });
 			if (news.kind === "failed") return fail({ kind: "bad-email" });
-			return showOnce(session, "/signup", CARD_KEY, { kind: "email-pending", news });
+			return showOnce(session, "/signup", CARD_KEY, {
+				kind: "email-pending",
+				news,
+			});
 		}
 	}
 };

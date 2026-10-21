@@ -6,10 +6,10 @@ export const hasDatabase = !!LIBSQL_URL;
 let db: Client | undefined;
 
 const getDb = () =>
-(db ??= createClient({
-	url: LIBSQL_URL!,
-	authToken: LIBSQL_AUTH_TOKEN,
-}));
+	(db ??= createClient({
+		url: LIBSQL_URL!,
+		authToken: LIBSQL_AUTH_TOKEN,
+	}));
 
 // Signups from the main page have no account, so a later email-only signup
 // must not wipe the DID and handle an RSVP already recorded.

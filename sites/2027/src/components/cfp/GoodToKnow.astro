@@ -1,14 +1,15 @@
 ---
-import airplane from "../../../images/airplane.svg?url";
-import Cloud from "../site/Cloud.astro";
+import Airplane from "../../../images/airplane.svg";
+import CloudMarquee from "../site/CloudMarquee.astro";
 import { cfp } from "../../data/cfp";
 
 const link = "underline underline-offset-4 hover:no-underline";
 ---
 
 <section
-	class="relative overflow-hidden bg-blue text-white"
+	class="relative overflow-hidden bg-blue text-white [--cloud-band:160px] md:[--cloud-band:240px] lg:[--cloud-band:280px]"
 	aria-labelledby="good-to-know-title"
+	id="good-to-know"
 >
 	<div
 		class="relative z-2 wrap grid gap-8 pt-16 pb-10 md:grid-cols-2 md:gap-12 md:pt-20 lg:gap-19 lg:pt-30"
@@ -54,24 +55,21 @@ const link = "underline underline-offset-4 hover:no-underline";
 			}
 		</ol>
 	</div>
-	<div class="relative z-1 mx-auto w-[min(593px,80vw)] pt-6 pb-40 md:pb-48">
-		<img
-			class="w-full"
-			src={airplane}
-			alt=""
-			width="593"
-			height="248"
-			loading="lazy"
+	<div class="relative z-1 mx-auto w-[min(593px,80vw)] pt-6 pb-(--cloud-band)">
+		<Airplane
+			data-scene="airplane"
+			class="h-auto w-full overflow-visible"
+			aria-hidden="true"
 		/>
 	</div>
-	<Cloud
-		shape="puffy"
-		class="-bottom-1 -left-15 w-65 md:left-0 md:w-125"
-		loading="lazy"
-	/>
-	<Cloud
-		shape="long"
-		class="-right-25 -bottom-1 w-87.5 md:right-0 md:w-168.75"
-		loading="lazy"
-	/>
+	<CloudMarquee variant="a" loading="lazy" drift="left" />
 </section>
+
+<script>
+	import { paperPlane } from "../lib/paper-plane";
+
+	const airplane = document.querySelector<SVGSVGElement>(
+		'svg[data-scene="airplane"]',
+	);
+	if (airplane) paperPlane(airplane);
+</script>

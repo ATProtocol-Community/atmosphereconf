@@ -5,7 +5,9 @@ import { createClient } from "@libsql/client";
 
 const url = process.env.LIBSQL_URL;
 if (!url) {
-	console.error("Set LIBSQL_URL (and LIBSQL_AUTH_TOKEN if the server needs one).");
+	console.error(
+		"Set LIBSQL_URL (and LIBSQL_AUTH_TOKEN if the server needs one).",
+	);
 	process.exit(1);
 }
 

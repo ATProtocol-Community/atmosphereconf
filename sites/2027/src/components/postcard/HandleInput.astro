@@ -40,7 +40,13 @@ const {
 		label={label}
 		required={required}
 	>
-		{atSign && <span slot="leading-icon" class="at-sign">@</span>}
+		{
+			atSign && (
+				<span slot="leading-icon" class="at-sign">
+					@
+				</span>
+			)
+		}
 	</ComboBox>
 	<div class="handle-placeholder" aria-hidden="true">
 		<span>you</span><RotatingSuffix words={suffixes} />

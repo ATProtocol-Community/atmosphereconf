@@ -1,0 +1,52 @@
+---
+interface Props {
+	text: string;
+	class?: string;
+}
+
+const { text, class: className } = Astro.props;
+const words = text.split(/\s+/).filter(Boolean);
+---
+
+<span class:list={["reveal", className]}
+	>{
+		words.map((word, i) => (
+			<>
+				{i > 0 && " "}
+				<span class="reveal-word" style={`--i:${i}`}>
+					<span>{word}</span>
+				</span>
+			</>
+		))
+	}</span
+>
+
+<style>
+	.reveal-word {
+		display: inline-block;
+		overflow: clip;
+		vertical-align: bottom;
+		padding-block: 0.12em;
+		margin-block: -0.12em;
+	}
+
+	.reveal-word > span {
+		display: inline-block;
+	}
+
+	:global(html[data-motion]) .reveal-word > span {
+		animation: reveal-word 550ms var(--ease-soft) backwards;
+		animation-delay: calc(
+			var(--reveal-at, 0ms) + var(--i) * var(--reveal-step, 60ms)
+		);
+	}
+
+	@keyframes reveal-word {
+		from {
+			transform: translateY(110%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+</style>

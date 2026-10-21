@@ -26,6 +26,10 @@ const { title, description, ogDescription = description } = Astro.props;
 		<meta property="og:type" content="website" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<link rel="icon" href="/favicon.png" />
+		<script is:inline>
+			if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+				document.documentElement.dataset.motion = "";
+		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -41,5 +45,12 @@ const { title, description, ogDescription = description } = Astro.props;
 		<SiteHeader />
 		<main id="main"><slot /></main>
 		<SiteFooter />
+		<script>
+			import { playWhileVisible } from "../components/lib/motion";
+
+			document
+				.querySelectorAll<HTMLElement>("[data-scene]:not([data-scene-hover])")
+				.forEach((scene) => playWhileVisible(scene));
+		</script>
 	</body>
 </html>

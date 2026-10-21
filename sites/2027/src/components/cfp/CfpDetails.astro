@@ -1,33 +1,31 @@
 ---
-import buildingBlocks from "../../../images/icons/building-blocks.svg?url";
-import magicWand from "../../../images/icons/magic-wand.svg?url";
-import microphone from "../../../images/icons/microphone.svg?url";
-import scales from "../../../images/icons/scales.svg?url";
+import Icon from "../site/Icon.astro";
+import type { IconName } from "../site/Icon.astro";
 import postmark from "../../../images/postmark.svg?url";
 import { cfp } from "../../data/cfp";
 
-const themes = [
+const themes: { name: string; icon: IconName; description: string }[] = [
 	{
 		name: "Build",
-		icon: buildingBlocks,
+		icon: "building-blocks",
 		description:
 			"Apps, infra, protocol, tooling. How they work, and how they break.",
 	},
 	{
 		name: "Create",
-		icon: magicWand,
+		icon: "magic-wand",
 		description:
 			"Art, games, fandom, and culture, made and connected in the open.",
 	},
 	{
 		name: "Inform",
-		icon: microphone,
+		icon: "microphone",
 		description:
 			"Journalism, publishing, and the fight for reliable, trustworthy information.",
 	},
 	{
 		name: "Govern",
-		icon: scales,
+		icon: "scales",
 		description:
 			"Moderation, safety, policy, and the rules that shape and protect our spaces.",
 	},
@@ -113,15 +111,8 @@ const cardTitle = "font-display text-lg/[1.3] uppercase";
 			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
 				{
 					themes.map(({ name, icon, description }) => (
-						<li class={card}>
-							<img
-								class="w-12 md:w-14"
-								src={icon}
-								alt=""
-								width="90"
-								height="90"
-								loading="lazy"
-							/>
+						<li class:list={[card, "card-lift"]} data-card>
+							<Icon name={icon} class="size-12 md:size-14" />
 							<h3 class:list={[cardTitle, "mt-6"]}>{name}</h3>
 							<p class="mt-2 text-sm/5">{description}</p>
 						</li>

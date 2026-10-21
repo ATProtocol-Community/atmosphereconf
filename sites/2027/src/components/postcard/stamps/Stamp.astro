@@ -10,11 +10,21 @@ interface Props {
 const { stamp } = Astro.props;
 ---
 
-<span class:list={["stamp", stamp.id, stamp.character]} data-stamp aria-hidden="true">
+<span
+	class:list={["stamp", stamp.id, stamp.character]}
+	data-stamp
+	aria-hidden="true"
+>
 	<span class="stamp-year">{stamp.year}</span>
 	<span class="portrait">
 		<img class="mascot-art" src={mascot.src} alt="" width="792" height="990" />
-		<img class="goose-art" src={goose.src} alt="" width={goose.width} height={goose.height} />
+		<img
+			class="goose-art"
+			src={goose.src}
+			alt=""
+			width={goose.width}
+			height={goose.height}
+		/>
 	</span>
 </span>
 
@@ -32,10 +42,14 @@ const { stamp } = Astro.props;
 		background: #f5d583;
 		border: 5px solid transparent;
 		mask:
-			radial-gradient(circle at 50% 0, transparent 3px, #000 3.5px) 0 0 / 12px 100%,
-			radial-gradient(circle at 50% 100%, transparent 3px, #000 3.5px) 0 0 / 12px 100%,
-			radial-gradient(circle at 0 50%, transparent 3px, #000 3.5px) 0 0 / 100% 12px,
-			radial-gradient(circle at 100% 50%, transparent 3px, #000 3.5px) 0 0 / 100% 12px;
+			radial-gradient(circle at 50% 0, transparent 3px, #000 3.5px) 0 0 / 12px
+				100%,
+			radial-gradient(circle at 50% 100%, transparent 3px, #000 3.5px) 0 0 /
+				12px 100%,
+			radial-gradient(circle at 0 50%, transparent 3px, #000 3.5px) 0 0 / 100%
+				12px,
+			radial-gradient(circle at 100% 50%, transparent 3px, #000 3.5px) 0 0 /
+				100% 12px;
 		mask-composite: intersect;
 	}
 
@@ -52,7 +66,9 @@ const { stamp } = Astro.props;
 		top: 9px;
 		right: 8px;
 		z-index: 4;
-		font: 800 10px "Courier New", monospace;
+		font:
+			800 10px "Courier New",
+			monospace;
 	}
 
 	.portrait {

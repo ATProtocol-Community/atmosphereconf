@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.12.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -25,6 +25,7 @@
     "astro": "^7.3.1",
     "escape-goat": "^4.0.0",
     "interestfor": "^1.0.8",
+    "marqy": "1.1.1",
     "node-addon-api": "^8.9.2",
     "node-gyp": "^13.0.2",
     "tailwindcss": "^4.3.3",

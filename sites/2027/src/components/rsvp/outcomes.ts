@@ -25,7 +25,8 @@ const standardLine = (standard: "subscribed" | "failed"): Line => {
 	switch (standard) {
 		case "subscribed":
 			return {
-				words: html`We also subscribed you via <strong>Standard.site</strong>. Way to go!`,
+				words: html`We also subscribed you via <strong>Standard.site</strong>.
+					Way to go!`,
 				tone: "done",
 			};
 		case "failed":

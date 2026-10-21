@@ -1,28 +1,21 @@
 ---
-import map from "../../../images/icons/map.svg?url";
-import wheelchair from "../../../images/icons/wheelchair.svg?url";
-import bed from "../../../images/icons/bed.svg?url";
-import wallet from "../../../images/icons/wallet.svg?url";
-import canalHouses from "../../../images/icons/canal-houses.svg?url";
-import tickets from "../../../images/icons/tickets.svg?url";
-import yesNo from "../../../images/icons/yes-no.svg?url";
-import crown from "../../../images/icons/crown.svg?url";
-import clock from "../../../images/icons/clock.svg?url";
+import Icon from "../site/Icon.astro";
+import type { IconName } from "../site/Icon.astro";
 
 // Guide pages aren't written yet; add an `href` to turn a card into a link.
-const guides: { name: string; icon: string; href?: string }[] = [
-	{ name: "Getting here and getting around", icon: map },
-	{ name: "Accessibility and limited mobility", icon: wheelchair },
-	{ name: "Where to stay", icon: bed },
-	{ name: "Amsterdam on a budget", icon: wallet },
+const guides: { name: string; icon: IconName; href?: string }[] = [
+	{ name: "Getting here and getting around", icon: "map" },
+	{ name: "Accessibility and limited mobility", icon: "wheelchair" },
+	{ name: "Where to stay", icon: "bed" },
+	{ name: "Amsterdam on a budget", icon: "wallet" },
 	{
 		name: "Amsterdam-Oost: the neighbourhood around the venue",
-		icon: canalHouses,
+		icon: "canal-houses",
 	},
-	{ name: "Things to do", icon: tickets },
-	{ name: "Dos and don’ts", icon: yesNo },
-	{ name: "King’s Day", icon: crown },
-	{ name: "After the conference", icon: clock },
+	{ name: "Things to do", icon: "tickets" },
+	{ name: "Dos and don’ts", icon: "yes-no" },
+	{ name: "King’s Day", icon: "crown" },
+	{ name: "After the conference", icon: "clock" },
 ];
 
 const facts = [
@@ -44,7 +37,7 @@ const facts = [
 ];
 
 const card =
-	"flex min-h-21 items-center gap-4 rounded-lg border border-line bg-white p-4 text-left";
+	"card-lift flex min-h-21 items-center gap-4 rounded-lg border border-line bg-white p-4 text-left";
 ---
 
 <section class="bg-white" aria-labelledby="handy-info-title">
@@ -55,14 +48,7 @@ const card =
 				guides.map(({ name, icon, href }, index) => {
 					const content = (
 						<>
-							<img
-								class="w-12 shrink-0 md:w-14"
-								src={icon}
-								alt=""
-								width="90"
-								height="90"
-								loading="lazy"
-							/>
+							<Icon name={icon} class="size-12 shrink-0 md:size-14" />
 							<span class="flex-1">
 								<span class="block eyebrow text-[10px] text-steel">
 									{String(index + 1).padStart(2, "0")}
@@ -79,11 +65,17 @@ const card =
 					return (
 						<li class="contents">
 							{href ? (
-								<a class:list={[card, "hover:border-navy"]} href={href}>
+								<a
+									class:list={[card, "hover:border-navy"]}
+									href={href}
+									data-card
+								>
 									{content}
 								</a>
 							) : (
-								<div class={card}>{content}</div>
+								<div class={card} data-card>
+									{content}
+								</div>
 							)}
 						</li>
 					);
