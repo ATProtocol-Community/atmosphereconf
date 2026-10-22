@@ -30,15 +30,12 @@ import RevealWords from "../site/RevealWords.astro";
 		>
 			<RevealWords text="Building for a new internet" />
 		</p>
-		<EventDetails reveal class="[--reveal-at:850ms] [--reveal-step:50ms]" />
+		<EventDetails />
 		<div class="flex flex-wrap justify-center gap-2">
-			<a class="btn" data-hero-rise style="--i:0" href="#tickets"
+			<a class="btn" href="#tickets"
 				>Early-bird tickets <span aria-hidden="true">▸</span></a
 			><a
 				class="btn btn-outline"
-				data-hero-rise
-				data-hero-last
-				style="--i:1"
 				href="/speak">Apply to speak <span aria-hidden="true">▸</span></a
 			>
 		</div>
@@ -59,10 +56,6 @@ import RevealWords from "../site/RevealWords.astro";
 		animation: hero-logo 900ms var(--ease-soft) backwards;
 	}
 
-	:global(html[data-motion]) [data-hero-rise] {
-		animation: hero-rise 500ms var(--ease-soft) backwards;
-		animation-delay: calc(1450ms + var(--i) * 100ms);
-	}
 
 	@keyframes hero-logo {
 		from {
@@ -77,23 +70,13 @@ import RevealWords from "../site/RevealWords.astro";
 		}
 	}
 
-	@keyframes hero-rise {
-		from {
-			opacity: 0;
-			transform: translateY(12px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
 </style>
 
 <script>
 	import { prefersReducedMotion } from "../lib/motion";
 
 	const hero = document.querySelector<HTMLElement>("[data-hero]");
-	const last = document.querySelector<HTMLElement>("[data-hero-last]");
+	const logo = document.querySelector<HTMLElement>("[data-hero-logo]");
 
 	const ready = () => {
 		if (!hero || hero.dataset.heroReady !== undefined) return;
@@ -103,13 +86,13 @@ import RevealWords from "../site/RevealWords.astro";
 
 	if (
 		!hero ||
-		!last ||
+		!logo ||
 		prefersReducedMotion() ||
 		!document.documentElement.hasAttribute("data-motion")
 	) {
 		ready();
 	} else {
-		last.addEventListener("animationend", ready, { once: true });
+		logo.addEventListener("animationend", ready, { once: true });
 		setTimeout(ready, 2600);
 	}
 </script>
@@ -141,12 +124,12 @@ import RevealWords from "../site/RevealWords.astro";
 			infinite var(--play);
 	}
 
-	html[data-motion] [data-hero]:not([data-hero-ready]) .hero-goose,
+	html[data-motion] .hero-goose:not(.is-flying),
 	html[data-motion] .hero-goose.is-flying {
 		animation: hero-fly-x 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) both paused;
 	}
 
-	html[data-motion] [data-hero]:not([data-hero-ready]) .hero-goose-y,
+	html[data-motion] .hero-goose:not(.is-flying) .hero-goose-y,
 	html[data-motion] .is-flying .hero-goose-y {
 		animation: hero-fly-y 2.2s cubic-bezier(0.6, 0, 0.4, 1) both paused;
 	}
@@ -242,7 +225,7 @@ import RevealWords from "../site/RevealWords.astro";
 </style>
 
 <script>
-	import { prefersReducedMotion, whenHeroReady } from "../lib/motion";
+	import { prefersReducedMotion } from "../lib/motion";
 
 	const goose = document.querySelector<HTMLElement>("[data-hero-goose]");
 
@@ -256,6 +239,6 @@ import RevealWords from "../site/RevealWords.astro";
 				goose.classList.add("has-landed");
 			}
 		});
-		whenHeroReady().then(() => goose.classList.add("is-flying"));
+		goose.classList.add("is-flying");
 	}
 </script>
