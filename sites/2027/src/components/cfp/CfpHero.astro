@@ -6,11 +6,11 @@ import { cfp } from "../../data/cfp";
 ---
 
 <section
-	class="relative overflow-hidden bg-azure text-white [--cloud-band:160px] md:[--cloud-band:240px] lg:[--cloud-band:280px]"
+	class="relative overflow-hidden bg-azure text-white [--cloud-band:160px] md:[--cloud-band:240px] lg:[--cloud-band:280px] [--cloud-gap:12px] md:[--cloud-gap:18px]"
 	aria-labelledby="cfp-title"
 >
 	<div
-		class="relative z-2 wrap flex flex-col items-center pt-16 pb-[calc(var(--cloud-band)+24px)] text-center md:pt-24 lg:pt-28"
+		class="relative z-2 wrap flex flex-col items-center pt-16 pb-[calc(var(--cloud-band)+var(--cloud-gap)+24px)] text-center md:pt-24 lg:pt-28"
 	>
 		<div class="relative">
 			<img
@@ -40,7 +40,7 @@ import { cfp } from "../../data/cfp";
 			>Submit a proposal <span aria-hidden="true">▸</span></a
 		>
 	</div>
-	<CloudMarquee variant="c" />
+	<CloudMarquee variant="c" class="bottom-(--cloud-gap)!" />
 </section>
 
 <style>

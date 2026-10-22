@@ -43,6 +43,14 @@
 			font-size: 20px;
 		}
 	}
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		text-wrap: balance;
+	}
 	button,
 	a {
 		-webkit-tap-highlight-color: transparent;
@@ -94,6 +102,7 @@
 
 @utility title {
 	@apply display text-[28px]/[1.5] md:text-[34px]/[1.33] lg:text-[48px]/[1.33];
+	text-wrap: balance;
 }
 
 @utility eyebrow {
