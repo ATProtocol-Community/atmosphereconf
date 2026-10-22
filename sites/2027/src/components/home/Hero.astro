@@ -12,6 +12,7 @@ import RevealWords from "../site/RevealWords.astro";
 	aria-labelledby="hero-title"
 >
 	<div
+		data-hero-parallax
 		class="relative z-2 px-5 pt-19 pb-[calc(var(--cloud-band)+24px)] text-center md:px-6 md:pt-27.5 lg:pt-32"
 	>
 		<h1 id="hero-title">
@@ -42,16 +43,35 @@ import RevealWords from "../site/RevealWords.astro";
 	</div>
 	<CloudMarquee variant="a" />
 	<div
-		class="hero-goose absolute right-[8%] bottom-6 z-1 w-52.5 md:right-[7%] md:w-67.5 lg:right-[13%] lg:w-81.5 xl:right-[calc(50%-530px)]"
-		data-hero-goose
+		class="hero-goose-scroll absolute right-[8%] bottom-6 z-1 w-52.5 md:right-[7%] md:w-67.5 lg:right-[13%] lg:w-81.5 xl:right-[calc(50%-530px)]"
 	>
-		<div class="hero-goose-y">
-			<Goose data-scene="hero-goose" class="h-auto w-full" aria-hidden="true" />
+		<div class="hero-goose" data-hero-goose>
+			<div class="hero-goose-y">
+				<Goose data-scene="hero-goose" class="h-auto w-full" aria-hidden="true" />
+			</div>
 		</div>
 	</div>
 </section>
 
 <style>
+	@media (prefers-reduced-motion: no-preference) {
+		[data-hero-parallax] {
+			transform: translateY(var(--hero-parallax, 0px));
+		}
+
+		[data-hero] :global(.cloud-strip:first-child) {
+			transform: translateY(var(--cloud-back-parallax, 0px));
+		}
+
+		[data-hero] :global(.cloud-strip:last-child) {
+			transform: translateY(var(--cloud-front-parallax, 0px));
+		}
+
+		.hero-goose-scroll {
+			transform: translate(var(--goose-scroll-x, 0px), var(--goose-scroll-y, 0px));
+		}
+	}
+
 	:global(html[data-motion]) [data-hero-logo] {
 		animation: hero-logo 900ms var(--ease-soft) backwards;
 	}
@@ -240,5 +260,40 @@ import RevealWords from "../site/RevealWords.astro";
 			}
 		});
 		goose.classList.add("is-flying");
+	}
+</script>
+
+<script>
+	import { reducedMotionQuery } from "../lib/motion";
+
+	const scrollHero = document.querySelector<HTMLElement>("[data-hero]");
+	const scrollGoose = document.querySelector<HTMLElement>(".hero-goose-scroll");
+
+	if (scrollHero && scrollGoose) {
+		let frame = 0;
+		const updateScroll = () => {
+			frame = 0;
+			const distance = reducedMotionQuery.matches
+				? 0
+				: Math.min(window.scrollY, scrollHero.offsetHeight);
+			const progress = reducedMotionQuery.matches
+				? 0
+				: Math.min(1, window.scrollY / (scrollHero.offsetHeight * 1.3));
+			scrollHero.style.setProperty("--hero-parallax", `${distance * 0.18}px`);
+			scrollHero.style.setProperty("--cloud-back-parallax", `${distance * 0.4}px`);
+			scrollHero.style.setProperty("--cloud-front-parallax", `${distance * -0.1}px`);
+			scrollHero.style.setProperty(
+				"--goose-scroll-x",
+				`${-progress * (window.innerWidth + scrollGoose.offsetWidth)}px`,
+			);
+			scrollHero.style.setProperty("--goose-scroll-y", `${-progress * 120}px`);
+		};
+		const scheduleUpdate = () => {
+			if (!frame) frame = requestAnimationFrame(updateScroll);
+		};
+		window.addEventListener("scroll", scheduleUpdate, { passive: true });
+		window.addEventListener("resize", scheduleUpdate);
+		reducedMotionQuery.addEventListener("change", scheduleUpdate);
+		updateScroll();
 	}
 </script>

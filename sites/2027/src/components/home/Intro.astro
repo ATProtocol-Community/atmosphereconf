@@ -3,16 +3,17 @@ import seattle from "../../../images/illustrations/seattle-stamp.png";
 import vancouver from "../../../images/illustrations/vancouver-stamp.png";
 import postmark from "../../../images/postmark.svg?url";
 import Callout from "../site/Callout.astro";
+import DrinkingGoose from "../../../images/guus/drinking.svg";
 ---
 
 <section
 	data-intro
-	class="wrap grid grid-cols-[minmax(0,1fr)] gap-9 py-16 max-md:overflow-x-clip md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:py-20 lg:min-h-229.75 lg:py-30"
+	class="wrap relative grid grid-cols-[minmax(0,1fr)] gap-9 pt-16 max-md:overflow-x-clip md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:pt-20 lg:min-h-229.75 lg:pt-30"
 	aria-labelledby="intro-title"
 >
 	<div class="contents md:block">
 		<h2 class="title" id="intro-title">
-			The ATProto<br />conference is<br />back
+			The ATProto<br />conference <br/> goes <span class="text-gradient">europe</span>
 		</h2>
 		<div
 			class="relative order-3 mx-auto h-70 w-85 md:order-0 md:mx-0 md:mt-17.5 md:-mb-17.5 md:h-92.5 md:w-117.5 md:max-w-full md:origin-top-left md:scale-80 lg:mb-0 lg:scale-100"
@@ -48,32 +49,45 @@ import Callout from "../site/Callout.astro";
 	</div>
 	<div class="text-slate md:pt-10">
 		<p>
-			ATProto is the foundation: a shared protocol layer for building
-			decentralized, interoperable, and resilient digital environments.
+			<span class="font-bold text-pretty">ATProto</span>, the foundation: a shared protocol layer for
+			decentralized, interoperable, and resilient digital experiences where people own their data.
 		</p>
 		<p class="mt-8">
-			The Atmosphere is the space where that protocol meets practice: a
-			gathering of builders, researchers, and operators shaping the next
-			network.
+			<span class="font-bold text-pretty">The Atmosphere</span>, our network: a gathering of builders, 
+			researchers, operators, creators, and users dreaming a new internet.
 		</p>
 		<p class="mt-8">
-			This conference is designed to move from theory to implementation:
-			aligning standards, testing real-world use cases, and building the teams
-			that will carry the work forward.
+			<span class="font-bold text-pretty">Atmosphere Conference</span>, where protocol 
+			meets community: aligning ideas, testing real-world use, and 
+			building connections that move our space forward.
 		</p>
 		<Callout
 			icon="microphone"
 			title="Interested in speaking?"
 			description="View our Call for papers"
 		>
-			<a class="btn btn-outline max-lg:ml-auto" href="/speak"
+			<a class="btn max-lg:ml-auto" href="/speak"
 				>Call for papers <span aria-hidden="true">▸</span></a
 			>
 		</Callout>
 	</div>
+	<DrinkingGoose
+		data-scene="ticket-drinking"
+		data-intro-goose
+		class="pointer-events-none absolute right-5 -bottom-2 h-auto w-33.75 origin-bottom -scale-x-150 scale-y-150 md:right-6 md:w-43.25"
+		aria-hidden="true"
+	/>
 </section>
 
 <style>
+	[data-intro] :global([data-intro-goose]) {
+		translate: -10px 43px;
+	}
+
+	[data-intro] :global([data-intro-goose] > path:first-child) {
+		display: none;
+	}
+
 	:global(html[data-motion])
 		[data-intro]:not([data-reveal="in"])
 		img[data-photo],
