@@ -2,4 +2,8 @@
 export const event = {
 	dates: "29 Apr — 2 May",
 	venue: "Netherlands",
+	venueCode: "NL",
+	firstDay: "29 Apr",
+	lastDay: "2 May",
+	year: "2027",
 };

@@ -442,10 +442,13 @@ const audiences: {
 
 	class ScrollCanal extends HTMLElement {
 		private frame = 0;
+		private lastTime = 0;
+		private smoothed: number | null = null;
+		private smoothingRate = 7;
 		private reducedMotion = window.matchMedia(
 			"(prefers-reduced-motion: reduce)",
 		);
-		private update = () => {
+		private update = (time: number) => {
 			this.frame = 0;
 			const scene = this.querySelector<SVGSVGElement>(
 				'svg[data-scene="canal-scroll"]',
@@ -456,10 +459,27 @@ const audiences: {
 			// Keep the existing entry point, but use a fixed scroll distance to cross.
 			const startOffset = 0.2 * (window.innerHeight + bounds.height);
 			const scrolled = window.innerHeight - bounds.top - startOffset;
-			const progress = this.reducedMotion.matches
+			const target = this.reducedMotion.matches
 				? 0.5
 				: Math.max(0, Math.min(1, scrolled / scrollDistance));
-			scene.style.setProperty("--canal-progress", String(progress));
+			const elapsed = this.lastTime
+				? Math.min(time - this.lastTime, 100) / 1000
+				: 0;
+			this.lastTime = time;
+			const progress =
+				this.smoothed === null || this.reducedMotion.matches
+					? target
+					: this.smoothed +
+						(target - this.smoothed) *
+							(1 - Math.exp(-this.smoothingRate * elapsed));
+			if (Math.abs(target - progress) < 0.0005) {
+				this.smoothed = target;
+				this.lastTime = 0;
+			} else {
+				this.smoothed = progress;
+				this.frame = requestAnimationFrame(this.update);
+			}
+			scene.style.setProperty("--canal-progress", String(this.smoothed));
 		};
 		private requestUpdate = () => {
 			if (!this.frame) this.frame = requestAnimationFrame(this.update);
@@ -468,7 +488,7 @@ const audiences: {
 			window.addEventListener("scroll", this.requestUpdate, { passive: true });
 			window.addEventListener("resize", this.requestUpdate);
 			this.reducedMotion.addEventListener("change", this.requestUpdate);
-			this.update();
+			this.update(performance.now());
 		}
 		disconnectedCallback() {
 			window.removeEventListener("scroll", this.requestUpdate);
@@ -476,6 +496,7 @@ const audiences: {
 			this.reducedMotion.removeEventListener("change", this.requestUpdate);
 			cancelAnimationFrame(this.frame);
 			this.frame = 0;
+			this.lastTime = 0;
 		}
 	}
 	if (!customElements.get("scroll-canal"))

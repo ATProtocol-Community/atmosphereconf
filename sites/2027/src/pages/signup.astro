@@ -10,6 +10,6 @@ const card = await signupPage(Astro);
 if (card instanceof Response) return card;
 ---
 
-<PostcardLayout title={title} description={description}>
+<PostcardLayout title={title} description={description} ogImage="signup">
 	<SignupPostcard card={card} />
 </PostcardLayout>

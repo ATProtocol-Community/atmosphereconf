@@ -6,6 +6,10 @@ import Sponsors from "../components/home/Sponsors.astro";
 import Tickets from "../components/home/Tickets.astro";
 import Audience from "../components/home/AudienceScroll.astro";
 import Invite from "../components/home/Invite.astro";
+import { signupPage } from "../components/publication-signup/server";
+
+const signupCard = await signupPage(Astro, { page: "/", anchor: "#news" });
+if (signupCard instanceof Response) return signupCard;
 ---
 
 <SiteLayout
@@ -18,5 +22,5 @@ import Invite from "../components/home/Invite.astro";
 	<Sponsors />
 	<Tickets />
 	<Audience />
-	<Invite />
+	<Invite signupCard={signupCard} />
 </SiteLayout>
