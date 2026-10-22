@@ -80,6 +80,12 @@
 	);
 }
 
+@utility text-gradient {
+	@apply sky-gradient;
+	background-clip: text;
+	color: transparent;
+}
+
 @utility display {
 	font-family: var(--font-display);
 	font-weight: 400;

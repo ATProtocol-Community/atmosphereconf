@@ -2,6 +2,7 @@
 import bluesky from "../../../images/logo/bluesky-wordmark.svg?url";
 import google from "../../../images/logo/google-open-source.png";
 import Callout from "../site/Callout.astro";
+import ThankfulGoose from "../../../images/guus/thankful.svg";
 
 const platinum = [
 	{
@@ -29,34 +30,151 @@ const platinum = [
 			{
 				platinum.map((sponsor) => (
 					<a
-						class="group grid min-h-32.5 card-lift place-items-center rounded-[10px] bg-white px-3 py-2 md:min-h-50 md:rounded-2xl md:px-4"
+						class="platinum-sponsor group relative isolate grid min-h-32.5 card-lift place-items-center rounded-[10px] bg-white px-3 py-2 md:min-h-50 md:rounded-2xl md:px-4"
 						href={sponsor.href}
 						aria-label={sponsor.name}
 					>
-						<img
-							class="transition-transform duration-250 ease-soft group-focus-visible:scale-[1.04] motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.04]"
-							src={sponsor.src}
-							alt=""
-							width={sponsor.width}
-							height={sponsor.height}
-							loading="lazy"
-						/>
+						<span class="relative block max-w-full" style={`width: ${sponsor.width}px`}>
+							<span class="sponsor-spark" aria-hidden="true">✦</span>
+							<span class="sponsor-spark sponsor-spark-small" aria-hidden="true">✦</span>
+							<span class="sponsor-spark sponsor-spark-tiny" aria-hidden="true">✦</span>
+							<img
+								class="relative z-1 transition-transform duration-250 ease-soft group-focus-visible:scale-[1.04] motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.04]"
+								src={sponsor.src}
+								alt=""
+								width={sponsor.width}
+								height={sponsor.height}
+								loading="lazy"
+							/>
+						</span>
 					</a>
 				))
 			}
 		</div>
-		<Callout
-			icon="crown"
-			title="Interested in becoming a sponsor?"
-			description="Community sponsorship starts at €1.2k"
-			tone="white"
-		>
-			<button
-				class="btn btn-outline max-lg:ml-auto"
-				disabled
-				title="Sponsorship contact coming soon"
-				>Get in touch <span aria-hidden="true">▸</span></button
-			>
-		</Callout>
+		<div class="flex flex-wrap items-end gap-4 md:flex-nowrap md:gap-6">
+			<div class="min-w-0 flex-1 basis-full md:basis-auto">
+				<Callout
+					icon="crown"
+					title="Interested in becoming a sponsor?"
+					description="Community sponsorship starts at €1.2k"
+					tone="white"
+				>
+					<button
+						class="btn max-lg:ml-auto"
+						disabled
+						title="Sponsorship contact coming soon"
+						>Get in touch <span aria-hidden="true">▸</span></button
+					>
+				</Callout>
+			</div>
+			<ThankfulGoose
+				data-scene="sponsor-thankful"
+				style="scale: 1.7;"
+				class="mr-auto h-auto w-28 shrink-0 md:order-first md:mr-0 md:w-40"
+				aria-hidden="true"
+			/>
+		</div>
 	</div>
 </section>
+
+<style>
+	@media (prefers-reduced-motion: no-preference) {
+		:global([data-scene="sponsor-thankful"] [data-part="bouquet"]) {
+			animation: sponsor-offer 5s ease-in-out infinite var(--play);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		:global([data-scene="sponsor-thankful"] [data-part="thankful-wing"]) {
+			animation: sponsor-wave 5s ease-in-out infinite var(--play);
+		}
+		:global([data-scene="sponsor-thankful"] [data-part="thankful-heart"]) {
+			animation: sponsor-hearts 5s ease-out var(--heart-delay) infinite var(--play);
+		}
+	}
+
+	@keyframes sponsor-wave {
+		0%, 12%, 65%, 100% { transform: rotate(0deg); }
+		25%, 45% { transform: rotate(8deg); }
+		35%, 55% { transform: rotate(4deg); }
+	}
+
+	@keyframes sponsor-hearts {
+		0%, 18% { opacity: 0; transform: translateY(4px) scale(0.5); }
+		28% { opacity: 0.9; transform: translateY(0) scale(1); }
+		55%, 100% { opacity: 0; transform: translate(4px, -16px) scale(0.75); }
+	}
+
+	@keyframes sponsor-offer {
+		0%, 15%, 65%, 100% { transform: rotate(0deg); }
+		35%, 45% { transform: rotate(7deg); }
+	}
+
+
+	.sponsor-spark {
+		position: absolute;
+		top: 8%;
+		left: 8%;
+		z-index: 2;
+		color: #f6d4f0;
+		font-size: 24px;
+		line-height: 1;
+		text-shadow: 0 0 5px rgb(246 212 240 / 0.5);
+		pointer-events: none;
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0);
+	}
+
+	.sponsor-spark-small {
+		top: 65%;
+		left: 96%;
+		font-size: 12px;
+		--spark-delay: 450ms;
+	}
+
+	.sponsor-spark-tiny {
+		top: 95%;
+		left: 55%;
+		font-size: 9px;
+		--spark-delay: 650ms;
+	}
+
+	.platinum-sponsor:focus-visible {
+		box-shadow: 0 5px 24px -8px rgb(234 151 223 / 0.4);
+	}
+
+
+	@media (hover: hover) {
+		.platinum-sponsor:hover {
+			box-shadow: 0 5px 24px -8px rgb(234 151 223 / 0.4);
+		}
+
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.platinum-sponsor[data-reveal="in"] .sponsor-spark {
+			animation: sponsor-twinkle 1100ms ease-in-out var(--spark-delay, 250ms);
+		}
+	}
+
+	@keyframes sponsor-twinkle {
+		0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+		35% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(5deg); }
+		60% { opacity: 0.85; transform: translate(-50%, -50%) scale(0.85) rotate(10deg); }
+		100% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(15deg); }
+	}
+
+</style>
+
+<script>
+	import { onEnterViewport } from "../lib/motion";
+
+	document.querySelectorAll<HTMLElement>(".platinum-sponsor").forEach((card) => {
+		onEnterViewport(card, () => {
+			card.dataset.reveal = "in";
+		}, {
+			rootMargin: "0px",
+			threshold: 1,
+		});
+	});
+</script>
