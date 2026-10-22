@@ -2,10 +2,7 @@
 
 Main website: <https://atmosphereconf.org>
 
-News & Updates: <https://news.atprotocol.org> (powered by Leaflet!)
-RSVP on [Smoke Signal](https://smokesignal.events/did:plc:lehcqqkwzcwvjvw66uthu5oq/3lte3c7x43l2e)
-
-Suggestions, code, and design contributions welcome! Join the [ATProto Touchers Discord chat](https://discord.com/channels/1097580399187738645/1479753137479745617)
+News & Updates: <https://news.atmosphereconf.org> (powered by Leaflet!)
 
 > [!NOTE]
 > There is a tangled repo at <https://tangled.org/@atprotocol.dev/ATmosphereConf.org> that was another start to this. We are using Railway for hosting, and it has Github integration for deploys, so we're going to use this for now and then figure out how to sync both, and primarily use tangled for issues and development.
