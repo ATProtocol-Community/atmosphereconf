@@ -1,4 +1,4 @@
-// Call for papers facts shared by the CFP page sections.
+// Call for presentations facts shared by the CFP page sections.
 export const cfp = {
 	submissionUrl: "https://cfp.atmosphereconf.org/atmoco2027/cfp",
 	contactEmail: "speakers@atmosphereconf.org",
