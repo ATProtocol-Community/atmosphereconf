@@ -23,7 +23,7 @@ const platinum = [
 			{
 				platinum.map((sponsor) => (
 					<a
-						class="platinum-sponsor group relative isolate grid min-h-32.5 card-lift place-items-center rounded-[10px] bg-white px-3 py-2 md:min-h-50 md:rounded-2xl md:px-4"
+						class="platinum-sponsor group relative isolate grid min-h-32.5 card-lift grid-cols-[minmax(0,1fr)] place-items-center rounded-[10px] bg-white px-3 py-2 md:min-h-50 md:rounded-2xl md:px-4"
 						href={sponsor.href}
 						aria-label={sponsor.name}
 					>
@@ -32,7 +32,7 @@ const platinum = [
 							<span class="sponsor-spark sponsor-spark-small" aria-hidden="true">✦</span>
 							<span class="sponsor-spark sponsor-spark-tiny" aria-hidden="true">✦</span>
 							<img
-								class="relative z-1 transition-transform duration-250 ease-soft group-focus-visible:scale-[1.04] motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.04]"
+								class="relative z-1 h-auto w-full transition-transform duration-250 ease-soft group-focus-visible:scale-[1.04] motion-reduce:transition-none [@media(hover:hover)]:group-hover:scale-[1.04]"
 								src={sponsor.src}
 								alt=""
 								width={sponsor.width}

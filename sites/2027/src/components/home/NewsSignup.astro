@@ -237,7 +237,7 @@ const line: Line | undefined =
 		background: white;
 		text-align: left;
 
-		@media (min-width: 701px) {
+		@media (min-width: 1101px) {
 			grid-template-columns: auto minmax(0, 1fr) auto;
 			grid-template-areas: "chip input submit";
 		}
@@ -248,7 +248,7 @@ const line: Line | undefined =
 			"input input"
 			"submit submit";
 
-		@media (min-width: 701px) {
+		@media (min-width: 1101px) {
 			grid-template-areas: "input input submit";
 		}
 	}
@@ -296,6 +296,12 @@ const line: Line | undefined =
 	.news-input {
 		grid-area: input;
 		min-width: 0;
+	}
+
+	.news-input :global(.handle-placeholder) {
+		right: 0;
+		overflow: hidden;
+		white-space: nowrap;
 	}
 
 	.news-input :global(.cmb-input) {
