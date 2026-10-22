@@ -2,15 +2,22 @@
 import "../styles/global.css";
 import SiteHeader from "../components/site/SiteHeader.astro";
 import SiteFooter from "../components/site/SiteFooter.astro";
+import { ogImageUrl, type OgImage } from "../og/pages";
 
 interface Props {
 	title: string;
 	description: string;
 	/** Shorter description for link previews. Falls back to `description`. */
 	ogDescription?: string;
+	ogImage?: OgImage;
 }
 
-const { title, description, ogDescription = description } = Astro.props;
+const {
+	title,
+	description,
+	ogDescription = description,
+	ogImage = "home",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -22,10 +29,14 @@ const { title, description, ogDescription = description } = Astro.props;
 		<meta name="description" content={description} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={ogDescription} />
-		<meta property="og:image" content="https://atmosphereconf.org/og.png" />
+		<meta property="og:image" content={ogImageUrl(ogImage, Astro)} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
 		<meta property="og:type" content="website" />
 		<meta name="twitter:card" content="summary_large_image" />
-		<link rel="icon" href="/favicon.png" />
+		<link rel="icon" href="/favicon-32.png" sizes="32x32" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<script is:inline>
 			if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
 				document.documentElement.dataset.motion = "";

@@ -1,36 +1,45 @@
 ---
 import Stamp from "../../../images/illustrations/stamp.svg";
 import postmark from "../../../images/postmark.svg?url";
-import EventDetails from "../site/EventDetails.astro";
+import NewsSignup from "./NewsSignup.astro";
+import type { SignupCard } from "../publication-signup/server";
+
+interface Props {
+	signupCard: SignupCard;
+}
+
+const { signupCard } = Astro.props;
 ---
 
-<section class="bg-cream" aria-labelledby="invite-title">
+<section id="news" class="scroll-mt-6 bg-cream" aria-labelledby="news-title">
 	<div
-		class="wrap flex flex-col items-center justify-center gap-8 py-16 md:flex-row md:gap-6 md:py-30 lg:gap-10"
+		class="wrap flex flex-col items-center justify-center gap-8 py-16 md:flex-row md:gap-6 md:py-30 lg:gap-16"
 	>
 		<Stamp
 			data-scene="stamp"
-			class="h-auto w-57.5 md:w-[30%] lg:w-88"
+			class="h-auto w-57.5 shrink-0 md:w-[30%] lg:w-88"
 			role="img"
 			aria-label="A Dutch postage stamp with a cycling goose"
 		/>
-		<div class="text-center">
+		<div class="flex w-full max-w-160 flex-col items-center text-center">
 			<img
-				class="mx-auto mb-6 w-27.5 md:mb-10 md:w-auto"
+				class="mx-auto mb-6 w-27.5 md:mb-8 md:w-auto"
 				src={postmark}
 				alt=""
 				width="150"
 				height="75"
 				loading="lazy"
-			/><h2 class="mb-10 title max-md:text-2xl/normal" id="invite-title">
-				Send a postcard to<br />invite a friend
-			</h2><EventDetails /><div class="flex flex-wrap justify-center gap-2">
-				<a class="btn" href="/postcard"
-					>Send a postcard <span aria-hidden="true">▸</span></a
-				><a class="btn btn-outline" href="#tickets"
-					>Early-bird tickets <span aria-hidden="true">▸</span></a
-				>
-			</div>
+			/><h2 class="title max-md:text-2xl/normal" id="news-title">
+				Hear it straight from the gaggle-vine
+			</h2><p class="mt-4 mb-8 max-w-130 text-slate md:mt-5">
+				Be the first to learn about dates, tickets, news, and exclusive geese
+				reveals!
+			</p><NewsSignup card={signupCard} /><a
+				class="mt-7 font-semibold underline-offset-4 hover:underline"
+				href="/postcard"
+				>Or send a postcard to invite a friend <span aria-hidden="true">▸</span
+				></a
+			>
 		</div>
 	</div>
 </section>
