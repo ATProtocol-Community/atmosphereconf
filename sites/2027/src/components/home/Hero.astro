@@ -46,9 +46,7 @@ import RevealWords from "../site/RevealWords.astro";
 		class="hero-goose-scroll absolute right-[8%] bottom-6 z-1 w-52.5 md:right-[7%] md:w-67.5 lg:right-[13%] lg:w-81.5 xl:right-[calc(50%-530px)]"
 	>
 		<div class="hero-goose" data-hero-goose>
-			<div class="hero-goose-y">
-				<Goose data-scene="hero-goose" class="h-auto w-full" aria-hidden="true" />
-			</div>
+			<Goose data-scene="hero-goose" class="h-auto w-full" aria-hidden="true" />
 		</div>
 	</div>
 </section>
@@ -149,18 +147,11 @@ import RevealWords from "../site/RevealWords.astro";
 		animation: hero-fly-x 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) both paused;
 	}
 
-	html[data-motion] .hero-goose:not(.is-flying) .hero-goose-y,
-	html[data-motion] .is-flying .hero-goose-y {
-		animation: hero-fly-y 2.2s cubic-bezier(0.6, 0, 0.4, 1) both paused;
-	}
-
-	html[data-motion] .hero-goose.is-flying,
-	html[data-motion] .is-flying .hero-goose-y {
+	html[data-motion] .hero-goose.is-flying {
 		animation-play-state: running;
 	}
 
-	html[data-motion] .hero-goose.has-landed,
-	html[data-motion] .has-landed .hero-goose-y {
+	html[data-motion] .hero-goose.has-landed {
 		animation: none;
 	}
 
@@ -168,19 +159,8 @@ import RevealWords from "../site/RevealWords.astro";
 		--play: running;
 	}
 
-	.hero-goose-y {
-		--fly-lift: -15vh;
-	}
-
-	@media (min-width: 701px) {
-		.hero-goose-y {
-			--fly-lift: -30vh;
-		}
-	}
-
 	@media (prefers-reduced-motion: reduce) {
-		.hero-goose,
-		.hero-goose-y {
+		.hero-goose {
 			animation: none !important;
 		}
 	}
@@ -234,14 +214,6 @@ import RevealWords from "../site/RevealWords.astro";
 		}
 	}
 
-	@keyframes hero-fly-y {
-		from {
-			transform: translateY(var(--fly-lift)) rotate(-6deg);
-		}
-		to {
-			transform: none;
-		}
-	}
 </style>
 
 <script>
@@ -270,15 +242,30 @@ import RevealWords from "../site/RevealWords.astro";
 	const scrollGoose = document.querySelector<HTMLElement>(".hero-goose-scroll");
 
 	if (scrollHero && scrollGoose) {
+		const smoothingRate = 7;
 		let frame = 0;
-		const updateScroll = () => {
+		let lastTime = 0;
+		let smoothedY = window.scrollY;
+		const updateScroll = (time: number) => {
 			frame = 0;
+			const targetY = window.scrollY;
+			const elapsed = lastTime ? Math.min(time - lastTime, 100) / 1000 : 0;
+			lastTime = time;
+			smoothedY = reducedMotionQuery.matches
+				? targetY
+				: smoothedY + (targetY - smoothedY) * (1 - Math.exp(-smoothingRate * elapsed));
+			if (Math.abs(targetY - smoothedY) < 0.5) {
+				smoothedY = targetY;
+				lastTime = 0;
+			} else {
+				frame = requestAnimationFrame(updateScroll);
+			}
 			const distance = reducedMotionQuery.matches
 				? 0
-				: Math.min(window.scrollY, scrollHero.offsetHeight);
+				: Math.min(smoothedY, scrollHero.offsetHeight);
 			const progress = reducedMotionQuery.matches
 				? 0
-				: Math.min(1, window.scrollY / (scrollHero.offsetHeight * 1.3));
+				: Math.min(1, smoothedY / (scrollHero.offsetHeight * 1.3));
 			scrollHero.style.setProperty("--hero-parallax", `${distance * 0.18}px`);
 			scrollHero.style.setProperty("--cloud-back-parallax", `${distance * 0.4}px`);
 			scrollHero.style.setProperty("--cloud-front-parallax", `${distance * -0.1}px`);
@@ -294,6 +281,6 @@ import RevealWords from "../site/RevealWords.astro";
 		window.addEventListener("scroll", scheduleUpdate, { passive: true });
 		window.addEventListener("resize", scheduleUpdate);
 		reducedMotionQuery.addEventListener("change", scheduleUpdate);
-		updateScroll();
+		updateScroll(performance.now());
 	}
 </script>
