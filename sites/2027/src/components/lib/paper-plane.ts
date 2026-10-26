@@ -171,7 +171,23 @@ const layered = (
 	return { offset, velocity, acceleration };
 };
 
-export const paperPlane = (root: SVGSVGElement): void => {
+interface PaperPlaneOptions {
+	/** Whether the plane occasionally flies a loop-the-loop. */
+	loops?: boolean;
+	/** Seconds a trail dash lasts before fading out; shorter means a shorter trail. */
+	trailLife?: number;
+	/** Seconds into the climb cycle to start from, so the plane begins mid-flight. */
+	startTime?: number;
+}
+
+export const paperPlane = (
+	root: SVGSVGElement,
+	{
+		loops = true,
+		trailLife = TRAIL_LIFE,
+		startTime = 0,
+	}: PaperPlaneOptions = {},
+): void => {
 	const plane = root.querySelector<SVGGElement>('[data-part="plane"]');
 	const trail = root.querySelector<SVGGElement>('[data-part="trail"]');
 	if (!plane || !trail) return;
@@ -192,7 +208,7 @@ export const paperPlane = (root: SVGSVGElement): void => {
 	let nextDash = 0;
 
 	let clock = 0;
-	let cruiseTime = 0;
+	let cruiseTime = startTime;
 	let loopTimer = random(LOOP_MIN, LOOP_MAX);
 	let loopProgress: number | null = null;
 	let loop: Loop | null = null;
@@ -244,7 +260,7 @@ export const paperPlane = (root: SVGSVGElement): void => {
 
 	const reset = () => {
 		clock = 0;
-		cruiseTime = 0;
+		cruiseTime = startTime;
 		loopTimer = random(LOOP_MIN, LOOP_MAX);
 		loopProgress = null;
 		exitTime = null;
@@ -359,7 +375,7 @@ export const paperPlane = (root: SVGSVGElement): void => {
 
 		while (
 			oldestDash < nextDash &&
-			clock - (dashBorn[oldestDash % DASH_POOL] ?? 0) >= TRAIL_LIFE
+			clock - (dashBorn[oldestDash % DASH_POOL] ?? 0) >= trailLife
 		) {
 			hideDash(oldestDash);
 			oldestDash += 1;
@@ -391,7 +407,7 @@ export const paperPlane = (root: SVGSVGElement): void => {
 
 		for (let k = oldestDash; k < nextDash; k += 1) {
 			const slot = k % DASH_POOL;
-			const life = 1 - (clock - (dashBorn[slot] ?? 0)) / TRAIL_LIFE;
+			const life = 1 - (clock - (dashBorn[slot] ?? 0)) / trailLife;
 			const opacity = Math.round(Math.max(0, life) ** 1.4 * 1000) / 1000;
 			if (opacity !== dashOpacity[slot]) {
 				dashes[slot]?.setAttribute("stroke-opacity", String(opacity));
@@ -449,7 +465,7 @@ export const paperPlane = (root: SVGSVGElement): void => {
 		const angle = Math.atan2(climbVelocity, forward);
 		const turnRate = (angle - cruiseAngle) / dt;
 		cruiseAngle = angle;
-		if (loopTimer <= 0 && exitTime === null) {
+		if (loops && loopTimer <= 0 && exitTime === null) {
 			const speed = Math.hypot(forward, climbVelocity);
 			const exitRate = (forward * climb.acceleration) / (speed * speed);
 			const candidate = createLoop(planeX, y, angle, speed, turnRate, exitRate);
@@ -542,5 +558,14 @@ export const paperPlane = (root: SVGSVGElement): void => {
 	});
 
 	if (reducedMotionQuery.matches) return;
+	if (startTime > 0) {
+		// Jump to the starting pose now so the plane doesn't snap there on the first frame.
+		const climb = layered(CLIMB, startTime);
+		cruiseAngle = Math.atan2(climb.velocity, AIRSPEED);
+		plane.setAttribute(
+			"transform",
+			`translate(${format(HOME.x)} ${format(HOME.y + climb.offset)}) rotate(${format((cruiseAngle * 180) / Math.PI)}) scale(${PLANE_SCALE})`,
+		);
+	}
 	schedule();
 };

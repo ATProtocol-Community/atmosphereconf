@@ -5,6 +5,8 @@ import postmark from "../../../images/postmark.svg?url";
 import puffy from "../../../images/clouds/puffy.svg?url";
 import long from "../../../images/clouds/long.svg?url";
 import LookingGoose from "../../../images/guus/looking.svg";
+import DrinkingGoose from "../../../images/guus/drinking.svg";
+import "../home/goose-animations.css";
 
 const themes: { name: string; icon: IconName; description: string }[] = [
 	{
@@ -47,7 +49,7 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 			<h2 class={heading} id="looking-for-title">
 				What we’re<br />looking for
 			</h2>
-			<div class="text-slate md:pt-10">
+			<div class="text-slate">
 				<p>
 					<span class="font-bold text-pretty">We’re looking for talks</span> from
 					everyone building, using and dreaming about the Atmosphere—the open network
@@ -57,11 +59,10 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 					<span class="font-bold text-pretty"
 						>Developers, yes, but not only:</span
 					> we want to hear from researchers, artists, journalists, community builders,
-					policy people, and everyone else with projects, thoughts, experiences, and insights to share.
-				
+					policy people, and everyone else with projects, thoughts, experiences, and
+					insights to share.
 				</p>
-				<p class="mt-8">	First-time speakers are <u>very</u> welcome.
-					</p>
+				<p class="mt-8">First-time speakers are <u>very</u> welcome.</p>
 			</div>
 		</div>
 		<!-- Sits half below the section edge so Guus peeks up from the next section. -->
@@ -101,14 +102,10 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 		<div class={row}>
 			<div>
 				<h2 class={heading}>Four themes to choose from</h2>
-				<img
-					class="mt-12 hidden w-37.5 brightness-0 invert md:block"
-					src={postmark}
-					alt=""
-					width="150"
-					height="75"
-					loading="lazy"
-				/>
+				<span
+					class="themes-postmark mt-12 hidden h-18.75 w-37.5 md:block"
+					style={`--postmark-mask: url("${postmark}")`}
+					aria-hidden="true"></span>
 			</div>
 			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
 				{
@@ -124,11 +121,22 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 		</div>
 
 		<div class={row}>
-			<h2 class={heading}>Two formats, choose what fits your story best.</h2>
+			<div class="flex flex-col">
+				<h2 class={heading}>Two formats, choose what fits your story best.</h2>
+				<div class="mt-auto flex justify-center pt-8 md:pt-10">
+					<DrinkingGoose
+						data-scene="ticket-drinking"
+						class="h-auto w-40 md:w-48"
+						aria-hidden="true"
+					/>
+				</div>
+			</div>
 			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
 				<li class:list={[card, "md:last:col-span-2"]}>
 					<h3 class="eyebrow">Regular</h3>
-					<p class:list={[cardTitle, "mt-4"]}>25 minutes <span class="text-[#fda9a7]">Talk</span></p>
+					<p class:list={[cardTitle, "mt-4"]}>
+						25 minutes <span class="text-[#fed261]">Talk</span>
+					</p>
 					<p class="mt-3 text-sm/5">
 						25 minutes including Q&A. A standard session for deeper stories,
 						demos and discussion.
@@ -136,7 +144,10 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 				</li>
 				<li class:list={[card, "md:last:col-span-2"]}>
 					<h3 class="eyebrow">Short</h3>
-					<p class:list={[cardTitle, "mt-4"]}>10 minutes <span class="text-[#fda9a7]">Lightning&nbsp;talk</span><br/><span class="text-sm/5">with 5 minutes Q&A</span></p>
+					<p class:list={[cardTitle, "mt-4"]}>
+						10 minutes <span class="text-[#fed261]">Lightning&nbsp;talk</span
+						><br /><span class="text-sm/5">with 5 minutes Q&A</span>
+					</p>
 					<p class="mt-3 text-sm/5">
 						Short, sharp and recorded in a smaller room. Great for new ideas,
 						quick demos and concise updates.
@@ -144,18 +155,44 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 				</li>
 				<li class:list={[card, "md:last:col-span-2"]}>
 					<h3 class="eyebrow">Hands-on</h3>
-					<p class:list={[cardTitle, "mt-4"]}>90 mins <span class="text-[#fda9a7]">Workshop</span></p>
+					<p class:list={[cardTitle, "mt-4"]}>
+						90 mins <span class="text-[#fed261]">Workshop</span>
+					</p>
 					<p class="mt-3 text-sm/5">
 						A longer session for deeper knowledge sharing.
 					</p>
 				</li>
 			</ul>
 		</div>
-
 	</div>
 </section>
 
 <style is:global>
+	.themes-postmark {
+		background-image: linear-gradient(
+			to bottom,
+			white 0% 20%,
+			#69ceff 20% 40%,
+			#d38ff5 40% 60%,
+			#fed261 60% 80%,
+			white 80% 100%
+		);
+		background-size: 100% 500%;
+		background-position: 0 0;
+		-webkit-mask-image: var(--postmark-mask);
+		mask-image: var(--postmark-mask);
+		-webkit-mask-size: contain;
+		mask-size: contain;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+	}
+
+	@media (min-width: 1101px) {
+		.themes-postmark {
+			transform: translate(100px, 50px) rotate(-15deg) scale(1.1);
+		}
+	}
+
 	[data-scene="cfp-goose"] [data-part="eye"] {
 		transform-box: fill-box;
 		transform-origin: center;
@@ -176,3 +213,60 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 		}
 	}
 </style>
+
+<script>
+	const postmark = document.querySelector<HTMLElement>(".themes-postmark");
+	if (postmark) {
+		const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+		const stops = [
+			[0, 0],
+			[0.08, 0.25],
+			[0.15, 0.25],
+			[0.25, 0.5],
+			[0.32, 0.5],
+			[0.42, 0.75],
+			[0.75, 0.75],
+			[0.9, 1],
+			[1, 1],
+		] as const;
+		let scheduled = false;
+
+		const update = () => {
+			scheduled = false;
+			if (reducedMotion.matches) {
+				postmark.style.backgroundPositionY = "0%";
+				return;
+			}
+			if (!postmark.getClientRects().length) return;
+
+			const rect = postmark.getBoundingClientRect();
+			const start = innerHeight;
+			const end = -rect.height * 0.8;
+			const progress = Math.max(
+				0,
+				Math.min(1, (start - rect.top) / (start - end)),
+			);
+			let position = 1;
+			for (let index = 1; index < stops.length; index++) {
+				const previous = stops[index - 1];
+				const next = stops[index];
+				if (!previous || !next || progress > next[0]) continue;
+				const fraction = (progress - previous[0]) / (next[0] - previous[0]);
+				const eased = fraction * fraction * (3 - 2 * fraction);
+				position = previous[1] + (next[1] - previous[1]) * eased;
+				break;
+			}
+			postmark.style.backgroundPositionY = `${position * 100}%`;
+		};
+		const schedule = () => {
+			if (scheduled) return;
+			scheduled = true;
+			requestAnimationFrame(update);
+		};
+
+		addEventListener("scroll", schedule, { passive: true });
+		addEventListener("resize", schedule);
+		reducedMotion.addEventListener("change", schedule);
+		schedule();
+	}
+</script>

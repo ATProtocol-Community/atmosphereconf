@@ -1,11 +1,13 @@
 ---
 import { cfp, timeUntil } from "../../data/cfp";
+import RunningGoose from "../../../images/guus/running.svg";
+import "../home/goose-animations.css";
 
 const countdown = timeUntil(cfp.deadline);
 ---
 
 <section class="bg-white text-center" aria-labelledby="deadline-title">
-	<div class="wrap py-16 md:py-20 lg:py-20">
+	<div class="wrap pt-16 pb-8 md:pt-20 md:pb-10">
 		<h2 class="eyebrow" id="deadline-title">Submissions close</h2>
 		<p class="mt-4">
 			<time
@@ -13,9 +15,27 @@ const countdown = timeUntil(cfp.deadline);
 				datetime={cfp.deadline.toISOString()}>{cfp.deadlineLabel}</time
 			><span class="mt-1 block text-sm text-slate">({cfp.timeZone})</span>
 		</p>
-		<p class="mt-6 text-sm text-slate">{countdown}</p>
-		<a class="mt-6 btn text-lg gap-4" href={cfp.submissionUrl}
-			><span class="flex flex-col"><span>Submit a proposal</span><span class="text-sm italic">(or two, or three)</span></span> <span class="scale-150" aria-hidden="true">▸</span></a
+		<div
+			class="mt-6 flex items-center justify-center gap-5 min-[360px]:gap-6 md:gap-10"
 		>
+			<RunningGoose
+				data-scene="ticket-running"
+				class="h-auto w-20 shrink-0 min-[360px]:w-24 md:w-40"
+				aria-hidden="true"
+			/>
+			<div>
+				<a
+					class="btn gap-4 text-lg max-[359px]:gap-2 max-[359px]:px-2 max-[359px]:text-sm"
+					href={cfp.submissionUrl}
+					><span class="flex flex-col"
+						><span>Submit a proposal</span><span class="text-sm italic"
+							>(or two, or three)</span
+						></span
+					>
+					<span class="scale-150" aria-hidden="true">▸</span></a
+				>
+				<p class="mt-1 text-sm text-slate">{countdown}</p>
+			</div>
+		</div>
 	</div>
 </section>

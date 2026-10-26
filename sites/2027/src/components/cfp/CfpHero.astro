@@ -1,13 +1,15 @@
 ---
 import vancouver from "../../../images/illustrations/vancouver-stamp.png";
 import seattle from "../../../images/illustrations/seattle-stamp.png";
+import Airplane from "../../../images/airplane.svg";
 import CloudMarquee from "../site/CloudMarquee.astro";
 import { cfp } from "../../data/cfp";
 ---
 
 <section
-	class="relative overflow-hidden bg-azure text-white [--cloud-band:160px] md:[--cloud-band:240px] lg:[--cloud-band:280px] [--cloud-gap:12px] md:[--cloud-gap:18px]"
+	class="relative overflow-hidden bg-azure text-white [--cloud-band:160px] [--cloud-gap:12px] md:[--cloud-band:240px] md:[--cloud-gap:18px] lg:[--cloud-band:280px]"
 	aria-labelledby="cfp-title"
+	data-cfp-hero
 >
 	<div
 		class="relative z-2 wrap flex flex-col items-center pt-16 pb-[calc(var(--cloud-band)+var(--cloud-gap)+24px)] text-center md:pt-24 lg:pt-28"
@@ -36,12 +38,36 @@ import { cfp } from "../../data/cfp";
 				data-cfp-photo="right"
 			/>
 		</div>
-		<a class="btn mt-8 md:mt-10" href={cfp.submissionUrl}
-			>Submit a proposal <span aria-hidden="true">▸</span></a
+		<!-- overflow-visible lets the plane fly past the edges, so the hover fill
+		grows with scale instead of sliding in from a clipped edge. -->
+		<a
+			class="group btn mt-8 overflow-visible py-4 pr-24 pl-7 text-lg font-medium before:origin-bottom before:translate-none before:scale-y-0 before:transition-[scale] before:duration-250 hover:before:scale-y-100 md:mt-10 md:py-5 md:pr-36 md:pl-9 md:text-2xl"
+			href={cfp.submissionUrl}
 		>
+			<Airplane
+				data-scene="airplane"
+				class="pointer-events-none absolute top-1/2 -right-5 z-1 h-auto w-60 -translate-y-[48%] overflow-visible transition-transform duration-250 group-hover:translate-x-1 md:-right-6 md:w-80"
+				aria-hidden="true"
+			/>
+			<!-- Sits above the plane's trail; the background hides the trail behind it. -->
+			<span
+				class="relative z-2 bg-navy transition-colors duration-250 group-hover:bg-blue"
+				>Submit your proposal</span
+			>
+		</a>
 	</div>
 	<CloudMarquee variant="c" class="bottom-(--cloud-gap)!" />
 </section>
+
+<script>
+	import { paperPlane } from "../lib/paper-plane";
+
+	const airplane = document.querySelector<SVGSVGElement>(
+		'[data-cfp-hero] svg[data-scene="airplane"]',
+	);
+	if (airplane)
+		paperPlane(airplane, { loops: false, trailLife: 1.6, startTime: 2.2 });
+</script>
 
 <style>
 	:global(html[data-motion]) [data-cfp-photo] {

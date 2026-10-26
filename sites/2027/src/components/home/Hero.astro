@@ -27,13 +27,14 @@ import RevealWords from "../site/RevealWords.astro";
 			/>
 		</h1>
 		<p
-			class="my-7 display text-[clamp(19px,4vw,28px)] leading-[1.6] [--reveal-at:450ms] [--reveal-step:70ms] md:my-10 md:text-[32px] md:leading-[1.33] lg:text-[48px]"
+			data-hero-tagline
+			class="my-7 display text-[clamp(19px,4vw,28px)] leading-[1.6] [--reveal-at:250ms] [--reveal-step:70ms] md:my-10 md:text-[32px] md:leading-[1.33] lg:text-[48px]"
 		>
 			<RevealWords text="Building for a new internet" />
 		</p>
 		<EventDetails />
 		<div class="flex flex-wrap justify-center gap-2">
-			<a class="btn btn-outline" href="/speak"
+			<a class="btn" href="/speak"
 				>Apply to speak <span aria-hidden="true">▸</span></a
 			>
 		</div>
@@ -49,7 +50,58 @@ import RevealWords from "../site/RevealWords.astro";
 </section>
 
 <style>
+	:global([data-hero-tagline] .reveal-word:nth-of-type(4) > span) {
+		color: #fed261;
+	}
+
+	@keyframes hero-new-colors {
+		0% {
+			background-position: 0 0%;
+		}
+		12%,
+		20% {
+			background-position: 0 25%;
+		}
+		35%,
+		45% {
+			background-position: 0 50%;
+		}
+		60%,
+		70% {
+			background-position: 0 75%;
+		}
+		85%,
+		100% {
+			background-position: 0 100%;
+		}
+	}
+
 	@media (prefers-reduced-motion: no-preference) {
+		:global(
+			html[data-motion] [data-hero-tagline] .reveal-word:nth-of-type(4) > span
+		) {
+			background-image: linear-gradient(
+				to bottom,
+				white 0% 20%,
+				#69ceff 20% 40%,
+				#d38ff5 40% 60%,
+				#fa877f 60% 80%,
+				#fed261 80% 100%
+			);
+			background-size: 100% 500%;
+			-webkit-background-clip: text;
+			background-clip: text;
+			-webkit-text-fill-color: transparent;
+			animation:
+				reveal-word 550ms var(--ease-soft) backwards,
+				hero-new-colors 1800ms ease-in-out forwards;
+			animation-delay:
+				calc(var(--reveal-at, 0ms) + var(--i) * var(--reveal-step, 60ms)),
+				calc(
+					var(--reveal-at, 0ms) + 3 * var(--reveal-step, 60ms) + 550ms
+				);
+		}
+
 		[data-hero-parallax] {
 			transform: translateY(var(--hero-parallax, 0px));
 		}
@@ -281,7 +333,7 @@ import RevealWords from "../site/RevealWords.astro";
 				`${-progress * (window.innerWidth + scrollGoose.offsetWidth)}px`,
 			);
 			scrollHero.style.setProperty("--goose-scroll-y", `${-progress * 120}px`);
-			if (smoothedY === 0) delete scrollGoose.dataset.direction;
+			if (targetY === 0 && smoothedY < 12) delete scrollGoose.dataset.direction;
 		};
 		const scheduleUpdate = () => {
 			if (!frame) frame = requestAnimationFrame(updateScroll);
