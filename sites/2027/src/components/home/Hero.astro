@@ -65,6 +65,15 @@ import RevealWords from "../site/RevealWords.astro";
 		.hero-goose-scroll {
 			transform: translate(var(--goose-scroll-x, 0px), var(--goose-scroll-y, 0px));
 		}
+
+		.hero-goose-scroll :global([data-scene="hero-goose"]) {
+			transform-origin: center;
+			transition: transform 250ms ease;
+		}
+
+		.hero-goose-scroll[data-direction="up"] :global([data-scene="hero-goose"]) {
+			transform: scaleX(-1);
+		}
 	}
 
 	:global(html[data-motion]) [data-hero-logo] {
@@ -243,6 +252,7 @@ import RevealWords from "../site/RevealWords.astro";
 		let frame = 0;
 		let lastTime = 0;
 		let smoothedY = window.scrollY;
+		let lastScrollY = window.scrollY;
 		const updateScroll = (time: number) => {
 			frame = 0;
 			const targetY = window.scrollY;
@@ -271,11 +281,20 @@ import RevealWords from "../site/RevealWords.astro";
 				`${-progress * (window.innerWidth + scrollGoose.offsetWidth)}px`,
 			);
 			scrollHero.style.setProperty("--goose-scroll-y", `${-progress * 120}px`);
+			if (smoothedY === 0) delete scrollGoose.dataset.direction;
 		};
 		const scheduleUpdate = () => {
 			if (!frame) frame = requestAnimationFrame(updateScroll);
 		};
-		window.addEventListener("scroll", scheduleUpdate, { passive: true });
+		const onScroll = () => {
+			const scrollY = window.scrollY;
+			if (Math.abs(scrollY - lastScrollY) > 1) {
+				scrollGoose.dataset.direction = scrollY < lastScrollY ? "up" : "down";
+				lastScrollY = scrollY;
+			}
+			scheduleUpdate();
+		};
+		window.addEventListener("scroll", onScroll, { passive: true });
 		window.addEventListener("resize", scheduleUpdate);
 		reducedMotionQuery.addEventListener("change", scheduleUpdate);
 		updateScroll(performance.now());

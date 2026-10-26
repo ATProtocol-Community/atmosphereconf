@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/heading-anchors.css";
 import SiteHeader from "../components/site/SiteHeader.astro";
 import SiteFooter from "../components/site/SiteFooter.astro";
 import { ogImageUrl, type OgImage } from "../og/pages";
@@ -57,6 +58,7 @@ const {
 		<main id="main"><slot /></main>
 		<SiteFooter />
 		<script>
+			import "../components/lib/heading-anchors";
 			import { playWhileVisible } from "../components/lib/motion";
 
 			document

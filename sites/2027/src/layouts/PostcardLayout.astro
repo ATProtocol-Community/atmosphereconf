@@ -3,6 +3,7 @@ import ThemeSwitcher from "../components/theme/ThemeSwitcher.astro";
 import { cloudShapes } from "../components/lib/cloud-shapes";
 import ThemeInit from "../components/theme/ThemeInit.astro";
 import "../styles/airmail.css";
+import "../styles/heading-anchors.css";
 import { ogImageUrl, type OgImage } from "../og/pages";
 
 interface Props {
@@ -141,6 +142,7 @@ const clouds = [
 </html>
 
 <script>
+	import "../components/lib/heading-anchors";
 	if (window.self === window.top) {
 		document.querySelector<HTMLElement>("[data-focus-on-load]")?.focus();
 	}
