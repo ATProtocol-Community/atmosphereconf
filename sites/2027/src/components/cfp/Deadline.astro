@@ -5,7 +5,7 @@ const countdown = timeUntil(cfp.deadline);
 ---
 
 <section class="bg-white text-center" aria-labelledby="deadline-title">
-	<div class="wrap py-16 md:py-20 lg:py-30">
+	<div class="wrap py-16 md:py-20 lg:py-20">
 		<h2 class="eyebrow" id="deadline-title">Submissions close</h2>
 		<p class="mt-4">
 			<time
@@ -14,8 +14,8 @@ const countdown = timeUntil(cfp.deadline);
 			><span class="mt-1 block text-sm text-slate">({cfp.timeZone})</span>
 		</p>
 		<p class="mt-6 text-sm text-slate">{countdown}</p>
-		<a class="mt-6 btn" href={cfp.submissionUrl}
-			>Submit a proposal <span aria-hidden="true">▸</span></a
+		<a class="mt-6 btn text-lg gap-4" href={cfp.submissionUrl}
+			><span class="flex flex-col"><span>Submit a proposal</span><span class="text-sm italic">(or two, or three)</span></span> <span class="scale-150" aria-hidden="true">▸</span></a
 		>
 	</div>
 </section>

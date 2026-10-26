@@ -32,7 +32,7 @@ const cards = posts.map((post, index) => ({
 {
 	cards.length > 0 && (
 		<section
-			class="airmail relative overflow-hidden pt-36 pb-[calc(var(--cloud-band)+24px)] [--cloud-band:170px] md:pt-52 md:[--cloud-band:240px]"
+			class="airmail relative overflow-hidden pt-36 pb-16 [--cloud-band:170px] md:pt-52 md:pb-20 md:[--cloud-band:240px]"
 			aria-labelledby="airmail-title"
 			data-airmail
 		>
@@ -103,7 +103,7 @@ const cards = posts.map((post, index) => ({
 				</h2>
 			</div>
 
-			<div class="relative wrap">
+			<div class="relative z-1 wrap">
 				<div
 					class="airmail-pile relative mx-auto mt-10 h-150 w-full max-w-90 md:mt-12 lg:h-135 lg:max-w-245"
 					role="group"
@@ -185,7 +185,7 @@ const cards = posts.map((post, index) => ({
 							</div>
 						</article>
 					))}
-					<div class="airmail-goose pointer-events-none absolute -top-30 -right-42 z-120 w-50 max-lg:hidden">
+					<div class="airmail-goose pointer-events-none absolute -right-8 -bottom-28 z-120 w-50 max-lg:hidden">
 						<FlyingGoose
 							data-scene="airmail-goose"
 							class="h-auto w-full"

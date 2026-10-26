@@ -95,8 +95,8 @@ const {
 
 const { front, back } = variants[variant];
 const strips = [
-	{ items: back, speed: backSpeed },
-	{ items: front, speed: frontSpeed },
+	{ items: back, speed: backSpeed, layer: "back" },
+	{ items: front, speed: frontSpeed, layer: "front" },
 ];
 ---
 
@@ -110,8 +110,8 @@ const strips = [
 	aria-hidden="true"
 >
 	{
-		strips.map(({ items, speed }) => (
-			<marqy-loop class="cloud-strip" speed={speed}>
+		strips.map(({ items, speed, layer }) => (
+			<marqy-loop class="cloud-strip" data-cloud-layer={layer} speed={speed}>
 				<div class="cloud-row">
 					{items.map(({ shape, h, gap, lift, flip }) => (
 						<img
@@ -136,6 +136,9 @@ const strips = [
 		inset-inline: 0;
 		bottom: 0;
 		display: block;
+	}
+	.cloud-band [data-cloud-layer="back"] {
+		opacity: 0.65;
 	}
 	.cloud-band .cloud-row {
 		display: flex;

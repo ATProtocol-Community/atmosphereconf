@@ -29,13 +29,13 @@ export function timeUntil(target: Date, now = new Date()): string {
 	const days = Math.floor((target.getTime() - now.getTime()) / 86_400_000);
 	if (days < 0) return "Submissions have closed.";
 	if (days === 0) return "Closes today.";
-	if (days < 7) return `${plural(days, "day")} from now.`;
+	if (days < 7) return `${plural(days, "day")} to go.`;
 	const months = Math.floor(days / 30);
 	const weeks = Math.floor((days % 30) / 7);
 	const parts = [];
 	if (months) parts.push(plural(months, "month"));
 	if (weeks) parts.push(plural(weeks, "week"));
-	return `${parts.join(", ")} from now.`;
+	return `${parts.join(", ")} to go.`;
 }
 
 function plural(count: number, unit: string) {

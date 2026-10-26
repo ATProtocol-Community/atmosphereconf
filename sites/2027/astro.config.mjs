@@ -80,5 +80,6 @@ export default defineConfig({
 	},
 	server: {
 		host: process.env.NODE_ENV === "development" ? "127.0.0.1" : "0.0.0.0",
+		allowedHosts: ["vs-macbook-pro.tail78245.ts.net"],
 	},
 });

@@ -46,7 +46,7 @@ const audiences: {
 	aria-labelledby="audience-title"
 >
 	<div
-		class="wrap grid gap-10 pt-16 pb-17.5 md:grid-cols-2 md:gap-12 md:pt-20 md:pb-25 lg:gap-19 lg:pt-30 lg:pb-46"
+		class="wrap grid gap-10 pt-16 pb-17.5 md:grid-cols-2 md:gap-12 md:pt-20 md:pb-25 lg:gap-19 lg:pt-30"
 	>
 		<h2 class="title" id="audience-title">
 			Who attends &amp;<br />what to expect
@@ -66,7 +66,7 @@ const audiences: {
 								/>
 								{audience.name}
 							</dt>
-							<dd class="mt-2 max-w-152.5 display text-xl leading-[1.6] md:leading-loose">
+							<dd class="mt-2 max-w-152.5 font-sans text-2xl/tight text-balance ">
 								{audience.description}
 							</dd>
 						</div>
@@ -109,6 +109,14 @@ const audiences: {
 
 	svg[data-scene="canal-scroll"] {
 		overflow: hidden;
+	}
+	[data-scene="canal-scroll"] [data-part="goose-facing"] {
+		transform-box: view-box;
+		transform-origin: 720.49px 215px;
+		transition: transform 250ms ease;
+	}
+	scroll-canal[data-direction="up"] [data-part="goose-facing"] {
+		transform: scaleX(-1);
 	}
 	[data-scene="canal-scroll"] [data-part="goose-ride"] {
 		animation: canal-scroll-ride 1s linear both paused;
@@ -161,7 +169,7 @@ const audiences: {
 		animation: canal-scroll-drift-a 83s linear -23.4s infinite var(--play);
 	}
 	[data-scene="canal-scroll"] [data-part="boat-b"] {
-		animation: canal-scroll-drift-b 87s linear -56s infinite var(--play);
+		animation: canal-scroll-drift-b 83s linear -56s infinite var(--play);
 	}
 	[data-scene="canal-scroll"] [data-part="boat-a-bob"] {
 		animation: canal-scroll-bob-boat 4.2s ease-in-out infinite var(--play);
@@ -187,7 +195,7 @@ const audiences: {
 			translate: -1125px 0;
 		}
 		to {
-			translate: 620px 0;
+			translate: 540px 0;
 		}
 	}
 
@@ -413,6 +421,9 @@ const audiences: {
 		[data-scene="canal-scroll"] [data-part] {
 			animation: none;
 		}
+		[data-scene="canal-scroll"] [data-part="goose-facing"] {
+			transition: none;
+		}
 	}
 </style>
 
@@ -445,6 +456,7 @@ const audiences: {
 		private lastTime = 0;
 		private smoothed: number | null = null;
 		private smoothingRate = 7;
+		private lastScrollY = window.scrollY;
 		private reducedMotion = window.matchMedia(
 			"(prefers-reduced-motion: reduce)",
 		);
@@ -484,14 +496,23 @@ const audiences: {
 		private requestUpdate = () => {
 			if (!this.frame) this.frame = requestAnimationFrame(this.update);
 		};
+		private onScroll = () => {
+			const scrollY = window.scrollY;
+			if (Math.abs(scrollY - this.lastScrollY) > 1) {
+				this.dataset.direction = scrollY < this.lastScrollY ? "up" : "down";
+				this.lastScrollY = scrollY;
+			}
+			this.requestUpdate();
+		};
 		connectedCallback() {
-			window.addEventListener("scroll", this.requestUpdate, { passive: true });
+			this.lastScrollY = window.scrollY;
+			window.addEventListener("scroll", this.onScroll, { passive: true });
 			window.addEventListener("resize", this.requestUpdate);
 			this.reducedMotion.addEventListener("change", this.requestUpdate);
 			this.update(performance.now());
 		}
 		disconnectedCallback() {
-			window.removeEventListener("scroll", this.requestUpdate);
+			window.removeEventListener("scroll", this.onScroll);
 			window.removeEventListener("resize", this.requestUpdate);
 			this.reducedMotion.removeEventListener("change", this.requestUpdate);
 			cancelAnimationFrame(this.frame);

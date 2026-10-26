@@ -2,8 +2,9 @@
 import Icon from "../site/Icon.astro";
 import type { IconName } from "../site/Icon.astro";
 import postmark from "../../../images/postmark.svg?url";
+import puffy from "../../../images/clouds/puffy.svg?url";
+import long from "../../../images/clouds/long.svg?url";
 import LookingGoose from "../../../images/guus/looking.svg";
-import { cfp } from "../../data/cfp";
 
 const themes: { name: string; icon: IconName; description: string }[] = [
 	{
@@ -32,39 +33,6 @@ const themes: { name: string; icon: IconName; description: string }[] = [
 	},
 ];
 
-const formats = [
-	{
-		kind: "Talk",
-		length: "25 minutes",
-		description:
-			"25 minutes including Q&A. A standard session for deeper stories, demos and discussion.",
-	},
-	{
-		kind: "Lightning talk",
-		length: "10 minutes + 5 minutes Q&A",
-		description:
-			"Short, sharp and recorded in a smaller room. Great for new ideas, quick demos and concise updates.",
-	},
-	{
-		kind: "Workshop",
-		length: "90 mins",
-		description: "Hands-on session for deeper knowledge sharing.",
-	},
-];
-
-const tips = [
-	{
-		title: "Ask yourself who should be in the room for your talk",
-		description:
-			"Developers (Build), makers and their fans (Create), people who publish (Inform), or people who set and enforce the rules (Govern). Pick that one. We move proposals between themes when it helps, so you can’t pick wrong.",
-	},
-	{
-		title: "The best proposals are specific",
-		description:
-			"What you built, studied or ran, what you learned (including what didn’t work), and what people can take home from your session. Sales pitches won’t make it through review.",
-	},
-];
-
 // Each row: heading on the left, content on the right (stacked on phones).
 const row =
 	"grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-12 lg:gap-19";
@@ -76,17 +44,20 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 <section class="overflow-hidden bg-white" aria-labelledby="looking-for-title">
 	<div class="relative wrap pt-16 pb-32 md:pt-20 md:pb-40 lg:pt-30">
 		<div class={row}>
-			<h2 class={heading} id="looking-for-title">What we’re<br />looking for</h2>
-			<div class="space-y-6 text-sm md:text-base">
+			<h2 class={heading} id="looking-for-title">
+				What we’re<br />looking for
+			</h2>
+			<div class="text-slate md:pt-10">
 				<p>
-					We’re looking for talks from everyone building, using and thinking
-					about the Atmosphere, the open network of apps and services built on
-					AT Protocol.
+					<span class="font-bold text-pretty">We’re looking for talks</span> from
+					everyone building, using and thinking about the Atmosphere, the open network
+					of apps and services built on AT Protocol.
 				</p>
-				<p>
-					Developers, yes, but far from only developers. We want to hear from
-					researchers, artists, journalists, community builders, policy people
-					and anyone (interested in) running something real on atproto.
+				<p class="mt-8">
+					<span class="font-bold text-pretty"
+						>Developers, yes, but far from just them.</span
+					> We want to hear from researchers, artists, journalists, community builders,
+					policy people and anyone (interested in) running something real on atproto.
 					First-time speakers are very welcome.
 				</p>
 			</div>
@@ -101,11 +72,29 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 </section>
 
 <section
-	class="bg-linear-to-b from-azure to-[#7d7cd8] text-white"
+	class="relative overflow-hidden bg-linear-to-b from-azure to-[#7d7cd8] text-white"
 	aria-label="What to propose"
 >
+	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+		<img
+			class="absolute top-16 -left-30 w-60 opacity-45 md:top-20 md:-left-28 md:w-80 lg:top-30 lg:w-95"
+			src={puffy}
+			alt=""
+			width="451"
+			height="196"
+			loading="lazy"
+		/>
+		<img
+			class="absolute top-80 -right-32 w-75 opacity-60 md:top-26 md:-right-30 md:w-90 lg:top-36 lg:-right-28 lg:w-105"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+	</div>
 	<div
-		class="wrap flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-24 lg:py-30"
+		class="relative z-1 wrap flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-40 lg:py-30"
 	>
 		<div class={row}>
 			<div>
@@ -135,35 +124,32 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 		<div class={row}>
 			<h2 class={heading}>Two formats, choose what fits your story best.</h2>
 			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
-				{
-					formats.map(({ kind, length, description }) => (
-						<li class:list={[card, "md:last:col-span-2"]}>
-							<h3 class="eyebrow">{kind}</h3>
-							<p class:list={[cardTitle, "mt-4"]}>{length}</p>
-							<p class="mt-3 text-sm/5">{description}</p>
-						</li>
-					))
-				}
+				<li class:list={[card, "md:last:col-span-2"]}>
+					<h3 class="eyebrow">Regular</h3>
+					<p class:list={[cardTitle, "mt-4"]}>25 minutes <span class="text-[#ff94ed]">Talk</span></p>
+					<p class="mt-3 text-sm/5">
+						25 minutes including Q&A. A standard session for deeper stories,
+						demos and discussion.
+					</p>
+				</li>
+				<li class:list={[card, "md:last:col-span-2"]}>
+					<h3 class="eyebrow">Short</h3>
+					<p class:list={[cardTitle, "mt-4"]}>10 minutes <span class="text-[#ff94ed]">Lightning&nbsp;talk</span><br/><span class="text-sm/5">with 5 minutes Q&A</span></p>
+					<p class="mt-3 text-sm/5">
+						Short, sharp and recorded in a smaller room. Great for new ideas,
+						quick demos and concise updates.
+					</p>
+				</li>
+				<li class:list={[card, "md:last:col-span-2"]}>
+					<h3 class="eyebrow">Hands-on</h3>
+					<p class:list={[cardTitle, "mt-4"]}>90 mins <span class="text-[#ff94ed]">Workshop</span></p>
+					<p class="mt-3 text-sm/5">
+						A longer session for deeper knowledge sharing.
+					</p>
+				</li>
 			</ul>
 		</div>
 
-		<div class={row}>
-			<h2 class={heading}>Still not sure?</h2>
-			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
-				{
-					tips.map(({ title, description }) => (
-						<li class={card}>
-							<h3 class={cardTitle}>{title}</h3>
-							<p class="mt-4 text-sm/5">{description}</p>
-						</li>
-					))
-				}
-			</ul>
-		</div>
-
-		<a class="btn self-center" href={cfp.submissionUrl}
-			>Submit a proposal <span aria-hidden="true">▸</span></a
-		>
 	</div>
 </section>
 
