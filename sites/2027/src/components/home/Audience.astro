@@ -1,6 +1,8 @@
 ---
-import heart from "../../../images/logo/heart.svg?url";
+import Heart from "../../../images/logo/heart.svg";
 import Canal from "../../../images/illustrations/canal-bike.svg";
+import FoliageLeft from "../../../images/illustrations/canal-foliage-left.svg";
+import FoliageRight from "../../../images/illustrations/canal-foliage-right.svg";
 
 const audiences: { name: string; description: string }[] = [
 	{
@@ -38,7 +40,7 @@ const formats: { name: string; description: string }[] = [
 		description: "Make your own goose puns",
 	},
 ];
-// Tablet widths break each item onto two lines by hand, so its box hugs the text and the hearts space evenly.
+// Line breaks are set by hand so each item's box hugs its text and the hearts space evenly.
 const extras: [string, string][] = [
 	["Hybrid & remote", "experiences"],
 	["Food, drinks", "& stroopwafels"],
@@ -88,41 +90,84 @@ const extras: [string, string][] = [
 					}
 				</dl>
 			</div>
-			<!-- Zero-width cell in the & column: the row overflows evenly on both sides, so it centers on the &. -->
-			<div
-				class="mt-16 md:col-start-2 md:row-start-6 md:mt-20 md:flex md:w-0 md:justify-center md:justify-self-center lg:mt-24"
-				data-audience-category
-			>
-				<div class="md:w-max md:shrink-0">
-					<h3 class="display text-[22px]/tight md:text-center md:text-[24px]/tight lg:text-[28px]/tight">Also featuring</h3>
-					<ul
-						class="mt-6 flex flex-col gap-y-3 font-sans text-xl/tight md:mt-10 md:flex-row md:items-center md:gap-x-10"
-					>
-						{
-							extras.map((extra, index) => (
-								<li class="flex items-center gap-x-10">
-									{index > 0 && (
-										<img src={heart} alt="" width="206" height="129" class="h-5 w-auto opacity-50 max-md:hidden" />
-									)}
-									<span>
-										{extra[0]} <br class="max-md:hidden lg:hidden" />
-										{extra[1]}
-									</span>
-								</li>
-							))
-						}
-					</ul>
-				</div>
-			</div>
 		</div>
 	</div>
-	<scroll-canal class="block">
+	<scroll-canal class="relative flex flex-col lg:block">
+		<!--
+			Below lg the water band is too thin for text, so the water carries on under the art and the boats
+			sail between the label and the items, with the foliage pinned to the bottom corners below them.
+			From lg the label floats under the boats and the items float over them. The label's bottom sits at
+			72.7% down the canal art; the boats' waterline is a little lower, between the label and the items.
+		-->
+		<div class="lg:contents" data-canal-copy>
+			<div
+				class="wrap absolute inset-x-0 z-10 flex -translate-y-full justify-center lg:top-[72.7%]"
+				style="--canal-vanish: 6.4vw"
+				data-audience-category
+				data-canal-stage
+				data-canal-label
+			>
+				<h3
+					class="display text-center text-lg/tight md:text-xl/tight lg:leading-none xl:text-[22px]/none"
+					data-canal-projection
+				>
+					Also featuring
+				</h3>
+			</div>
+			<div
+				class="wrap relative z-30 flex justify-center lg:absolute lg:inset-x-0 lg:top-[calc(72.7%+14px)] lg:pb-0"
+				style="--canal-vanish: 9.8vw"
+				data-audience-category
+				data-canal-stage
+				data-canal-items
+			>
+				<ul
+					class="flex flex-col items-center gap-y-3 font-sans max-md:text-center text-xl/tight md:w-max md:flex-row md:items-center md:gap-x-10 lg:gap-x-6 lg:text-[clamp(20px,1.6vw,26px)]/tight"
+					data-canal-projection
+				>
+					{
+						extras.map((extra, index) => (
+							<li class="flex items-center gap-x-10 lg:gap-x-6">
+								{index > 0 && (
+									<Heart aria-hidden="true" class="h-5 w-auto max-md:hidden" data-canal-heart />
+								)}
+								<span>
+									{extra[0]} <br class="max-md:hidden" />
+									{extra[1]}
+								</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+		<!-- The water is its own layer so the featuring copy can sit on it. -->
+		<div class="absolute inset-x-0 bottom-0 bg-[#005FE2] lg:hidden" aria-hidden="true" data-canal-water></div>
+		<svg
+			class="absolute inset-x-0 bottom-0 h-full w-full max-lg:hidden"
+			viewBox="0 0 1440 498"
+			preserveAspectRatio="xMidYMid slice"
+			aria-hidden="true"
+		>
+			<path d="M1442.59 506.738V268.449C956.395 262.944 470.208 255.236 -16 255.791V506.738H1442.59Z" fill="#005FE2" />
+		</svg>
 		<Canal
 			data-scene="canal-scroll"
-			class="h-auto w-full max-md:min-h-47.5"
+			class="relative z-20 h-auto min-h-(--canal-min-h) w-full max-lg:order-first"
 			preserveAspectRatio="xMidYMid slice"
 			role="img"
 			aria-label="Dutch canal houses, tulips, and boats, with a goose riding a bicycle across a bridge"
+		/>
+		<!-- Split out of the canal art so they stay in the corners when narrow screens crop the houses. -->
+		<FoliageLeft
+			class="absolute bottom-0 left-0 z-20 h-auto"
+			aria-hidden="true"
+			data-canal-foliage="left"
+		/>
+		<FoliageRight
+			class="absolute right-0 bottom-0 z-20 h-auto"
+			aria-hidden="true"
+			data-canal-foliage="right"
 		/>
 	</scroll-canal>
 </section>
@@ -150,6 +195,94 @@ const extras: [string, string][] = [
 
 	svg[data-scene="canal-scroll"] {
 		overflow: hidden;
+	}
+	[data-scene="canal-scroll"] [data-part="water"] {
+		visibility: hidden;
+	}
+	/* Below the width where the canal is this tall, the art keeps its height and crops houses off the
+	   sides, so the goose stays big. The foliage scales the same way: its share of the full-width art
+	   (440 and 260 of 1440 wide, 168 tall, out of 498), or its size at the minimum height. */
+	scroll-canal {
+		container-type: inline-size;
+		--canal-min-h: 260px;
+		/* Resolved where it's used, so cqw is the canal's own width. */
+		--canal-h: max(34.583cqw, var(--canal-min-h));
+	}
+	[data-canal-foliage="left"] {
+		width: max(30.556%, calc(var(--canal-min-h) * 440 / 498));
+	}
+	[data-canal-foliage="right"] {
+		width: max(18.056%, calc(var(--canal-min-h) * 260 / 498));
+	}
+	/* Below lg the water starts at the art's waterline (256 of 498). The label's bottom sits at 362,
+	   clear of the pink ripples above it, the boats drop 54 lower than in the art, and the items start
+	   at 425, so the boats sail through the middle of the gap, brushing the copy on either side. The items end just above the foliage's
+	   tallest leaves. */
+	@media (width < 1101px) {
+		[data-canal-water] {
+			top: calc(var(--canal-h) * 256 / 498);
+		}
+		[data-canal-label] {
+			top: calc(var(--canal-h) * 362 / 498);
+		}
+		[data-scene="canal-scroll"] [data-part="boats"] {
+			transform: translate(0, 72px);
+		}
+		[data-canal-copy] {
+			margin-top: calc(var(--canal-h) * -73 / 498);
+		}
+		[data-canal-items] {
+			padding-bottom: calc(var(--canal-h) * 168 / 498 * 0.7);
+		}
+	}
+	/* The featuring copy sits on the water in the illustration's own cream and ripple pink. */
+	[data-canal-projection] {
+		color: #fbebd7;
+	}
+	[data-canal-heart] path {
+		fill: #ea97df;
+	}
+	/* Lays the featuring copy flat on the water, like a projection on the canal. */
+	@media (width >= 1101px) {
+		/* Vanishing point sits on the bridge's middle arch (52.6% down the canal art), so the
+		   copy recedes with the canal. --canal-vanish is each stage's distance up to the arch:
+		   (its top% - 52.6%) of the canal height, which is 34.58vw since the canal scales with width. */
+		[data-canal-stage] {
+			perspective: 600px;
+			perspective-origin: 50% calc(50% - var(--canal-vanish));
+		}
+		[data-canal-projection] {
+			transform: rotateX(32deg);
+			transform-origin: 50% 100%;
+		}
+	}
+	/* Each piece bobs on its own rhythm, like the boats, so the copy floats on the same water. */
+	@media (prefers-reduced-motion: no-preference) {
+		[data-canal-projection]:is(h3),
+		[data-canal-projection] li {
+			animation: canal-scroll-bob-text 4.6s ease-in-out infinite;
+		}
+		[data-canal-projection] li:nth-child(1) {
+			animation-duration: 4.1s;
+			animation-delay: -1.3s;
+		}
+		[data-canal-projection] li:nth-child(2) {
+			animation-duration: 5.2s;
+			animation-delay: -2.6s;
+		}
+		[data-canal-projection] li:nth-child(3) {
+			animation-duration: 4.4s;
+			animation-delay: -0.4s;
+		}
+	}
+	@keyframes canal-scroll-bob-text {
+		0%,
+		100% {
+			translate: 0 0;
+		}
+		50% {
+			translate: 0 -3px;
+		}
 	}
 	[data-scene="canal-scroll"] [data-part="goose-facing"] {
 		transform-box: view-box;
@@ -437,25 +570,25 @@ const extras: [string, string][] = [
 	[data-scene="canal-scroll"] [data-part="crank-near"],
 	[data-scene="canal-scroll"] [data-part="crank-far"] {
 		animation: canal-bike-crank 1s linear infinite paused;
-		animation-delay: calc(var(--canal-progress, 0.5) * -6s);
+		animation-delay: calc(var(--canal-distance, 0.5) * -6s);
 	}
 	[data-scene="canal-scroll"] [data-part="pedal-near"],
 	[data-scene="canal-scroll"] [data-part="pedal-far"] {
 		animation: canal-bike-crank-counter 1s linear infinite paused;
-		animation-delay: calc(var(--canal-progress, 0.5) * -6s);
+		animation-delay: calc(var(--canal-distance, 0.5) * -6s);
 	}
 	[data-scene="canal-scroll"] [data-part="leg-near"] {
 		animation: canal-bike-leg-near 1s linear infinite paused;
-		animation-delay: calc(var(--canal-progress, 0.5) * -6s);
+		animation-delay: calc(var(--canal-distance, 0.5) * -6s);
 	}
 	[data-scene="canal-scroll"] [data-part="leg-far"] {
 		animation: canal-bike-leg-far 1s linear infinite paused;
-		animation-delay: calc(var(--canal-progress, 0.5) * -6s);
+		animation-delay: calc(var(--canal-distance, 0.5) * -6s);
 	}
 	[data-scene="canal-scroll"] [data-part="spokes-front"],
 	[data-scene="canal-scroll"] [data-part="spokes-rear"] {
 		animation: canal-bike-spin 1s linear infinite paused;
-		animation-delay: calc(var(--canal-progress, 0.5) * -9s);
+		animation-delay: calc(var(--canal-distance, 0.5) * -9s);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -496,6 +629,7 @@ const extras: [string, string][] = [
 		private frame = 0;
 		private lastTime = 0;
 		private smoothed: number | null = null;
+		private traveled = 0;
 		private smoothingRate = 7;
 		private lastScrollY = window.scrollY;
 		private reducedMotion = window.matchMedia(
@@ -525,6 +659,9 @@ const extras: [string, string][] = [
 					: this.smoothed +
 						(target - this.smoothed) *
 							(1 - Math.exp(-this.smoothingRate * elapsed));
+			// Accumulate distance so the wheels and pedals keep turning forward on the return trip.
+			this.traveled =
+				(this.traveled + Math.abs(progress - (this.smoothed ?? 0))) % 1;
 			if (Math.abs(target - progress) < 0.0005) {
 				this.smoothed = target;
 				this.lastTime = 0;
@@ -533,6 +670,7 @@ const extras: [string, string][] = [
 				this.frame = requestAnimationFrame(this.update);
 			}
 			scene.style.setProperty("--canal-progress", String(this.smoothed));
+			scene.style.setProperty("--canal-distance", String(this.traveled));
 		};
 		private requestUpdate = () => {
 			if (!this.frame) this.frame = requestAnimationFrame(this.update);
