@@ -22,7 +22,9 @@ export const signInError = (locals: App.Locals): SignInFailure | undefined => {
 type Session = NonNullable<APIContext["session"]>;
 type SessionKey = keyof App.SessionData;
 // A key with its own value type, as a pair the session's `set` accepts.
-type Parked = { [K in SessionKey]: [key: K, value: App.SessionData[K]] }[SessionKey];
+type Parked = {
+	[K in SessionKey]: [key: K, value: App.SessionData[K]];
+}[SessionKey];
 
 /** Parks something for the page to pick up once; the ten minutes outlast sign-in. */
 export const park = (session: Session, ...[key, value]: Parked) =>
@@ -39,7 +41,11 @@ export const unpark = async <K extends SessionKey>(
 };
 
 /** Parks a card for the page at `location` to show once, and sends the visitor there. */
-export const showOnce = (session: Session, location: string, ...card: Parked) => {
+export const showOnce = (
+	session: Session,
+	location: string,
+	...card: Parked
+) => {
 	park(session, ...card);
 	return returnTo(location);
 };
@@ -57,7 +63,11 @@ export type SignInContext = Pick<
  */
 export const startSignIn = (
 	context: SignInContext,
-	{ handle, scopes, backTo }: { handle: string; scopes: string[]; backTo: string },
+	{
+		handle,
+		scopes,
+		backTo,
+	}: { handle: string; scopes: string[]; backTo: string },
 ) => {
 	const user = context.locals.loggedInUser;
 	if (

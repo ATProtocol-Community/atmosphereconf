@@ -63,7 +63,8 @@ const postcardClouds = [
 				class="goose rpg-actor-sprite"
 				id="rpg-actor-goose"
 				style={`background-image:url(${RPG_ACTOR_SPRITE_URL})`}
-			></div>
+			>
+			</div>
 
 			<ColibriMegaphone class="goose colibri-megaphone" />
 
@@ -88,7 +89,7 @@ const postcardClouds = [
 			</g>
 			<circle class="windmill-detail" cx="40" cy="56" r="3"></circle>
 		</svg>
-		<h1 id="headline">
+		<h1 id="headline" aria-label="Back At It.">
 			<span class="headline-word"><slot name="first-word">Back</slot></span>
 			<span class="last-line"
 				><span class="headline-word headline-at">At</span>
@@ -96,13 +97,16 @@ const postcardClouds = [
 					>It<span class="period">.</span><D20Logo
 						class="period-logo"
 						aria-hidden="true"
-					/></span></span
+					/></span
+				></span
 			>
 		</h1>
 		<div class="destination">
 			<span>April 29th–May 2nd, 2027</span>
 			<div>
-				Somewhere<br />in the Netherlands <span class="online">(and online)</span>
+				Somewhere<br />in the Netherlands <span class="online"
+					>(and online)</span
+				>
 				<span class="destination-arrow" aria-hidden="true">
 					<PaperPlane />
 				</span>

@@ -1,0 +1,75 @@
+---
+import Airplane from "../../../images/airplane.svg";
+import CloudMarquee from "../site/CloudMarquee.astro";
+import { cfp } from "../../data/cfp";
+
+const link = "underline underline-offset-4 hover:no-underline";
+---
+
+<section
+	class="relative overflow-hidden bg-blue text-white [--cloud-band:160px] md:[--cloud-band:240px] lg:[--cloud-band:280px]"
+	aria-labelledby="good-to-know-title"
+	id="good-to-know"
+>
+	<div
+		class="relative z-2 wrap grid gap-8 pt-16 pb-10 md:grid-cols-2 md:gap-12 md:pt-20 lg:gap-19 lg:pt-30"
+	>
+		<h2 class="title" id="good-to-know-title">Good to know</h2>
+		<ol
+			class="divide-y divide-white/40 border-y border-white/40 text-sm md:text-base"
+		>
+			{
+				[
+					<>
+						<strong class="font-semibold">A free ticket is</strong> included
+						with every accepted full talk. Lightning talks don’t include a free
+						ticket.
+					</>,
+					<>
+						Submit in round 1 if you need a{" "}
+						<strong class="font-semibold">visa or travel support</strong>
+					</>,
+					<>All talks are recorded and livestreamed.</>,
+					<>
+						Everyone at AtmosphereConf follows our{" "}
+						<a class={link} href={cfp.codeOfConductUrl}>
+							Code of Conduct
+						</a>
+						.
+					</>,
+					<>
+						Questions? Email{" "}
+						<a class={link} href={`mailto:${cfp.contactEmail}`}>
+							{cfp.contactEmail}
+						</a>
+						.
+					</>,
+				].map((item, index) => (
+					<li class="flex gap-6 py-4 md:gap-8">
+						<span class="w-5 shrink-0 pt-1 eyebrow">
+							{String(index + 1).padStart(2, "0")}
+						</span>
+						<p>{item}</p>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+	<div class="relative z-1 mx-auto w-[min(593px,80vw)] py-6">
+		<Airplane
+			data-scene="airplane"
+			class="h-auto w-full overflow-visible"
+			aria-hidden="true"
+		/>
+	</div>
+	<CloudMarquee variant="a" loading="lazy" drift="left" />
+</section>
+
+<script>
+	import { paperPlane } from "../lib/paper-plane";
+
+	const airplane = document.querySelector<SVGSVGElement>(
+		'#good-to-know svg[data-scene="airplane"]',
+	);
+	if (airplane) paperPlane(airplane);
+</script>

@@ -12,7 +12,11 @@ const stars = Array.from({ length: 140 }, (_, index) => ({
 <div class="twinkl-stars" aria-hidden="true">
 	{
 		stars.map((star) => (
-			<span style={`left: ${star.left}%; top: ${star.top}%; --star-size: ${star.size}px; --star-duration: ${star.duration}s; --star-delay: ${star.delay}s; --star-color: ${star.color};`}>✦</span>
+			<span
+				style={`left: ${star.left}%; top: ${star.top}%; --star-size: ${star.size}px; --star-duration: ${star.duration}s; --star-delay: ${star.delay}s; --star-color: ${star.color};`}
+			>
+				✦
+			</span>
 		))
 	}
 </div>
@@ -29,7 +33,12 @@ const stars = Array.from({ length: 140 }, (_, index) => ({
 		if (starfield) document.body.prepend(starfield);
 		const mountPictureStars = () => {
 			const picture = document.querySelector(".picture");
-			if (!picture || !starfield || picture.querySelector(".twinkl-picture-stars")) return;
+			if (
+				!picture ||
+				!starfield ||
+				picture.querySelector(".twinkl-picture-stars")
+			)
+				return;
 			const field = starfield.cloneNode(true);
 			field.className = "twinkl-stars twinkl-picture-stars";
 			for (const star of field.children) {
@@ -39,7 +48,9 @@ const stars = Array.from({ length: 140 }, (_, index) => ({
 			picture.prepend(field);
 		};
 		if (document.readyState === "loading") {
-			document.addEventListener("DOMContentLoaded", mountPictureStars, { once: true });
+			document.addEventListener("DOMContentLoaded", mountPictureStars, {
+				once: true,
+			});
 		} else {
 			mountPictureStars();
 		}
@@ -92,19 +103,28 @@ const stars = Array.from({ length: 140 }, (_, index) => ({
 			frame = 0;
 			if (!context) return;
 			context.clearRect(0, 0, innerWidth, innerHeight);
-			particles = particles.filter((particle) => now - particle.born < particle.life);
+			particles = particles.filter(
+				(particle) => now - particle.born < particle.life,
+			);
 			for (const particle of particles) {
 				const age = (now - particle.born) / 1000;
 				const remaining = 1 - (now - particle.born) / particle.life;
 				const size = particle.size * (0.4 + remaining * 0.6);
-				context.globalAlpha = remaining * (0.65 + 0.35 * Math.sin(age * 9 + particle.phase));
+				context.globalAlpha =
+					remaining * (0.65 + 0.35 * Math.sin(age * 9 + particle.phase));
 				context.save();
 				context.translate(
 					particle.x + particle.vx * age,
 					particle.y + particle.vy * age + 55 * age * age,
 				);
 				context.rotate(particle.phase + age * particle.spin);
-				context.drawImage(sprites[particle.sprite], -size / 2, -size / 2, size, size);
+				context.drawImage(
+					sprites[particle.sprite],
+					-size / 2,
+					-size / 2,
+					size,
+					size,
+				);
 				context.restore();
 			}
 			context.globalAlpha = 1;
@@ -136,10 +156,17 @@ const stars = Array.from({ length: 140 }, (_, index) => ({
 
 		const burst = (event) => {
 			if (event.button !== 0) return;
-			const bounds = event.target instanceof Element ? event.target.getBoundingClientRect() : null;
+			const bounds =
+				event.target instanceof Element
+					? event.target.getBoundingClientRect()
+					: null;
 			emit(
-				event.detail === 0 && bounds ? bounds.left + bounds.width / 2 : event.clientX,
-				event.detail === 0 && bounds ? bounds.top + bounds.height / 2 : event.clientY,
+				event.detail === 0 && bounds
+					? bounds.left + bounds.width / 2
+					: event.clientX,
+				event.detail === 0 && bounds
+					? bounds.top + bounds.height / 2
+					: event.clientY,
 				90,
 				true,
 			);
@@ -150,7 +177,10 @@ const stars = Array.from({ length: 140 }, (_, index) => ({
 			const now = performance.now();
 			if (now - lastEmission < 16) return;
 			const start = previous && now - lastEmission < 100 ? previous : event;
-			const distance = Math.hypot(event.clientX - start.clientX, event.clientY - start.clientY);
+			const distance = Math.hypot(
+				event.clientX - start.clientX,
+				event.clientY - start.clientY,
+			);
 			const count = Math.min(16, Math.max(6, Math.ceil(distance / 6)));
 			lastEmission = now;
 			emit(event.clientX, event.clientY, count, false);

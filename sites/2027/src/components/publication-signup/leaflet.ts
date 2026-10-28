@@ -20,7 +20,9 @@ export const createLeafletSignup = ({
 		method: "get",
 		fields: {
 			// Leaflet double-decodes the action, so encode it before form encoding.
-			action: encodeURIComponent(JSON.stringify({ action: "subscribe", publication })),
+			action: encodeURIComponent(
+				JSON.stringify({ action: "subscribe", publication }),
+			),
 			redirect,
 		},
 	};

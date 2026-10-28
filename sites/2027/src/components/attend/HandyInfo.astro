@@ -1,0 +1,98 @@
+---
+import Icon from "../site/Icon.astro";
+import type { IconName } from "../site/Icon.astro";
+
+// Guide pages aren't written yet; add an `href` to turn a card into a link.
+const guides: { name: string; icon: IconName; href?: string }[] = [
+	{ name: "Getting here and getting around", icon: "map" },
+	{ name: "Accessibility and limited mobility", icon: "wheelchair" },
+	{ name: "Where to stay", icon: "bed" },
+	{ name: "Netherlands on a budget", icon: "wallet" },
+	{
+		name: "Neighbourhood around the venue",
+		icon: "canal-houses",
+	},
+	{ name: "Things to do", icon: "tickets" },
+	{ name: "Dos and don’ts", icon: "yes-no" },
+	{ name: "King’s Day", icon: "crown" },
+	{ name: "After the conference", icon: "clock" },
+];
+
+const facts = [
+	{
+		term: "Language",
+		value:
+			"Dutch, but nearly everyone speaks English, especially in the cities. A “dank je wel” (thank you) always goes down well.",
+	},
+	{
+		term: "Emergency number & non-emergency police",
+		value: "112 (police, fire, ambulance) & 0900-8844",
+	},
+	{ term: "Time zone", value: "CEST (UTC+2)" },
+	{ term: "Power sockets", value: "type C/F, 230V" },
+	{
+		term: "Sunset in early May",
+		value: "around 21:00, so evenings are long and light.",
+	},
+];
+
+const card =
+	"card-lift flex min-h-21 items-center gap-4 rounded-lg border border-line bg-white p-4 text-left";
+---
+
+<section class="bg-white" aria-labelledby="handy-info-title">
+	<div class="wrap py-16 md:py-20 lg:py-30">
+		<h2 class="title" id="handy-info-title">Handy info</h2>
+		<ul class="mt-8 grid gap-3 md:mt-10 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
+			{
+				guides.map(({ name, icon, href }, index) => {
+					const content = (
+						<>
+							<Icon name={icon} class="size-12 shrink-0 md:size-14" />
+							<span class="flex-1">
+								<span class="block eyebrow text-[10px] text-steel">
+									{String(index + 1).padStart(2, "0")}
+								</span>
+								<span class="mt-1 block text-sm/5">{name}</span>
+							</span>
+							{href && (
+								<span class="text-steel" aria-hidden="true">
+									↗
+								</span>
+							)}
+						</>
+					);
+					return (
+						<li class="contents">
+							{href ? (
+								<a
+									class:list={[card, "hover:border-navy"]}
+									href={href}
+									data-card
+								>
+									{content}
+								</a>
+							) : (
+								<div class={card} data-card>
+									{content}
+								</div>
+							)}
+						</li>
+					);
+				})
+			}
+		</ul>
+		<dl
+			class="mt-10 grid gap-x-6 gap-y-6 md:mt-14 md:grid-cols-2 md:gap-y-8 lg:grid-cols-3"
+		>
+			{
+				facts.map(({ term, value }) => (
+					<div class="border-t border-line pt-4">
+						<dt class="eyebrow text-[10px] text-steel">{term}</dt>
+						<dd class="mt-2 text-sm/5 md:text-base/6">{value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</section>

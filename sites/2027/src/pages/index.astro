@@ -1,0 +1,26 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Hero from "../components/home/Hero.astro";
+import Intro from "../components/home/Intro.astro";
+import Sponsors from "../components/home/Sponsors.astro";
+import Audience from "../components/home/Audience.astro";
+import Invite from "../components/home/Invite.astro";
+import AirmailNews from "../components/site/AirmailNews.astro";
+import { signupPage } from "../components/publication-signup/server";
+
+const signupCard = await signupPage(Astro, { page: "/", anchor: "#news" });
+if (signupCard instanceof Response) return signupCard;
+---
+
+<SiteLayout
+	title="AtmosphereConf 2027 — Building for a new internet"
+	description="The ATProto conference is back. Join builders, creators, storytellers, and stewards in the Netherlands, 29 April–2 May 2027."
+	ogDescription="29 April–2 May 2027 · the Netherlands. Four days building for a new internet."
+>
+	<Hero />
+	<Intro />
+	<AirmailNews />
+	<Invite signupCard={signupCard} />
+	<Audience />
+	<Sponsors />
+</SiteLayout>

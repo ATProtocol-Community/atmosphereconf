@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.12.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -21,17 +21,22 @@
     "@atproto/lex": "^0.3.11",
     "@fujocoded/authproto": "^0.4.1",
     "@libsql/client": "^0.18.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.1",
     "escape-goat": "^4.0.0",
     "interestfor": "^1.0.8",
+    "marqy": "1.1.1",
     "node-addon-api": "^8.9.2",
     "node-gyp": "^13.0.2",
-    "vite": "^8",
-    "unstorage": "^1.17.6"
+    "satori": "^0.63.2",
+    "tailwindcss": "^4.3.3",
+    "unstorage": "^1.17.6",
+    "vite": "^8"
   },
   "devDependencies": {
-	  "prettier": "^3.8.1",
-	  "prettier-plugin-astro": "^0.14.1",
-	  "prettier-plugin-tailwindcss": "^0.7.2"
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.8.1"
   }
 }

@@ -18,7 +18,8 @@ import { unavailable } from "../lib/responses";
 import type { Line } from "../postcard/Confirmation.astro";
 import { htmlEscape as html } from "escape-goat";
 
-export const SUBSCRIBE_SCOPE = "repo:site.standard.graph.subscription?action=create";
+export const SUBSCRIBE_SCOPE =
+	"repo:site.standard.graph.subscription?action=create";
 
 const REQUEST_KEY = "signupRequest";
 const CARD_KEY = "signupCard";
@@ -42,7 +43,10 @@ export type SignupReceipt = { kind: "subscribed"; already: boolean };
 export type SignupCard =
 	| { kind: "form"; failure?: SignupFailure }
 	| SignupReceipt
-	| { kind: "email-pending"; news: Extract<NewsOutcome, { kind: "leaflet-step" }> };
+	| {
+			kind: "email-pending";
+			news: Extract<NewsOutcome, { kind: "leaflet-step" }>;
+	  };
 
 export type NewsOutcome =
 	// The visitor still has to confirm through Leaflet.
@@ -53,7 +57,8 @@ export const newsLine = (news: NewsOutcome): Line => {
 	switch (news.kind) {
 		case "leaflet-step":
 			return {
-				words: html`One more step: we'll send a code to <strong>${news.email}</strong>.`,
+				words: html`One more step: we'll send a code to
+					<strong>${news.email}</strong>.`,
 				tone: "todo",
 				action: { label: "Send my code", href: leafletStepUrl(news.email) },
 			};
@@ -61,12 +66,14 @@ export const newsLine = (news: NewsOutcome): Line => {
 			switch (news.reason) {
 				case "no-email":
 					return {
-						words: html`We couldn't read your account email, so email news isn't set up.`,
+						words: html`We couldn't read your account email, so email news isn't
+						set up.`,
 						tone: "failed",
 					};
 				case "bad-email":
 					return {
-						words: html`That email address doesn't look right, so email news isn't set up.`,
+						words: html`That email address doesn't look right, so email news
+						isn't set up.`,
 						tone: "failed",
 					};
 			}
@@ -83,6 +90,10 @@ declare global {
 }
 
 type SignupContext = SignInContext & Pick<APIContext, "session">;
+
+export type SignupPlace = { page: string; anchor?: string };
+
+const landing = ({ page, anchor = "" }: SignupPlace) => `${page}${anchor}`;
 
 /** Subscribes the account unless it already is, and says which it was. */
 export const ensureSubscription = (client: Client) =>
@@ -117,7 +128,10 @@ const readMethod = (formData: FormData): Method | null => {
 /** Reads the form's one field as whichever kind of address it holds. */
 const readIdentifier = (
 	formData: FormData,
-): { kind: "missing" } | { kind: "email"; email: string } | { kind: "handle"; handle: string } => {
+):
+	| { kind: "missing" }
+	| { kind: "email"; email: string }
+	| { kind: "handle"; handle: string } => {
 	const submitted = formData.get("identifier");
 	const raw = typeof submitted === "string" ? submitted.trim() : "";
 	if (!raw) return { kind: "missing" };
@@ -131,11 +145,15 @@ const readIdentifier = (
  * An email gets a receipt linking to Leaflet's code step; a handle parks the request and
  * starts sign-in, which comes back here for `signupPage` to finish.
  */
-const startSignup = async (context: SignupContext, formData: FormData) => {
+const startSignup = async (
+	context: SignupContext,
+	formData: FormData,
+	place: SignupPlace,
+) => {
 	const { session } = context;
 	if (!session) return unavailable("Subscriptions");
 	const fail = (failure: SignupFailure) =>
-		showOnce(session, "/signup", CARD_KEY, { kind: "form", failure });
+		showOnce(session, landing(place), CARD_KEY, { kind: "form", failure });
 	const identifier = readIdentifier(formData);
 	switch (identifier.kind) {
 		case "missing":
@@ -145,12 +163,15 @@ const startSignup = async (context: SignupContext, formData: FormData) => {
 			return startSignIn(context, {
 				handle: identifier.handle,
 				scopes: [SUBSCRIBE_SCOPE],
-				backTo: "/signup",
+				backTo: place.page,
 			});
 		case "email": {
 			const news = await signUpForNews({ email: identifier.email });
 			if (news.kind === "failed") return fail({ kind: "bad-email" });
-			return showOnce(session, "/signup", CARD_KEY, { kind: "email-pending", news });
+			return showOnce(session, landing(place), CARD_KEY, {
+				kind: "email-pending",
+				news,
+			});
 		}
 	}
 };
@@ -176,17 +197,23 @@ const completeSignup = async (locals: App.Locals): Promise<SignupCard> => {
  */
 export const signupPage = async (
 	context: SignupContext,
+	place: SignupPlace = { page: "/signup" },
 ): Promise<Response | SignupCard> => {
 	const { session, locals } = context;
 	if (context.request.method === "POST") {
-		return startSignup(context, await context.request.formData());
+		return startSignup(context, await context.request.formData(), place);
 	}
 	const request = await unpark(session, REQUEST_KEY);
 	const signIn = signInError(locals);
 	if (signIn) return { kind: "form", failure: signIn };
 	if (request && locals.loggedInUser) {
 		if (!session) return unavailable("Subscriptions");
-		return showOnce(session, "/signup", CARD_KEY, await completeSignup(locals));
+		return showOnce(
+			session,
+			landing(place),
+			CARD_KEY,
+			await completeSignup(locals),
+		);
 	}
 	return (await unpark(session, CARD_KEY)) ?? { kind: "form" };
 };

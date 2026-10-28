@@ -1,0 +1,85 @@
+---
+const days = [
+	{
+		date: "18 March – 9 May",
+		what: "Keukenhof tulip gardens open, so also during the conference",
+	},
+	{
+		date: "Mon 26 April",
+		what: "King’s Night (Koningsnacht): parties and club nights across the city",
+	},
+	{
+		date: "Tue 27 April",
+		what: "King’s Day (Koningsdag): the whole city turns orange",
+	},
+	{ date: "Wed 28 April", what: "City recovers. Best day to arrive" },
+	{
+		date: "Thu 29 April – Sun 2 May",
+		what: "AtmosphereConf 2027",
+		event: true,
+	},
+	{
+		date: "Tue 4 May",
+		what: "Remembrance Day (Dodenherdenking): two minutes of silence at 20:00",
+	},
+	{
+		date: "Wed 5 May",
+		what: "Liberation Day (Bevrijdingsdag): free festivals across the country",
+	},
+	{
+		date: "Thu 6 May",
+		what: "Ascension Day (Hemelvaartsdag): public holiday, busy trains",
+	},
+	{
+		date: "Sat 8 – Sun 9 May",
+		what: "National Mill Day: windmills open to visitors",
+	},
+	{ date: "Sun 9 May", what: "Keukenhof’s last day of the season" },
+];
+---
+
+<section class="text-white sky-gradient" aria-labelledby="calendar-title">
+	<div class="wrap py-16 md:py-20 lg:py-30">
+		<h2 class="max-w-200 title" id="calendar-title">
+			What’s happening in the Netherlands around the conference
+		</h2>
+		<p class="mt-4 text-sm md:text-base">
+			Plan your arrival and stay around the Netherland’s busiest spring week.
+		</p>
+		<table
+			class="mt-8 w-full overflow-hidden rounded-lg bg-white text-left text-navy md:mt-10"
+		>
+			<thead class="bg-navy text-white">
+				<tr class="eyebrow *:px-4 *:py-4 *:font-medium md:*:px-6">
+					<th scope="col">Date</th><th scope="col">What’s happening</th><th
+						scope="col"
+						class="text-right max-md:sr-only">2027</th
+					>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-line">
+				{
+					days.map(({ date, what, event }) => (
+						<tr
+							class:list={[
+								"*:px-4 *:py-4 md:*:px-6 md:*:py-5",
+								event && "bg-[#cfe0ff]",
+							]}
+						>
+							<th
+								scope="row"
+								class="w-[30%] align-top text-xs/5 font-normal text-slate md:text-sm/5"
+							>
+								{date}
+							</th>
+							<td class="text-sm/5 md:text-base/6">{what}</td>
+							<td class="text-right align-top max-md:hidden">
+								{event && <span class="eyebrow text-azure">Event</span>}
+							</td>
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+	</div>
+</section>

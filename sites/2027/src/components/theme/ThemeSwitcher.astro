@@ -98,7 +98,8 @@ import { themes } from "./themes";
 			}
 		};
 
-		const normalize = (theme) => (themeKeys.includes(theme) ? theme : DEFAULT_THEME);
+		const normalize = (theme) =>
+			themeKeys.includes(theme) ? theme : DEFAULT_THEME;
 		const readQuery = () => {
 			const theme = new URLSearchParams(window.location.search).get("theme");
 			return themeKeys.includes(theme) ? theme : null;
@@ -182,7 +183,11 @@ import { themes } from "./themes";
 		const init = () => {
 			// Keep the dev preview's iframes in sync with its shared switcher.
 			window.addEventListener("storage", (event) => {
-				if (!readQuery() && event.key === themeStorageKey && event.storageArea === localStorage) {
+				if (
+					!readQuery() &&
+					event.key === themeStorageKey &&
+					event.storageArea === localStorage
+				) {
 					applyTheme(event.newValue, false);
 				}
 			});

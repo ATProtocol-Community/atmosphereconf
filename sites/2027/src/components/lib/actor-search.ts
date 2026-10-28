@@ -31,7 +31,10 @@ export const searchActors = async (q: string): Promise<ActorSuggestion[]> => {
 export const wireActorSearch = (combobox: Element) => {
 	combobox.addEventListener("combobox-search", (e) => {
 		const detail = (
-			e as CustomEvent<{ query: string; results: Promise<ActorSuggestion[]> | null }>
+			e as CustomEvent<{
+				query: string;
+				results: Promise<ActorSuggestion[]> | null;
+			}>
 		).detail;
 		detail.results = searchActors((detail.query ?? "").trim());
 	});

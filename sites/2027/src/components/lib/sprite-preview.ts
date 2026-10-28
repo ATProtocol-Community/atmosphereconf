@@ -49,7 +49,10 @@ export const attachSpritePreview = (
 			spriteCache.set(handle, spriteUrl);
 			sprite.style.backgroundImage = spriteUrl ?? defaultSprite ?? "";
 		} catch (error) {
-			if ((error as DOMException).name === "AbortError" || controller !== nextController)
+			if (
+				(error as DOMException).name === "AbortError" ||
+				controller !== nextController
+			)
 				return;
 			spriteCache.set(handle, null);
 			reset();

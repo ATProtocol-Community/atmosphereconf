@@ -1,0 +1,363 @@
+---
+import HandleInput from "../postcard/HandleInput.astro";
+import { newsLine, type SignupCard } from "../publication-signup/server";
+import { signupError, signupReceipt } from "../publication-signup/leaflet";
+import type { Line } from "../postcard/Confirmation.astro";
+
+interface Props {
+	card: SignupCard;
+}
+
+const { card } = Astro.props;
+const error =
+	card.kind === "form" && card.failure ? signupError(card.failure) : undefined;
+const line: Line | undefined =
+	card.kind === "subscribed"
+		? { words: signupReceipt(card), tone: "done" }
+		: card.kind === "email-pending"
+			? newsLine(card.news)
+			: undefined;
+---
+
+<div class="news-signup">
+	{
+		line ? (
+			<div class="news-status" role="status" tabindex="-1" data-news-status>
+				<p set:html={line.words} />
+				{line.action && (
+					<a class="btn" href={line.action.href}>
+						{line.action.label} <span aria-hidden="true">▸</span>
+					</a>
+				)}
+			</div>
+		) : (
+			<form
+				class="news-form"
+				method="post"
+				action="/"
+				data-news-form
+				data-mode="email"
+			>
+				<input type="hidden" name="method" value="" data-news-method />
+				<div class="news-field">
+					<button
+						class="news-chip"
+						type="button"
+						aria-label="Signing up by email. Switch to Atmosphere handle"
+						data-news-chip
+						hidden
+					>
+						<svg
+							class="news-chip-email"
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<rect x="2" y="4" width="20" height="16" rx="2" />
+							<path d="m22 7-10 6L2 7" />
+						</svg>
+						<svg
+							class="news-chip-handle"
+							width="18"
+							height="18"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<circle cx="12" cy="12" r="4" />
+							<path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" />
+						</svg>
+						<span data-news-chip-text>Email</span>
+					</button>
+					<div class="news-input">
+						<label class="sr-only" for="news-identifier">
+							Email or Atmosphere handle
+						</label>
+						<HandleInput
+							id="news-identifier"
+							name="identifier"
+							label="Email or Atmosphere handle"
+							placeholder="you@atmosphere.web"
+							autocomplete="username webauthn email"
+							atSign={false}
+							suffixes={[
+								"@atmosphere.web",
+								".bsky.social",
+								".blacksky.social",
+								".atmosphere.web",
+							]}
+							required
+						/>
+					</div>
+					<button class="news-submit btn" type="submit">
+						Keep me posted <span aria-hidden="true">▸</span>
+					</button>
+				</div>
+				{error ? (
+					<p class="news-error" role="alert">
+						{error}
+					</p>
+				) : (
+					<p class="news-hint" data-news-hint>
+						Leaflet emails you a code to confirm. Have an Atmosphere handle?
+						Type that instead.
+					</p>
+				)}
+			</form>
+		)
+	}
+</div>
+
+<script>
+	import {
+		methodFor,
+		sureMethod,
+		type Method,
+	} from "../publication-signup/identifier";
+
+	const status = document.querySelector<HTMLElement>("[data-news-status]");
+	status?.focus();
+
+	const form = document.querySelector<HTMLFormElement>("[data-news-form]");
+	const input = form?.querySelector<HTMLInputElement>(
+		'input[name="identifier"]',
+	);
+	const methodField =
+		form?.querySelector<HTMLInputElement>("[data-news-method]");
+	const chip = form?.querySelector<HTMLButtonElement>("[data-news-chip]");
+	const chipText = form?.querySelector("[data-news-chip-text]");
+	const hint = form?.querySelector("[data-news-hint]");
+
+	if (form && input && methodField && chip && chipText) {
+		const combobox = input.closest("cmb-combobox");
+		const suffixSlots = Array.from(
+			form.querySelectorAll<HTMLDivElement>(".suffix-options div"),
+		);
+		const suffixWords = suffixSlots.map((el) => el.textContent?.trim() ?? "");
+		const suffixFor: Record<Method, string | undefined> = {
+			email: suffixWords[0],
+			handle: suffixWords.at(-2),
+		};
+		const copy: Record<Method, { chip: string; label: string; hint: string }> =
+			{
+				email: {
+					chip: "Email",
+					label: "Signing up by email. Switch to Atmosphere handle",
+					hint: "Leaflet emails you a code to confirm. Have an Atmosphere handle? Type that instead.",
+				},
+				handle: {
+					chip: "Handle",
+					label: "Signing up with an Atmosphere handle. Switch to email",
+					hint: "You’ll sign in with your Atmosphere account, and the subscription lands in your own repo.",
+				},
+			};
+
+		let picked: Method | null = null;
+
+		const render = () => {
+			const mode = methodFor(input.value, picked);
+			form.dataset.mode = mode;
+			methodField.value = picked ?? "";
+			chip.disabled = sureMethod(input.value) !== null;
+			chip.setAttribute("aria-label", copy[mode].label);
+			chipText.textContent = copy[mode].chip;
+			if (hint) hint.textContent = copy[mode].hint;
+			combobox?.toggleAttribute("disable-suggestions", mode === "email");
+			const word = suffixFor[mode];
+			const slot = suffixSlots.at(-1);
+			if (word && slot) slot.textContent = word;
+		};
+
+		chip.addEventListener("click", () => {
+			picked = form.dataset.mode === "handle" ? "email" : "handle";
+			render();
+			input.focus();
+		});
+		input.addEventListener("input", render);
+		input.addEventListener("change", render);
+
+		chip.hidden = false;
+		render();
+	}
+</script>
+
+<style>
+	.news-signup {
+		--ink: var(--color-navy);
+		--card: white;
+		--paper: white;
+		--butter: #fbebd7;
+		--foreground: var(--color-navy);
+		--foreground-muted: var(--color-slate);
+		--primary: var(--color-azure);
+		--primary-muted: #e6effc;
+		--border: var(--color-line);
+		--error: #b42318;
+		--error-foreground: white;
+		--elevation-low: 0 1px 2px rgb(0 25 65 / 0.2);
+		--space-base: 8px;
+		--space-sm: 8px;
+		--space-md: 12px;
+		--text-sm: 15px;
+		--text-xs: 13px;
+		--leading-tight: 1.25;
+		--leading-normal: 1.5;
+		width: 100%;
+		max-width: 640px;
+		margin-inline: auto;
+	}
+
+	.news-form {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.news-field {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		grid-template-areas:
+			"chip input"
+			"submit submit";
+		align-items: center;
+		gap: 8px;
+		padding: 6px;
+		border: 1px solid var(--color-navy);
+		border-radius: 6px;
+		background: white;
+		text-align: left;
+
+		@media (min-width: 1101px) {
+			grid-template-columns: auto minmax(0, 1fr) auto;
+			grid-template-areas: "chip input submit";
+		}
+	}
+
+	.news-field:has(.news-chip[hidden]) {
+		grid-template-areas:
+			"input input"
+			"submit submit";
+
+		@media (min-width: 1101px) {
+			grid-template-areas: "input input submit";
+		}
+	}
+
+	.news-field:focus-within {
+		outline: 3px solid var(--color-orange);
+		outline-offset: 4px;
+	}
+
+	.news-chip {
+		grid-area: chip;
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		min-height: 44px;
+		padding-inline: 14px;
+		border-radius: 4px;
+		background: var(--butter);
+		color: var(--color-navy);
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+		cursor: pointer;
+		transition: background-color 200ms var(--ease-soft);
+	}
+
+	.news-chip:disabled {
+		cursor: default;
+	}
+
+	.news-chip:focus-visible {
+		outline: 2px solid var(--color-azure);
+		outline-offset: 2px;
+	}
+
+	[data-mode="handle"] .news-chip {
+		background: #dfe8fb;
+	}
+
+	[data-mode="email"] .news-chip-handle,
+	[data-mode="handle"] .news-chip-email {
+		display: none;
+	}
+
+	.news-input {
+		grid-area: input;
+		min-width: 0;
+	}
+
+	.news-input :global(.handle-placeholder) {
+		right: 0;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.news-input :global(.cmb-input) {
+		width: 100%;
+		min-height: 44px;
+		padding: 0 14px;
+		border: 0;
+		background: transparent;
+		color: var(--color-navy);
+		font-size: 17px;
+	}
+
+	.news-input :global(.cmb-input:focus) {
+		outline: none;
+	}
+
+	.news-submit {
+		grid-area: submit;
+	}
+
+	.news-hint,
+	.news-error {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.5;
+	}
+
+	.news-hint {
+		color: var(--color-slate);
+	}
+
+	.news-error {
+		color: var(--error);
+		font-weight: 600;
+	}
+
+	.news-status {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 16px;
+		padding: 24px 28px;
+		border: 1px solid var(--color-line);
+		border-radius: 6px;
+		background: white;
+		font-size: 18px;
+		line-height: 1.5;
+	}
+
+	.news-status:focus {
+		outline: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.news-chip {
+			transition: none;
+		}
+	}
+</style>

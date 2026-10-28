@@ -19,19 +19,17 @@ const anchor = `--tt-${id}`;
 const vars = `--tooltip-anchor: ${anchor}; --tooltip-block-anchor: ${blockAnchor ?? anchor}`;
 ---
 
-{/* No wrapper element: both parts sit directly in the surrounding text flow. */}<button
+{
+	/* No wrapper element: both parts sit directly in the surrounding text flow. */
+}<button
 	class:list={["tooltip-button", className]}
 	type="button"
 	interestfor={id}
 	aria-describedby={id}
-	style={vars}
->{label}</button><span
-	class="tooltip"
-	id={id}
-	popover="hint"
-	role="tooltip"
-	style={vars}
-><slot /></span>
+	style={vars}>{label}</button
+><span class="tooltip" id={id} popover="hint" role="tooltip" style={vars}
+	><slot /></span
+>
 
 <script>
 	// `interestfor` handles hover / focus / long-press, Escape and light-dismiss

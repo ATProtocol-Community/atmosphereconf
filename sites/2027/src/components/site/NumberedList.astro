@@ -1,0 +1,30 @@
+---
+/**
+ * Zero-padded numbered list with hairline dividers, for the dark sections.
+ * Each item is a bold lead followed by plain text.
+ */
+interface Props {
+	items: { lead?: string; text: string }[];
+	label?: string;
+}
+
+const { items, label } = Astro.props;
+---
+
+<ol
+	class="divide-y divide-white/40 border-y border-white/40 text-sm md:text-base"
+	aria-label={label}
+>
+	{
+		items.map(({ lead, text }, index) => (
+			<li class="flex gap-6 py-4 md:gap-8">
+				<span class="w-5 shrink-0 pt-1 eyebrow">
+					{String(index + 1).padStart(2, "0")}
+				</span>
+				<p>
+					{lead && <strong class="font-semibold">{lead}</strong>} {text}
+				</p>
+			</li>
+		))
+	}
+</ol>

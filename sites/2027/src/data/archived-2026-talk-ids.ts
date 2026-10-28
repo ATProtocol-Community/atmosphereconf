@@ -1,4 +1,4 @@
-// Talk IDs from the archived 2026 schedule. Keeping this local for now so we don't 
+// Talk IDs from the archived 2026 schedule. Keeping this local for now so we don't
 // have to rederive it from the PDS.
 export const archived2026TalkIds = new Set([
 	"XxPMqvO",
