@@ -54,9 +54,9 @@ const {
 			class="absolute top-2.5 left-5 z-10 translate-y-[-160%] bg-white p-3 underline focus:translate-y-0"
 			href="#main">Skip to content</a
 		>
-		<SiteHeader />
+		<slot name="header"><SiteHeader /></slot>
 		<main id="main"><slot /></main>
-		<SiteFooter />
+		<slot name="footer"><SiteFooter /></slot>
 		<script>
 			import "../components/lib/heading-anchors";
 			import { playWhileVisible } from "../components/lib/motion";
