@@ -1,0 +1,177 @@
+---
+import Icon from "../site/Icon.astro";
+import type { IconName } from "../site/Icon.astro";
+import puffy from "../../../images/clouds/puffy.svg?url";
+import long from "../../../images/clouds/long.svg?url";
+import bumpy from "../../../images/clouds/bumpy.svg?url";
+import LookingGoose from "../../../images/guus/looking.svg";
+
+const themes: { name: string; icon: IconName; description: string; tags: string[]; }[] = [
+	{
+		name: "Compose",
+		icon: "building-blocks",
+		description:
+			"Questions, claims, data, and methods shared as pieces anyone can cite, reuse and build on.",
+		tags: [
+			"Modular science",
+			"Shared schemas",
+			"Continuous publishing"
+		],
+	},
+	{
+		name: "Collaborate",
+		icon: "microphone", // placeholder
+		description:
+			"How researchers, citizens, and AI agents can work together in the open, responsibly.",
+		tags: [
+			"Collective intelligence",
+			"Citizen science",
+			"Humans and agents"
+		],
+	},
+	{
+		name: "Verify",
+		icon: "yes-no",
+		description:
+			"Tracking and assessing who produced a result, who checked it, and whether it was a person or AI agent.",
+		tags: [
+			"Research attribution",
+			"Provenance",
+			"Auditable AI outputs"
+		],
+	},
+	{
+		name: "Sustain",
+		icon: "scales",
+		description:
+			"New models for research infrastructure, funding, and governance that is driven by its communities.",
+		tags: [
+			"Local-first",
+			"Distributed storage & compute",
+			"New funding models"
+		],
+	},
+];
+
+const heading = "display text-2xl/[1.5] md:text-[32px]/[1.5]";
+const card = "rounded-xl bg-white/15 p-5 md:p-6";
+const cardTitle = "font-display text-lg/[1.5] uppercase";
+---
+
+<section
+	class="relative overflow-hidden bg-linear-to-b from-azure to-[#7d7cd8] text-white"
+	aria-label="What to propose"
+>
+	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+		<!-- Mobile/tablet: long cloud on the left -->
+		<img
+			class="absolute top-16 -left-30 w-80 -scale-x-100 opacity-40 md:top-20 md:-left-36 md:w-105 lg:hidden"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+
+		<!-- Desktop: left = puffy, right = long -->
+		<img
+			class="absolute top-30 -left-28 hidden w-95 opacity-30 lg:block"
+			src={puffy}
+			alt=""
+			width="451"
+			height="196"
+			loading="lazy"
+		/>
+		<img
+		class="absolute top-80 -right-32 hidden w-75 opacity-20 md:top-26 md:-right-30 md:w-90 lg:top-36 lg:-right-28 lg:block lg:w-105"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+	</div>
+	<div
+		class="relative z-1 wrap flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-40 lg:py-30"
+	>
+		<div class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-19">
+			<div class="grid grid-cols-[minmax(0,1fr)_80px] items-center gap-x-4 md:grid-cols-[minmax(0,1fr)_144px] md:gap-x-8 lg:block">
+				<div class="w-fit min-w-0 max-w-full">
+					<h2 class={heading}>
+						How you can contribute
+					</h2>
+					<p class="mt-6 w-full max-w-[24ch] min-[538px]:max-w-[33ch] min-[700px]:max-w-[30ch] min-[778px]:max-w-[33ch] min-[840px]:max-w-[40ch] min-[940px]:max-w-[45ch] lg:max-w-[24ch]">
+						These are starting points, not categories. Don’t see your work? We still want to hear from you.
+					</p>
+				</div>
+
+				<!-- Mobile/tablet: header goose and its cloud -->
+				<div
+					class="pointer-events-none relative isolate w-full translate-y-6 lg:hidden"
+					aria-hidden="true"
+				>
+					<img
+						src={bumpy}
+						alt=""
+						class="absolute top-[12%] -right-[55%] z-0 w-[230%] max-w-none opacity-50"
+						width="449"
+						height="195"
+					/>
+					<LookingGoose
+						data-scene="cfp-goose"
+						class="relative z-20 block h-auto w-full scale-x-100"
+					/>
+				</div>
+			</div>
+			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
+				{
+					themes.map(({ name, icon, description, tags }) => (
+						<li class:list={[card, "card-lift", "flex flex-col"]} data-card>
+							<div class="flex items-center gap-3">
+								<Icon name={icon} class="size-10 shrink-0 md:size-12" />
+								<h3 class={cardTitle}>{name}</h3>
+							</div>
+							<p class="mt-2 text-sm/5">{description}</p>
+							<div class="mt-auto pt-5">
+								<p class="border-t border-white/20 pt-3 text-xs/5 font-semibold uppercase">{tags.join(" · ")}</p>
+							</div>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+	<div
+		class="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden lg:block"
+		aria-hidden="true"
+	>
+		<div class="wrap">
+			<LookingGoose
+				data-scene="cfp-goose"
+				class="ml-12 block h-auto w-48 -scale-x-100"
+			/>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	[data-scene="cfp-goose"] [data-part="eye"] {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: cfp-goose-blink 4.5s ease-in-out infinite var(--play);
+	}
+
+	@keyframes cfp-goose-blink {
+		0%,
+		90%,
+		94%,
+		96%,
+		100% {
+			transform: scaleY(1);
+		}
+		92%,
+		98% {
+			transform: scaleY(0.1);
+		}
+	}
+</style>

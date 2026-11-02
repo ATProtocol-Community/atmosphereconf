@@ -1,0 +1,60 @@
+---
+import { cfp, timeUntil } from "../../data/science";
+import RunningGoose from "../../../images/guus/running.svg";
+import "../home/goose-animations.css";
+
+const countdown = timeUntil(cfp.deadline);
+const deadlineDate = new Intl.DateTimeFormat("en-GB", {
+	timeZone: cfp.timeZone,
+	day: "numeric",
+	month: "long",
+	year: "numeric",
+}).format(cfp.deadline);
+
+const deadlineTime = new Intl.DateTimeFormat("en-GB", {
+	timeZone: cfp.timeZone,
+	hour: "2-digit",
+	minute: "2-digit",
+	hourCycle: "h23",
+	timeZoneName: "short",
+}).format(cfp.deadline);
+---
+
+<section class="bg-white" aria-labelledby="deadline-title">
+	<div class="wrap max-w-[1120px] grid items-center gap-8 pt-8 pb-8 md:pb-15 lg:pb-20 text-center min-[800px]:grid-cols-2 min-[800px]:gap-12 min-[800px]:text-left">
+		<div>
+			<h2 class="eyebrow" id="deadline-title">Round 1 submissions close</h2>
+			<p class="mt-4">
+				<time
+					class="block display whitespace-nowrap text-[28px]/[1.2] md:text-[32px]/[1.2] lg:text-[48px]/[1.2]"
+					datetime={cfp.deadline.toISOString()}>{cfp.deadlineLabel}</time
+				><span class="mt-1 block text-sm text-slate">({cfp.timeZone})</span>
+			</p>
+		</div>
+
+		<div class="flex justify-center min-[800px]:justify-end">
+			<div class="w-fit text-center">
+				<div class="relative">
+					<RunningGoose
+						data-scene="ticket-running"
+						class="absolute top-1/2 right-[calc(100%+8px)] block h-auto w-12 -translate-y-1/2 min-[375px]:right-[calc(100%+16px)] min-[375px]:w-20 min-[800px]:w-28"
+						aria-hidden="true"
+					/>
+
+					<a
+						class="btn gap-4 text-lg max-[359px]:gap-2 max-[359px]:px-2 max-[359px]:text-sm"
+						href={cfp.submissionUrl}
+					>
+						<span class="flex flex-col">
+							<span>Submit a proposal</span>
+							<span class="text-sm italic">(or two, or three)</span>
+						</span>
+						<span class="scale-150" aria-hidden="true">▸</span>
+					</a>
+				</div>
+
+				<p class="mt-2 text-sm text-slate">{countdown}</p>
+			</div>
+		</div>
+	</div>
+</section>

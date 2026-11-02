@@ -1,0 +1,50 @@
+---
+const link = "underline underline-offset-4 hover:no-underline";
+---
+
+<section class="bg-navy text-cream" aria-labelledby="organizers-title">
+	<div class="wrap py-12 md:py-16 lg:py-20">
+		<h2 class="title" id="organizers-title">Organizers</h2>
+		<div class="mt-10 grid gap-8 md:grid-cols-2 md:gap-0">
+			<div class="flex flex-col items-start md:pr-12 lg:pr-19">
+				<!-- Replace with the ATScience logo when available. -->
+				<h3
+					class="flex h-20 items-center text-2xl font-semibold md:h-24 md:text-3xl"
+				>
+					ATScience
+				</h3>
+				<p class="mt-6 max-w-[40ch]">
+					ATScience builds communities and tools for publishing, curating,
+					sharing and discussing research online with AT Protocol and other
+					decentralized protocols.
+				</p>
+				<a
+					class={`${link} mt-6 text-sm md:mt-auto md:pt-8 md:text-base`}
+					href="https://atproto.science/"
+				>
+					Visit ATScience <span aria-hidden="true">↗</span>
+				</a>
+			</div>
+			<div
+				class="flex flex-col items-start border-t border-cream/25 pt-8 md:border-t-0 md:border-l md:pt-0 md:pl-12 lg:pl-19"
+			>
+				<!-- Replace with the IOSP logo when available. -->
+				<h3
+					class="flex h-20 items-center text-2xl font-semibold md:h-24 md:text-3xl"
+				>
+					IOSP
+				</h3>
+				<p class="mt-6 max-w-[40ch]">
+					IOSP brings researchers and the people building open science
+					infrastructure together to work on shared problems.
+				</p>
+				<a
+					class={`${link} mt-6 text-sm md:mt-auto md:pt-8 md:text-base`}
+					href="https://www.iosp.science/"
+				>
+					Visit IOSP <span aria-hidden="true">↗</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,185 @@
+---
+import Icon from "../site/Icon.astro";
+import type { IconName } from "../site/Icon.astro";
+import puffy from "../../../images/clouds/puffy.svg?url";
+import long from "../../../images/clouds/long.svg?url";
+import bumpy from "../../../images/clouds/bumpy.svg?url";
+import LookingGoose from "../../../images/guus/looking.svg";
+
+const themes: { name: string; icon: IconName; description: string; }[] = [
+	{
+		name: "Modular research",
+		icon: "building-blocks",
+		description:
+			"Questions, claims, data and methods shared as pieces you can cite and reuse.",
+	},
+	{
+		name: "Continuous publishing",
+		icon: "microphone", // placeholder
+		description:
+			"Sharing work as it happens and updating it in the open.",
+	},
+	{
+		name: "Collective intelligence",
+		icon: "building-blocks", // placeholder
+		description:
+			"Groups that sense, argue and decide well together.",
+	},
+	{
+		name: "Citizen science",
+		icon: "microphone", // placeholder
+		description:
+			"Research that anyone can join and shape.",
+	},
+	{
+		name: "Trust & attribution",
+		icon: "yes-no", // placeholder
+		description:
+			"Who made a result, and who checked the result.",
+	},
+	{
+		name: "Research data",
+		icon: "building-blocks", // placeholder
+		description:
+			"Storing, sharing, and keeping datasets alive.",
+	},
+	{
+		name: "AI for verifiable science",
+		icon: "yes-no", // placeholder
+		description:
+			"Models and agents that research communities can run and shape.",
+	},
+	{
+		name: "Funding & governance",
+		icon: "scales",
+		description:
+			"New models to funding research and collaborative decision making.",
+	},
+	{
+		name: "Science on open social",
+		icon: "microphone", // placeholder
+		description:
+			"Tools and communities on atproto, or other decentralized social protocols.",
+	},
+];
+
+const heading = "display text-2xl/[1.5] md:text-[32px]/[1.5]";
+const card = "rounded-xl bg-white/15 p-5 md:p-6";
+const cardTitle = "font-display text-lg/[1.5] uppercase";
+---
+
+<section
+	class="relative overflow-hidden bg-linear-to-b from-azure to-[#7d7cd8] text-white"
+	aria-label="What to propose"
+>
+	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+		<!-- Mobile/tablet: long cloud on the left -->
+		<img
+			class="absolute top-16 -left-30 w-80 -scale-x-100 opacity-40 md:top-20 md:-left-36 md:w-105 lg:hidden"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+
+		<!-- Desktop: left = puffy, right = long -->
+		<img
+			class="absolute top-30 -left-28 hidden w-95 opacity-30 lg:block"
+			src={puffy}
+			alt=""
+			width="451"
+			height="196"
+			loading="lazy"
+		/>
+		<img
+		class="absolute top-80 -right-32 hidden w-75 opacity-20 md:top-26 md:-right-30 md:w-90 lg:top-36 lg:-right-28 lg:block lg:w-105"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+	</div>
+	<div
+		class="relative z-1 wrap flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-40 lg:py-30"
+	>
+		<div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] lg:gap-15">
+			<div class="grid grid-cols-[minmax(0,1fr)_80px] items-center gap-x-4 md:grid-cols-[minmax(0,1fr)_144px] md:gap-x-8 lg:block">
+				<div class="w-fit min-w-0 max-w-full">
+					<h2 class={heading}>What we are looking for</h2>
+					<p class="mt-6 w-full max-w-[24ch] min-[538px]:max-w-[33ch] min-[700px]:max-w-[30ch] min-[778px]:max-w-[33ch] min-[840px]:max-w-[40ch] min-[940px]:max-w-[45ch] lg:max-w-[24ch]">
+						These are starting points, not categories. Don’t see your work?
+						We still want to hear from you.
+					</p>
+				</div>
+
+				<!-- Mobile/tablet: header goose and its cloud -->
+				<div
+					class="pointer-events-none relative isolate w-full translate-y-6 lg:hidden"
+					aria-hidden="true"
+				>
+					<img
+						src={bumpy}
+						alt=""
+						class="absolute top-[12%] -right-[55%] z-0 w-[230%] max-w-none opacity-50"
+						width="449"
+						height="195"
+					/>
+					<LookingGoose
+						data-scene="cfp-goose"
+						class="relative z-20 block h-auto w-full scale-x-100"
+					/>
+				</div>
+			</div>
+			<ul class="grid grid-cols-1 gap-3 md:grid-cols-2 min-[900px]:grid-cols-3 md:gap-4">
+				{
+					themes.map(({ name, icon, description }) => (
+					<li class:list={[card, "card-lift", "@container", "flex flex-col"]} data-card>
+						<div class="flex flex-col items-start gap-3 @min-[280px]:flex-row @min-[280px]:items-center">
+							<Icon name={icon} class="size-10 shrink-0" />
+							<h3 class:list={[cardTitle, "min-w-0"]}>{name}</h3>
+						</div>
+							<!-- <Icon name={icon} class="size-12 md:size-14" />
+							<h3 class:list={[cardTitle, "mt-6"]}>{name}</h3> -->
+							<p class="mt-2 text-sm/5">{description}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+	<div
+		class="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden lg:block"
+		aria-hidden="true"
+	>
+		<div class="wrap">
+			<LookingGoose
+				data-scene="cfp-goose"
+				class="ml-12 block h-auto w-48 -scale-x-100"
+			/>
+		</div>
+	</div>
+</section>
+
+<style is:global>
+	[data-scene="cfp-goose"] [data-part="eye"] {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: cfp-goose-blink 4.5s ease-in-out infinite var(--play);
+	}
+
+	@keyframes cfp-goose-blink {
+		0%,
+		90%,
+		94%,
+		96%,
+		100% {
+			transform: scaleY(1);
+		}
+		92%,
+		98% {
+			transform: scaleY(0.1);
+		}
+	}
+</style>
