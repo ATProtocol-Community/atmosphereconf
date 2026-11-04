@@ -6,26 +6,17 @@ import ScienceFooter from "../components/science/ScienceFooter.astro";
 import Hero from "../components/science/Hero.astro";
 import Intro from "../components/science/Intro.astro";
 import CfpDetails from "../components/science/CfpDetails.astro";
-import CfpDetailsV2 from "../components/science/CfpDetails-v2.astro";
 import Deadline from "../components/science/Deadline.astro";
 import GoodToKnow from "../components/science/GoodToKnow.astro";
 import CfpFormats from "../components/science/CfpFormats.astro";
 import Sponsors from "../components/science/Sponsors.astro";
 import Organizers from "../components/science/Organizers.astro";
-import OrganizersV2 from "../components/science/Organizers-v2.astro";
 import Invite from "../components/home/Invite.astro";
 import { signupPage } from "../components/publication-signup/server";
 
 
 const signupCard = await signupPage(Astro, { page: "/", anchor: "#news" });
 if (signupCard instanceof Response) return signupCard;
-
-const useV2 =
-	import.meta.env.DEV &&
-	(Astro.url.searchParams.get("cfp") === "v2" ||
-		Astro.url.searchParams.get("organizers") === "v2");
-const CfpComponent = useV2 ? CfpDetailsV2 : CfpDetails;
-const OrganizersComponent = useV2 ? OrganizersV2 : Organizers;
 ---
 
 <SiteLayout
@@ -37,23 +28,13 @@ const OrganizersComponent = useV2 ? OrganizersV2 : Organizers;
 	<Hero />
 	<Intro />
 	<section id ="cfp" aria-label="Call for presentations">
-		{
-			import.meta.env.DEV && (
-				<a
-					href={useV2 ? "/science#cfp" : "/science?cfp=v2#cfp"}
-					class="fixed right-4 bottom-4 z-50 rounded-lg bg-slate px-4 py-2 text-sm font-bold text-white shadow-lg"
-				>
-					{useV2 ? "Viewing V2 → Show V1" : "Viewing V1 → Show V2"}
-				</a>
-			)
-		}
-		<CfpComponent />
+		<CfpDetails />
 		<CfpFormats />
 		<Deadline />
 		<GoodToKnow />
 	</section>
 	<Invite signupCard={signupCard} />
-	<OrganizersComponent />
+	<Organizers />
 	<Sponsors tone="white" />
 	<ScienceFooter slot="footer" />
 </SiteLayout>
