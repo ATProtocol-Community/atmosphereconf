@@ -11,11 +11,11 @@ import GoodToKnow from "../components/science/GoodToKnow.astro";
 import CfpFormats from "../components/science/CfpFormats.astro";
 import Sponsors from "../components/science/Sponsors.astro";
 import Organizers from "../components/science/Organizers.astro";
-import Invite from "../components/home/Invite.astro";
-import { signupPage } from "../components/publication-signup/server";
+import Invite from "../components/science/Invite.astro";
+import { signupPage } from "../components/science/signup-server";
 
 
-const signupCard = await signupPage(Astro, { page: "/", anchor: "#news" });
+const signupCard = await signupPage(Astro, { page: "/science", anchor: "#news" });
 if (signupCard instanceof Response) return signupCard;
 ---
 
