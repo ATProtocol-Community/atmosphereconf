@@ -11,66 +11,48 @@ const themes: { name: string; icon: IconName; description: string; tags: string[
 		name: "Compose",
 		icon: "building-blocks",
 		description:
-			"Research shared as pieces anyone can cite, reuse, build on, and credit.",
+			"Questions, claims, data, and methods shared as pieces anyone can cite, reuse and build on.",
 		tags: [
-			"Modular research",
-			"Attribution",
-			"Research data",
+			"Modular science",
+			"Shared schemas",
+			"Continuous publishing",
+			"Research data"
 		],
 	},
 	{
-		name: "Share",
+		name: "Verify",
+		icon: "yes-no",
+		description:
+			"Tracking and assessing who produced a result, who checked it, and whether it was a person or AI agent.",
+		tags: [
+			"Research attribution",
+			"Provenance",
+			"Auditable AI outputs",
+			"Trust signals"
+		],
+	},
+	{
+		name: "Collaborate",
 		icon: "microphone", // placeholder
 		description:
-			"Publishing and communicating research as it happens, in the open.",
-		tags: [
-			"Continuous publishing",
-			"Preprints",
-			"Science communication"
-		],
-	},
-	{
-		name: "Connect",
-		icon: "yes-no",
-		description:
-			"Growing research communities on open social networks that anyone can join.",
-		tags: [
-			"Research communities",
-			"Citizen science",
-			"Feeds & discovery"
-		],
-	},
-	{
-		name: "Study",
-		icon: "yes-no",
-		description:
-			"Researching the open social web itself: its networks, dynamics and design.",
-		tags: [
-			"Social media research",
-			"Network science",
-			"Platform design",
-		],
-	},
-	{
-		name: "Synthesize",
-		icon: "yes-no",
-		description:
-			"People and AI making sense of research and finding new insight.",
+			"How researchers, citizens, and AI agents can work together in the open, responsibly.",
 		tags: [
 			"Collective intelligence",
-			"Sensemaking tools",
-			"AI for Science",
+			"Feeds & discovery",
+			"Citizen science",
+			"Research communities"
 		],
 	},
 	{
 		name: "Sustain",
 		icon: "scales",
 		description:
-			"The infrastructure, instiutions and funding that keep the research commons alive.",
+			"New models for research infrastructure, funding, and governance that is driven by its communities.",
 		tags: [
-			"Storage & compute",
-			"Local-first AI",
-			"New funding models"
+			"Distributed storage & compute",
+			"Local-first",
+			"Commons-based AI",
+			"Funding & governance"
 		],
 	},
 ];
@@ -123,7 +105,7 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 						What we're looking for
 					</h2>
 					<p class="mt-6 w-full max-w-[24ch] min-[538px]:max-w-[33ch] min-[700px]:max-w-[30ch] min-[778px]:max-w-[33ch] min-[840px]:max-w-[40ch] min-[940px]:max-w-[45ch] lg:max-w-[30ch]">
-						These are just starting points, so even if you don’t see your topic, we still want to hear from you.
+						We welcome researchers studying, builders creating, and anyone thinking about these topics. Don’t see your topic? We still want to hear from you!
 					</p>
 				</div>
 
@@ -145,7 +127,7 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 					/>
 				</div>
 			</div>
-			<ul class="grid gap-3 md:grid-cols-3 md:gap-4">
+			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
 				{
 					themes.map(({ name, icon, description, tags }) => (
 						<li class:list={[card, "card-lift", "flex flex-col"]} data-card>
