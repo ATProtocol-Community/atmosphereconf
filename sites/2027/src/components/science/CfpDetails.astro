@@ -11,43 +11,65 @@ const themes: { name: string; icon: IconName; description: string; tags: string[
 		name: "Compose",
 		icon: "building-blocks",
 		description:
-			"Questions, claims, data, and methods shared as pieces anyone can cite, reuse and build on.",
+			"Research shared as pieces anyone can cite, reuse, build on, and credit.",
 		tags: [
-			"Modular science",
-			"Shared schemas",
-			"Continuous publishing"
+			"Modular research",
+			"Attribution",
+			"Research data",
 		],
 	},
 	{
-		name: "Collaborate",
+		name: "Share",
 		icon: "microphone", // placeholder
 		description:
-			"How researchers, citizens, and AI agents can work together in the open, responsibly.",
+			"Publishing and communicating research as it happens, in the open.",
 		tags: [
-			"Collective intelligence",
-			"Citizen science",
-			"Humans and agents"
+			"Continuous publishing",
+			"Preprints",
+			"Science communication"
 		],
 	},
 	{
-		name: "Verify",
+		name: "Connect",
 		icon: "yes-no",
 		description:
-			"Tracking and assessing who produced a result, who checked it, and whether it was a person or AI agent.",
+			"Growing research communities on open social networks that anyone can join.",
 		tags: [
-			"Research attribution",
-			"Provenance",
-			"Auditable AI outputs"
+			"Research communities",
+			"Citizen science",
+			"Feeds & discovery"
+		],
+	},
+	{
+		name: "Study",
+		icon: "yes-no",
+		description:
+			"Researching the open social web itself: its networks, dynamics and design.",
+		tags: [
+			"Social media research",
+			"Network science",
+			"Platform design",
+		],
+	},
+	{
+		name: "Synthesize",
+		icon: "yes-no",
+		description:
+			"People and AI making sense of research and finding new insight.",
+		tags: [
+			"Collective intelligence",
+			"Sensemaking tools",
+			"AI for Science",
 		],
 	},
 	{
 		name: "Sustain",
 		icon: "scales",
 		description:
-			"New models for research infrastructure, funding, and governance that is driven by its communities.",
+			"The infrastructure, instiutions and funding that keep the research commons alive.",
 		tags: [
-			"Local-first",
-			"Distributed storage & compute",
+			"Storage & compute",
+			"Local-first AI",
 			"New funding models"
 		],
 	},
@@ -94,14 +116,14 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 	<div
 		class="relative z-1 wrap flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-40 lg:py-30"
 	>
-		<div class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-19">
+		<div class="grid gap-8 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,3.2fr)] lg:gap-19">
 			<div class="grid grid-cols-[minmax(0,1fr)_80px] items-center gap-x-4 md:grid-cols-[minmax(0,1fr)_144px] md:gap-x-8 lg:block">
 				<div class="w-fit min-w-0 max-w-full">
 					<h2 class={heading}>
-						How you can contribute
+						What we're looking for
 					</h2>
-					<p class="mt-6 w-full max-w-[24ch] min-[538px]:max-w-[33ch] min-[700px]:max-w-[30ch] min-[778px]:max-w-[33ch] min-[840px]:max-w-[40ch] min-[940px]:max-w-[45ch] lg:max-w-[24ch]">
-						These are starting points, not categories. Don’t see your work? We still want to hear from you.
+					<p class="mt-6 w-full max-w-[24ch] min-[538px]:max-w-[33ch] min-[700px]:max-w-[30ch] min-[778px]:max-w-[33ch] min-[840px]:max-w-[40ch] min-[940px]:max-w-[45ch] lg:max-w-[30ch]">
+						These are just starting points, so even if you don’t see your topic, we still want to hear from you.
 					</p>
 				</div>
 
@@ -123,7 +145,7 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 					/>
 				</div>
 			</div>
-			<ul class="grid gap-3 md:grid-cols-2 md:gap-4">
+			<ul class="grid gap-3 md:grid-cols-3 md:gap-4">
 				{
 					themes.map(({ name, icon, description, tags }) => (
 						<li class:list={[card, "card-lift", "flex flex-col"]} data-card>
@@ -133,7 +155,9 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 							</div>
 							<p class="mt-2 text-sm/5">{description}</p>
 							<div class="mt-auto pt-5">
-								<p class="border-t border-white/20 pt-3 text-xs/5 font-semibold uppercase">{tags.join(" · ")}</p>
+								<ul class="theme-tags" aria-label={`${name} topics`}>
+									{tags.map((tag) => <li><span>{tag}</span></li>)}
+								</ul>
 							</div>
 						</li>
 					))
@@ -153,6 +177,29 @@ const cardTitle = "font-display text-lg/[1.5] uppercase";
 		</div>
 	</div>
 </section>
+
+<style>
+	.theme-tags {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		gap: 8px;
+		color: var(--color-navy);
+		font-size: 12px;
+		line-height: 1.5;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+	.theme-tags li {
+		min-width: 0;
+		max-width: 100%;
+		overflow-wrap: anywhere;
+		/*background: var(--color-cream);*/
+		background: color-mix(in srgb, var(--color-cream) 90%, transparent);
+		padding: 4.8px 8px;
+	}
+</style>
 
 <style is:global>
 	[data-scene="cfp-goose"] [data-part="eye"] {
