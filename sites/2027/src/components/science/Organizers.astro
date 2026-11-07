@@ -1,10 +1,13 @@
 ---
 import puffy from "../../../images/clouds/puffy.svg?url";
 import long from "../../../images/clouds/long.svg?url";
+import atscienceMark from "../../../images/logo/atscience-mark.svg?url";
+import sciosMark from "../../../images/logo/scios-mark.svg?url";
 
 const organizers = [
 	{
 		name: "ATScience",
+		mark: atscienceMark,
 		establishedYear: "2025",
 		href: "https://atproto.science/",
 		domain: "atproto.science",
@@ -13,11 +16,12 @@ const organizers = [
 	},
 	{
 		name: "IOSP",
+		mark: sciosMark,
 		establishedYear: "2024",
 		href: "https://www.iosp.science/",
 		domain: "iosp.science",
 		description:
-			"IOSP brings researchers and the people building open science infrastructure together to work on shared problems.",
+			"Institute of Open Science Practices (IOSP) brings researchers and the people building open science infrastructure together to work on shared problems.",
 	},
 ];
 ---
@@ -55,42 +59,32 @@ const organizers = [
 			{
 				organizers.map((organizer) => (
 					<article class="organizer-stack relative isolate flex text-navy">
-						<div class="relative z-1 flex w-full flex-col rounded-md bg-cream p-6 md:p-7 lg:p-10">
-							<div class="relative min-h-44 border-b border-dashed border-line lg:min-h-48">
-								<h3 class="absolute top-6 left-0 display text-base/7 md:text-lg/8 lg:text-2xl/9">
-									{organizer.name}
-								</h3>
-								{/* Founding years are layout placeholders, not verified dates. */}
-								<div class="absolute right-14 bottom-6 z-1 flex size-20 -rotate-12 flex-col items-center justify-center rounded-full border-2 border-azure bg-cream/80 text-center font-semibold text-azure lg:right-18">
-									<span class="text-[9px]/3 tracking-[0.06em] uppercase">
-										Est.
+						<div class="organizer-paper relative z-1 w-full rounded-md bg-cream p-6 lg:p-8">
+							<h3 class="organizer-name display text-lg/8 lg:text-[22px]/[1.7]">
+								{organizer.name}
+							</h3>
+							<p class="organizer-description max-w-[40ch] text-[17px]/[1.6] text-slate">
+								{organizer.description}
+							</p>
+							<div class="organizer-postage relative w-20 self-start justify-self-end lg:w-24">
+								<div class="organizer-postmark absolute top-16 -left-6 z-1 flex size-14 -rotate-12 flex-col items-center justify-center rounded-full border-2 border-azure bg-cream text-center text-[9px]/3 font-semibold tracking-[0.06em] text-azure uppercase lg:top-20 lg:-left-8 lg:size-16 lg:text-[10px]">
+									<span>Est.</span>
+									<span class="text-sm/5 lg:text-base/6">
+										{organizer.establishedYear}
 									</span>
-									<span class="text-base/6">
-										c. {organizer.establishedYear}
-									</span>
-									<span class="text-[8px]/3 uppercase">Placeholder</span>
 								</div>
-								<div
-									class="absolute top-0 right-0 w-20 rotate-6 md:w-24 lg:w-28"
-									aria-hidden="true"
-								>
-									<div class="organizer-stamp flex aspect-[4/5] flex-col items-center justify-center gap-3 bg-white p-3 text-blue">
-										{/* Replace the name with the supplied organization logo. */}
-										<span class="text-[10px] font-semibold md:text-xs lg:text-sm">
-											{organizer.name}
-										</span>
-										<span class="text-center text-[8px]/3 tracking-[0.06em] uppercase">
-											Logo placeholder
-										</span>
+								<div class="rotate-6" aria-hidden="true">
+									<div class="organizer-stamp flex aspect-[4/5] items-center justify-center p-5">
+										<span
+											class="organizer-mark block aspect-square w-full"
+											style={{ "--organizer-mark": `url("${organizer.mark}")` }}
+										/>
 									</div>
 								</div>
 							</div>
-							<p class="mt-6 mb-8 max-w-[40ch] text-base/7 text-slate lg:mb-10 lg:text-lg/7">
-								{organizer.description}
-							</p>
-							<div class="mt-auto border-t border-line pt-5">
+							<div class="organizer-link border-t border-dashed border-line pt-3">
 								<a
-									class="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-blue underline-offset-4 hover:underline md:text-base"
+									class="inline-flex min-h-11 items-center gap-2 text-base font-semibold text-blue underline-offset-4 hover:underline"
 									href={organizer.href}
 								>
 									{organizer.domain} <span aria-hidden="true">▸</span>
@@ -105,9 +99,51 @@ const organizers = [
 </section>
 
 <style>
+	.organizer-paper {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 80px;
+		grid-template-areas: "name postage" "description description" "link link";
+		grid-template-rows: auto 1fr auto;
+		gap: 16px;
+	}
+
+	.organizer-name {
+		grid-area: name;
+	}
+
+	.organizer-description {
+		grid-area: description;
+	}
+
+	.organizer-postage {
+		grid-area: postage;
+		min-height: 120px;
+	}
+
+	.organizer-link {
+		grid-area: link;
+		margin-top: 4px;
+	}
+
+	@media (width >= 1024px) {
+		.organizer-postage {
+			min-height: 152px;
+		}
+	}
+
+	@media (width >= 1100px) {
+		.organizer-paper {
+			grid-template-columns: minmax(0, 1fr) 112px;
+			grid-template-areas: "name postage" "description postage" "link link";
+			column-gap: 24px;
+		}
+	}
+
 	/* Perforation treatment from postcard/stamps/Stamp.astro. */
 	.organizer-stamp {
 		position: relative;
+		color: var(--color-cream);
+		background: var(--color-blue);
 		mask:
 			radial-gradient(circle at 50% 0, transparent 3px, #000 3.5px) 0 0 / 12px
 				100%,
@@ -120,11 +156,16 @@ const organizers = [
 		mask-composite: intersect;
 	}
 
+	.organizer-mark {
+		background: currentColor;
+		mask: var(--organizer-mark) center / contain no-repeat;
+	}
+
 	.organizer-stamp::before {
 		content: "";
 		position: absolute;
 		inset: 8px;
-		border: 1px solid var(--color-line);
+		border: 1px solid color-mix(in oklch, currentColor 55%, transparent);
 	}
 
 	.organizer-stack {
