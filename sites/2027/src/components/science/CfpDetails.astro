@@ -1,0 +1,224 @@
+---
+import Icon from "../site/Icon.astro";
+import type { IconName } from "../site/Icon.astro";
+import puffy from "../../../images/clouds/puffy.svg?url";
+import long from "../../../images/clouds/long.svg?url";
+import bumpy from "../../../images/clouds/bumpy.svg?url";
+import LookingGoose from "../../../images/guus/telescope.svg";
+
+const themes: { name: string; icon: IconName; description: string; tags: string[]; }[] = [
+	{
+		name: "Compose",
+		icon: "puzzle-piece",
+		description:
+			"Research shared as pieces anyone can cite, reuse, build on, and credit.",
+		tags: [
+			"Modular research",
+			"Shared schemas",
+			"Research data",
+		],
+	},
+	{
+		name: "Collaborate",
+		icon: "team-of-three",
+		description:
+			"Growing research communities on open social networks that anyone can join.",
+		tags: [
+			"Research communities",
+			"Citizen science",
+			"Feeds & discovery",
+		],
+	},
+	{
+		name: "Synthesize",
+		icon: "brain",
+		description:
+			"People and AI making sense of research and finding new insight.",
+		tags: [
+			"Collective intelligence",
+			"Sensemaking tools",
+			"AI for science",
+		],
+	},
+	{
+		name: "Share",
+		icon: "paper-plane",
+		description:
+			"Publishing and communicating research as it happens, in the open.",
+		tags: [
+			"Continuous publishing",
+			"Science communication",
+			"Preprints",
+		],
+	},
+	{
+		name: "Verify",
+		icon: "magnifying-glass",
+		description:
+			"New ways to review research and show who checked it, and how.",
+		tags: [
+			"Auditable AI outputs",
+			"Research attribution",
+			"Trust signals",
+		],
+	},
+	{
+		name: "Sustain",
+		icon: "seedling",
+		description:
+			"The infrastructure, instiutions and funding that keep the research commons alive.",
+		tags: [
+			"Storage & compute",
+			"Commons-based AI",
+			"New funding models"
+		],
+	},
+];
+
+const heading = "display text-2xl/[1.5] md:text-[32px]/[1.5]";
+const card = "rounded-xl bg-white/15 p-5 md:p-6";
+const cardTitle = "font-display text-lg/[1.5] uppercase";
+---
+
+<section
+	class="relative overflow-hidden bg-linear-to-b from-azure to-[#7d7cd8] text-white"
+	aria-label="What to propose"
+>
+	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+		<!-- Mobile/tablet: long cloud on the left -->
+		<img
+			class="absolute top-16 -left-30 w-80 -scale-x-100 opacity-40 md:top-20 md:-left-36 md:w-105 lg:hidden"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+
+		<!-- Desktop: left = puffy, right = long -->
+		<img
+			class="absolute top-30 -left-28 hidden w-95 opacity-30 lg:block"
+			src={puffy}
+			alt=""
+			width="451"
+			height="196"
+			loading="lazy"
+		/>
+		<img
+		class="absolute top-80 -right-32 hidden w-75 opacity-20 md:top-26 md:-right-30 md:w-90 lg:top-36 lg:-right-28 lg:block lg:w-105"
+			src={long}
+			alt=""
+			width="735"
+			height="272"
+			loading="lazy"
+		/>
+	</div>
+	<div
+		class="relative z-1 wrap flex flex-col gap-16 py-16 md:gap-20 md:py-20 lg:gap-40 lg:py-30"
+	>
+		<div class="grid gap-8 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,3.2fr)] lg:gap-19">
+			<div class="grid grid-cols-[minmax(0,1fr)_80px] items-center gap-x-4 md:grid-cols-[minmax(0,1fr)_144px] md:gap-x-8 lg:block">
+				<div class="w-fit min-w-0 max-w-full">
+					<h2 class={heading}>
+						What we're looking for
+					</h2>
+					<p class="mt-6 w-full max-w-[24ch] min-[538px]:max-w-[33ch] min-[700px]:max-w-[30ch] min-[778px]:max-w-[33ch] min-[840px]:max-w-[40ch] min-[940px]:max-w-[45ch] lg:max-w-[30ch]">
+						We welcome researchers studying, builders creating, and anyone thinking about these topics or, more broadly, open science and the open social web. So if you don’t see your topic, we still want to hear from you!
+					</p>
+				</div>
+
+				<!-- Mobile/tablet: header goose and its cloud -->
+				<div
+					class="pointer-events-none relative isolate w-full translate-y-6 lg:hidden"
+					aria-hidden="true"
+				>
+					<img
+						src={bumpy}
+						alt=""
+						class="absolute top-[12%] -right-[55%] z-0 w-[230%] max-w-none opacity-50"
+						width="449"
+						height="195"
+					/>
+					<LookingGoose
+						data-scene="cfp-goose"
+						class="relative z-20 block h-auto w-full scale-x-100"
+					/>
+				</div>
+			</div>
+			<ul class="grid gap-3 md:grid-cols-3 md:gap-4">
+				{
+					themes.map(({ name, icon, description, tags }) => (
+						<li class:list={[card, "card-lift", "flex flex-col"]} data-card>
+							<div class="flex items-center gap-3">
+								<Icon name={icon} class="size-10 shrink-0 md:size-12" />
+								<h3 class={cardTitle}>{name}</h3>
+							</div>
+							<p class="mt-2 text-sm/5">{description}</p>
+							<div class="mt-auto pt-5">
+								<ul class="theme-tags" aria-label={`${name} topics`}>
+									{tags.map((tag) => <li><span>{tag}</span></li>)}
+								</ul>
+							</div>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+	<div
+		class="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden lg:block"
+		aria-hidden="true"
+	>
+		<div class="wrap">
+			<LookingGoose
+				data-scene="cfp-goose"
+				class="ml-12 block h-auto w-48 -scale-x-100"
+			/>
+		</div>
+	</div>
+</section>
+
+<style>
+	.theme-tags {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		gap: 8px;
+		color: var(--color-navy);
+		font-size: 11px;
+		line-height: 1.5;
+		font-weight: 600;
+		letter-spacing: 0.03em;
+		text-transform: uppercase;
+	}
+	.theme-tags li {
+		min-width: 0;
+		max-width: 100%;
+		overflow-wrap: anywhere;
+		/*background: var(--color-cream);*/
+		background: color-mix(in srgb, var(--color-cream) 90%, transparent);
+		padding: 3.6px 6px;
+	}
+</style>
+
+<style is:global>
+	[data-scene="cfp-goose"] [data-part="eye"] {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: cfp-goose-blink 4.5s ease-in-out infinite var(--play);
+	}
+
+	@keyframes cfp-goose-blink {
+		0%,
+		90%,
+		94%,
+		96%,
+		100% {
+			transform: scaleY(1);
+		}
+		92%,
+		98% {
+			transform: scaleY(0.1);
+		}
+	}
+</style>
