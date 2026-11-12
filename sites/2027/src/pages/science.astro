@@ -3,6 +3,7 @@ import { event } from "../data/science";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import ScienceHeader from "../components/science/ScienceHeader.astro";
 import ScienceFooter from "../components/science/ScienceFooter.astro";
+import BackToTop from "../components/science/BackToTop.astro";
 import Hero from "../components/science/Hero.astro";
 import Intro from "../components/science/Intro.astro";
 import CfpDetails from "../components/science/CfpDetails.astro";
@@ -36,5 +37,6 @@ if (signupCard instanceof Response) return signupCard;
 	<Invite signupCard={signupCard} />
 	<Organizers />
 	<Sponsors tone="white" />
+	<BackToTop />
 	<ScienceFooter slot="footer" />
 </SiteLayout>
