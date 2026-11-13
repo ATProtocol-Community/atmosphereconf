@@ -1,7 +1,6 @@
 ---
 import { event } from "../data/science";
 import SiteLayout from "../layouts/SiteLayout.astro";
-import ScienceHeader from "../components/science/ScienceHeader.astro";
 import ScienceFooter from "../components/science/ScienceFooter.astro";
 import BackToTop from "../components/science/BackToTop.astro";
 import Hero from "../components/science/Hero.astro";
@@ -25,7 +24,6 @@ if (signupCard instanceof Response) return signupCard;
 	description={`ATScience and IOSP team up for a two-day side event at AtmosphereConf ${event.year}. Join researchers, citizen scientists, developers, and funders in the Netherlands, ${event.firstDay}–${event.lastDay} ${event.year}.`}
 	ogDescription={`${event.firstDay}–${event.lastDay} · the ${event.venue}. Two days shaping the future of open science.`}
 >
-	<ScienceHeader slot="header" />
 	<Hero />
 	<Intro />
 	<section id ="cfp" aria-label="Call for presentations">
