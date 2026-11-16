@@ -7,6 +7,7 @@ import stackSans600 from "./fonts/stack-sans-text-600.ttf?inline";
 import stackSans700 from "./fonts/stack-sans-text-700.ttf?inline";
 import { homeImage } from "./home";
 import { pageImage } from "./page";
+import { scienceImage } from "./science";
 import { ogPages, type OgImage } from "./pages";
 
 const fontData = (dataUrl: string) =>
@@ -37,7 +38,12 @@ const fonts = [
 ];
 
 export const renderOgImage = async (image: OgImage) => {
-	const tree = image === "home" ? homeImage() : pageImage(ogPages[image]);
+	const tree =
+		image === "home"
+			? homeImage()
+			: image === "science"
+				? scienceImage()
+				: pageImage(ogPages[image]);
 	const svg = await satori(tree as Parameters<typeof satori>[0], {
 		width: 1200,
 		height: 630,
