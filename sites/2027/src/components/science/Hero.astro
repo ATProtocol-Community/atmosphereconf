@@ -174,7 +174,8 @@ import RevealWords from "../site/RevealWords.astro";
 
 <style is:global>
 	[data-scene="hero-goose"] [data-part="goose"] {
-		transform-origin: 160px 150px;
+		/* The science goose is drawn at about 2x the main one (645×531 vs 326×269). */
+		transform-origin: 320px 300px;
 		animation: hero-bob 1.1s cubic-bezier(0.45, 0, 0.55, 1) -0.275s infinite
 			var(--play);
 	}

@@ -17,9 +17,9 @@ const comingSoon = "block cursor-not-allowed text-lg opacity-65";
 		class="relative z-1 wrap pt-16 pb-[calc(var(--cloud-band)+24px)] md:pt-30"
 	>
 		<div
-			class="grid grid-cols-2 gap-10 md:grid-cols-[1fr_150px_150px] md:gap-6 lg:grid-cols-[1fr_204px_204px]"
+			class="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 md:gap-x-10 lg:grid-cols-[1fr_repeat(3,max-content)] lg:gap-x-16 xl:gap-x-24"
 		>
-			<div class="max-md:col-span-full">
+			<div class="col-span-full lg:col-span-1">
 				<dl class="mb-6 flex gap-6 text-left md:gap-12">
 					<div>
 						<dt class="eyebrow">Dates</dt><dd class="mt-1 text-sm uppercase">
@@ -32,12 +32,20 @@ const comingSoon = "block cursor-not-allowed text-lg opacity-65";
 					</div>
 				</dl>
 			</div><nav class={navList} aria-label="Conference">
-				<h2 class={navTitle}>Join Atmo27</h2><a href="/attend">Attend</a><a
-					href="/science#cfp">Call for presentations</a
+				<h2 class={navTitle}>Join Atmo27</h2>
+				{/* <a href="/attend">Attend</a> */}
+				<a href="/speak">Call for presentations</a>
+				<a href="/science">ATScience x IOSP</a>
+			</nav><nav class={navList} aria-label="ATScience">
+				<h2 class={navTitle}>ATScience</h2>
+				<a href="https://atproto.science/">Website</a>
+				<a href="https://bsky.app/profile/did:plc:nncebyouba4ex3775syiyvjy"
+					>Bluesky</a
 				>
+				<a href="https://notes.atproto.science">Newsletter</a>
 			</nav><nav class={navList} aria-label="Community">
 				<h2 class={navTitle}>Community</h2><a
-					href="https://bsky.app/profile/did:plc:nncebyouba4ex3775syiyvjy"
+					href="https://bsky.app/profile/did:plc:3xewinw4wtimo2lqfy5fm5sw"
 					>Bluesky</a
 				><a href="https://github.com/ATProtocol-Community/atmosphereconf"
 					>GitHub</a
@@ -316,7 +324,8 @@ const comingSoon = "block cursor-not-allowed text-lg opacity-65";
 		}
 	}
 	[data-scene="footer-goose"] [data-part="goose"] {
-		transform-origin: 160px 150px;
+		/* The science goose is drawn at about 2x the main one (645×531 vs 326×269). */
+		transform-origin: 320px 300px;
 		animation: footer-goose-bob 1.1s ease-in-out -0.275s infinite var(--play);
 	}
 	[data-scene="footer-goose"] [data-part="wing-near"],

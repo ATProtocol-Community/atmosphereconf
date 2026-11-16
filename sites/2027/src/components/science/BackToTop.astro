@@ -1,6 +1,27 @@
+---
+import Goose from "../../../images/guus/science-flying.svg";
+import puffy from "../../../images/clouds/puffy.svg?url";
+import bumpy from "../../../images/clouds/bumpy.svg?url";
+---
+
 <science-back-to-top>
 	<a href="#page-top" tabindex="-1">
-		<span aria-hidden="true">↑</span> Back to top
+		<img
+			class="back-to-top-cloud cloud-big"
+			src={puffy}
+			alt=""
+			width="451"
+			height="196"
+		/>
+		<img
+			class="back-to-top-cloud cloud-small"
+			src={bumpy}
+			alt=""
+			width="449"
+			height="195"
+		/>
+		<Goose class="back-to-top-goose" aria-hidden="true" />
+		Back to top
 	</a>
 </science-back-to-top>
 
@@ -16,19 +37,29 @@
 
 			const update = () => {
 				// Clamp Safari's overscroll so bouncing at either edge isn't intent.
-				const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+				const maxY = Math.max(
+					0,
+					document.documentElement.scrollHeight - window.innerHeight,
+				);
 				const y = Math.max(0, Math.min(window.scrollY, maxY));
 				const delta = previousY - y;
 				previousY = y;
-				const eligible = y > window.innerHeight * 2;
+				const eligible = y > window.innerHeight * 1.5;
+				// Hiding takes real reading progress (half a screen), so the
+				// button doesn't flicker away on a small nudge downward.
+				const hideAfter = Math.max(300, window.innerHeight * 0.5);
 
 				if (!eligible) {
 					travel = 0;
 					revealed = false;
+				} else if (y >= maxY - 4) {
+					// Reaching the end is the most likely moment to want the top.
+					revealed = true;
 				} else if (delta !== 0) {
-					travel = Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
-					if (travel >= 80) revealed = true;
-					if (travel <= -24) revealed = false;
+					travel =
+						Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
+					if (travel >= 60) revealed = true;
+					if (travel <= -hideAfter) revealed = false;
 				}
 
 				this.toggleAttribute("data-revealed", revealed);
@@ -36,12 +67,19 @@
 				link.tabIndex = eligible ? 0 : -1;
 			};
 
-			window.addEventListener("scroll", update, { passive: true, signal: controller.signal });
+			window.addEventListener("scroll", update, {
+				passive: true,
+				signal: controller.signal,
+			});
 			window.addEventListener("resize", update, { signal: controller.signal });
-			link.addEventListener("click", () => {
-				// Keep native hash navigation, but move focus as well as the viewport.
-				document.getElementById("page-top")?.focus({ preventScroll: true });
-			}, { signal: controller.signal });
+			link.addEventListener(
+				"click",
+				() => {
+					// Keep native hash navigation, but move focus as well as the viewport.
+					document.getElementById("page-top")?.focus({ preventScroll: true });
+				},
+				{ signal: controller.signal },
+			);
 			update();
 		}
 
@@ -67,9 +105,10 @@
 		align-items: center;
 		gap: 8px;
 		min-height: 44px;
-		padding: 10px 18px;
+		/* Right room for the goose taking off from the corner. */
+		padding: 10px 44px 10px 18px;
 		border: 1px solid var(--color-navy);
-		border-radius: 999px;
+		border-radius: 4px;
 		background: var(--color-cream);
 		color: var(--color-navy);
 		font-size: 14px;
@@ -78,7 +117,9 @@
 		opacity: 0;
 		transform: translateY(8px);
 		pointer-events: none;
-		transition: opacity 160ms ease-out, transform 160ms ease-out;
+		transition:
+			opacity 160ms ease-out,
+			transform 160ms ease-out;
 	}
 
 	science-back-to-top[data-revealed] a,
@@ -93,8 +134,52 @@
 		color: var(--color-cream);
 	}
 
+	.back-to-top-goose {
+		position: absolute;
+		right: -14px;
+		top: -29px;
+		width: 66px;
+		height: auto;
+		rotate: 12deg;
+		filter: drop-shadow(1px 3px 4px rgb(0 25 65 / 0.35));
+		transition: translate 200ms var(--ease-soft);
+	}
+
+	science-back-to-top a:is(:hover, :focus-visible) .back-to-top-goose {
+		translate: -2px -5px;
+	}
+
+	.back-to-top-cloud {
+		position: absolute;
+		height: auto;
+		pointer-events: none;
+		filter: drop-shadow(1px 0 0 var(--color-navy))
+			drop-shadow(-1px 0 0 var(--color-navy))
+			drop-shadow(0 1px 0 var(--color-navy))
+			drop-shadow(0 -1px 0 var(--color-navy));
+		transition: translate 200ms var(--ease-soft);
+	}
+
+	.cloud-big {
+		right: -18px;
+		top: 12px;
+		width: 58px;
+	}
+
+	.cloud-small {
+		right: 12px;
+		top: 30px;
+		width: 32px;
+	}
+
+	science-back-to-top a:is(:hover, :focus-visible) .back-to-top-cloud {
+		translate: 3px 1px;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		science-back-to-top a {
+		science-back-to-top a,
+		.back-to-top-goose,
+		.back-to-top-cloud {
 			transform: none;
 			transition: none;
 		}
