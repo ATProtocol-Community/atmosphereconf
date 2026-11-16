@@ -39,6 +39,12 @@ export const ogPages = {
 		path: "/postcard",
 		seat: "Sender",
 	},
+	science: {
+		title: "ATScience × IOSP 2027",
+		description: "ATScience and IOSP team up for a two-day side event at AtmosphereConf 2027. Join researchers, citizen scientists, developers, and funders to shape the future of science.",
+		path: "/science",
+		seat: "Attendee",
+	},
 } satisfies Record<string, OgPage>;
 
 export type OgImage = "home" | keyof typeof ogPages;
