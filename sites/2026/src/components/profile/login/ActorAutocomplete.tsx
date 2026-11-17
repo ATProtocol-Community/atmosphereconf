@@ -28,7 +28,7 @@ async function fetchActors(
   signal?: AbortSignal,
 ): Promise<Actor[]> {
   const url = new URL(
-    "https://public.api.bsky.app/xrpc/app.bsky.actor.searchActorsTypeahead",
+    "https://typeahead.waow.tech/xrpc/app.bsky.actor.searchActorsTypeahead",
   );
   url.searchParams.set("q", query);
   url.searchParams.set("limit", "5");

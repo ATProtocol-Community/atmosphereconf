@@ -10,7 +10,7 @@ export type ActorSuggestion = {
 
 export const searchActors = async (q: string): Promise<ActorSuggestion[]> => {
 	const result = await xrpcSafe(
-		"https://public.api.bsky.app",
+		"https://typeahead.waow.tech",
 		searchActorsTypeahead,
 		{ params: { q, limit: 8 } },
 	);
