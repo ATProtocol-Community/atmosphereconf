@@ -2,10 +2,11 @@ name: Deploy Preview to Railway
 
 on:
   pull_request_target:
-    types: [opened, synchronize, closed]
+    types: [opened, reopened, synchronize, closed]
 
 permissions:
   contents: write
+  # Needed to post the preview URL comment on pull requests.
   pull-requests: write
   issues: write
 
@@ -17,10 +18,14 @@ jobs:
   create-preview:
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
+    # Optional repository variable PREVIEW_TRUSTED_AUTHORS: JSON array of GitHub
+    # usernames, e.g. ["username"]. Adds to owner/member/collaborator trust.
+    # Trust the PR author, regardless of who triggers a workflow update.
     environment: >-
-      ${{ (github.actor == github.repository_owner 
+      ${{ (github.event.pull_request.user.login == github.repository_owner
           || github.event.pull_request.author_association == 'MEMBER'
-          || github.event.pull_request.author_association == 'COLLABORATOR')
+          || github.event.pull_request.author_association == 'COLLABORATOR'
+          || contains(fromJSON(vars.PREVIEW_TRUSTED_AUTHORS || '[]'), github.event.pull_request.user.login))
           && 'preview-cleanup' 
           || 'preview-deploy' }}
     steps:
@@ -40,117 +45,59 @@ jobs:
             echo "is_fork=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Checkout PR head (fork)
+      - name: Checkout trusted controller (fork)
         if: steps.branch.outputs.is_fork == 'true'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Push to trackable branch (fork)
         if: steps.branch.outputs.is_fork == 'true'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          git push origin HEAD:refs/heads/railway-preview/pr-${{ github.event.pull_request.number }} --force
+          git fetch --no-tags origin "refs/pull/${PR_NUMBER}/head"
+          fetched_sha=$(git rev-parse FETCH_HEAD)
+          if [ "$fetched_sha" != "$EXPECTED_SHA" ]; then
+            echo "PR changed after this run was requested; use the newer run."
+            exit 1
+          fi
+          git push origin "${EXPECTED_SHA}:refs/heads/railway-preview/pr-${PR_NUMBER}" --force
 
       - name: Deploy to Railway
         id: railway-deploy
-        uses: ayungavis/railway-preview-deploy@v1.0.2
+        uses: ayungavis/railway-preview-deploy@8f821daf4bab3ba5bfd0e8b9d3408aed202610d7 # v2.0.0
         with:
           railway_api_token: ${{ secrets.RAILWAY_TOKEN }}
           project_id: ${{ vars.RAILWAY_PROJECT_ID }}
           environment_name: "preview-deploy"
           preview_environment_name: "pr-${{ github.event.pull_request.number }}"
+          deployment_mode: commit
+          commit_sha: ${{ github.event.pull_request.head.sha }}
+          api_service_name: atmosphereconf-2027
           branch_name: ${{ steps.branch.outputs.name }}
+          update_deployment_triggers: "true"
           environment_variables: |
             {
-              "QUICKSLICE_CLIENT_ID": "${{ '${{shared.QUICKSLICE_CLIENT_ID}}' }}",
-              "QUICKSLICE_CLIENT_SECRET":  "${{ '${{shared.QUICKSLICE_CLIENT_SECRET}}' }}",
-              "QUICKSLICE_REDIRECT_URI": "https://${{ '${{RAILWAY_PUBLIC_DOMAIN}}' }}/api/auth/callback",
               "AUTHPROTO_EXTERNAL_DOMAIN": "https://${{ '${{RAILWAY_PUBLIC_DOMAIN}}' }}",
               "LIBSQL_URL": "file:/tmp/preview.db"
             }
 
-      - name: Wait for deployment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const token = '${{ secrets.RAILWAY_TOKEN }}';
-            const projectId = '${{ vars.RAILWAY_PROJECT_ID }}';
-            const prNumber = context.payload.pull_request.number;
-            const envName = `pr-${prNumber}`;
-
-            // Embed the functions to make it easier to call them for forks
-            async function railwayQuery(query, variables = {}) {
-              const response = await fetch('https://backboard.railway.com/graphql/v2', {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query, variables }),
-              });
-
-              const json = await response.json();
-              if (json.errors) {
-                throw new Error(`Railway API Error: ${json.errors.map((error) => error.message).join(', ')}`);
-              }
-
-              return json.data;
-            }
-
-            async function getEnvironmentId(name) {
-              const data = await railwayQuery(
-                `query GetEnvironments($projectId: String!) {
-                  environments(projectId: $projectId) {
-                    edges { node { id name } }
-                  }
-                }`,
-                { projectId },
-              );
-
-              const environment = data.environments.edges.find((edge) => edge.node.name === name);
-              return environment ? environment.node.id : null;
-            }
-
-            async function getLatestDeploymentStatus(environmentId) {
-              const data = await railwayQuery(
-                `query GetLatestDeployment($projectId: String!, $environmentId: String!) {
-                  deployments(first: 1, input: {
-                    projectId: $projectId,
-                    environmentId: $environmentId,
-                  }) {
-                    edges { node { id status } }
-                  }
-                }`,
-                { projectId, environmentId },
-              );
-
-              return data.deployments?.edges?.[0]?.node?.status;
-            }
-
-            const envId = await getEnvironmentId(envName);
-            if (!envId) throw new Error(`Environment ${envName} not found`);
-
-            // Try listening for 10 minutes
-            for (let i = 0; i < 60; i++) {
-              const status = await getLatestDeploymentStatus(envId);
-              core.info(`Attempt ${i + 1}: status=${status}`);
-
-              if (status === 'SUCCESS') return;
-              if (['FAILED', 'CRASHED', 'REMOVED'].includes(status)) {
-                throw new Error(`Deployment failed with status: ${status}`);
-              }
-
-              await new Promise(r => setTimeout(r, 10000));
-            }
-            throw new Error('Timed out waiting for deployment');
-
       - name: Comment with preview URL
+        env:
+          PREVIEW_DOMAIN: ${{ steps.railway-deploy.outputs.service_domain }}
         uses: actions/github-script@v7
         with:
           script: |
             const marker = '<!-- railway-preview -->';
             const envName = 'pr-${{ github.event.pull_request.number }}';
-            const domain = `atmosphereconf-2027-pr-${{ github.event.pull_request.number }}.up.railway.app`;
+            const domain = process.env.PREVIEW_DOMAIN;
+            if (!domain) throw new Error('Railway did not return a preview domain');
+            const previewUrl = new URL(`https://${domain}`);
+            if (!previewUrl.hostname.endsWith('.up.railway.app')) {
+              throw new Error('Unexpected Railway domain');
+            }
 
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -159,7 +106,7 @@ jobs:
               repo: context.repo.repo
             });
 
-            const body = `${marker}\n## 🪿 🪿 🪿 Preview environment for **${envName}** is ready! 🪿 🪿 🪿\nTake a gander: https://${domain}`;
+            const body = `${marker}\n## 🪿 🪿 🪿 Preview environment for **${envName}** is ready! 🪿 🪿 🪿\nTake a gander: ${previewUrl}`;
 
             const existingComment = comments.find(comment => comment.body.includes(marker));
 
@@ -216,7 +163,7 @@ jobs:
 
       - name: Cleanup Railway Environment
         if: steps.branch.outputs.is_fork != 'true' || steps.preview_branch.outputs.exists == 'true'
-        uses: ayungavis/railway-preview-deploy@v1.0.2
+        uses: ayungavis/railway-preview-deploy@8f821daf4bab3ba5bfd0e8b9d3408aed202610d7 # v2.0.0
         with:
           railway_api_token: ${{ secrets.RAILWAY_TOKEN }}
           project_id: ${{ vars.RAILWAY_PROJECT_ID }}
