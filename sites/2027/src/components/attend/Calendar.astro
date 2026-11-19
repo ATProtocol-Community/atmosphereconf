@@ -1,4 +1,6 @@
 ---
+import Airplane from "../../../images/airplane.svg";
+
 const days = [
 	{
 		date: "18 March – 9 May",
@@ -38,23 +40,21 @@ const days = [
 ];
 ---
 
-<section class="text-white sky-gradient" aria-labelledby="calendar-title">
+<section class="overflow-x-clip text-white sky-gradient" aria-labelledby="calendar-title">
 	<div class="wrap py-16 md:py-20 lg:py-30">
 		<h2 class="max-w-200 title" id="calendar-title">
 			What’s happening in the Netherlands around the conference
 		</h2>
-		<p class="mt-4 text-sm md:text-base">
-			Plan your arrival and stay around the Netherland’s busiest spring week.
+		<p class="mt-4 text-sm md:text-lg">
+			Plan your arrival and stay around the Netherlands’ busiest spring week.
 		</p>
+		<div class="relative mt-8 md:mt-10">
 		<table
-			class="mt-8 w-full overflow-hidden rounded-lg bg-white text-left text-navy md:mt-10"
+			class="w-full overflow-hidden rounded-lg bg-white text-left text-navy"
 		>
 			<thead class="bg-navy text-white">
 				<tr class="eyebrow *:px-4 *:py-4 *:font-medium md:*:px-6">
-					<th scope="col">Date</th><th scope="col">What’s happening</th><th
-						scope="col"
-						class="text-right max-md:sr-only">2027</th
-					>
+					<th scope="col">Date (2027)</th><th scope="col">What’s happening</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-line">
@@ -62,24 +62,39 @@ const days = [
 					days.map(({ date, what, event }) => (
 						<tr
 							class:list={[
-								"*:px-4 *:py-4 md:*:px-6 md:*:py-5",
-								event && "bg-[#cfe0ff]",
+								"*:px-4 md:*:px-6",
+								event
+									? "bg-azure font-medium text-white *:py-4 md:h-22 md:*:py-5.5"
+									: "*:py-3.5 md:*:py-4.5",
 							]}
 						>
 							<th
 								scope="row"
-								class="w-[30%] align-top text-xs/5 font-normal text-slate md:text-sm/5"
+								class="w-[30%] align-top text-xs/5 font-normal md:align-middle md:text-sm/5 lg:w-[334px]"
 							>
 								{date}
 							</th>
-							<td class="text-sm/5 md:text-base/6">{what}</td>
-							<td class="text-right align-top max-md:hidden">
-								{event && <span class="eyebrow text-azure">Event</span>}
-							</td>
+							<td class="text-sm/5 md:text-lg/6">{what}</td>
 						</tr>
 					))
 				}
 			</tbody>
 		</table>
+		<div
+			class="pointer-events-none mt-4 ml-auto w-[min(320px,70%)] md:absolute md:-right-[8%] md:-bottom-36 md:z-1 -scale-x-100 md:mt-0 md:w-[34%]"
+			aria-hidden="true"
+		>
+			<Airplane data-scene="airplane" class="h-auto w-full overflow-visible" />
+		</div>
+		</div>
 	</div>
 </section>
+
+<script>
+	import { paperPlane } from "../lib/paper-plane";
+
+	const airplane = document.querySelector<SVGSVGElement>(
+		'section[aria-labelledby="calendar-title"] svg[data-scene="airplane"]',
+	);
+	if (airplane) paperPlane(airplane);
+</script>

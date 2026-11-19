@@ -1,0 +1,66 @@
+---
+import Sitting from "../../../images/guus/sitting.svg";
+import Looking from "../../../images/guus/looking.svg";
+import Biking from "../../../images/guus/biking.svg";
+
+interface Props {
+	goose?: "sitting" | "binoculars" | "biking";
+	side?: "left" | "right" | "below";
+	mirror?: boolean;
+}
+
+const { goose = "sitting", side = "left", mirror = false } = Astro.props;
+const facesAway =
+	(goose === "sitting" && side === "left") ||
+	(goose === "binoculars" && side === "left");
+const flip = facesAway !== mirror;
+---
+
+<div
+	class:list={[
+		"flex gap-1",
+		side === "right" && "flex-row-reverse items-center",
+		side === "left" && "items-center",
+		side === "below" && "flex-col-reverse items-center gap-3",
+	]}
+>
+	{
+		goose === "sitting" && (
+			<Sitting
+				class:list={["size-12 shrink-0", flip && "-scale-x-100"]}
+				viewBox="40 -8 125 125"
+				aria-hidden="true"
+			/>
+		)
+	}
+	{
+		goose === "binoculars" && (
+			<Looking
+				class:list={["h-12 w-25 shrink-0", flip && "-scale-x-100"]}
+				viewBox="0 -10 760 360"
+				aria-hidden="true"
+			/>
+		)
+	}
+	{
+		goose === "biking" && (
+			<Biking
+					class:list={["h-auto w-16 shrink-0", flip && "-scale-x-100"]}
+					aria-hidden="true"
+				/>
+		)
+	}
+	<p
+		class:list={[
+			"relative rounded-2xl bg-cream px-4 py-2 text-sm/5 text-pretty before:absolute before:size-4 before:rotate-45 before:bg-cream",
+			side === "left" &&
+				"ml-2 before:top-1/2 before:-left-2 before:-translate-y-1/2 before:rounded-bl-sm",
+			side === "right" &&
+				"mr-2 before:top-1/2 before:-right-2 before:-translate-y-1/2 before:rounded-tr-sm",
+			side === "below" &&
+				"before:-bottom-2 before:left-1/2 before:-translate-x-1/2 before:rounded-br-sm",
+		]}
+	>
+		<span class="relative"><slot /></span>
+	</p>
+</div>

@@ -1,15 +1,21 @@
 ---
 import Icon from "../site/Icon.astro";
 import type { IconName } from "../site/Icon.astro";
+import ExternalLink from "../../../images/icons/external-link.svg";
+import WingedSocket from "../../../images/icons/winged-socket.svg";
+import GooseTip from "./GooseTip.astro";
+import heart from "../../../images/logo/heart.svg?url";
+import heartSilhouette from "../../../images/logo/heart-silhouette.svg?url";
+import heartCutout from "../../../images/logo/heart-cutout.svg?url";
 
 // Guide pages aren't written yet; add an `href` to turn a card into a link.
 const guides: { name: string; icon: IconName; href?: string }[] = [
 	{ name: "Getting here and getting around", icon: "map" },
 	{ name: "Accessibility and limited mobility", icon: "wheelchair" },
 	{ name: "Where to stay", icon: "bed" },
-	{ name: "Netherlands on a budget", icon: "wallet" },
+	{ name: "Amersfoort on a budget", icon: "wallet" },
 	{
-		name: "Neighbourhood around the venue",
+		name: "Amersfoort: the neighbourhood around the venue",
 		icon: "canal-houses",
 	},
 	{ name: "Things to do", icon: "tickets" },
@@ -18,46 +24,78 @@ const guides: { name: string; icon: IconName; href?: string }[] = [
 	{ name: "After the conference", icon: "clock" },
 ];
 
-const facts = [
-	{
-		term: "Language",
-		value:
-			"Dutch, but nearly everyone speaks English, especially in the cities. A “dank je wel” (thank you) always goes down well.",
-	},
-	{
-		term: "Emergency number & non-emergency police",
-		value: "112 (police, fire, ambulance) & 0900-8844",
-	},
-	{ term: "Time zone", value: "CEST (UTC+2)" },
-	{ term: "Power sockets", value: "type C/F, 230V" },
-	{
-		term: "Sunset in early May",
-		value: "around 21:00, so evenings are long and light.",
-	},
-];
+const amersfoortTime = (date: Date) =>
+	new Intl.DateTimeFormat("en-GB", {
+		timeZone: "Europe/Amsterdam",
+		hour: "2-digit",
+		minute: "2-digit",
+	}).format(date);
+
+const term = "eyebrow text-slate";
+const value = "mt-2 pr-6 text-pretty text-base/6 md:text-lg/6 lg:pr-10";
+
+const allComingSoon = guides.every(({ href }) => !href);
 
 const card =
-	"card-lift flex min-h-21 items-center gap-4 rounded-lg border border-line bg-white p-4 text-left";
+	"flex min-h-21 items-center gap-4 rounded-lg border p-4 text-left md:min-h-28 md:p-6";
 ---
 
 <section class="bg-white" aria-labelledby="handy-info-title">
-	<div class="wrap py-16 md:py-20 lg:py-30">
+	<div class="wrap pt-16 pb-12 md:pt-20 md:pb-16 lg:pt-30 lg:pb-18">
 		<h2 class="title" id="handy-info-title">Handy info</h2>
-		<ul class="mt-8 grid gap-3 md:mt-10 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
+		<div
+			class:list={[
+				"relative mt-8 md:mt-10",
+				allComingSoon &&
+					"rounded-xl border border-dashed border-line bg-cream/60 p-3 pt-10 md:p-4 md:pt-12",
+			]}
+		>
+			{
+				allComingSoon && (
+					<p class="absolute -top-4 left-8 inline-flex -rotate-3 items-center py-2 pr-4 pl-12 eyebrow text-white md:text-sm/4">
+							<span
+								class="absolute inset-0 rounded-full bg-navy"
+								style={`mask: linear-gradient(#000 0 0), url("${heartCutout}") -35.4px center / 76.8px 50.6px no-repeat; mask-composite: exclude;`}
+								aria-hidden="true"
+							/>
+							<span
+								class="absolute top-1/2 -left-8 h-11 w-17.5 -translate-y-1/2 -rotate-6 bg-white [mask:var(--silhouette)_center/contain_no-repeat]"
+								style={`--silhouette: url("${heartSilhouette}")`}
+								aria-hidden="true"
+							/>
+							<span
+								class="absolute top-1/2 -left-8 h-11 w-17.5 -translate-y-1/2 -rotate-6 bg-navy [mask:var(--heart)_center/contain_no-repeat]"
+								style={`--heart: url("${heart}")`}
+								aria-hidden="true"
+							/>
+							<span class="relative">Coming soon</span>
+					</p>
+				)
+			}
+		<ul class="grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
 			{
 				guides.map(({ name, icon, href }, index) => {
 					const content = (
 						<>
-							<Icon name={icon} class="size-12 shrink-0 md:size-14" />
+							<Icon
+								name={icon}
+								class:list={[
+									"size-16 shrink-0 overflow-visible md:size-22.5",
+									!href && "pointer-events-none opacity-50 grayscale",
+								]}
+							/>
 							<span class="flex-1">
-								<span class="block eyebrow text-[10px] text-steel">
+								<span class="block eyebrow text-slate">
 									{String(index + 1).padStart(2, "0")}
 								</span>
-								<span class="mt-1 block text-sm/5">{name}</span>
+								<span class="mt-1 block text-sm/5 md:text-base/5">{name}</span>
 							</span>
 							{href && (
-								<span class="text-steel" aria-hidden="true">
-									↗
+								<span
+									class="grid size-8 shrink-0 place-items-center rounded-lg bg-cream"
+									aria-hidden="true"
+								>
+									<ExternalLink class="size-4" />
 								</span>
 							)}
 						</>
@@ -66,14 +104,22 @@ const card =
 						<li class="contents">
 							{href ? (
 								<a
-									class:list={[card, "hover:border-navy"]}
+									class:list={[
+										card,
+										"card-lift border-line bg-white hover:border-navy",
+									]}
 									href={href}
 									data-card
 								>
 									{content}
 								</a>
 							) : (
-								<div class={card} data-card>
+								<div
+									class:list={[
+										card,
+										"cursor-not-allowed border-line bg-white/70 text-slate",
+									]}
+								>
 									{content}
 								</div>
 							)}
@@ -82,17 +128,93 @@ const card =
 				})
 			}
 		</ul>
-		<dl
-			class="mt-10 grid gap-x-6 gap-y-6 md:mt-14 md:grid-cols-2 md:gap-y-8 lg:grid-cols-3"
+		</div>
+		<div
+			class="mt-10 grid gap-x-4 gap-y-6 md:mt-10.5 md:grid-cols-2 lg:grid-cols-3"
 		>
-			{
-				facts.map(({ term, value }) => (
-					<div class="border-t border-line pt-4">
-						<dt class="eyebrow text-[10px] text-steel">{term}</dt>
-						<dd class="mt-2 text-sm/5 md:text-base/6">{value}</dd>
-					</div>
-				))
-			}
-		</dl>
+			<dl class="flex flex-col gap-6 border-t border-line py-4.5">
+				<div>
+					<dt class={term}>Language</dt>
+					<dd class={value}>
+						Dutch, but nearly everyone speaks English, especially in the
+						cities.
+					</dd>
+					<dd class="mt-4">
+						<GooseTip
+							><span class="sr-only">Tip:</span> A “dank je wel” (thank you) always
+							goes down well.</GooseTip
+						>
+					</dd>
+				</div>
+				<div>
+					<dt class={term}>Power sockets</dt>
+					<dd class:list={[value, "flex items-center gap-3"]}>
+						<span
+							><a
+								class="underline decoration-line underline-offset-4 hover:decoration-navy"
+								href="https://en.wikipedia.org/wiki/Schuko">Type C/F</a
+							>, 230V</span
+						>
+						<WingedSocket class="h-auto w-16 shrink-0 rotate-8" aria-hidden="true" />
+					</dd>
+				</div>
+			</dl>
+			<dl class="flex flex-col gap-6 border-t border-line py-4.5">
+				<div>
+					<dt class={term}>Time zone</dt>
+					<dd class={value}>
+						CEST (UTC+2). Sunset is around 21:00, so evenings are long and
+						light.
+					</dd>
+					<dd class="mt-4">
+						<GooseTip goose="binoculars" side="right"
+							>Right now it’s <time
+								class="underline decoration-dotted decoration-2 underline-offset-4"
+								data-amersfoort-clock>{amersfoortTime(new Date())}</time
+							> in Amersfoort.</GooseTip
+						>
+					</dd>
+				</div>
+				<div>
+					<dt class={term}>Weather in May</dt>
+					<dd class={value}>
+						Mild, around 13°C, with the odd shower. Pack layers and a rain
+						jacket!
+					</dd>
+				</div>
+			</dl>
+			<dl class="flex flex-col gap-6 border-t border-line py-4.5">
+				<div>
+					<dt class={term}>Emergency</dt>
+					<dd class={value}>112 (police, fire, ambulance)</dd>
+				</div>
+				<div class="-mt-3 grid flex-1 grid-cols-[auto_1fr] grid-rows-[auto_auto_1fr] gap-x-4">
+					<dt class:list={[term, "col-start-1 row-start-1"]}>
+						Non-emergency police
+					</dt>
+					<dd class:list={[value, "col-start-1 row-start-2"]}>0900-8844</dd>
+					<dd class="col-start-2 row-span-3 row-start-1 self-end">
+						<GooseTip goose="biking" side="below" mirror
+							>Stolen bike? Pickpockets? Call this number!</GooseTip
+						>
+					</dd>
+				</div>
+			</dl>
+		</div>
 	</div>
 </section>
+
+<script>
+	const format = new Intl.DateTimeFormat(undefined, {
+		timeZone: "Europe/Amsterdam",
+		hour: "numeric",
+		minute: "2-digit",
+	});
+	const clocks = document.querySelectorAll("[data-amersfoort-clock]");
+	const tick = () => {
+		const now = format.format(new Date());
+		for (const clock of clocks) clock.textContent = now;
+	};
+	tick();
+	setInterval(tick, 15_000);
+</script>

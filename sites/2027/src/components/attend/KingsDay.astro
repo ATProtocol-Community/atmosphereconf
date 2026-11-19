@@ -1,22 +1,34 @@
 ---
 import Bicycle from "../../../images/illustrations/bycicle.svg";
 import NumberedList from "../site/NumberedList.astro";
+import Icon from "../site/Icon.astro";
 
 const options = [
 	{
-		lead: "If you like the party/crazy:",
-		text: "arrive early and you’ll see the city at its busiest and most orange.",
+		lead: "Like the party (& chaos)?",
+		text: "Arrive early to see the city at its busiest and most orange.",
+		accent: "most orange",
 	},
-	{ lead: "If you prefer to avoid that:", text: "arrive on the 28th." },
+	{ lead: "Rather avoid it?", text: "Arrive on the 28th!" },
 ];
 ---
 
-<section class="bg-navy text-white" aria-labelledby="kings-day-title">
+<section class="bg-blue text-white" aria-labelledby="kings-day-title">
 	<div
-		class="wrap grid gap-10 pt-16 pb-12 md:grid-cols-2 md:items-center md:gap-12 md:pt-20 md:pb-16 lg:gap-19 lg:pt-30 lg:pb-24"
+		class="wrap grid gap-10 pt-16 pb-12 md:grid-cols-2 md:items-end md:gap-12 lg:grid-cols-[minmax(0,630px)_minmax(0,1fr)] md:pt-20 md:pb-16 lg:gap-18 lg:py-30"
 	>
 		<h2 class="title" id="kings-day-title">
-			King’s Day falls on Tuesday 27 April, two days before we start.
+			<span class="inline-block text-orange" data-kings-day
+				>Kin<span class="relative"
+					><Icon
+						name="crown"
+						class="kings-crown absolute -top-[1em] left-1/2 size-[1.4em] -translate-x-1/2 -rotate-12 overflow-visible"
+					/>g</span
+				>’s Day</span
+			> falls on Tuesday 27 April,{" "}<span
+				class="bg-[linear-gradient(90deg,#7d7cd8,#ea97df_55%,#eb9b9b)] bg-clip-text text-transparent [box-decoration-break:clone]"
+				>two days</span
+			> before we start.
 		</h2>
 		<NumberedList items={options} />
 	</div>
