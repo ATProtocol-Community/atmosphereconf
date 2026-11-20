@@ -5,21 +5,37 @@ import stampEdge from "../../../images/illustrations/stamp-edge.svg?url";
 const venueUrl = "https://www.derijtuigenloods.nl/en/";
 
 const venue = { lat: 52.15518, lon: 5.36802 };
-const station = { lat: 52.1539, lon: 5.37410 };
+const station = { lat: 52.1539, lon: 5.3741 };
 
 const mapBbox = [5.3631, 52.1491, 5.3791, 52.1601];
-const mapEmbed = `https://www.openstreetmap.org/export/embed.html?bbox=${mapBbox.join("%2C")}&layer=mapnik&marker=${venue.lat}%2C${venue.lon}`;
+const mapEmbed = `https://www.openstreetmap.org/export/embed.html?bbox=${mapBbox.join("%2C")}&layer=mapnik`;
 
 const walkMinutes = 7;
 const walkPath = [
-	[5.374131, 52.153901], [5.374101, 52.154223], [5.373983, 52.154238],
-	[5.373927, 52.15428], [5.373916, 52.154402], [5.373964, 52.154404],
-	[5.37398, 52.154532], [5.373724, 52.154514], [5.37359, 52.154485],
-	[5.373332, 52.154473], [5.373105, 52.154489], [5.37297, 52.154527],
-	[5.372867, 52.154581], [5.372811, 52.154639], [5.372779, 52.154702],
-	[5.372771, 52.154751], [5.372635, 52.154784], [5.372338, 52.154808],
-	[5.371905, 52.154855], [5.371759, 52.154888], [5.371624, 52.154877],
-	[5.371392, 52.154885], [5.36945, 52.155117], [5.368823, 52.1552],
+	[5.374131, 52.153901],
+	[5.374101, 52.154223],
+	[5.373983, 52.154238],
+	[5.373927, 52.15428],
+	[5.373916, 52.154402],
+	[5.373964, 52.154404],
+	[5.37398, 52.154532],
+	[5.373724, 52.154514],
+	[5.37359, 52.154485],
+	[5.373332, 52.154473],
+	[5.373105, 52.154489],
+	[5.37297, 52.154527],
+	[5.372867, 52.154581],
+	[5.372811, 52.154639],
+	[5.372779, 52.154702],
+	[5.372771, 52.154751],
+	[5.372635, 52.154784],
+	[5.372338, 52.154808],
+	[5.371905, 52.154855],
+	[5.371759, 52.154888],
+	[5.371624, 52.154877],
+	[5.371392, 52.154885],
+	[5.36945, 52.155117],
+	[5.368823, 52.1552],
 	[5.368055, 52.155292],
 ];
 const walkingRoute = `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=${station.lat}%2C${station.lon}%3B${venue.lat}%2C${venue.lon}`;
@@ -44,27 +60,27 @@ const routes = [
 ---
 
 <section class="bg-white" aria-labelledby="venue-title">
-	<div class="wrap flex flex-col gap-14 py-16 md:py-20 lg:gap-20 lg:px-8 lg:py-30">
+	<div
+		class="wrap flex flex-col gap-14 py-16 md:py-20 lg:gap-20 lg:px-8 lg:py-30"
+	>
 		<div
 			class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-center lg:gap-10"
 		>
 			<div>
 				<h2 class="title" id="venue-title">
-					AtmosphereConf 2027 takes place in Amersfoort
+					AtmosphereConf 2027 takes place in Amersfoort, NL
 				</h2>
-				<p
-					class="mt-6 max-w-139 text-base/7 text-slate md:mt-10 md:text-xl/8"
-				>
+				<p class="mt-6 max-w-139 text-base/7 text-slate md:mt-10 md:text-xl/8">
 					De Rijtuigenloods is an industrial venue in Amersfoort. It is a
 					restored railway depot with historic train carriages that holds a
 					Green Key Gold sustainability label.
 				</p>
-				<a class="mt-8 btn btn-outline md:mt-10" href={venueUrl}
+				<a class="btn mt-8 md:mt-10" href={venueUrl}
 					>View venue <span aria-hidden="true">▸</span></a
 				>
 			</div>
 			<img
-				class="mx-auto h-auto w-[min(320px,80%)] md:w-90 drop-shadow-[0_6px_10px_rgb(0_25_65/0.25)] lg:relative lg:z-2 lg:w-full"
+				class="mx-auto h-auto w-[min(320px,80%)] drop-shadow-[0_6px_10px_rgb(0_25_65/0.25)] md:w-90 lg:relative lg:z-2 lg:w-full"
 				src={stamp.src}
 				alt="Postage stamp of De Rijtuigenloods from above: a long depot hall with yellow-striped doors, labelled Amersfoort"
 				width={stamp.width / 2}
@@ -73,7 +89,7 @@ const routes = [
 			/>
 		</div>
 		<div
-			class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:items-center lg:gap-10"
+			class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10"
 		>
 			<div>
 				<h3 class="display text-lg/10 md:text-xl/10">How to get there</h3>
@@ -84,7 +100,7 @@ const routes = [
 								<dt class="text-xs/4 font-medium tracking-[0.03em] text-slate uppercase md:text-sm/4">
 									{how}
 								</dt>
-								<dd class="mt-4 text-pretty text-base/7 text-steel md:text-lg/7">
+								<dd class="mt-4 text-base/7 text-pretty text-steel md:text-lg/7">
 									<ul class="flex flex-col gap-2">
 										{steps.map((step) => (
 											<li class="flex gap-3">
@@ -112,7 +128,7 @@ const routes = [
 				</dl>
 			</div>
 			<a
-				class="group mx-auto block w-[min(240px,64%)] -rotate-6 drop-shadow-[0_6px_10px_rgb(0_25_65/0.25)] transition-transform duration-300 ease-(--ease-soft) hover:rotate-0 md:w-54 lg:relative lg:z-1 lg:-mt-28 lg:translate-y-20 lg:self-start lg:w-[58%] motion-reduce:transition-none"
+				class="group mx-auto block w-[min(240px,64%)] -rotate-6 drop-shadow-[0_6px_10px_rgb(0_25_65/0.25)] transition-transform duration-300 ease-(--ease-soft) hover:rotate-0 motion-reduce:transition-none md:w-54 lg:relative lg:z-1 lg:-mt-28 lg:w-61 lg:translate-y-20 lg:self-start"
 				href={walkingRoute}
 			>
 				<span
@@ -129,7 +145,11 @@ const routes = [
 							aria-hidden="true"></iframe>
 						<svg
 							class="pointer-events-none absolute -top-1/2 -left-1/2 h-[200%] w-[200%] overflow-visible"
-							data-walk-route={JSON.stringify({ bbox: mapBbox, path: walkPath })}
+							data-walk-route={JSON.stringify({
+								bbox: mapBbox,
+								path: walkPath,
+								pin: [venue.lon, venue.lat],
+							})}
 							aria-hidden="true"
 						>
 							<polyline
@@ -139,6 +159,14 @@ const routes = [
 								stroke-dasharray="1 6"
 								stroke-linecap="round"
 								stroke-linejoin="round"></polyline>
+							<g data-pin>
+								<path
+									d="M0 0C-2-6-10-10-10-18a10 10 0 1 1 20 0c0 8-8 12-10 18Z"
+									fill="var(--color-orange)"
+									stroke="var(--color-navy)"
+									stroke-width="1.5"></path>
+								<circle cy="-18" r="3.5" fill="white"></circle>
+							</g>
 						</svg>
 					</span>
 					<span
@@ -172,10 +200,12 @@ const routes = [
 	for (const svg of document.querySelectorAll<SVGSVGElement>(
 		"svg[data-walk-route]",
 	)) {
-		const { bbox, path } = JSON.parse(svg.dataset.walkRoute ?? "{}") as {
+		const { bbox, path, pin } = JSON.parse(svg.dataset.walkRoute ?? "{}") as {
 			bbox: number[];
 			path: number[][];
+			pin: number[];
 		};
+		const marker = svg.querySelector("[data-pin]");
 		const line = svg.querySelector("polyline");
 		if (!line) continue;
 		const [west, north] = mercator([bbox[0], bbox[3]]);
@@ -186,15 +216,19 @@ const routes = [
 			const fit = Math.min(width / (east - west), height / (south - north));
 			const centreX = (west + east) / 2;
 			const centreY = (north + south) / 2;
+			const project = (point: number[]) => {
+				const [x, y] = mercator(point);
+				return [
+					width / 2 + (x - centreX) * fit,
+					height / 2 + (y - centreY) * fit,
+				];
+			};
 			line.setAttribute(
 				"points",
-				path
-					.map((point) => {
-						const [x, y] = mercator(point);
-						return `${width / 2 + (x - centreX) * fit},${height / 2 + (y - centreY) * fit}`;
-					})
-					.join(" "),
+				path.map((point) => project(point).join(",")).join(" "),
 			);
+			const [pinX, pinY] = project(pin);
+			marker?.setAttribute("transform", `translate(${pinX} ${pinY})`);
 		};
 		new ResizeObserver(draw).observe(svg);
 	}

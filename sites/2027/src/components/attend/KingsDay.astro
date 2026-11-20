@@ -15,19 +15,17 @@ const options = [
 
 <section class="bg-blue text-white" aria-labelledby="kings-day-title">
 	<div
-		class="wrap grid gap-10 pt-16 pb-12 md:grid-cols-2 md:items-end md:gap-12 lg:grid-cols-[minmax(0,630px)_minmax(0,1fr)] md:pt-20 md:pb-16 lg:gap-18 lg:py-30"
+		class="wrap grid gap-10 pt-20 pb-20 md:grid-cols-2 md:items-end md:gap-12 lg:grid-cols-[minmax(0,630px)_minmax(0,1fr)] md:pt-28 md:pb-32 lg:gap-18 lg:pt-40 lg:pb-52"
 	>
 		<h2 class="title" id="kings-day-title">
 			<span class="inline-block text-orange" data-kings-day
 				>Kin<span class="relative"
 					><Icon
 						name="crown"
-						class="kings-crown absolute -top-[1em] left-1/2 size-[1.4em] -translate-x-1/2 -rotate-12 overflow-visible"
+						class="kings-crown absolute -top-[0.67em] left-[21%] size-[1.25em] -translate-x-1/2 -rotate-[22deg] overflow-visible"
 					/>g</span
 				>’s Day</span
-			> falls on Tuesday 27 April,{" "}<span
-				class="bg-[linear-gradient(90deg,#7d7cd8,#ea97df_55%,#eb9b9b)] bg-clip-text text-transparent [box-decoration-break:clone]"
-				>two days</span
+			> falls on Tuesday 27 April,{" "}<span class="text-gradient [box-decoration-break:clone]">two days</span
 			> before we start.
 		</h2>
 		<NumberedList items={options} />
@@ -303,7 +301,7 @@ const options = [
 	}
 	@keyframes bike-scroll {
 		100% {
-			transform: translateX(-1440px);
+			transform: translateX(-2160px);
 		}
 	}
 	[data-scene="bicycle"] [data-part="spokes-front"],
@@ -341,6 +339,6 @@ const options = [
 			infinite var(--play);
 	}
 	[data-scene="bicycle"] [data-part="scroll"] {
-		animation: bike-scroll 8s linear infinite var(--play);
+		animation: bike-scroll 12s linear infinite var(--play);
 	}
 </style>
