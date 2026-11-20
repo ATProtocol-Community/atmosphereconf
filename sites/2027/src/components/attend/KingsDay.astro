@@ -1,22 +1,32 @@
 ---
 import Bicycle from "../../../images/illustrations/bycicle.svg";
 import NumberedList from "../site/NumberedList.astro";
+import Icon from "../site/Icon.astro";
 
 const options = [
 	{
-		lead: "If you like the party/crazy:",
-		text: "arrive early and you’ll see the city at its busiest and most orange.",
+		lead: "Like the party (& chaos)?",
+		text: "Arrive early to see the city at its busiest and most orange.",
+		accent: "most orange",
 	},
-	{ lead: "If you prefer to avoid that:", text: "arrive on the 28th." },
+	{ lead: "Rather avoid it?", text: "Arrive on the 28th!" },
 ];
 ---
 
-<section class="bg-navy text-white" aria-labelledby="kings-day-title">
+<section class="bg-blue text-white" aria-labelledby="kings-day-title">
 	<div
-		class="wrap grid gap-10 pt-16 pb-12 md:grid-cols-2 md:items-center md:gap-12 md:pt-20 md:pb-16 lg:gap-19 lg:pt-30 lg:pb-24"
+		class="wrap grid gap-10 pt-20 pb-20 md:grid-cols-2 md:items-end md:gap-12 lg:grid-cols-[minmax(0,630px)_minmax(0,1fr)] md:pt-28 md:pb-32 lg:gap-18 lg:pt-40 lg:pb-52"
 	>
 		<h2 class="title" id="kings-day-title">
-			King’s Day falls on Tuesday 27 April, two days before we start.
+			<span class="inline-block text-orange" data-kings-day
+				>Kin<span class="relative"
+					><Icon
+						name="crown"
+						class="kings-crown absolute -top-[0.67em] left-[21%] size-[1.25em] -translate-x-1/2 -rotate-[22deg] overflow-visible"
+					/>g</span
+				>’s Day</span
+			> falls on Tuesday 27 April,{" "}<span class="text-gradient [box-decoration-break:clone]">two days</span
+			> before we start.
 		</h2>
 		<NumberedList items={options} />
 	</div>
@@ -291,7 +301,7 @@ const options = [
 	}
 	@keyframes bike-scroll {
 		100% {
-			transform: translateX(-1440px);
+			transform: translateX(-2160px);
 		}
 	}
 	[data-scene="bicycle"] [data-part="spokes-front"],
@@ -329,6 +339,6 @@ const options = [
 			infinite var(--play);
 	}
 	[data-scene="bicycle"] [data-part="scroll"] {
-		animation: bike-scroll 8s linear infinite var(--play);
+		animation: bike-scroll 12s linear infinite var(--play);
 	}
 </style>

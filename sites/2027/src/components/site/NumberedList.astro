@@ -4,7 +4,7 @@
  * Each item is a bold lead followed by plain text.
  */
 interface Props {
-	items: { lead?: string; text: string }[];
+	items: { lead?: string; text: string; accent?: string }[];
 	label?: string;
 }
 
@@ -12,17 +12,26 @@ const { items, label } = Astro.props;
 ---
 
 <ol
-	class="divide-y divide-white/40 border-y border-white/40 text-sm md:text-base"
+	class="divide-y divide-white border-y border-white text-sm md:text-lg"
 	aria-label={label}
 >
 	{
-		items.map(({ lead, text }, index) => (
-			<li class="flex gap-6 py-4 md:gap-8">
-				<span class="w-5 shrink-0 pt-1 eyebrow">
+		items.map(({ lead, text, accent }, index) => (
+			<li class="flex gap-6 pt-4.5 pb-5">
+				<span class="w-5 shrink-0 pt-0.5 text-sm/5 md:w-10 md:text-base/5">
 					{String(index + 1).padStart(2, "0")}
 				</span>
 				<p>
-					{lead && <strong class="font-semibold">{lead}</strong>} {text}
+					{lead && <strong class="font-bold md:text-xl">{lead}</strong>}{" "}
+					{accent && text.includes(accent) ? (
+						<>
+							{text.slice(0, text.indexOf(accent))}
+							<strong class="font-bold text-orange">{accent}</strong>
+							{text.slice(text.indexOf(accent) + accent.length)}
+						</>
+					) : (
+						text
+					)}
 				</p>
 			</li>
 		))

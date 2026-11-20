@@ -1,85 +1,430 @@
 ---
-const days = [
+import Airplane from "../../../images/airplane.svg";
+import heart from "../../../images/logo/heart.svg?url";
+import Tulip from "./Tulip.astro";
+
+const days: {
+	date: string;
+	day: string;
+	top: string;
+	month: string;
+	end?: { day: string; top: string; month: string; join: "to" | "and" };
+	name: string;
+	dutch?: string;
+	sub?: string;
+	href?: string;
+	what?: string;
+	event?: boolean;
+	kings?: boolean;
+}[] = [
 	{
-		date: "18 March – 9 May",
-		what: "Keukenhof tulip gardens open, so also during the conference",
+		date: "Until 9 May",
+		day: "9",
+		top: "Until",
+		month: "May",
+		name: "Keukenhof is open",
+		sub: "Tulip garden, Lisse",
+		href: "https://keukenhof.nl/en/",
+		what: "Day trip to seven million blooming flowers",
 	},
 	{
 		date: "Mon 26 April",
-		what: "King’s Night (Koningsnacht): parties and club nights across the city",
+		day: "26",
+		top: "Mon",
+		month: "April",
+		name: "King’s Night",
+		dutch: "Koningsnacht",
+		kings: true,
+		what: "Parties and club nights across the city",
 	},
 	{
 		date: "Tue 27 April",
-		what: "King’s Day (Koningsdag): the whole city turns orange",
+		day: "27",
+		top: "Tue",
+		month: "April",
+		name: "King’s Day",
+		dutch: "Koningsdag",
+		kings: true,
+		what: "The whole city turns orange",
 	},
-	{ date: "Wed 28 April", what: "City recovers. Best day to arrive" },
+	{
+		date: "Wed 28 April",
+		day: "28",
+		top: "Wed",
+		month: "April",
+		name: "City recovers",
+		what: "Best day to arrive if you like quiet",
+	},
 	{
 		date: "Thu 29 April – Sun 2 May",
-		what: "AtmosphereConf 2027",
+		day: "29",
+		top: "Thu",
+		month: "April",
+		end: { day: "2", top: "Sun", month: "May", join: "to" },
+		name: "AtmosphereConf 2027",
 		event: true,
 	},
 	{
 		date: "Tue 4 May",
-		what: "Remembrance Day (Dodenherdenking): two minutes of silence at 20:00",
+		day: "4",
+		top: "Tue",
+		month: "May",
+		name: "Remembrance Day",
+		dutch: "Dodenherdenking",
+		what: "Two minutes of silence at 20:00",
 	},
 	{
 		date: "Wed 5 May",
-		what: "Liberation Day (Bevrijdingsdag): free festivals across the country",
+		day: "5",
+		top: "Wed",
+		month: "May",
+		name: "Liberation Day",
+		dutch: "Bevrijdingsdag",
+		what: "Free festivals across the country",
 	},
 	{
 		date: "Thu 6 May",
-		what: "Ascension Day (Hemelvaartsdag): public holiday, busy trains",
+		day: "6",
+		top: "Thu",
+		month: "May",
+		name: "Ascension Day",
+		dutch: "Hemelvaartsdag",
+		what: "Public holiday, busy trains",
 	},
 	{
 		date: "Sat 8 – Sun 9 May",
-		what: "National Mill Day: windmills open to visitors",
+		day: "8",
+		top: "Sat",
+		month: "May",
+		end: { day: "9", top: "Sun", month: "May", join: "and" },
+		name: "National Mill Day",
+		dutch: "Nationale Molendag",
+		what: "Windmills open to visitors",
 	},
-	{ date: "Sun 9 May", what: "Keukenhof’s last day of the season" },
+	{
+		date: "Sun 9 May",
+		day: "9",
+		top: "Sun",
+		month: "May",
+		name: "Keukenhof closes",
+		what: "Last day of the season",
+	},
 ];
+
+const orange = "#FE6E25";
+const pink = "#EA97DF";
+const yellow = "#FED261";
+const afterDate = "left-[26cqw] md:left-[256px]";
+const bunches = [
+	{
+		edge: "bottom",
+		at: "left-[3%]",
+		tulips: [
+			[orange, 22, -16],
+			[pink, 27, -6],
+			[yellow, 25, 3],
+			[orange, 20, 14],
+		],
+	},
+	{ edge: "bottom", at: "left-[12%]", tulips: [[pink, 18, 9]] },
+	{
+		edge: "top",
+		at: afterDate,
+		tulips: [
+			[yellow, 23, -7],
+			[orange, 19, 10],
+		],
+	},
+	{
+		edge: "bottom",
+		at: "left-[57%]",
+		tulips: [
+			[yellow, 21, -11],
+			[pink, 26, 1],
+			[orange, 22, 12],
+		],
+	},
+	{ edge: "top", at: "left-[68%]", tulips: [[pink, 21, 5]] },
+	{
+		edge: "top",
+		at: "left-[90%]",
+		tulips: [
+			[orange, 24, -12],
+			[yellow, 20, -1],
+			[pink, 25, 9],
+		],
+	},
+] as const;
+
+const perforated =
+	"radial-gradient(circle 3.5px at 50% 0, #0000 97%, #000) 0 0 / 11px 100% repeat-x, radial-gradient(circle 3.5px at 50% 100%, #0000 97%, #000) 0 0 / 11px 100% repeat-x, radial-gradient(circle 3.5px at 0 50%, #0000 97%, #000) 0 0 / 100% 11px repeat-y, radial-gradient(circle 3.5px at 100% 50%, #0000 97%, #000) 0 0 / 100% 11px repeat-y; mask-composite: intersect";
 ---
 
-<section class="text-white sky-gradient" aria-labelledby="calendar-title">
-	<div class="wrap py-16 md:py-20 lg:py-30">
+<section
+	class="overflow-x-clip text-white sky-gradient"
+	aria-labelledby="calendar-title"
+>
+	<div class="wrap py-20 md:py-28 lg:py-40">
 		<h2 class="max-w-200 title" id="calendar-title">
-			What’s happening in the Netherlands around the conference
+			The Netherlands around the conference
 		</h2>
-		<p class="mt-4 text-sm md:text-base">
-			Plan your arrival and stay around the Netherland’s busiest spring week.
+		<p class="mt-4 text-sm md:text-lg">
+			Plan your arrival and stay around the Netherlands’ busiest spring week.
 		</p>
-		<table
-			class="mt-8 w-full overflow-hidden rounded-lg bg-white text-left text-navy md:mt-10"
-		>
-			<thead class="bg-navy text-white">
-				<tr class="eyebrow *:px-4 *:py-4 *:font-medium md:*:px-6">
-					<th scope="col">Date</th><th scope="col">What’s happening</th><th
-						scope="col"
-						class="text-right max-md:sr-only">2027</th
+		<div class="@container relative mt-10 md:mt-14">
+			<table
+				class="w-full border-separate border-spacing-0 rounded-lg bg-white text-left text-navy"
+			>
+				<thead class="text-white">
+					<tr
+						class="eyebrow *:bg-navy *:px-4 *:py-4 *:font-medium *:first:rounded-tl-lg *:last:rounded-tr-lg md:*:px-6"
 					>
-				</tr>
-			</thead>
-			<tbody class="divide-y divide-line">
-				{
-					days.map(({ date, what, event }) => (
-						<tr
-							class:list={[
-								"*:px-4 *:py-4 md:*:px-6 md:*:py-5",
-								event && "bg-[#cfe0ff]",
-							]}
-						>
-							<th
-								scope="row"
-								class="w-[30%] align-top text-xs/5 font-normal text-slate md:text-sm/5"
-							>
-								{date}
-							</th>
-							<td class="text-sm/5 md:text-base/6">{what}</td>
-							<td class="text-right align-top max-md:hidden">
-								{event && <span class="eyebrow text-azure">Event</span>}
-							</td>
-						</tr>
-					))
-				}
-			</tbody>
-		</table>
+						<th scope="col">Date (2027)</th>
+						<th scope="col" class="max-md:rounded-tr-lg">What’s on</th>
+						<th scope="col" class="max-md:hidden">Good to know</th>
+					</tr>
+				</thead>
+				<tbody
+					class="[&>tr+tr>*]:border-t [&>tr+tr>*]:border-line [&>tr:last-child>*:first-child]:rounded-bl-lg [&>tr:last-child>*:last-child]:rounded-br-lg"
+				>
+					{
+						days.map(
+							(
+								{
+									date,
+									day,
+									top,
+									month,
+									end,
+									name,
+									dutch,
+									sub,
+									href,
+									what,
+									event,
+									kings,
+								},
+								index,
+							) => (
+								<tr
+									class:list={[
+										"*:px-4 md:*:px-6",
+										event
+											? "-rotate-1 font-medium text-white *:relative *:border-transparent! *:py-7 md:h-32 md:-rotate-[0.5deg] md:*:py-10"
+											: "*:py-3.5 md:*:py-4.5",
+										days[index + 1]?.event && "*:pb-5.5 md:*:pb-6.5",
+										days[index - 1]?.event && "*:pt-5.5 md:*:pt-6.5",
+									]}
+								>
+									<th
+										scope="row"
+										class="w-[28%] align-top max-md:pr-2 text-xs/5 font-normal md:w-40 md:align-middle md:text-sm/5 lg:w-44"
+									>
+										{event && (
+											<span
+												class="pointer-events-none absolute inset-y-0 left-0 w-[100cqw]"
+												aria-hidden="true"
+											>
+												<span class="absolute inset-0 drop-shadow-[0_6px_10px_rgb(0_25_65/0.3)]">
+													<span
+														class="absolute -inset-x-3 -inset-y-2 overflow-hidden bg-white"
+														style={`mask: ${perforated}`}
+													>
+														<span class="absolute inset-[7px] overflow-hidden bg-azure">
+															{bunches.map(({ edge, at, tulips }) => (
+																<span
+																	class:list={[
+																		"absolute flex -translate-x-1/2 items-end",
+																		at,
+																		edge === "bottom"
+																			? "bottom-0"
+																			: "top-0 rotate-180",
+																	]}
+																>
+																	{tulips.map(([color, height, tilt]) => (
+																		<Tulip
+																			color={color}
+																			class="-mx-0.5 h-[calc(var(--h)*0.9px)] w-auto md:-mx-1 md:h-[calc(var(--h)*1.4px)]"
+																			style={`--h: ${height}; rotate: ${tilt}deg; transform-origin: bottom`}
+																		/>
+																	))}
+																</span>
+															))}
+														</span>
+													</span>
+												</span>
+											</span>
+										)}
+										<span
+											class:list={[
+												"relative block whitespace-nowrap",
+												end?.join === "to" &&
+													"md:absolute md:top-1/2 md:left-6 md:-translate-y-1/2",
+											]}
+										>
+											<span class="sr-only">{date}</span>
+											<span
+												class:list={[
+													"relative inline-flex flex-col gap-y-1",
+													end?.join === "to" &&
+														"md:flex-row md:items-center md:gap-x-2",
+												]}
+												aria-hidden="true"
+											>
+												{(end
+													? [{ day, top, month }, end]
+													: [{ day, top, month }]
+												).map((part, partIndex) => (
+													<>
+														{partIndex > 0 && end?.join === "to" && (
+															<svg
+																class="absolute top-1/2 left-full ml-2 h-2.5 w-5 -translate-y-1/2 rotate-90 md:static md:ml-0 md:translate-y-0 md:rotate-0"
+																viewBox="0 0 20 10"
+																fill="none"
+																stroke="currentColor"
+																stroke-width="1.5"
+																stroke-linecap="round"
+																stroke-linejoin="round"
+															>
+																<path d="M1 5h17M14 1l4 4-4 4" />
+															</svg>
+														)}
+														<span class="flex items-center gap-x-1.5 md:gap-x-2.5">
+															<span
+																class:list={[
+																	"w-7 shrink-0 text-center display tabular-nums md:w-10",
+																	event && "w-auto! min-w-7 md:min-w-10",
+																	!end
+																		? "text-xl/7 md:text-[28px]/9"
+																		: event
+																			? "text-lg/6 md:text-[34px]/9"
+																			: end.join === "to"
+																			? "text-lg/6 md:text-[26px]/8"
+																			: "text-lg/6 md:text-[22px]/7",
+																]}
+															>
+																{part.day}
+															</span>
+															<span class="flex flex-col-reverse">
+																<span
+																	class:list={[
+																		!end
+																			? "eyebrow"
+																			: event
+																				? "text-[10px]/3 font-medium tracking-[0.03em] uppercase md:text-xs/4"
+																				: end.join === "to"
+																				? "text-[10px]/3 font-medium tracking-[0.03em] uppercase"
+																				: "text-[10px]/3 font-medium tracking-[0.03em] uppercase",
+																		event ? "text-white/80" : "text-slate",
+																	]}
+																>
+																	{part.top}
+																</span>
+																<span
+																	class:list={[
+																		event
+																			? "text-xs/4 md:text-base/5"
+																			: end
+																			? "text-xs/4"
+																			: "text-xs/4 md:text-sm/5",
+																	]}
+																>
+																	{part.month}
+																</span>
+															</span>
+														</span>
+													</>
+												))}
+												{end?.join === "and" && (
+													<span
+														class:list={[
+															"absolute top-1/2 left-full ml-2 -translate-y-1/2 text-lg/4 font-medium md:text-xl/5",
+															event ? "text-white/80" : "text-slate",
+														]}
+													>
+														&amp;
+													</span>
+												)}
+											</span>
+										</span>
+									</th>
+									{event ? (
+										<td colspan="2" class="text-sm/5 md:pl-[123px]! lg:pl-[106px]! md:text-lg/6">
+											<span class="flex items-center gap-3 md:gap-4">
+												<span
+													class="h-12 w-18 shrink-0 -rotate-6 bg-white [mask:var(--heart)_center/contain_no-repeat] max-md:hidden"
+													style={`--heart: url("${heart}")`}
+													aria-hidden="true"
+												/>
+												<span class="display text-lg/7 md:text-[32px]/10 lg:text-[44px]/12">
+													{name}
+													<span
+														class="ml-1.5 inline-block h-5 w-7.5 rotate-6 bg-white align-[-3px] [mask:var(--heart)_center/contain_no-repeat] md:hidden"
+														style={`--heart: url("${heart}")`}
+														aria-hidden="true"
+													/>
+												</span>
+											</span>
+										</td>
+									) : (
+										<>
+											<td class="text-sm/5 md:w-[30%] md:text-lg/6 lg:w-56">
+												<span class:list={["block", kings && "text-orange"]}>{name}</span>
+												{sub && (
+													<span class="mt-0.5 block eyebrow text-slate">
+														{href ? (
+															<a
+																class="underline decoration-line underline-offset-3 hover:text-navy hover:decoration-navy"
+																href={href}
+															>
+																{sub}
+															</a>
+														) : (
+															sub
+														)}
+													</span>
+												)}
+												{dutch && (
+													<span
+														lang="nl"
+														class="mt-0.5 block eyebrow text-slate"
+													>
+														{dutch}
+													</span>
+												)}
+												<span class="mt-1 block text-steel md:hidden">
+													{what}
+												</span>
+											</td>
+											<td class="text-sm/5 text-steel max-md:hidden md:text-lg/6">
+												{what}
+											</td>
+										</>
+									)}
+								</tr>
+							),
+						)
+					}
+				</tbody>
+			</table>
+			<div
+				class="pointer-events-none mt-2 ml-auto w-[min(320px,70%)] -scale-x-100 md:absolute md:-right-[6%] md:-bottom-32 md:z-1 md:mt-0 md:w-[34%]"
+				aria-hidden="true"
+			>
+				<Airplane
+					data-scene="airplane"
+					class="h-auto w-full overflow-visible"
+				/>
+			</div>
+		</div>
 	</div>
 </section>
+
+<script>
+	import { paperPlane } from "../lib/paper-plane";
+
+	const airplane = document.querySelector<SVGSVGElement>(
+		'section[aria-labelledby="calendar-title"] svg[data-scene="airplane"]',
+	);
+	if (airplane) paperPlane(airplane);
+</script>

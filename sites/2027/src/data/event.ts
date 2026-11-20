@@ -2,6 +2,7 @@
 export const event = {
 	dates: "29 Apr — 2 May",
 	venue: "Netherlands",
+	city: "Amersfoort",
 	venueCode: "NL",
 	firstDay: "29 Apr",
 	lastDay: "2 May",

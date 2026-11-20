@@ -16,7 +16,7 @@ export const ogPages = {
 	speak: {
 		title: "Call for presentations",
 		description:
-			"Four themes, two formats, two rounds of review. Round 1 closes 30 November 2026.",
+			"Four themes, three formats, two rounds of review. Round 1 closes 30 November 2026.",
 		path: "/speak",
 		seat: "Speaker",
 	},
