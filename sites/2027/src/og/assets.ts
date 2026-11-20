@@ -5,6 +5,8 @@ import stampSvg from "../../images/illustrations/stamp.svg?raw";
 import postmarkSvg from "../../images/postmark.svg?raw";
 import puffySvg from "../../images/clouds/puffy.svg?raw";
 import longSvg from "../../images/clouds/long.svg?raw";
+import scienceSvg from "../../images/logo/science-logo-large.svg?raw";
+import canalScienceSvg from "../../images/illustrations/canal-science.svg?raw";
 import { svgDataUri } from "./elements";
 
 export const colors = {
@@ -30,4 +32,6 @@ export const assets = {
 	postmark: svgDataUri(postmarkSvg),
 	puffyCloud: svgDataUri(puffySvg),
 	longCloud: svgDataUri(longSvg),
+	science: svgDataUri(scienceSvg),
+	canalScience: svgDataUri(canalScienceSvg),
 };
