@@ -1,0 +1,14 @@
+---
+// Loads tito.js once per page. Tito warns (and misbehaves) if it loads twice,
+// so pages include this once rather than each Tito component bundling it.
+//
+// Plugins ride in the URL: `inline` renders the widget into our DOM instead of
+// an iframe, which is what lets our CSS style it. In dev, `test_mode` tags
+// orders as test orders and `development_mode` lets checkout run on plain-http
+// localhost (Tito otherwise refuses with an SSL alert at Continue).
+const titoSrc = import.meta.env.DEV
+	? "https://js.tito.io/v2/with/inline,test_mode,development_mode"
+	: "https://js.tito.io/v2/with/inline";
+---
+
+<script is:inline src={titoSrc} async></script>
