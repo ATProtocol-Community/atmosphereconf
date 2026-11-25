@@ -7,3 +7,9 @@ declare namespace astroHTML.JSX {
 		interestfor?: string;
 	}
 }
+
+// Tito's widget API (https://ti.to/docs/api/widget): a global function that
+// queues calls in `q` until tito.js loads.
+interface Window {
+	tito: ((...args: unknown[]) => void) & { q?: unknown[][] };
+}

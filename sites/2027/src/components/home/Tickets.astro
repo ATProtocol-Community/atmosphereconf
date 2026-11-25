@@ -1,32 +1,294 @@
 ---
-import Running from "../../../images/guus/running.svg";
-import Walking from "../../../images/guus/walking.svg";
-import Drinking from "../../../images/guus/drinking.svg";
-import TicketCard from "./TicketCard.astro";
+import Flying from "../../../images/guus/flying.svg";
+import Festive from "../../../images/guus/festive.svg";
+import GooseFace from "../../../images/guus/sitting.svg";
+import TitoButton from "../attend/TitoButton.astro";
+import TitoScript from "../attend/TitoScript.astro";
+import PriceOption from "./PriceOption.astro";
 
-const tickets = [
-	{ name: "Early goose", price: "50", goose: Running, kind: "running" },
-	{ name: "Community goose", price: "199", goose: Walking, kind: "walking" },
-	{ name: "Employed goose", price: "350", goose: Drinking, kind: "drinking" },
-	{ name: "Online goose", price: "10", goose: Running, kind: "running" },
-] as const;
+// Tickets and prices come from Tito's public JSON, the one tito.js reads.
+const EVENT = "atmosphere-coop/atmosphereconf2027";
+const EVENT_URL = `https://ti.to/${EVENT}`;
+// What it covers, the amount and how many are left are set on the code in Tito.
+const DISCOUNT_CODE = "EARLYGUUS";
+const DISCOUNT_LABEL = "Early Guus price";
+const perks = [
+	"All four days of the conference",
+	"Entry to the side events: ATScience x IOSP, and more to be announced",
+	"Breakfast and lunch every day",
+	"Snacks and non-alcoholic drinks throughout",
+];
+
+const SUPPORTER_SLUG = "individual-supporter";
+// Page copy that replaces Tito's, keyed by Tito slug.
+const choiceTitle: Record<string, string> = {
+	"0a0ohvbecz8": "Regular",
+};
+const choiceCopy: Record<string, string> = {
+	"0a0ohvbecz8": "Our regular price.",
+	"ztynk-jgbuo":
+		"If Regular would keep you from coming, choose this one. No questions asked.",
+};
+
+interface Release {
+	id: number;
+	slug: string;
+	title: string;
+	price: string;
+	tax_description: string | null;
+}
+
+let releases: Release[] = [];
+let currency = "EUR";
+// Tax-inclusive price after the discount, keyed by release id. Only tickets the
+// code covers (and only while it has uses left) are listed.
+let discounted: Record<string, { price: string }> = {};
+try {
+	const response = await fetch(
+		`https://checkout.tito.io/${EVENT}.json?discount_code=${DISCOUNT_CODE}`,
+		{
+			headers: { Accept: "application/json" },
+			// The homepage renders per request: don't let a slow Tito stall it.
+			signal: AbortSignal.timeout(3000),
+		},
+	);
+	if (response.ok) {
+		const { event } = await response.json();
+		releases = event.releases;
+		currency = event.currency;
+		discounted =
+			event.discount_codes?.[DISCOUNT_CODE.toLowerCase()]?.release_prices ?? {};
+	} else {
+		console.error(`Tito tickets: HTTP ${response.status}`);
+	}
+} catch (error) {
+	console.error("Tito tickets: fetch failed", error);
+}
+
+// Always list the slugs: without them Tito reuses the filter from the URL.
+const allReleases = releases.map((release) => release.slug).join(",");
+
+const formatPrice = new Intl.NumberFormat("en", {
+	style: "currency",
+	currency,
+	trailingZeroDisplay: "stripIfInteger",
+});
+
+// Tito's JSON only has tax-inclusive prices, so pre-tax figures are worked
+// back out from the rate in its tax note ("Inc. VAT @21%").
+function prices(release: Release) {
+	const fullTotal = Number(release.price);
+	const discountedPrice = discounted[release.id]?.price;
+	const total = discountedPrice ? Number(discountedPrice) : fullTotal;
+	const rate = Number(release.tax_description?.match(/([\d.]+)%/)?.[1]);
+	const preTax = (amount: number) =>
+		rate ? Math.round((amount / (1 + rate / 100)) * 100) / 100 : amount;
+	return {
+		price: formatPrice.format(preTax(total)),
+		fullPrice: discountedPrice
+			? formatPrice.format(preTax(fullTotal))
+			: undefined,
+		total: rate ? formatPrice.format(total) : undefined,
+		fullTotal:
+			rate && discountedPrice ? formatPrice.format(fullTotal) : undefined,
+		vatNote: rate ? `with ${rate}% VAT` : undefined,
+	};
+}
+
+const supporter = releases.find((release) => release.slug === SUPPORTER_SLUG);
+const choices = releases
+	.filter((release) => release !== supporter)
+	.sort((a, b) => Number(a.price) - Number(b.price));
+// Cheapest first, but the regular (priciest) one starts picked.
+const preselected = choices.at(-1);
+const supporterPrices = supporter && prices(supporter);
 ---
 
 <section
 	id="tickets"
-	class="text-white sky-gradient"
+	class="tickets-sky text-white"
 	aria-labelledby="tickets-title"
 >
 	<div class="wrap py-16 md:py-20 lg:py-30">
 		<div class="mb-10 grid items-start gap-6 md:grid-cols-2 md:gap-9">
-			<h2 class="title" id="tickets-title">Tickets</h2><p>
-				Choose your ticket and join the community. All tickets include three
-				days of entry, food and drinks, and an afterparty on the final day.
-			</p>
+			<div>
+				<h2 class="title" id="tickets-title">In-person tickets</h2>
+				<p class="mt-3 max-w-[36ch] md:mt-4">
+					Our tickets are priced to keep the event affordable and open to the
+					community.
+				</p>
+			</div>
 		</div>
-		<div class="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4 lg:gap-6">
-			{tickets.map((ticket) => <TicketCard {...ticket} />)}
-		</div>
+		{
+			releases.length > 0 ? (
+				<div class="grid gap-4 md:grid-cols-[5fr_7fr] lg:gap-6">
+					<div class="flex flex-col rounded-xl bg-white p-6 text-navy md:p-8">
+						<h3 class="font-display text-2xl/10 uppercase md:text-[28px]/10">
+							Every ticket includes
+						</h3>
+						<ul class="mt-6 space-y-3 text-lg/7">
+							{perks.map((perk) => (
+								<li class="flex gap-3">
+									<svg
+										class="mt-1 size-5 shrink-0 text-green-600"
+										viewBox="0 0 20 20"
+										fill="none"
+										aria-hidden="true"
+									>
+										<path
+											d="M4 10.5l4 4 8-9"
+											stroke="currentColor"
+											stroke-width="2.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
+									{perk}
+								</li>
+							))}
+						</ul>
+						<Flying
+							class="mt-6 h-auto w-56 -scale-x-100 self-center md:my-auto md:w-72"
+							data-scene="tickets-flying"
+							aria-hidden="true"
+						/>
+					</div>
+					<div class="relative rounded-xl bg-white p-6 text-navy md:p-8">
+						<h3
+							id="choose-price-title"
+							class="font-display text-2xl/10 uppercase md:text-[28px]/10"
+						>
+							Choose your price
+						</h3>
+						<p class="mt-2 text-slate">
+							Same ticket, same conference. Pick what works for you.
+						</p>
+						<fieldset
+							class="mt-5 grid min-w-0 gap-3"
+							aria-labelledby="choose-price-title"
+						>
+							{choices.map((release) => {
+								const { price, fullPrice, total, fullTotal, vatNote } =
+									prices(release);
+								const copy = choiceCopy[release.slug];
+								return (
+									<PriceOption
+										value={release.slug}
+										title={`${choiceTitle[release.slug] ?? release.title} Guus`}
+										titleClass="pr-14 lg:pr-28"
+										price={price}
+										fullPrice={fullPrice}
+										checked={release === preselected}
+									>
+										{fullPrice && (
+											<span
+												slot="art"
+												class="pointer-events-none absolute top-2 right-2 z-10 flex max-w-[4.5rem] rotate-8 items-center gap-0.5 rounded-md border-4 border-double border-azure bg-white px-1.5 py-0.5 text-center text-azure uppercase lg:top-5 lg:right-5 lg:block lg:w-24 lg:max-w-none lg:px-1.5 lg:py-0.5"
+											>
+												<GooseFace
+													class="order-last size-3.5 shrink-0 lg:absolute lg:right-0.5 lg:bottom-0.5 lg:size-5"
+													viewBox="38 6 76 76"
+													aria-hidden="true"
+												/>
+												<span class="block font-display text-[7px]/[10px] lg:text-[10px]/3.5">
+													{DISCOUNT_LABEL.split(" ").map((word) => (
+														<span class="block">{word} </span>
+													))}
+												</span>
+											</span>
+										)}
+										{copy && (
+											<span class="mt-2 max-w-[44ch] text-sm text-pretty">
+												{copy}
+											</span>
+										)}
+										{total && (
+											<span class="mt-1.5 text-xs/4 text-slate">
+												Pay <span class="text-navy">{total}</span>{" "}
+												<span class="whitespace-nowrap">{vatNote}</span>
+												{fullPrice && (
+													<>
+														{" + "}
+														{DISCOUNT_CODE}
+													</>
+												)}
+												{fullTotal && (
+													<>
+														{" "}
+														<span class="whitespace-nowrap">
+															(was {fullTotal})
+														</span>
+													</>
+												)}
+											</span>
+										)}
+									</PriceOption>
+								);
+							})}
+							{supporter && supporterPrices && (
+								<>
+									<p class="mt-3 text-base/6 font-semibold">
+										Want to help someone else attend?
+									</p>
+									<PriceOption
+										value={supporter.slug}
+										title="Guus Samaritan"
+										price={supporterPrices.price}
+										class="pr-16 min-[390px]:pr-20 lg:pr-32"
+									>
+										<Festive
+											slot="art"
+											class="pointer-events-none absolute top-1/2 right-4 h-auto w-12 -translate-y-1/2 max-lg:top-auto max-lg:bottom-3 max-lg:translate-y-0 min-[390px]:w-14 md:right-6 lg:w-24"
+											aria-hidden="true"
+										/>
+										<span class="mt-2 max-w-[44ch] text-sm text-pretty">
+											A {supporter.title} ticket is your own ticket, plus a
+											contribution that subsidises tickets for others.
+										</span>
+										{supporterPrices.total && (
+											<span class="mt-1.5 text-xs/4 text-slate">
+												Pay{" "}
+												<span class="text-navy">{supporterPrices.total}</span>{" "}
+												<span class="whitespace-nowrap">
+													{supporterPrices.vatNote}
+												</span>
+											</span>
+										)}
+									</PriceOption>
+								</>
+							)}
+						</fieldset>
+						<div class="mt-6 flex flex-col items-center gap-3">
+							<TitoButton
+								event={EVENT}
+								release={allReleases}
+								pick={preselected?.slug}
+								discountCode={DISCOUNT_CODE}
+								label="Buy ticket ▸"
+								look="large"
+								buyNow
+							/>
+							<p class="text-sm text-slate">
+								Buying multiple?{" "}
+								<TitoButton
+									event={EVENT}
+									release={allReleases}
+									discountCode={DISCOUNT_CODE}
+									label="Get tickets à la carte ▸"
+									look="link"
+								/>
+							</p>
+						</div>
+					</div>
+				</div>
+			) : (
+				<div class="rounded-[10px] bg-white p-6 text-navy md:px-12">
+					<a class="btn" href={EVENT_URL}>
+						Get tickets on Tito <span aria-hidden="true">▸</span>
+					</a>
+				</div>
+			)
+		}
 		<div
 			class="mt-4 flex flex-wrap items-center gap-5 rounded-[10px] bg-white p-6 text-navy md:flex-nowrap md:gap-8 md:px-12"
 		>
@@ -34,9 +296,8 @@ const tickets = [
 				<h3 class="font-display text-[19px]/10 uppercase md:text-xl/10">
 					Opportunity ticket
 				</h3><p class="mt-2 text-sm text-slate">
-					We do not have any specific criteria for the opportunity tickets yet. If
-					you need a free ticket or travel support to attend, then
-					please apply.
+					We do not have any specific criteria for opportunity tickets yet.
+					For travel support, we are prioritizing speakers, so please <a href="https://cfp.atmosphereconf.org/atmoco2027/cfp">submit to the CFP</a>.
 				</p>
 			</div><button class="btn" disabled title="Applications coming soon"
 				>Apply <span aria-hidden="true">▸</span></button
@@ -45,16 +306,45 @@ const tickets = [
 	</div>
 </section>
 
-<script>
-	import { hoverLoop } from "../lib/motion";
+<TitoScript />
 
-	for (const card of document.querySelectorAll<HTMLElement>(
-		"#tickets [data-card]",
-	)) {
-		const scene = card.querySelector<SVGSVGElement>("svg[data-scene]");
-		const loopPart = scene?.querySelector(
-			'[data-part="body"], [data-part="upper"]',
+<style>
+	/* The site's sky gradient, but out of the blue sooner: this section follows
+	   the blue canal. Without the in-between stops the fade reads as a stripe. */
+	.tickets-sky {
+		background: linear-gradient(
+			180deg,
+			#005fe2 0%,
+			#4b70dc 50px,
+			#7d7cd8 6.5rem,
+			#b48adc 14rem,
+			#ea97df 28%,
+			#eb9b9b 100%
 		);
-		if (scene && loopPart) hoverLoop(card, scene, loopPart);
+	}
+</style>
+
+<script>
+	import { playWhileVisible } from "../lib/motion";
+
+	for (const goose of document.querySelectorAll<HTMLElement>(
+		'[data-scene="tickets-flying"]',
+	)) {
+		playWhileVisible(goose);
+	}
+
+	// Browsers restore a picked radio on reload, so read it rather than trust
+	// the server-rendered default.
+	const picker = document.querySelector("#tickets fieldset");
+	const checkout = document.querySelector<HTMLElement>(
+		"#tickets tito-button[data-pick]",
+	);
+	if (picker && checkout) {
+		const pick = () => {
+			const picked = picker.querySelector<HTMLInputElement>("input:checked");
+			if (picked) checkout.dataset.pick = picked.value;
+		};
+		picker.addEventListener("change", pick);
+		pick();
 	}
 </script>

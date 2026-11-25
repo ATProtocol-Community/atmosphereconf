@@ -64,7 +64,7 @@ const extras: [string, string][] = [
 				<dl class="md:row-span-4 md:grid md:grid-rows-subgrid">
 					{
 						audiences.map((audience) => (
-							<div class="py-5 md:py-6" data-audience-category>
+							<div class="py-5 last:pb-0 md:py-6" data-audience-category>
 								<dt class="eyebrow">{audience.name}</dt>
 								<dd class="mt-2 font-sans text-2xl/tight max-w-90 text-balance md:ml-auto">
 									{audience.description}
@@ -74,13 +74,16 @@ const extras: [string, string][] = [
 					}
 				</dl>
 			</div>
-			<span class="title max-md:mt-10 md:row-span-full" aria-hidden="true">&amp;</span>
+			<span
+				class="title origin-center scale-160 self-start justify-self-start text-white max-md:mt-14 max-md:mb-4 max-md:origin-bottom-left md:row-span-full"
+				aria-hidden="true">&amp;</span
+			>
 			<div class="md:row-span-full md:grid md:grid-rows-subgrid">
 				<h3 class="title pb-6 md:pb-10">What to expect</h3>
 				<dl class="md:row-span-4 md:grid md:grid-rows-subgrid">
 					{
 						formats.map((format) => (
-							<div class="py-5 md:py-6" data-audience-category>
+							<div class="py-5 last:pb-0 md:py-6" data-audience-category>
 								<dt class="eyebrow">{format.name}</dt>
 								<dd class="mt-2 font-sans text-2xl/tight max-w-90 text-balance">
 									{format.description}

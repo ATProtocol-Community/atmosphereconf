@@ -1,0 +1,77 @@
+---
+import postmark from "../../../images/postmark.svg?url";
+
+interface Props {
+	/** Tito slug of the ticket this row picks. */
+	value: string;
+	title: string;
+	price: string;
+	/** Price before a discount, shown struck through before `price`. */
+	fullPrice?: string;
+	checked?: boolean;
+	/** Classes for the text column, e.g. room for the `art` slot. */
+	class?: string;
+	/** Classes for the title alone, e.g. room for a stamp beside it. */
+	titleClass?: string;
+}
+
+const {
+	value,
+	title,
+	price,
+	fullPrice,
+	checked,
+	class: textClass,
+	titleClass,
+} = Astro.props;
+---
+
+<label
+	class="group relative flex cursor-pointer items-start gap-3 rounded-lg border-2 border-line p-4 transition-colors hover:border-steel has-checked:border-navy has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue md:gap-4 md:p-5"
+>
+	<slot name="art" />
+	<input
+		class="mt-0.5 size-5 shrink-0 accent-navy md:mt-1"
+		type="radio"
+		name="ticket-price"
+		value={value}
+		checked={checked}
+	/>
+	<span class:list={["flex min-w-0 flex-col", textClass]}>
+		<span class="flex flex-col gap-2">
+			<span
+				class:list={[
+					"font-display text-base/6 uppercase md:text-xl/7",
+					titleClass,
+				]}
+			>
+				{title}
+			</span>
+			<span
+				class="relative self-start font-display text-sm/6 whitespace-nowrap md:text-lg/7"
+			>
+				{
+					fullPrice && (
+						<>
+							<del class="mr-1.5 font-sans text-xs/6 font-normal text-slate md:text-sm/7">
+								<span class="sr-only">Was </span>
+								{fullPrice}
+							</del>
+							<span class="sr-only">now </span>
+						</>
+					)
+				}
+				{price}
+				<img
+					class="pointer-events-none absolute top-1/2 left-full ml-1 w-12 max-w-none -translate-y-1/2 scale-125 -rotate-12 opacity-0 transition-[scale,opacity] duration-200 ease-soft group-has-checked:scale-100 group-has-checked:opacity-100 motion-reduce:transition-none lg:ml-3 lg:w-16"
+					src={postmark}
+					alt=""
+					width="150"
+					height="75"
+					loading="lazy"
+				/>
+			</span>
+		</span>
+		<slot />
+	</span>
+</label>

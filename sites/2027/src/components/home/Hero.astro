@@ -34,7 +34,10 @@ import RevealWords from "../site/RevealWords.astro";
 		</p>
 		<EventDetails />
 		<div class="flex flex-wrap justify-center gap-2">
-			<a class="btn" href="/speak"
+			<a class="btn" href="#tickets"
+				>Early-goose tickets <span aria-hidden="true">▸</span></a
+			>
+			<a class="btn btn-outline" href="/speak"
 				>Apply to speak <span aria-hidden="true">▸</span></a
 			>
 		</div>
@@ -174,28 +177,29 @@ import RevealWords from "../site/RevealWords.astro";
 </script>
 
 <style is:global>
-	[data-scene="hero-goose"] [data-part="goose"] {
+	/* Also the ticket section's flying goose, flapping in place. */
+	:is([data-scene="hero-goose"], [data-scene="tickets-flying"]) [data-part="goose"] {
 		transform-origin: 160px 150px;
 		animation: hero-bob 1.1s cubic-bezier(0.45, 0, 0.55, 1) -0.275s infinite
 			var(--play);
 	}
 
-	[data-scene="hero-goose"] [data-part="wing-near"] {
+	:is([data-scene="hero-goose"], [data-scene="tickets-flying"]) [data-part="wing-near"] {
 		animation: hero-flap 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite
 			var(--play);
 	}
 
-	[data-scene="hero-goose"] [data-part="wing-far"] {
+	:is([data-scene="hero-goose"], [data-scene="tickets-flying"]) [data-part="wing-far"] {
 		animation: hero-flap 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite
 			var(--play);
 	}
 
-	[data-scene="hero-goose"] [data-part="leg-near"] {
+	:is([data-scene="hero-goose"], [data-scene="tickets-flying"]) [data-part="leg-near"] {
 		animation: hero-dangle-near 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite
 			var(--play);
 	}
 
-	[data-scene="hero-goose"] [data-part="leg-far"] {
+	:is([data-scene="hero-goose"], [data-scene="tickets-flying"]) [data-part="leg-far"] {
 		animation: hero-dangle-far 1.1s cubic-bezier(0.45, 0, 0.55, 1) -0.12s
 			infinite var(--play);
 	}

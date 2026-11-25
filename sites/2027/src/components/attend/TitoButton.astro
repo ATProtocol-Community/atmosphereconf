@@ -1,0 +1,292 @@
+---
+interface Props {
+	/** Tito "account/event" slug. */
+	event: string;
+	/**
+	 * Ticket (release) slug, or comma-separated slugs to offer several. Always
+	 * pass it: when omitted, Tito reuses whichever filter is in the URL.
+	 */
+	release: string;
+	/**
+	 * Slug of the ticket to add when checkout opens. The page may change it by
+	 * setting `data-pick`, e.g. from a price picker. Without it, checkout opens
+	 * with what the visitor already picked. Tito has no option for this, so the
+	 * script below sets it.
+	 */
+	pick?: string;
+	/** Discount code to apply at checkout. Tito ignores it on tickets it doesn't cover. */
+	discountCode?: string;
+	label?: string;
+	/**
+	 * "large" fills its container for a section's main call to action; "link"
+	 * reads as a plain text link for a secondary way in.
+	 */
+	look?: "button" | "large" | "link";
+	/**
+	 * Buy just the `pick` ticket: checkout opens with one of it and nothing
+	 * else, and skips Tito's ticket list for its details step. The remembered
+	 * cart is left out of it, both ways.
+	 */
+	buyNow?: boolean;
+}
+
+const {
+	event,
+	release,
+	pick,
+	discountCode,
+	label = "Purchase ▸",
+	look = "button",
+	buyNow = false,
+} = Astro.props;
+---
+
+<tito-button
+	event={event}
+	releases={release}
+	button-label={label}
+	discount-code={discountCode}
+	data-pick={pick}
+	data-look={look}
+	data-buy-now={buyNow ? "" : undefined}></tito-button>
+<span class="tito-fallback" data-look={look}>
+	<a href={`https://ti.to/${event}`}>{label}</a>
+	{
+		look === "large" && (
+			<span class="tito-fallback-note">
+				Checkout didn't load here, so this button opens Tito's site instead.
+				{discountCode && ` Enter the code ${discountCode} there.`}
+			</span>
+		)
+	}
+</span>
+
+<style>
+	@reference "../../styles/global.css";
+
+	tito-button :global(.tito-widget-button),
+	.tito-fallback a {
+		@apply btn uppercase;
+	}
+	tito-button[data-look="large"] {
+		display: block;
+		& :global(.tito-widget-button) {
+			@apply min-h-14 w-full text-base font-bold tracking-[0.02em];
+		}
+	}
+	.tito-fallback[data-look="large"] {
+		@apply flex flex-col items-center;
+		& a {
+			@apply min-h-14 text-base font-bold tracking-[0.02em];
+		}
+	}
+	/* Takes no room until Tito draws into it, so the stand-in link sits exactly
+	   where the button will. */
+	tito-button:empty {
+		display: none;
+	}
+	tito-button:has(:global(.tito-widget-button)) + .tito-fallback {
+		display: none;
+	}
+	/* Held at no height until Tito has clearly not turned up. */
+	.tito-fallback-note {
+		@apply mt-3 max-w-[44ch] overflow-hidden text-center text-sm text-slate;
+		animation: tito-fallback-note 4s step-end;
+	}
+	@keyframes tito-fallback-note {
+		from {
+			max-height: 0;
+			margin-top: 0;
+			visibility: hidden;
+		}
+	}
+	tito-button[data-look="link"] :global(.tito-widget-button),
+	.tito-fallback[data-look="link"] a {
+		--btn-hover-text: var(--color-blue);
+		@apply min-h-0 overflow-visible rounded-none border-0 bg-transparent p-0 font-medium text-navy normal-case underline underline-offset-2;
+		&::before {
+			content: none;
+		}
+	}
+
+	/* Tito applies a discount code silently: prices just get struck through.
+	   Say so under the code field, but only while Tito is actually showing a
+	   discounted price, so a rejected or used-up code never claims success. */
+	:global(
+		#tito-overlay .tito-widget-form:has(.tito-discounted-price) .tito-discount
+	)::after {
+		content: "✓ Code applied";
+		display: block;
+		margin-top: 0.25rem;
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: var(--color-navy);
+	}
+
+	/* "Buy ticket" sets up the ticket list out of sight; see the script. */
+	:global(html[data-tito-buy-now] #tito-overlay .tito-widget-form) {
+		visibility: hidden;
+	}
+</style>
+
+<script>
+	// Tito has no cart our page can read, and it starts from its own default
+	// quantities every time checkout opens. So we remember what the visitor
+	// picks (for this browser tab) and put it back when checkout reopens. It's
+	// cleared once Tito reports the order finished.
+	//
+	// This presses Tito's own controls (it ignores direct value changes) and
+	// reads its markup, which isn't a documented API, and needs the inline
+	// plugin so the form is in our DOM. If Tito's markup changes, checkout
+	// still works with Tito's defaults.
+	const CART_KEY = "tito-cart";
+	const SETTLE_MS = 150;
+	const SETTLE_TIMEOUT_MS = 5000;
+
+	type Cart = Record<string, number>;
+
+	// False while checkout is open from a `buyNow` button.
+	let tracking = true;
+
+	function loadCart(): Cart {
+		try {
+			return JSON.parse(sessionStorage.getItem(CART_KEY) ?? "{}");
+		} catch {
+			return {};
+		}
+	}
+
+	function saveCart(cart: Cart) {
+		sessionStorage.setItem(CART_KEY, JSON.stringify(cart));
+	}
+
+	const slugOf = (release: Element) => release.id.replace(/^tito-ticket-/, "");
+
+	function readQuantity(release: Element) {
+		const checkbox = release.querySelector<HTMLInputElement>(
+			"input[type=checkbox]",
+		);
+		if (checkbox) return checkbox.checked ? 1 : 0;
+		const input = release.querySelector<HTMLInputElement>(
+			".tito-quantity-input",
+		);
+		return Number(input?.value) || 0;
+	}
+
+	function setQuantity(release: Element, want: number) {
+		const checkbox = release.querySelector<HTMLInputElement>(
+			"input[type=checkbox]",
+		);
+		if (checkbox) {
+			if (checkbox.checked !== want > 0) checkbox.click();
+			return;
+		}
+		const step = (selector: string, times: number) => {
+			const link = release.querySelector<HTMLElement>(selector);
+			for (let i = 0; i < times; i++) link?.click();
+		};
+		const have = readQuantity(release);
+		if (have < want)
+			step(".tito-release--increment-quantity--link", want - have);
+		if (have > want)
+			step(".tito-release--decrement-quantity--link", have - want);
+	}
+
+	function recordCart() {
+		if (!tracking) return;
+		const releases = document.querySelectorAll("#tito-overlay .tito-release");
+		// Past the ticket list (the details step) there's nothing to read; keep
+		// the cart as it was.
+		if (releases.length === 0) return;
+		const cart: Cart = {};
+		for (const release of releases) {
+			const count = readQuantity(release);
+			if (count > 0) cart[slugOf(release)] = count;
+		}
+		saveCart(cart);
+	}
+
+	document.addEventListener("click", (event) => {
+		const button = (event.target as Element).closest<HTMLElement>(
+			"tito-button",
+		);
+		if (!button) return;
+		const buyNow = button.dataset.buyNow !== undefined;
+		tracking = !buyNow;
+		const selected = button.dataset.pick ?? "";
+		if (buyNow && !selected) return;
+		const want: Cart = buyNow ? { [selected]: 1 } : loadCart();
+		if (selected && !want[selected]) want[selected] = 1;
+
+		// Buying one ticket skips the ticket list, so keep the form hidden until
+		// Tito moves on; it would otherwise flash while we set it up. Always shown
+		// again after the timeout, so a missed step never leaves a blank checkout.
+		const root = document.documentElement;
+		let reveal: MutationObserver | undefined;
+		const show = () => {
+			reveal?.disconnect();
+			delete root.dataset.titoBuyNow;
+		};
+		if (buyNow) {
+			root.dataset.titoBuyNow = "";
+			setTimeout(show, SETTLE_TIMEOUT_MS);
+		}
+
+		// Tito renders the form in several passes (default quantities land after
+		// the markup), so act once the overlay has stopped changing.
+		let settle: ReturnType<typeof setTimeout> | undefined;
+		const observer = new MutationObserver(() => {
+			clearTimeout(settle);
+			settle = setTimeout(() => {
+				const releases = document.querySelectorAll(
+					"#tito-overlay .tito-release",
+				);
+				if (releases.length === 0) return;
+				observer.disconnect();
+				for (const release of releases) {
+					const count = want[slugOf(release)];
+					// Buying one ticket also clears the rest, Tito's defaults included.
+					if (buyNow) setQuantity(release, count ?? 0);
+					else if (count) setQuantity(release, count);
+				}
+				recordCart();
+				// Tito takes the new quantities on its next update; press its
+				// Continue after that. If the button isn't there, the visitor
+				// just sees the ticket list with their cart filled in.
+				if (buyNow) {
+					setTimeout(() => {
+						const submit = document.querySelector<HTMLButtonElement>(
+							"#tito-overlay .tito-submit",
+						);
+						if (!submit) return show();
+						reveal = new MutationObserver(() => {
+							if (!document.querySelector("#tito-overlay .tito-release"))
+								show();
+						});
+						reveal.observe(document.body, { childList: true, subtree: true });
+						submit.click();
+					}, SETTLE_MS);
+				}
+			}, SETTLE_MS);
+		});
+		observer.observe(document.body, { childList: true, subtree: true });
+		setTimeout(() => observer.disconnect(), SETTLE_TIMEOUT_MS);
+	});
+
+	const recordSoon = (event: Event) => {
+		if ((event.target as Element).closest?.("#tito-overlay .tito-release")) {
+			setTimeout(recordCart, 50);
+		}
+	};
+	document.addEventListener("click", recordSoon);
+	document.addEventListener("change", recordSoon);
+
+	// Tito's documented callback; the stub queues it if tito.js hasn't loaded.
+	// https://ti.to/docs/api/widget
+	window.tito =
+		window.tito ||
+		function (...args: unknown[]) {
+			(window.tito.q = window.tito.q || []).push(args);
+		};
+	window.tito("on:registration:finished", () => saveCart({}));
+</script>
