@@ -84,14 +84,12 @@ function prices(release: Release) {
 	const preTax = (amount: number) =>
 		rate ? Math.round((amount / (1 + rate / 100)) * 100) / 100 : amount;
 	return {
-		price: formatPrice.format(preTax(total)),
-		fullPrice: discountedPrice
-			? formatPrice.format(preTax(fullTotal))
-			: undefined,
-		total: rate ? formatPrice.format(total) : undefined,
-		fullTotal:
-			rate && discountedPrice ? formatPrice.format(fullTotal) : undefined,
-		vatNote: rate ? `with ${rate}% VAT` : undefined,
+		price: formatPrice.format(total),
+		fullPrice: discountedPrice ? formatPrice.format(fullTotal) : undefined,
+		base: rate ? formatPrice.format(preTax(total)) : undefined,
+		// Tax-inclusive, to match the struck-through big price.
+		saving: discountedPrice ? formatPrice.format(fullTotal - total) : undefined,
+		vatNote: rate ? `+ ${rate}% VAT` : undefined,
 	};
 }
 
@@ -168,7 +166,7 @@ const supporterPrices = supporter && prices(supporter);
 							aria-labelledby="choose-price-title"
 						>
 							{choices.map((release) => {
-								const { price, fullPrice, total, fullTotal, vatNote } =
+								const { price, fullPrice, base, saving, vatNote } =
 									prices(release);
 								const copy = choiceCopy[release.slug];
 								return (
@@ -202,22 +200,16 @@ const supporterPrices = supporter && prices(supporter);
 												{copy}
 											</span>
 										)}
-										{total && (
+										{base && (
 											<span class="mt-1.5 text-xs/4 text-slate">
-												Pay <span class="text-navy">{total}</span>{" "}
-												<span class="whitespace-nowrap">{vatNote}</span>
+												{base} <span class="whitespace-nowrap">{vatNote}</span>
 												{fullPrice && (
 													<>
-														{" + "}
-														{DISCOUNT_CODE}
-													</>
-												)}
-												{fullTotal && (
-													<>
-														{" "}
+														{" · "}
 														<span class="whitespace-nowrap">
-															(was {fullTotal})
-														</span>
+															{saving} off
+														</span>{" "}
+														with {DISCOUNT_CODE}
 													</>
 												)}
 											</span>
@@ -245,10 +237,9 @@ const supporterPrices = supporter && prices(supporter);
 											A {supporter.title} ticket is your own ticket, plus a
 											contribution that subsidises tickets for others.
 										</span>
-										{supporterPrices.total && (
+										{supporterPrices.base && (
 											<span class="mt-1.5 text-xs/4 text-slate">
-												Pay{" "}
-												<span class="text-navy">{supporterPrices.total}</span>{" "}
+												{supporterPrices.base}{" "}
 												<span class="whitespace-nowrap">
 													{supporterPrices.vatNote}
 												</span>
@@ -296,8 +287,11 @@ const supporterPrices = supporter && prices(supporter);
 				<h3 class="font-display text-[19px]/10 uppercase md:text-xl/10">
 					Opportunity ticket
 				</h3><p class="mt-2 text-sm text-slate">
-					We do not have any specific criteria for opportunity tickets yet.
-					For travel support, we are prioritizing speakers, so please <a href="https://cfp.atmosphereconf.org/atmoco2027/cfp">submit to the CFP</a>.
+					We do not have any specific criteria for opportunity tickets yet. For
+					travel support, we are prioritizing speakers, so please <a
+						href="https://cfp.atmosphereconf.org/atmoco2027/cfp"
+						>submit to the CFP</a
+					>.
 				</p>
 			</div><button class="btn" disabled title="Applications coming soon"
 				>Apply <span aria-hidden="true">▸</span></button
